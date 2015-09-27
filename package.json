@@ -1,0 +1,19 @@
+{
+  "name": "linearlearning.github.io",
+  "version": "1.0.0",
+  "description": "Learning tools for linear algebra",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linearlearning/linearlearning.github.io.git"
+  },
+  "author": "Joseph Milla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linearlearning/linearlearning.github.io/issues"
+  },
+  "homepage": "https://github.com/linearlearning/linearlearning.github.io#readme"
+}
