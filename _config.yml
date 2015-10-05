@@ -11,7 +11,7 @@ title: Project 415x
 tagline: A Linear Algebra Experience
 description: Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra
 keywords: Project, 415x, Mathematics, Linear, Algebgra, UIUC, Illinois, Engineering, STEM
-url: http://project415x.github.io
+url: http://p415x.xyz
 baseurl: /
 paginate: 5
 paginate_path: 'blog/page:num'
