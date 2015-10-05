@@ -1,34 +1,13 @@
 <script src="{{ site.baseurl }}bower_components/jquery/dist/jquery.min.js"></script>
-<script src="{{ site.baseurl }}bower_components/jquery-ui/jquery-ui.min.js"></script>
-<script src="{{ site.baseurl }}bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- <script src="{{ site.baseurl }}bower_components/jquery-ui/jquery-ui.min.js"></script> -->
+<!-- <script src="{{ site.baseurl }}bower_components/bootstrap/dist/js/bootstrap.min.js"></script> -->
+<script src="{{ site.baseurl }}bower_components/gsap/src/minified/TweenMax.min.js"></script>
 <script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/ScrollMagic.min.js"></script>
 <script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/jquery.ScrollMagic.min.js"></script>
 <script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/animation.gsap.min.js"></script>
-<script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/animation.velocity.min.js"></script>
-<script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/debug.addIndicators.min.js"></script>
-<script src="{{ site.baseurl }}bower_components/gsap/src/minified/TweenMax.min.js"></script>
+<!-- <script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/animation.velocity.min.js"></script>
+<script src="{{ site.baseurl }}bower_components/ScrollMagic/scrollmagic/minified/plugins/debug.addIndicators.min.js"></script> -->
+
+<script src="{{ site.baseurl }}public/js/index.js"></script>
 
 {% include ga.html %}
-<script>
-	$(function () { // wait for document ready
-		// init
-		var controller = new ScrollMagic.Controller();
-
-		// define movement of panels
-		var wipeAnimation = new TimelineMax()
-			.fromTo("section.panel.turqoise", 1, {x: "-100%"}, {x: "0%", ease: Linear.easeNone})  // in from left
-			.fromTo("section.panel.green",    1, {x:  "100%"}, {x: "0%", ease: Linear.easeNone})  // in from right
-			.fromTo("section.panel.bordeaux", 1, {y: "-100%"}, {y: "0%", ease: Linear.easeNone}); // in from top
-
-		// create scene to pin and link animation
-		new ScrollMagic.Scene({
-				triggerElement: "#pinContainer",
-				triggerHook: "onLeave",
-				duration: "300%"
-			})
-			.setPin("#pinContainer")
-			.setTween(wipeAnimation)
-			.addIndicators() // add indicators (requires plugin)
-			.addTo(controller);
-	});
-</script>

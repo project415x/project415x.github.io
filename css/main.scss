@@ -1,52 +1,198 @@
 ---
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
-@charset "utf-8";
+// @import "compass/css3";
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900);
+
+// General Styles
+// ====================================================================
+
+body {
+    background: #3883D8;
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 13px;
+    tap-highlight-color: rgba(0,0,0,0);
+}
+
+body,
+html {
+    height: 100%
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Josefin Slab", serif;
+    font-weight: bold;
+}
+
+h1 {
+    // font-style: italic;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+.noselect * {
+    user-select: none;
+}
+
+header {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
 
 
+// ScrollMagic Containers
+// ====================================================================
 
-// Our variables
-$base-font-family: Helvetica, Arial, sans-serif;
-$base-font-size:   16px;
-$small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.5;
+.container {
+    height: 100%;
+    margin: 0 auto;
+    max-width: 900px;
+    position: relative;
+    width: 100%;
+}
 
-$spacing-unit:     30px;
+#content-wrapper {
+    height: 100%;
+    min-height: 500px;
+    width: 100%;
+}
 
-$text-color:       #111;
-$background-color: #fdfdfd;
-$brand-color:      #2a7ae2;
+.scroll-magic-section {
+    height: 100%;
+}
 
-$grey-color:       #828282;
-$grey-color-light: lighten($grey-color, 40%);
-$grey-color-dark:  darken($grey-color, 25%);
+// ScrollMagic Pin Panel
+// ====================================================================
 
-// Width of the content area
-$content-width:    800px;
+#pin {
+    overflow: hidden;
+    width: 100%;
 
-$on-palm:          600px;
-$on-laptop:        800px;
+    h1 {
+        margin: -40px 0 0 0;
+        position: relative;
+        top: 50%;
+        font-size: 80px;
+        line-height: 80px;
+        text-align: center;
+        color: #EFEFEF;
+    }
 
+    span {
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      font-weight: 100;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      position: relative;
+      text-align: center;
+      vertical-align: middle;
+    }
 
-
-// Using media queries with like this:
-// @include media-query($on-palm) {
-//     .wrapper {
-//         padding-right: $spacing-unit / 2;
-//         padding-left: $spacing-unit / 2;
-//     }
-// }
-@mixin media-query($device) {
-    @media screen and (max-width: $device) {
-        @content;
+    p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 40px;
+      font-weight: 100;
+      color: #EFEFEF;
+      position: relative;
+      text-align: center;
+      top: 35%;
     }
 }
 
 
+// ScrollMagic Wipe Panels
+// ====================================================================
 
-// Import partials from `sass_dir` (defaults to `_sass`)
-@import
-        "base",
-        "layout",
-        "syntax-highlighting"
-;
+#wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: #2e639e;
+
+    h1 {
+        color: white;
+    }
+
+    p {
+      color: white;
+    }
+}
+
+#second-wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: red;
+}
+
+
+// ScrollMagic Slide Panels
+// ====================================================================
+
+#slide {
+    height: 100%;
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    background: #c7e1ff;
+
+    h1 {
+        position: absolute;
+        width: 100%;
+        color: black;
+    }
+
+    p {
+      color: black;
+    }
+}
+
+#slide-uno {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(100%);
+    width: 100%;
+    background: tan;
+}
+
+#slide-dos {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    width: 100%;
+    background: tan;
+}
+
+
+// ScrollMagic Unpin Panel
+// ====================================================================
+
+#unpin {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: maroon;
+}

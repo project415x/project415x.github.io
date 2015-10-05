@@ -20,6 +20,7 @@
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
     "ScrollMagic": "~2.0.5",
-    "gsap": "~1.18.0"
+    "gsap": "~1.18.0",
+    "modernizr": "~3.0.0"
   }
 }
