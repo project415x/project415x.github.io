@@ -1,12 +1,18 @@
 ---
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
-// @import "compass/css3";
+
+/**
+ * TODO:
+ * - Add a general styling class for sections
+ * - Separate ids and the classes
+ */
+
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900);
 
-// General Styles
-// ====================================================================
-
+/**
+ * General
+ */
 body {
     background: #3883D8;
     font-family: "Source Sans Pro", Arial, sans-serif;
@@ -48,10 +54,9 @@ header {
   z-index: 1;
 }
 
-
-// ScrollMagic Containers
-// ====================================================================
-
+/**
+ * ScrollMagic Containers
+ */
 .container {
     height: 100%;
     margin: 0 auto;
@@ -70,9 +75,9 @@ header {
     height: 100%;
 }
 
-// ScrollMagic Pin Panel
-// ====================================================================
-
+/**
+ * ScrollMagic Pin Panel
+ */
 #pin {
     overflow: hidden;
     width: 100%;
@@ -109,10 +114,9 @@ header {
     }
 }
 
-
-// ScrollMagic Wipe Panels
-// ====================================================================
-
+/**
+ * ScrollMagic Wipe Panels
+ */
 #wipe {
     height: 100%;
     overflow: hidden;
@@ -165,11 +169,9 @@ header {
     background: green;
 }
 
-
-
-// ScrollMagic Slide Panels
-// ====================================================================
-
+/**
+ * ScrollMagic Slide Panels
+ */
 #slide {
     height: 100%;
     position: absolute;
@@ -199,10 +201,9 @@ header {
     background: tan;
 }
 
-
-// ScrollMagic Unpin Panel
-// ====================================================================
-
+/**
+ * ScrollMagic Unpin Panel
+ */
 #unpin {
     height: 100%;
     position: absolute;
