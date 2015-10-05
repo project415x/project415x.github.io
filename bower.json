@@ -19,6 +19,7 @@
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
-    "ScrollMagic": "~2.0.5"
+    "ScrollMagic": "~2.0.5",
+    "gsap": "~1.18.0"
   }
 }
