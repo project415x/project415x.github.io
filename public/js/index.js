@@ -30,7 +30,9 @@ var pinani = new TimelineMax()
         TweenMax.to("#slide h1:last-child", 3, {color: "black"})
     ])
     .add(TweenMax.to("#slide-uno", 1, {transform: "translateX(0)"}))
-    // .add(TweenMax.to("#slide-dos", 1, {transform: "translateX(0)"}))
+    .add(TweenMax.to("#third-wipe", 1, {transform: "translateY(0)"}))
+    .add(TweenMax.to("#slide-dos", 1, {transform: "translateX(0)"}))
+    .add(TweenMax.to("#fourth-wipe", 1, {transform: "translateY(0)"}))
     .add(TweenMax.from("#unpin", .5, {top: "100%"}));
 
 new ScrollMagic.Scene({

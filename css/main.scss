@@ -143,6 +143,29 @@ header {
     background: red;
 }
 
+#third-wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: green;
+}
+
+#fourth-wipe  {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: green;
+}
+
+
 
 // ScrollMagic Slide Panels
 // ====================================================================
@@ -165,22 +188,13 @@ header {
     }
 }
 
-#slide-uno {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateX(100%);
-    width: 100%;
-    background: tan;
-}
-
+#slide-uno,
 #slide-dos {
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    transform: translateX(-100%);
+    transform: translateX(100%);
     width: 100%;
     background: tan;
 }
