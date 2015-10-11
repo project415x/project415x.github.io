@@ -1,0 +1,201 @@
+/**
+ * General
+ */
+body {
+    background: #3883D8;
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 13px;
+    tap-highlight-color: rgba(0,0,0,0);
+}
+
+body,
+html {
+    height: 100%
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Josefin Slab", serif;
+    font-weight: bold;
+}
+
+h1 {
+    // font-style: italic;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+.noselect * {
+    user-select: none;
+}
+
+header {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+/**
+ * ScrollMagic Containers
+ */
+.container {
+    height: 100%;
+    margin: 0 auto;
+    max-width: 900px;
+    position: relative;
+    width: 100%;
+}
+
+#content-wrapper {
+    height: 100%;
+    min-height: 500px;
+    width: 100%;
+}
+
+.scroll-magic-section {
+    height: 100%;
+}
+
+/**
+ * ScrollMagic Pin Panel
+ */
+#pin {
+    overflow: hidden;
+    width: 100%;
+
+    h1 {
+        margin: -40px 0 0 0;
+        position: relative;
+        top: 50%;
+        font-size: 80px;
+        line-height: 80px;
+        text-align: center;
+        color: #EFEFEF;
+    }
+
+    span {
+      font-family: 'Roboto', sans-serif;
+      font-size: 18px;
+      font-weight: 100;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      position: relative;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 40px;
+      font-weight: 100;
+      color: #EFEFEF;
+      position: relative;
+      text-align: center;
+      top: 35%;
+    }
+}
+
+/**
+ * ScrollMagic Wipe Panels
+ */
+#wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: #2e639e;
+
+    h1 {
+        color: white;
+    }
+
+    p {
+      color: white;
+    }
+}
+
+#second-wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: red;
+}
+
+#third-wipe {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: green;
+}
+
+#fourth-wipe  {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: green;
+}
+
+/**
+ * ScrollMagic Slide Panels
+ */
+#slide {
+    height: 100%;
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    background: #c7e1ff;
+
+    h1 {
+        position: absolute;
+        width: 100%;
+        color: black;
+    }
+
+    p {
+      color: black;
+    }
+}
+
+#slide-uno,
+#slide-dos {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(100%);
+    width: 100%;
+    background: tan;
+}
+
+/**
+ * ScrollMagic Unpin Panel
+ */
+#unpin {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: maroon;
+}
