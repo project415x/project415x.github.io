@@ -1095,12 +1095,12 @@ function johnson (el) {
 
 // require('./johnson')(document.querySelector('.sidebar'));
 
-require('./demo-add')(document.querySelector('.demo-add1'));
-require('./demo-add')(document.querySelector('.demo-add2'));
+require('./demo-add1')(document.querySelector('.demo-add1'));
+require('./demo-add2')(document.querySelector('.demo-add2'));
 require('./demo-angle')(document.querySelector('.demo-angle'));
 require('./demo-randomize')(document.querySelector('.demo-randomize'));
 
-},{"./demo-add":6,"./demo-angle":7,"./demo-randomize":8,"./header-animation":9,"./johnson":10}],12:[function(require,module,exports){
+},{"./demo-add1":6, "./demo-add2":6}],12:[function(require,module,exports){
 exports.background = '#202224';
 exports.white = '#f8f8f2';
 exports.pink = '#f92672';
@@ -1111,23 +1111,6 @@ exports.blue = '#66d9ef';
 exports.orange = '#fd971f';
 exports.brand = '#e06a60';
 exports.victor = '#d83e31';
-
-
-
-},{"./demo-add":6,"./demo-angle":7,"./demo-randomize":8,"./header-animation":9,"./johnson":10}],12:[function(require,module,exports){
-exports.background = '#202224';
-exports.white = '#f8f8f2';
-exports.pink = '#f92672';
-exports.purple = '#ae81ff';
-exports.green = '#a6e22e';
-exports.yellow = '#e6db74';
-exports.blue = '#66d9ef';
-exports.orange = '#fd971f';
-exports.brand = '#e06a60';
-exports.victor = '#d83e31';
-
-
-
 },
 {}],13:[function(require,module,exports){
 exports = module.exports = Victor;
