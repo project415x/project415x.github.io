@@ -1,6 +1,31 @@
 ---
-layout: default
+layout: minimum
 title: Test
 ---
 
-Test
+<script>
+  var vec = new Victor(42, 1337);
+  vec.x;
+
+  Victor(50, 60)
+  .add(new Victor(20, 30))
+  .toString();
+</script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="demo demo-add1"></div>
+    </div>
+
+    <div class="col-md-2">
+      BOX
+    </div>
+
+    <div class="col-md-5">
+      <div class="demo demo-add2"></div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ site.baseurl}}public/js/bundle/main.js"></script>
