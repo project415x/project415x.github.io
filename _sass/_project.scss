@@ -71,20 +71,38 @@
       margin-top: 5%;
     }
 
-    span {
+    .subtitle {
       font-family: 'Roboto', sans-serif;
       font-size: 18px;
-      font-weight: 100;
+      font-weight: 300;
       text-transform: uppercase;
       letter-spacing: 5px;
       position: relative;
       text-align: center;
       vertical-align: middle;
     }
+
+    .info {
+      font-size: 28px;
+      margin: 0 auto;
+      text-align: center;
+      color: #000000;
+      //
+      // &:focus,
+      // &:hover {
+      //   text-transform: none;
+      //   opacity: 0.75;
+      // }
+      //
+      // &:active {
+      //   opacity: 0.90;
+      // }
+    }
+
     p {
       font-family: 'Roboto', sans-serif;
       font-size: 40px;
-      font-weight: 100;
+      font-weight: 300;
       color: #efefef;
       position: relative;
       text-align: center;
