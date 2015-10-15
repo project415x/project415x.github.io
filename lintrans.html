@@ -483,20 +483,32 @@ function onMouseDown(event) {
 
 	fro = new Point(input.x0, input.y0);
 	to = new Point(input.x, input.y);
-	straightLine = new Path.Line(fro, to);
-	straightLine.strokeColor = 'red';
-	straightLine.strokeWidth = 5;
+	straightLine = to - fro;
 
 	var arrowVector = straightLine.normalize(10);
 
+	if (vectorItem)
+		vectorItem.remove();
+
+	var matrix = [[2, 1], [1, -1]]
+
 	vectorItem = new Group([
-		new Path([fro, straightLine]),
+		new Path([{
+			x: input.x0,
+			y: input.y0
+		},{
+			x: input.x0 + input.x,
+			y: input.y0 + input.y
+		}]),
 		new Path([
 			straightLine + arrowVector.rotate(135),
 			straightLine,
 			straightLine + arrowVector.rotate(-135)
 		])
 	]);
+
+	vectorItem.strokeColor = 'red';
+	vectorItem.strokeWidth = 5;
 
 	console.log(straightLine);
 }
