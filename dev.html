@@ -4,7 +4,7 @@ title: Linear Transformation
 ---
 <style>
 .arrow {
-	margin-top: 35vh;
+	margin-top: 25vh;
 	font-family: 'Glyphicons Halflings';
 	font-size: 100px !important;
 	color: #CCCCCC !important;
@@ -13,10 +13,28 @@ title: Linear Transformation
 canvas {
 	margin-top: 9vh;
 }
+
+.btn-transform {
+	background-color: #CCCCCC;
+}
+
+.btn-transform:focus,
+.btn-transform:hover {
+	opacity: 0.75;
+}
+
+.btn-transform:active {
+	opacity: 0.90;
+}
 </style>
 
 <script type="text/javascript">
   var input = {};
+	var matrix = [[1, 0.5], [0.5, -0.5]];
+
+	function updateMatrix() {
+		matrix = document.getElementById('matrix').value;
+	}
 </script>
 
 <script type="text/paperscript" canvas="canvas1">
@@ -481,8 +499,6 @@ function onMouseDown(event) {
 	console.log("Weeee");
 	console.log(input);
 
-	var matrix = [[1, 0.5], [0.5, -0.5]]
-
 	fro = new Point(matrix[0][0]*input.x0 + matrix[0][1]*input.y0, matrix[1][0]*input.x0 + matrix[1][1]*input.y0);
 	to = new Point(matrix[0][0]*(input.x0 + input.x) + matrix[0][1]*(input.y0 + input.y), matrix[1][0]*(input.x0 + input.x) + matrix[1][1]*(input.y0 + input.y));
 	straightLine = to - fro;
@@ -517,6 +533,11 @@ function onMouseDown(event) {
 </script>
 
 <div class="container-fluid">
+	<div class="row">
+		<center>
+			<h2>Linear Transformation</h2>
+		</center>
+	</div>
   <div class="row">
     <div class="col-md-5">
 			<center>
@@ -528,6 +549,16 @@ function onMouseDown(event) {
       <center>
         <!-- <img src="{{ site.baseurl }}public/calculator.png" height="100" width="100"/> -->
         <span class="glyphicon glyphicon-arrow-right arrow"></span>
+
+				<br><br>
+
+				<div class="input-group input-group-lg">
+				  <input id="matrix" type="text" class="form-control" placeholder="Matrix: [[2, 1],[1,-1]]">
+				</div>
+
+				<br>
+
+				<button type="button" class="btn btn-lg btn-transform" onclick="updateMatrix()">Transform</button>
       </center>
     </div>
 
