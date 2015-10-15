@@ -1,0 +1,25 @@
+---
+layout: minimum
+title: Test
+---
+
+<script src="{{ site.baseurl }}public/js/grid.js"></script>
+<script src="{{ site.baseurl }}public/js/vector.js"></script>
+<script>
+/* Set up */
+var canvas = document.getElementById('canvas1');
+paper.setup(canvas);
+
+paper.install(window);
+window.onload = function() {
+	paper.setup('canvas1');
+
+  drawGridLines(50, 50, paper.view.bounds);
+
+  paper.view.draw();
+
+}
+</script>
+
+<canvas id="canvas1" width="500" height="500"></canvas>
+<!-- <canvas id="canvas1" width="500" height="500"></canvas> -->
