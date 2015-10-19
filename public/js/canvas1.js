@@ -3,6 +3,9 @@
  * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
+var xOrigin;
+var yOrigin;
+
 /* Grid */
 var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
   var width_per_rectangle = boundingRect.width / num_rectangles_wide;
@@ -16,6 +19,7 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_wide / 2) {
       aLine.strokeWidth = 5;
+      xOrigin = num_rectangles_wide / 2;
     }
   }
   for (var i = 0; i <= num_rectangles_tall; i++) {
@@ -27,6 +31,7 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_tall / 2) {
       aLine.strokeWidth = 5;
+      yOrigin = num_rectangles_tall / 2;
     }
   }
 }
@@ -71,12 +76,17 @@ function drawVector(drag) {
   var arrowVector = vector.normalize(10);
 
   // Set input
-  input.x0 = vectorStart.x
-  input.y0 = vectorStart.y
+  vectorOrigin = {
+    x: 250,
+    y: 250
+  }
+
+  input.x0 = vectorOrigin.x
+  input.y0 = vectorOrigin.y
 
   var end = vectorStart + vector;
   vectorItem = new Group([
-    new Path([vectorStart, end]),
+    new Path([vectorOrigin, end]),
     new Path([
       end + arrowVector.rotate(135),
       end,
@@ -202,11 +212,18 @@ function onMouseDown(event) {
     create = false;
   } else {
     vectorStart = event.point;
+    // vectorStart = {
+    //   x: 250,
+    //   y: 250
+    // };
+    console.log("even.point: " + event.point);
+    console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
   }
   if (create) {
     dashItem = vectorItem;
     vectorItem = null;
   }
+
   processVector(event, true);
   //	document.redraw();
 }

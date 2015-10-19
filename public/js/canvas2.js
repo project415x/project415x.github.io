@@ -222,7 +222,8 @@ function onMouseDown(event) {
   console.log("Weeee");
   console.log(input);
 
-  fro = new Point(matrix[0][0] * input.x0 + matrix[0][1] * input.y0, matrix[1][0] * input.x0 + matrix[1][1] * input.y0);
+  // fro = new Point(matrix[0][0] * input.x0 + matrix[0][1] * input.y0, matrix[1][0] * input.x0 + matrix[1][1] * input.y0);
+  fro = new Point(250, 250);
   to = new Point(matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y), matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y));
   straightLine = to - fro;
 
@@ -232,10 +233,27 @@ function onMouseDown(event) {
     vectorItem.remove();
 
   /* This is where linear transformation happens */
+  // vectorItem = new Group([
+  //   new Path([{
+  //     x: matrix[0][0] * input.x0 + matrix[0][1] * input.y0,
+  //     y: matrix[1][0] * input.x0 + matrix[1][1] * input.y0
+  //   }, {
+  //     // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
+  //     // y: (input.x0 + input.x) - (input.y0 + input.y)
+  //     x: matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y),
+  //     y: matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y)
+  //   }]),
+  //   new Path([
+  //     to + arrowVector.rotate(135),
+  //     to,
+  //     to + arrowVector.rotate(-135)
+  //   ])
+  // ]);
+
   vectorItem = new Group([
     new Path([{
-      x: matrix[0][0] * input.x0 + matrix[0][1] * input.y0,
-      y: matrix[1][0] * input.x0 + matrix[1][1] * input.y0
+      x: 250,
+      y: 250
     }, {
       // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
       // y: (input.x0 + input.x) - (input.y0 + input.y)
