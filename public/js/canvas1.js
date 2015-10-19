@@ -1,3 +1,8 @@
+/**
+ * Input Canvas
+ * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
+ */
+
 /* Grid */
 var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
   var width_per_rectangle = boundingRect.width / num_rectangles_wide;

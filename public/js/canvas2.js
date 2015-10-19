@@ -1,3 +1,8 @@
+/**
+ * Output Canvas
+ * This is where the output vector is being generated and shown in the DOM
+ */
+
 /* Grid */
 var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
   var width_per_rectangle = boundingRect.width / num_rectangles_wide;
@@ -27,7 +32,6 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 }
 
 drawGridLines(20, 20, paper.view.bounds);
-
 
 /* Vector */
 var values = {
