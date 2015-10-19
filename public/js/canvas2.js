@@ -220,13 +220,44 @@ var dashItem;
 
 // function onMouseDown(event)
 
+function convertToMathCoords(x, y) {
+  var newX = (x - 250)/25;
+  var newY = -(y - 250)/25;
+
+  return [newX, newY];
+}
+
+function convertToScreenCoords(x, y) {
+  var newX = 25*x + 250;
+  var newY = -25*y + 250;
+
+  return [newX, newY];
+}
+
+
 function onMouseDown(event) {
   console.log("Weeee");
   console.log(input);
 
   // fro = new Point(matrix[0][0] * input.x0 + matrix[0][1] * input.y0, matrix[1][0] * input.x0 + matrix[1][1] * input.y0);
   fro = new Point(250, 250);
-  to = new Point(matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y), matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y));
+
+  /* Same as input */
+  // to = new Point(250 + input.x, 250 + input.y);
+
+  /* New Formula */
+  // to = new Point(2*input.x - input.y - 500, input.x - input.y + 250)
+
+  /* New Formula 2 */
+  var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
+  var matrixApplied = [2*mathCoords[0] + 1*mathCoords[1], 1*mathCoords[0] + -1*mathCoords[1]];
+  var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
+  to = new Point(screenCoords[0], screenCoords[1]);
+
+  // console.log("input.x: " + input.x + ", input.y: " + input.y)
+  // console.log("new.x: " + (250 + input.x) + ", new.y: " + (250 + input.y))
+  // console.log("to: " + to);
+
   straightLine = to - fro;
 
   var arrowVector = straightLine.normalize(10);
@@ -234,34 +265,22 @@ function onMouseDown(event) {
   if (vectorItem)
     vectorItem.remove();
 
-  /* This is where linear transformation happens */
-  // vectorItem = new Group([
-  //   new Path([{
-  //     x: matrix[0][0] * input.x0 + matrix[0][1] * input.y0,
-  //     y: matrix[1][0] * input.x0 + matrix[1][1] * input.y0
-  //   }, {
-  //     // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
-  //     // y: (input.x0 + input.x) - (input.y0 + input.y)
-  //     x: matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y),
-  //     y: matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y)
-  //   }]),
-  //   new Path([
-  //     to + arrowVector.rotate(135),
-  //     to,
-  //     to + arrowVector.rotate(-135)
-  //   ])
-  // ]);
-
+  // Draw New Vector
   vectorItem = new Group([
     new Path([{
       x: 250,
       y: 250
     }, {
-      // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
-      // y: (input.x0 + input.x) - (input.y0 + input.y)
-      x: matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y),
-      y: matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y)
+      /* Same as input */
+      // x: 250 + input.x,
+      // y: 250 + input.y
+
+      /* New Formula */
+      x: screenCoords[0],
+      y: screenCoords[1]
     }]),
+
+    // Arrows
     new Path([
       to + arrowVector.rotate(135),
       to,
