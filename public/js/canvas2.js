@@ -218,6 +218,8 @@ var dashItem;
 // 	vectorPrevious = vector;
 // }
 
+// function onMouseDown(event)
+
 function onMouseDown(event) {
   console.log("Weeee");
   console.log(input);
