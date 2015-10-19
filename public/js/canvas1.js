@@ -241,6 +241,18 @@ function onMouseUp(event) {
     dashItem = null;
   }
   vectorPrevious = vector;
+
+  // updateOutput();
+  var targetNode = document.getElementById("canvas2");
+  triggerMouseEvent (targetNode, "mousedown");
+}
+
+
+// Trigger Mouse Events
+function triggerMouseEvent (node, eventType) {
+    var clickEvent = document.createEvent ('MouseEvents');
+    clickEvent.initEvent (eventType, true, true);
+    node.dispatchEvent (clickEvent);
 }
 
 /* Export */
