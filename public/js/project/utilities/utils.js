@@ -4,7 +4,6 @@
  */
 
 // Convert Screen Coordinates to Math Coordinates
-
 function convertToMathCoords(x, y) {
   var newX = (x - 250) / 25;
   var newY = -(y - 250) / 25;
@@ -23,6 +22,6 @@ function convertToScreenCoords(x, y) {
 // Apply Matrix
 function applyMatrix(x, y, matrix) {
   var matrixApplied = [matrix[0][0] * x + matrix[0][1] * y, matrix[1][0] * x + matrix[1][1] * y];
-  
+
   return matrixApplied;
 }
