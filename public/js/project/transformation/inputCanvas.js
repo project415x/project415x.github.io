@@ -60,6 +60,9 @@ function processVector(event, drag) {
     }
   }
   drawVector(drag);
+
+  // var targetNode = document.getElementById("outputCanvas");
+  // triggerMouseEvent(targetNode, "mousedown");
 }
 
 function drawVector(drag) {
@@ -227,6 +230,8 @@ function onMouseDown(event) {
 }
 
 function onMouseDrag(event) {
+  inputEvent = event;
+
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
@@ -242,10 +247,9 @@ function onMouseUp(event) {
 
   vectorPrevious = vector;
 
-  var targetNode = document.getElementById("canvas2");
+  var targetNode = document.getElementById("outputCanvas");
   triggerMouseEvent(targetNode, "mousedown");
 }
-
 
 // Trigger Mouse Events
 function triggerMouseEvent(node, eventType) {
