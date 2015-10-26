@@ -253,7 +253,7 @@ function onMouseDown(event) {
   // to = new Point(250 + input.x, 250 + input.y);
 
   /* New Formula  */
-  var matrix = [[2, 1], [1, -1]];
+  // var matrix = [[2, 1], [1, -1]];
   var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
   var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
   var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
