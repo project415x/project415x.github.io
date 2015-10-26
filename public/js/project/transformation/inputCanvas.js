@@ -33,8 +33,14 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
 drawGridLines(20, 20, paper.view.bounds);
 
+
+// Origin
 var xOrigin;
 var yOrigin;
+var vectorOrigin = {
+  x: 250,
+  y: 250
+}
 
 /* Vector */
 var values = {
@@ -49,7 +55,13 @@ var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
 function processVector(event, drag) {
+
+  // Gets vector relative to starting point
+  // If vectorStart = vectorOrigin, the input vector doesn't draw
   vector = event.point - vectorStart;
+
+
+  // This is for connecting multiple vectors
   if (vectorPrevious) {
     if (values.fixLength && values.fixAngle) {
       vector = vectorPrevious;
@@ -59,32 +71,37 @@ function processVector(event, drag) {
       vector = vector.project(vectorPrevious);
     }
   }
+
+  // Draw the vector
   drawVector(drag);
 }
 
 function drawVector(drag) {
+  // Go through all of the vectors present, and then delete them
   if (items) {
     for (var i = 0, l = items.length; i < l; i++) {
       items[i].remove();
     }
   }
+
+  // Delete vector, and set items array to empty
   if (vectorItem)
     vectorItem.remove();
   items = [];
+
   var arrowVector = vector.normalize(10);
 
-  // Set input
-  vectorOrigin = {
-    x: 250,
-    y: 250
-  }
-
+  // Set inputs for the ouputCanvas
   input.x0 = vectorOrigin.x
   input.y0 = vectorOrigin.y
 
+  // This is the endpoint of the vector
+  // If vectorStart = vectorOrigin
   var end = vectorStart + vector;
+
   vectorItem = new Group([
     new Path([vectorOrigin, end]),
+    // This is for the arrow
     new Path([
       end + arrowVector.rotate(135),
       end,
@@ -105,26 +122,32 @@ function drawVector(drag) {
     }));
   }
 
-  // Draw Labels
+  // Draw angle labels
   if (values.showAngleLength) {
     drawAngle(vectorStart, vector, !drag);
     if (!drag)
       drawLength(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
   }
+
+  // Show coordinate labels
   var quadrant = vector.quadrant;
   if (values.showCoordinates && !drag) {
     drawLength(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
     drawLength(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
   }
+
+  // Create dashlines
   for (var i = 0, l = dashedItems.length; i < l; i++) {
     var item = dashedItems[i];
     item.strokeColor = 'black';
     item.dashArray = [1, 2];
     items.push(item);
   }
+
   // Update palette
-  values.x = vector.x;
-  values.y = vector.y;
+  tempVector = vector + vectorStart - vectorOrigin;
+  values.x = tempVector.x;
+  values.y = tempVector.y;
   values.length = vector.length;
   values.angle = vector.angle;
 
@@ -204,14 +227,18 @@ function drawLength(from, to, sign, label, value, prefix) {
 var dashItem;
 
 function onMouseDown(event) {
+  // Endpoint for previous vector
   var end = vectorStart + vector;
+
   var create = false;
+  // If shift key is entered, multiple vectors could be added
   if (event.modifiers.shift && vectorItem) {
     vectorStart = end;
     create = true;
   } else if (vector && (event.modifiers.option || end && end.getDistance(event.point) < 10)) {
     create = false;
   } else {
+    // If vectorStart = vectorOrigin, the bug disappears but the vector isn't drawing
     vectorStart = event.point;
 
     // Debug
@@ -227,6 +254,8 @@ function onMouseDown(event) {
 }
 
 function onMouseDrag(event) {
+  inputEvent = event;
+
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
@@ -242,10 +271,9 @@ function onMouseUp(event) {
 
   vectorPrevious = vector;
 
-  var targetNode = document.getElementById("canvas2");
+  var targetNode = document.getElementById("outputCanvas");
   triggerMouseEvent(targetNode, "mousedown");
 }
-
 
 // Trigger Mouse Events
 function triggerMouseEvent(node, eventType) {
