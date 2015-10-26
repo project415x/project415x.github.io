@@ -83,8 +83,10 @@ function drawVector(drag) {
   ]);
   vectorItem.strokeWidth = 5;
   vectorItem.strokeColor = '#e4141b';
+
   // Display:
   dashedItems = [];
+
   // Draw Circle
   if (values.showCircle) {
     dashedItems.push(new Path.Circle({
@@ -183,43 +185,6 @@ function drawLength(from, to, sign, label, value, prefix) {
 
 var dashItem;
 
-// function onMouseDown(event) {
-// 	var end = vectorStart + vector;
-// 	var create = false;
-// 	if (event.modifiers.shift && vectorItem) {
-// 		vectorStart = end;
-// 		create = true;
-// 	} else if (vector && (event.modifiers.option
-// 			|| end && end.getDistance(event.point) < 10)) {
-// 		create = false;
-// 	} else {
-// 		vectorStart = event.point;
-// 	}
-// 	if (create) {
-// 		dashItem = vectorItem;
-// 		vectorItem = null;
-// 	}
-// 	processVector(event, true);
-// //	document.redraw();
-// }
-//
-// function onMouseDrag(event) {
-// 	if (!event.modifiers.shift && values.fixLength && values.fixAngle)
-// 		vectorStart = event.point;
-// 	processVector(event, event.modifiers.shift);
-// }
-//
-// function onMouseUp(event) {
-// 	processVector(event, false);
-// 	if (dashItem) {
-// 		dashItem.dashArray = [1, 2];
-// 		dashItem = null;
-// 	}
-// 	vectorPrevious = vector;
-// }
-
-// function onMouseDown(event)
-
 // Convert Screen Coordinates to Math Coordinates
 function convertToMathCoords(x, y) {
   var newX = (x - 250)/25;
@@ -243,26 +208,18 @@ function applyMatrix(x, y, matrix) {
 }
 
 function onMouseDown(event) {
-  console.log("Weeee");
   console.log(input);
 
-  // fro = new Point(matrix[0][0] * input.x0 + matrix[0][1] * input.y0, matrix[1][0] * input.x0 + matrix[1][1] * input.y0);
   fro = new Point(250, 250);
 
   /* Same as input */
   // to = new Point(250 + input.x, 250 + input.y);
 
   /* New Formula  */
-  var matrix = [[2, 1], [1, -1]];
   var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
   var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
   var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
   to = new Point(screenCoords[0], screenCoords[1]);
-
-  /* Debug */
-  // console.log("input.x: " + input.x + ", input.y: " + input.y)
-  // console.log("new.x: " + (250 + input.x) + ", new.y: " + (250 + input.y))
-  // console.log("to: " + to);
 
   straightLine = to - fro;
 
