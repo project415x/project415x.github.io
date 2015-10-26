@@ -23,6 +23,11 @@
 	.btn-transform:active {
 		opacity: 0.90;
 	}
+
+	.input-matrix {
+    width: 50px;
+		display: inline-block;
+  }
 </style>
 
 <!-- Configurations -->
@@ -35,7 +40,16 @@
 	var inputEvent;
 
 	function updateMatrix() {
-		matrix = document.getElementById('matrix').value;
+
+		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value: matrix[0][0];
+		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value: matrix[0][1];
+		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value: matrix[1][0];
+		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value: matrix[1][1];
+
+		matrix = [
+			[m00, m01],
+			[m10, m11]
+		];
 
 		var targetNode = document.getElementById("outputCanvas");
 		triggerMouseEvent(targetNode, "mousedown");
@@ -78,12 +92,25 @@
 				<br>
 				<br>
 
-				<div class="input-group input-group-lg">
-					<!-- Input Matrix -->
-					<input id="matrix" type="text" class="form-control" placeholder="Matrix: [[2, 1],[1,-1]]">
+				<div class="input-group input-group-lg input-matrix">
+					<input id="matrix00" type="text" class="form-control" placeholder="2">
+				</div>
+
+				<div class="input-group input-group-lg input-matrix">
+					<input id="matrix01" type="text" class="form-control" placeholder="1">
 				</div>
 
 				<br>
+
+				<div class="input-group input-group-lg input-matrix">
+					<input id="matrix10" type="text" class="form-control" placeholder="1">
+				</div>
+
+				<div class="input-group input-group-lg input-matrix">
+					<input id="matrix11" type="text" class="form-control" placeholder="-1">
+				</div>
+
+				<br><br><br>
 
 				<button type="button" class="btn btn-lg btn-transform" onclick="updateMatrix()">Transform</button>
 			</center>
