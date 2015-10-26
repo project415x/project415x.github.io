@@ -55,7 +55,13 @@ var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
 function processVector(event, drag) {
+
+  // Gets vector relative to starting point
+  // If vectorStart = vectorOrigin, the input vector doesn't draw
   vector = event.point - vectorStart;
+
+
+  // This is for connecting multiple vectors
   if (vectorPrevious) {
     if (values.fixLength && values.fixAngle) {
       vector = vectorPrevious;
@@ -65,29 +71,37 @@ function processVector(event, drag) {
       vector = vector.project(vectorPrevious);
     }
   }
-  drawVector(drag);
 
-  // var targetNode = document.getElementById("outputCanvas");
-  // triggerMouseEvent(targetNode, "mousedown");
+  // Draw the vector
+  drawVector(drag);
 }
 
 function drawVector(drag) {
+  // Go through all of the vectors present, and then delete them
   if (items) {
     for (var i = 0, l = items.length; i < l; i++) {
       items[i].remove();
     }
   }
+
+  // Delete vector, and set items array to empty
   if (vectorItem)
     vectorItem.remove();
   items = [];
+
   var arrowVector = vector.normalize(10);
 
+  // Set inputs for the ouputCanvas
   input.x0 = vectorOrigin.x
   input.y0 = vectorOrigin.y
 
+  // This is the endpoint of the vector
+  // If vectorStart = vectorOrigin
   var end = vectorStart + vector;
+
   vectorItem = new Group([
     new Path([vectorOrigin, end]),
+    // This is for the arrow
     new Path([
       end + arrowVector.rotate(135),
       end,
@@ -108,19 +122,21 @@ function drawVector(drag) {
     }));
   }
 
-  // Draw Labels
+  // Draw angle labels
   if (values.showAngleLength) {
     drawAngle(vectorStart, vector, !drag);
     if (!drag)
       drawLength(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
   }
 
+  // Show coordinate labels
   var quadrant = vector.quadrant;
   if (values.showCoordinates && !drag) {
     drawLength(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
     drawLength(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
   }
 
+  // Create dashlines
   for (var i = 0, l = dashedItems.length; i < l; i++) {
     var item = dashedItems[i];
     item.strokeColor = 'black';
@@ -220,6 +236,7 @@ function onMouseDown(event) {
   } else if (vector && (event.modifiers.option || end && end.getDistance(event.point) < 10)) {
     create = false;
   } else {
+    // If vectorStart = vectorOrigin, the bug disappears but the vector isn't drawing
     vectorStart = event.point;
 
     // Debug
