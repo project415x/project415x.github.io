@@ -33,8 +33,14 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
 drawGridLines(20, 20, paper.view.bounds);
 
+
+// Origin
 var xOrigin;
 var yOrigin;
+var vectorOrigin = {
+  x: 250,
+  y: 250
+}
 
 /* Vector */
 var values = {
@@ -76,12 +82,6 @@ function drawVector(drag) {
   items = [];
   var arrowVector = vector.normalize(10);
 
-  // Set input
-  vectorOrigin = {
-    x: 250,
-    y: 250
-  }
-
   input.x0 = vectorOrigin.x
   input.y0 = vectorOrigin.y
 
@@ -114,17 +114,20 @@ function drawVector(drag) {
     if (!drag)
       drawLength(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
   }
+
   var quadrant = vector.quadrant;
   if (values.showCoordinates && !drag) {
     drawLength(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
     drawLength(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
   }
+
   for (var i = 0, l = dashedItems.length; i < l; i++) {
     var item = dashedItems[i];
     item.strokeColor = 'black';
     item.dashArray = [1, 2];
     items.push(item);
   }
+
   // Update palette
   values.x = vector.x;
   values.y = vector.y;
@@ -207,7 +210,9 @@ function drawLength(from, to, sign, label, value, prefix) {
 var dashItem;
 
 function onMouseDown(event) {
+  // Endpoint for previous vector
   var end = vectorStart + vector;
+
   var create = false;
   if (event.modifiers.shift && vectorItem) {
     vectorStart = end;
