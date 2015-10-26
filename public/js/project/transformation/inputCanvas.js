@@ -3,9 +3,6 @@
  * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
-var xOrigin;
-var yOrigin;
-
 /* Grid */
 var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
   var width_per_rectangle = boundingRect.width / num_rectangles_wide;
@@ -19,7 +16,6 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_wide / 2) {
       aLine.strokeWidth = 5;
-      xOrigin = num_rectangles_wide / 2;
     }
   }
   for (var i = 0; i <= num_rectangles_tall; i++) {
@@ -31,12 +27,14 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_tall / 2) {
       aLine.strokeWidth = 5;
-      yOrigin = num_rectangles_tall / 2;
     }
   }
 }
 
 drawGridLines(20, 20, paper.view.bounds);
+
+var xOrigin;
+var yOrigin;
 
 /* Vector */
 var values = {
@@ -245,15 +243,15 @@ function onMouseUp(event) {
   vectorPrevious = vector;
 
   var targetNode = document.getElementById("canvas2");
-  triggerMouseEvent (targetNode, "mousedown");
+  triggerMouseEvent(targetNode, "mousedown");
 }
 
 
 // Trigger Mouse Events
-function triggerMouseEvent (node, eventType) {
-  var clickEvent = document.createEvent ('MouseEvents');
-  clickEvent.initEvent (eventType, true, true);
-  node.dispatchEvent (clickEvent);
+function triggerMouseEvent(node, eventType) {
+  var clickEvent = document.createEvent('MouseEvents');
+  clickEvent.initEvent(eventType, true, true);
+  node.dispatchEvent(clickEvent);
 }
 
 /* Export */
