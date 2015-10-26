@@ -59,7 +59,7 @@ function processVector(event, drag) {
   // Gets vector relative to starting point
   // If vectorStart = vectorOrigin, the input vector doesn't draw
   vector = event.point - vectorStart;
-
+  arrowVectorTemp =  event.point - vectorOrigin;
 
   // This is for connecting multiple vectors
   if (vectorPrevious) {
@@ -89,7 +89,7 @@ function drawVector(drag) {
     vectorItem.remove();
   items = [];
 
-  var arrowVector = vector.normalize(10);
+  var arrowVector = arrowVectorTemp.normalize(10);
 
   // Set inputs for the ouputCanvas
   input.x0 = vectorOrigin.x
