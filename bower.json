@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "homepage": "https://github.com/linearlearning/linearlearning.github.io",
   "authors": [
-    "Joseph Milla <jjtmilla@gmail.com>"
+    "Joseph Milla <joseph@milla.xyz>"
   ],
   "description": "Learning tools for linear algebra",
   "main": "index.html",
@@ -23,7 +23,6 @@
     "gsap": "~1.18.0",
     "modernizr": "~3.0.0",
     "normalize.css": "~3.0.3",
-    "victor": "~1.1.0",
     "paper": "~0.9.24"
   }
 }
