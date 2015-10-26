@@ -2,58 +2,6 @@
 layout: minimum
 title: Linear Transformation
 ---
-<!-- TODO: Make sure that the styling will be in a SCSS file -->
-<style>
-.arrow {
-	margin-top: 5vh;
-	font-family: 'Glyphicons Halflings';
-	font-size: 100px !important;
-	color: #CCCCCC !important;
-}
-
-canvas {
-	margin-top: 9vh;
-}
-
-.btn-transform {
-	background-color: #CCCCCC;
-}
-
-.btn-transform:focus,
-.btn-transform:hover {
-	opacity: 0.75;
-}
-
-.btn-transform:active {
-	opacity: 0.90;
-}
-</style>
-
-<!-- Configurations -->
-<script type="text/javascript">
-  var input = {};
-	var matrix = [[2, 1], [1, -1]];
-
-	function updateMatrix() {
-		matrix = document.getElementById('matrix').value;
-
-		var targetNode = document.getElementById("outputCanvas");
-	  triggerMouseEvent (targetNode, "mousedown");
-	}
-
-	// Trigger Mouse Events
-	function triggerMouseEvent (node, eventType) {
-	  var clickEvent = document.createEvent ('MouseEvents');
-	  clickEvent.initEvent (eventType, true, true);
-	  node.dispatchEvent (clickEvent);
-	}
-	// Initalize updateOutput function, then update on PaperScript
-	// var updateOutput = function() {};
-</script>
-
-<!-- PapersScript Canvas Import -->
-<script type="text/paperscript" src="../public/js/project/transformation/inputCanvas.js" canvas="canvas1"></script>
-<script type="text/paperscript" src="../public/js/project/transformation/outputCanvas.js" canvas="canvas2"></script>
 
 <div class="container-fluid">
 	<div class="row">
@@ -61,40 +9,6 @@ canvas {
 			<h2>Linear Transformation</h2>
 		</center>
 	</div>
-  <div class="row">
-    <div class="col-md-5">
-			<center>
-				<!-- Input Grid -->
-	      <canvas id="canvas1" width="500" height="500"></canvas>
-			</center>
-    </div>
-
-    <div class="col-md-2">
-      <center>
-				<br><br><br>
-				Click and drag a vector on the left, then enter a matrix to see the linear transformation on the right
-				<br>
-
-        <span class="glyphicon glyphicon-arrow-right arrow"></span>
-
-				<br><br>
-
-				<div class="input-group input-group-lg">
-					<!-- Input Matrix -->
-				  <input id="matrix" type="text" class="form-control" placeholder="Matrix: [[2, 1],[1,-1]]">
-				</div>
-
-				<br>
-
-				<button type="button" class="btn btn-lg btn-transform" onclick="updateMatrix()">Transform</button>
-      </center>
-    </div>
-
-    <div class="col-md-5">
-			<center>
-				<!-- Output Grid -->
-		    <canvas id="canvas2" width="500" height="500"></canvas>
-			</center>
-    </div>
-  </div>
 </div>
+
+{% include transformation.html %}
