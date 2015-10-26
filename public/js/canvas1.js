@@ -95,8 +95,10 @@ function drawVector(drag) {
   ]);
   vectorItem.strokeWidth = 5;
   vectorItem.strokeColor = '#e4141b';
+
   // Display:
   dashedItems = [];
+
   // Draw Circle
   if (values.showCircle) {
     dashedItems.push(new Path.Circle({
@@ -104,6 +106,7 @@ function drawVector(drag) {
       radius: vector.length
     }));
   }
+
   // Draw Labels
   if (values.showAngleLength) {
     drawAngle(vectorStart, vector, !drag);
@@ -212,10 +215,8 @@ function onMouseDown(event) {
     create = false;
   } else {
     vectorStart = event.point;
-    // vectorStart = {
-    //   x: 250,
-    //   y: 250
-    // };
+
+    // Debug
     console.log("even.point: " + event.point);
     console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
   }
@@ -225,7 +226,6 @@ function onMouseDown(event) {
   }
 
   processVector(event, true);
-  //	document.redraw();
 }
 
 function onMouseDrag(event) {
@@ -236,13 +236,14 @@ function onMouseDrag(event) {
 
 function onMouseUp(event) {
   processVector(event, false);
+
   if (dashItem) {
     dashItem.dashArray = [1, 2];
     dashItem = null;
   }
+
   vectorPrevious = vector;
 
-  // updateOutput();
   var targetNode = document.getElementById("canvas2");
   triggerMouseEvent (targetNode, "mousedown");
 }
