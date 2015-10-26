@@ -87,17 +87,11 @@
       margin: 0 auto;
       text-align: center;
       color: #000000;
-      //
-      // &:focus,
-      // &:hover {
-      //   text-transform: none;
-      //   opacity: 0.75;
-      // }
-      //
-      // &:active {
-      //   opacity: 0.90;
-      // }
     }
+
+    // .infoModal {
+    //   z-index: 100;
+    // }
 
     p {
       font-family: 'Roboto', sans-serif;
@@ -147,7 +141,7 @@
     right: 0;
     transform: translateY(100%);
     width: 100%;
-    background: green;
+    background: #FFFFFF;
   }
   #fourth-wipe {
     height: 100%;
