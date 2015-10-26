@@ -1,7 +1,10 @@
 /**
- * Output Canvas
- * This is where the output vector is being generated and shown in the DOM
+ * Input Canvas
+ * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
+
+var xOrigin;
+var yOrigin;
 
 /* Grid */
 var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
@@ -16,6 +19,7 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_wide / 2) {
       aLine.strokeWidth = 5;
+      xOrigin = num_rectangles_wide / 2;
     }
   }
   for (var i = 0; i <= num_rectangles_tall; i++) {
@@ -27,6 +31,7 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_tall / 2) {
       aLine.strokeWidth = 5;
+      yOrigin = num_rectangles_tall / 2;
     }
   }
 }
@@ -60,9 +65,6 @@ function processVector(event, drag) {
 }
 
 function drawVector(drag) {
-
-  console.log(drag);
-
   if (items) {
     for (var i = 0, l = items.length; i < l; i++) {
       items[i].remove();
@@ -72,9 +74,19 @@ function drawVector(drag) {
     vectorItem.remove();
   items = [];
   var arrowVector = vector.normalize(10);
+
+  // Set input
+  vectorOrigin = {
+    x: 250,
+    y: 250
+  }
+
+  input.x0 = vectorOrigin.x
+  input.y0 = vectorOrigin.y
+
   var end = vectorStart + vector;
   vectorItem = new Group([
-    new Path([vectorStart, end]),
+    new Path([vectorOrigin, end]),
     new Path([
       end + arrowVector.rotate(135),
       end,
@@ -83,8 +95,10 @@ function drawVector(drag) {
   ]);
   vectorItem.strokeWidth = 5;
   vectorItem.strokeColor = '#e4141b';
+
   // Display:
   dashedItems = [];
+
   // Draw Circle
   if (values.showCircle) {
     dashedItems.push(new Path.Circle({
@@ -92,6 +106,7 @@ function drawVector(drag) {
       radius: vector.length
     }));
   }
+
   // Draw Labels
   if (values.showAngleLength) {
     drawAngle(vectorStart, vector, !drag);
@@ -114,6 +129,13 @@ function drawVector(drag) {
   values.y = vector.y;
   values.length = vector.length;
   values.angle = vector.angle;
+
+  input.x = values.x;
+  input.y = values.y;
+  input.length = values.length / 10;
+  input.angle = values.angle;
+
+  console.log(values);
 }
 
 function drawAngle(center, vector, label) {
@@ -183,92 +205,59 @@ function drawLength(from, to, sign, label, value, prefix) {
 
 var dashItem;
 
-// function onMouseDown(event) {
-// 	var end = vectorStart + vector;
-// 	var create = false;
-// 	if (event.modifiers.shift && vectorItem) {
-// 		vectorStart = end;
-// 		create = true;
-// 	} else if (vector && (event.modifiers.option
-// 			|| end && end.getDistance(event.point) < 10)) {
-// 		create = false;
-// 	} else {
-// 		vectorStart = event.point;
-// 	}
-// 	if (create) {
-// 		dashItem = vectorItem;
-// 		vectorItem = null;
-// 	}
-// 	processVector(event, true);
-// //	document.redraw();
-// }
-//
-// function onMouseDrag(event) {
-// 	if (!event.modifiers.shift && values.fixLength && values.fixAngle)
-// 		vectorStart = event.point;
-// 	processVector(event, event.modifiers.shift);
-// }
-//
-// function onMouseUp(event) {
-// 	processVector(event, false);
-// 	if (dashItem) {
-// 		dashItem.dashArray = [1, 2];
-// 		dashItem = null;
-// 	}
-// 	vectorPrevious = vector;
-// }
-
 function onMouseDown(event) {
-  console.log("Weeee");
-  console.log(input);
+  var end = vectorStart + vector;
+  var create = false;
+  if (event.modifiers.shift && vectorItem) {
+    vectorStart = end;
+    create = true;
+  } else if (vector && (event.modifiers.option || end && end.getDistance(event.point) < 10)) {
+    create = false;
+  } else {
+    vectorStart = event.point;
 
-  // fro = new Point(matrix[0][0] * input.x0 + matrix[0][1] * input.y0, matrix[1][0] * input.x0 + matrix[1][1] * input.y0);
-  fro = new Point(250, 250);
-  to = new Point(matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y), matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y));
-  straightLine = to - fro;
+    // Debug
+    console.log("even.point: " + event.point);
+    console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
+  }
+  if (create) {
+    dashItem = vectorItem;
+    vectorItem = null;
+  }
 
-  var arrowVector = straightLine.normalize(10);
-
-  if (vectorItem)
-    vectorItem.remove();
-
-  /* This is where linear transformation happens */
-  // vectorItem = new Group([
-  //   new Path([{
-  //     x: matrix[0][0] * input.x0 + matrix[0][1] * input.y0,
-  //     y: matrix[1][0] * input.x0 + matrix[1][1] * input.y0
-  //   }, {
-  //     // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
-  //     // y: (input.x0 + input.x) - (input.y0 + input.y)
-  //     x: matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y),
-  //     y: matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y)
-  //   }]),
-  //   new Path([
-  //     to + arrowVector.rotate(135),
-  //     to,
-  //     to + arrowVector.rotate(-135)
-  //   ])
-  // ]);
-
-  vectorItem = new Group([
-    new Path([{
-      x: 250,
-      y: 250
-    }, {
-      // x: 2*(input.x0 + input.x) + (input.y0 + input.y),
-      // y: (input.x0 + input.x) - (input.y0 + input.y)
-      x: matrix[0][0] * (input.x0 + input.x) + matrix[0][1] * (input.y0 + input.y),
-      y: matrix[1][0] * (input.x0 + input.x) + matrix[1][1] * (input.y0 + input.y)
-    }]),
-    new Path([
-      to + arrowVector.rotate(135),
-      to,
-      to + arrowVector.rotate(-135)
-    ])
-  ]);
-
-  vectorItem.strokeColor = 'red';
-  vectorItem.strokeWidth = 5;
-
-  console.log(straightLine);
+  processVector(event, true);
 }
+
+function onMouseDrag(event) {
+  if (!event.modifiers.shift && values.fixLength && values.fixAngle)
+    vectorStart = event.point;
+  processVector(event, event.modifiers.shift);
+}
+
+function onMouseUp(event) {
+  processVector(event, false);
+
+  if (dashItem) {
+    dashItem.dashArray = [1, 2];
+    dashItem = null;
+  }
+
+  vectorPrevious = vector;
+
+  var targetNode = document.getElementById("canvas2");
+  triggerMouseEvent (targetNode, "mousedown");
+}
+
+
+// Trigger Mouse Events
+function triggerMouseEvent (node, eventType) {
+  var clickEvent = document.createEvent ('MouseEvents');
+  clickEvent.initEvent (eventType, true, true);
+  node.dispatchEvent (clickEvent);
+}
+
+/* Export */
+input.x = values.x;
+input.y = values.y;
+input.length = values.length;
+input.angle = values.angle;

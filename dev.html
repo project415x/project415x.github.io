@@ -5,7 +5,7 @@ title: Linear Transformation
 <!-- TODO: Make sure that the styling will be in a SCSS file -->
 <style>
 .arrow {
-	margin-top: 25vh;
+	margin-top: 5vh;
 	font-family: 'Glyphicons Halflings';
 	font-size: 100px !important;
 	color: #CCCCCC !important;
@@ -32,16 +32,28 @@ canvas {
 <!-- Configurations -->
 <script type="text/javascript">
   var input = {};
-	var matrix = [[1, 0.5], [0.5, -0.5]];
+	var matrix = [[2, 1], [1, -1]];
 
 	function updateMatrix() {
 		matrix = document.getElementById('matrix').value;
+
+		var targetNode = document.getElementById("outputCanvas");
+	  triggerMouseEvent (targetNode, "mousedown");
 	}
+
+	// Trigger Mouse Events
+	function triggerMouseEvent (node, eventType) {
+	  var clickEvent = document.createEvent ('MouseEvents');
+	  clickEvent.initEvent (eventType, true, true);
+	  node.dispatchEvent (clickEvent);
+	}
+	// Initalize updateOutput function, then update on PaperScript
+	// var updateOutput = function() {};
 </script>
 
 <!-- PapersScript Canvas Import -->
-<script type="text/paperscript" src="../public/js/canvas1.js" canvas="canvas1"></script>
-<script type="text/paperscript" src="../public/js/canvas2.js" canvas="canvas2"></script>
+<script type="text/paperscript" src="../public/js/project/transformation/inputCanvas.js" canvas="canvas1"></script>
+<script type="text/paperscript" src="../public/js/project/transformation/outputCanvas.js" canvas="canvas2"></script>
 
 <div class="container-fluid">
 	<div class="row">
@@ -59,6 +71,10 @@ canvas {
 
     <div class="col-md-2">
       <center>
+				<br><br><br>
+				Click and drag a vector on the left, then enter a matrix to see the linear transformation on the right
+				<br>
+
         <span class="glyphicon glyphicon-arrow-right arrow"></span>
 
 				<br><br>
