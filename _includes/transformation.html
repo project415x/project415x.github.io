@@ -25,9 +25,9 @@
 	}
 
 	.input-matrix {
-    width: 50px;
+		width: 50px;
 		display: inline-block;
-  }
+	}
 </style>
 
 <!-- Configurations -->
@@ -41,10 +41,10 @@
 
 	function updateMatrix() {
 
-		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value: matrix[0][0];
-		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value: matrix[0][1];
-		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value: matrix[1][0];
-		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value: matrix[1][1];
+		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value : matrix[0][0];
+		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value : matrix[0][1];
+		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value : matrix[1][0];
+		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value : matrix[1][1];
 
 		matrix = [
 			[m00, m01],
@@ -110,7 +110,9 @@
 					<input id="matrix11" type="text" class="form-control" placeholder="-1">
 				</div>
 
-				<br><br><br>
+				<br>
+				<br>
+				<br>
 
 				<button type="button" class="btn btn-lg btn-transform" onclick="updateMatrix()">Transform</button>
 			</center>
