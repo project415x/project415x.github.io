@@ -145,8 +145,9 @@ function drawVector(drag) {
   }
 
   // Update palette
-  values.x = vector.x;
-  values.y = vector.y;
+  tempVector = vector + vectorStart - vectorOrigin;
+  values.x = tempVector.x;
+  values.y = tempVector.y;
   values.length = vector.length;
   values.angle = vector.angle;
 
@@ -230,6 +231,7 @@ function onMouseDown(event) {
   var end = vectorStart + vector;
 
   var create = false;
+  // If shift key is entered, multiple vectors could be added
   if (event.modifiers.shift && vectorItem) {
     vectorStart = end;
     create = true;
