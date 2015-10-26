@@ -1,4 +1,6 @@
 # Project 415x
+![Project 415x](public/img/project415x.png)
+
 Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra
 
 ## Table of Contents
