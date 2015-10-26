@@ -23,7 +23,6 @@
     "gsap": "~1.18.0",
     "modernizr": "~3.0.0",
     "normalize.css": "~3.0.3",
-    "victor": "~1.1.0",
     "paper": "~0.9.24"
   }
 }
