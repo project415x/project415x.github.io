@@ -84,7 +84,7 @@ Issues can be anything from suggestions, improvements, bugs, and other thingamaj
 To file an issue, please [use](https://github.com/project415x/project415x.github.io/issues/new) this. It helps in tracking everything.
 
 ## Contributing
-Help in developing and maintaining this project would be much appreciated. Please contact either [Prof. Cary Malkiewich](http://math.uiuc.edu/~cmalkiew/) or [Prof. Jenya Sapir]((http://math.uiuc.edu/~cmalkiew/) for more information.
+Help in developing and maintaining this project would be much appreciated. Please contact either [Prof. Cary Malkiewich](http://math.uiuc.edu/~cmalkiew/) or [Prof. Jenya Sapir](http://math.uiuc.edu/~cmalkiew/) for more information.
 
 ## Versioning
 For transparency into our release cycle and in striving to maintain backward compatibility, Project415x is maintained under the [Semantic Versioning Guidelines](http://semver.org/). Sometimes we screw up, but we'll adhere to those rules whenever possible.
