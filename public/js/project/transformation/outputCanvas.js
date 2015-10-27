@@ -33,6 +33,13 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
 drawGridLines(20, 20, paper.view.bounds);
 
+/* Target */
+var targetX = getRandomInt(10, 490);
+var targetY = getRandomInt(10, 490);
+var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+targetPath.fillColor = 'blue';
+var score = 0;
+
 /* Vector */
 var values = {
   fixLength: false,
@@ -237,6 +244,31 @@ function onMouseDown(event) {
 
   vectorItem.strokeColor = 'red';
   vectorItem.strokeWidth = 5;
+
+  /* If target is hit */
+  if(Math.abs(targetX - screenCoords[0]) <= 10 && Math.abs(targetY - screenCoords[1]) <= 10) {
+    targetPath.visible = false;
+    console.log("Target was hit!");
+
+    scoreX = 460;
+    scoreY = 40;
+    var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
+    scorePath.fillColor = '#7CFC00';
+    // scorePath.opacity = 0.75;
+    score += 10;
+
+    var text = new PointText(new Point(scoreX, scoreY + 7));
+    text.justification = 'center';
+    text.fillColor = 'black';
+    text.content = score;
+    text.fontSize = 20;
+
+    targetX = getRandomInt(10, 460);
+    targetY = getRandomInt(10, 460);
+    targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+    targetPath.fillColor = 'blue';
+  }
+
 
   console.log(straightLine);
 }
