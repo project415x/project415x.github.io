@@ -1,4 +1,4 @@
-# ![Project 415x](http://p415x.xyz/)
+# [Project 415x](http://p415x.xyz/)
 [![Project 415x](public/img/project415x.png)](http://p415x.xyz/)
 
 Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra
