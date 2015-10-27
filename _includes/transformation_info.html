@@ -1,0 +1,42 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="lessonInfo">
+      Some functions are simpler than others. Linear transformations are the simplest ones. Recall that if v = (v1, v2) and w = (w1, w2) are points in R2, we can think of them as vectors, and add them together by the rule<br>
+
+      <center>v + w = (v1 + w1, v2 + w2)</center><br>
+
+      If c is a real number we can scale v by c. We call this operation multiplication by c:<br>
+
+      <center>cv = (cv1, cv2)</center><br>
+
+      Now if T is a function from R2 to R2, we say that T is a linear transformation if the following two equations are always true:<br>
+
+      <center>T (v + w) = T (v) + T (w)</center><br>
+
+      <center>T(cv) = cT(v)</center><br>
+
+      Intuitively, this means that T preserves the origin, and it preserves parallelograms.<br>
+
+      There are a few important facts about linear transformations. One is that a linear transformation from R2 is completely determined by its behavior on the standard basis vectors e1 = (1, 0) and e2 = (0, 1). This is easy to see: if (x, y) is another point, we have<br>
+
+      <center>T (x, y) = T ((x, 0) + (0, y)) = T (x, 0) + T (0, y) = xT (1, 0) + yT (0, 1)</center><br>
+
+      In fact, T is also determined by what it does to any other “basis” for R2.</center><br>
+
+      Linear transformations always take straight lines to straight lines (or collapse them down to points). The easiest way to see this is by considering straight lines through the origin. They must be of the form {tv : t ∈ R}. This notation means that v is a fixed vector, but t is a real number that is allowed to vary. When we apply T, we get<br>
+
+      <center>{tT(v) : t ∈ R}</center><br>
+
+      This forms another line, unless T(v) = 0, in which case we get just the origin. More intuitively, T preserves scaling, so once I know where v goes, all of the scalar multiples of v go to the scalar multiples of T(v).<br>
+
+      I could even consider lines not going through the origin. Consider the line {v+tw:t∈R}. T takes the points of this line to the points
+      <center>{T (v) + tT (w) : t ∈ R}</center><br>
+
+      This forms another line, unless T(w) = 0, in which case we get just the point T(v).<br>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>

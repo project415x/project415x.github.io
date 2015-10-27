@@ -1,23 +1,19 @@
 #f404 {
   background-color: #3883d8;
-  color: #FFFFFF;
+  color: #fff;
   text-align: center;
   height: 100vh;
   padding-top: 25%;
-
   span {
     font-weight: 400;
     display: block;
-
     a {
       color: orange;
       text-decoration: none;
-
       &:hover,
       &:focus {
         opacity: 0.75;
       }
-
       &:active {
         opacity: 0.90;
       }
