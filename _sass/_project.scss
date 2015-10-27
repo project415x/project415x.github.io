@@ -30,6 +30,17 @@
   }
 
   /**
+   * Lesson Info
+   */
+  .lessonInfo {
+    padding-top: 10%;
+    font-family: 'Crimson Text', serif;
+    font-size: 14px;
+    text-align: justify;
+    width: 75wh;
+  }
+
+  /**
    * ScrollMagic Containers
    */
   .container {
@@ -139,6 +150,16 @@
     background: #fff;
   }
   #wipe3 {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(100%);
+    width: 100%;
+    background: #fff;
+  }
+  #wipe4 {
     height: 100%;
     overflow: hidden;
     position: absolute;
