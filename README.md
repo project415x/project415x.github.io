@@ -90,4 +90,4 @@ Help in developing and maintaining this project would be much appreciated. Pleas
 For transparency into our release cycle and in striving to maintain backward compatibility, Project415x is maintained under the [Semantic Versioning Guidelines](http://semver.org/). Sometimes we screw up, but we'll adhere to those rules whenever possible.
 
 ## License
-Code released under the [MIT License](LICENSE)
+Code released under the [MIT License](LICENSE).
