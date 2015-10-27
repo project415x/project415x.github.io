@@ -156,7 +156,7 @@ function drawVector(drag) {
   input.length = values.length / 10;
   input.angle = values.angle;
 
-  console.log(values);
+  console.log("values: " + values);
 }
 
 function drawAngle(center, vector, label) {
@@ -259,6 +259,8 @@ function onMouseDrag(event) {
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
+
+  renderVector();
 }
 
 function onMouseUp(event) {

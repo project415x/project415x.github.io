@@ -272,3 +272,78 @@ function onMouseDown(event) {
 
   console.log(straightLine);
 }
+
+renderVector = function() {
+  console.log(input);
+
+  fro = new Point(250, 250);
+
+  /* Same as input */
+  // to = new Point(250 + input.x, 250 + input.y);
+
+  /* New Formula  */
+  var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
+  var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
+  var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
+  to = new Point(screenCoords[0], screenCoords[1]);
+
+  straightLine = to - fro;
+
+  var arrowVector = straightLine.normalize(10);
+
+  if (vectorItem)
+    vectorItem.remove();
+
+  // Draw New Vector
+  vectorItem = new Group([
+    new Path([{
+      x: 250,
+      y: 250
+    }, {
+      /* Same as input */
+      // x: 250 + input.x,
+      // y: 250 + input.y
+
+      /* New Formula */
+      x: screenCoords[0],
+      y: screenCoords[1]
+    }]),
+
+    // Arrows
+    new Path([
+      to + arrowVector.rotate(135),
+      to,
+      to + arrowVector.rotate(-135)
+    ])
+  ]);
+
+  vectorItem.strokeColor = 'red';
+  vectorItem.strokeWidth = 5;
+
+  /* If target is hit */
+  if(Math.abs(targetX - screenCoords[0]) <= 10 && Math.abs(targetY - screenCoords[1]) <= 10) {
+    targetPath.visible = false;
+    console.log("Target was hit!");
+
+    scoreX = 460;
+    scoreY = 40;
+    var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
+    scorePath.fillColor = '#7CFC00';
+    // scorePath.opacity = 0.75;
+    score += 10;
+
+    var text = new PointText(new Point(scoreX, scoreY + 7));
+    text.justification = 'center';
+    text.fillColor = 'black';
+    text.content = score;
+    text.fontSize = 20;
+
+    targetX = getRandomInt(10, 460);
+    targetY = getRandomInt(10, 460);
+    targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+    targetPath.fillColor = 'blue';
+  }
+
+
+  console.log(straightLine);
+}
