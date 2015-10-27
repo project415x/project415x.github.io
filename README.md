@@ -28,7 +28,7 @@ $ cd project415x.github.io
 $ jekyll serve
 ```
 
-## What's Included
+### What's Included
 ```
 project415x.github.io/
 ├── _includes/
