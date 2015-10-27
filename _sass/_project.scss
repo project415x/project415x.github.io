@@ -1,10 +1,8 @@
 /**
  * General
  */
-
 .project {
   height: 100%;
-
   h1,
   h2,
   h3,
@@ -13,6 +11,7 @@
     font-weight: bold;
   }
   h1 {
+
     // font-style: italic;
     font-weight: bold;
     font-size: 22px;
@@ -64,13 +63,11 @@
       text-align: center;
       color: #efefef;
     }
-
     h2 {
       font-size: 50px;
       text-align: center;
       margin-top: 5%;
     }
-
     .subtitle {
       font-family: 'Roboto', sans-serif;
       font-size: 18px;
@@ -81,18 +78,16 @@
       text-align: center;
       vertical-align: middle;
     }
-
     .info {
       font-size: 28px;
       margin: 0 auto;
       text-align: center;
-      color: #000000;
+      color: #000;
     }
 
     // .infoModal {
     //   z-index: 100;
     // }
-
     p {
       font-family: 'Roboto', sans-serif;
       font-size: 40px;
@@ -107,7 +102,7 @@
   /**
    * ScrollMagic Wipe Panels
    */
-  #wipe {
+  #wipe0 {
     height: 100%;
     overflow: hidden;
     position: absolute;
@@ -123,7 +118,7 @@
       color: white;
     }
   }
-  #second-wipe {
+  #wipe1 {
     height: 100%;
     overflow: hidden;
     position: absolute;
@@ -133,7 +128,7 @@
     width: 100%;
     background: red;
   }
-  #third-wipe {
+  #wipe2 {
     height: 100%;
     overflow: hidden;
     position: absolute;
@@ -141,9 +136,9 @@
     right: 0;
     transform: translateY(100%);
     width: 100%;
-    background: #FFFFFF;
+    background: #fff;
   }
-  #fourth-wipe {
+  #wipe3 {
     height: 100%;
     overflow: hidden;
     position: absolute;
@@ -157,7 +152,7 @@
   /**
    * ScrollMagic Slide Panels
    */
-  #slide {
+  #slide0 {
     height: 100%;
     position: absolute;
     top: -100%;
@@ -172,8 +167,8 @@
       color: black;
     }
   }
-  #slide-uno,
-  #slide-dos {
+  #slide1,
+  #slide2 {
     height: 100%;
     position: absolute;
     top: 0;
