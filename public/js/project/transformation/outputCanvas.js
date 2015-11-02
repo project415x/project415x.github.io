@@ -195,11 +195,9 @@ var dashItem;
 /* Target */
 // Default Mode
 var score = 0;
-var targetX = getRandomInt(10, 490);
-var targetY = getRandomInt(10, 490);
-var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-targetPath.fillColor = '#e5e5ff';
-
+var targetX;
+var targetY;
+var targetPath;
 
 /**
  * Game Modes
@@ -344,6 +342,7 @@ function onMouseDown(event) {
     // Hide the target that was hit
     targetPath.visible = false;
     console.log("Target was hit!");
+    console.log("Target hit in gameMode " + gameMode);
 
     // Create the score circle
     scoreX = 460;
@@ -393,7 +392,32 @@ function onMouseDown(event) {
 
       console.log("gameMode " + gameMode + " target has been created");
     }
+
+    // Shooting Gallery
+    if(gameMode == 4) {
+      targetX = getRandomInt(10, 490);
+      targetY = getRandomInt(10, 490);
+      targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+      targetPath.fillColor = '#e5e5ff';
+    }
   }
+
+  // Shooting Gallery
+  // if(gameMode == 4) {
+  //   targetX = getRandomInt(10, 490);
+  //   targetY = getRandomInt(10, 490);
+  //   targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+  //   // targetPath.fillColor = '#e5e5ff';
+  //
+  //   function removeTarget() {
+  //     targetPath.visible = false;
+  //     console.log("Target was removed!");
+  //   }
+  //
+  //   setInterval(removeTarget(), 1000);
+  //
+  //   console.log("gameMode " + gameMode + " target has been created");
+  // }
 
   console.log(straightLine);
 }
