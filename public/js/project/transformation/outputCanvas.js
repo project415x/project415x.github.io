@@ -193,11 +193,44 @@ var dashItem;
 
 
 /* Target */
-var targetX = getRandomInt(10, 490);
-var targetY = 250;
-var targetPath = new Path.Circle(new Point(targetX, 250), 10);
-targetPath.fillColor = '#e5e5ff';
+// Default Mode
 var score = 0;
+var targetX = getRandomInt(10, 490);
+var targetY = getRandomInt(10, 490);
+var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+targetPath.fillColor = '#e5e5ff';
+
+
+/**
+ * Game Modes
+ * 0 - Default
+ * 1 - XY-Axes
+ * 2 - Straight Line
+ * 3 - Circle
+ * 4 - Shooting Gallery
+ */
+
+if(gameMode == 0) {
+  targetX = getRandomInt(10, 490);
+  targetY = getRandomInt(10, 490);
+  targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+  targetPath.fillColor = '#e5e5ff';
+}
+
+if(gameMode == 1) {
+  var randomNumber = getRandomInt(1, 10);
+
+  if(randomNumber >= 5) {
+    targetX = getRandomInt(10, 490);
+    targetY = 250;
+  } else {
+    targetX = 250;
+    targetY = getRandomInt(10, 490);
+  }
+
+  targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+  targetPath.fillColor = '#e5e5ff';
+}
 
 function onMouseDown(event) {
   // Check proximity of target
@@ -328,10 +361,38 @@ function onMouseDown(event) {
     text.fontSize = 20;
 
     // Create a new random target
-    targetX = getRandomInt(10, 460);
-    targetY = 250;
-    targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-    targetPath.fillColor = '#e5e5ff';
+    // targetX = getRandomInt(10, 460);
+    // targetY = 250;
+    // targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+    // targetPath.fillColor = '#e5e5ff';
+
+    // Default
+    if(gameMode == 0) {
+      // Create a new random target
+      targetX = getRandomInt(10, 490);
+      targetY = getRandomInt(10, 490);
+      targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+      targetPath.fillColor = '#e5e5ff';
+      console.log("gameMode " + gameMode + " target has been created");
+    }
+
+    // XY-Axes
+    if(gameMode == 1) {
+      randomNumber = getRandomInt(1, 10);
+
+      if(randomNumber >= 5) {
+        targetX = getRandomInt(10, 490);
+        targetY = 250;
+      } else {
+        targetX = 250;
+        targetY = getRandomInt(10, 490);
+      }
+
+      targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+      targetPath.fillColor = '#e5e5ff';
+
+      console.log("gameMode " + gameMode + " target has been created");
+    }
   }
 
   console.log(straightLine);

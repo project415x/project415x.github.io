@@ -41,8 +41,20 @@
 		[1, -1]
 	];
 	var inputEvent;
+	var gameMode;
 
-	function updateMatrix() {
+	function updateMatrix(mode) {
+		/**
+		 * Game Modes
+		 * 0 - Default
+		 * 1 - XY-Axes
+		 * 2 - Straight Line
+		 * 3 - Circle
+		 * 4 - Shooting Gallery
+		 */
+
+		 gameMode = mode ? mode : 0;
+		 console.log("gameMode: " + mode);
 
 		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value : matrix[0][0];
 		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value : matrix[0][1];
@@ -64,6 +76,9 @@
 		clickEvent.initEvent(eventType, true, true);
 		node.dispatchEvent(clickEvent);
 	}
+
+	gameMode = mode ? mode : 0;
+	
 	// Initalize updateOutput function, then update on PaperScript
 	// var updateOutput = function() {};
 </script>
@@ -96,28 +111,28 @@
 				<br>
 
 				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix00" type="text" class="form-control" placeholder="2" onkeydown="if(event.keyCode == 13){ updateMatrix() }">
+					<input id="matrix00" type="text" class="form-control" placeholder="2" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
 				</div>
 
 				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix01" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix() }">
+					<input id="matrix01" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
 				</div>
 
 				<br>
 
 				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix10" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix() }">
+					<input id="matrix10" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
 				</div>
 
 				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix11" type="text" class="form-control" placeholder="-1" onkeydown="if(event.keyCode == 13){ updateMatrix() }">
+					<input id="matrix11" type="text" class="form-control" placeholder="-1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
 				</div>
 
 				<br>
 				<br>
 				<br>
 
-				<button type="button" class="btn btn-lg btn-gray" onclick="updateMatrix()">Transform</button>
+				<button type="button" class="btn btn-lg btn-gray" onclick="updateMatrix(0)">Transform</button>
 			</center>
 		</div>
 
@@ -127,10 +142,11 @@
 				<canvas id="outputCanvas" width="500" height="500"></canvas>
 				<br>
 				Game Options:
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">XY-Axes</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Straight Line</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Circle</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Shooting Gallery</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(0)">Default</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(1)">XY-Axes</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(2)">Straight Line</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(3)">Circle</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(4)">Shooting Gallery</button>
 			</center>
 		</div>
 	</div>
