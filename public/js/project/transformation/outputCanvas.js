@@ -33,13 +33,6 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
 drawGridLines(20, 20, paper.view.bounds);
 
-/* Target */
-var targetX = getRandomInt(10, 490);
-var targetY = getRandomInt(10, 490);
-var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-targetPath.fillColor = '#e5e5ff';
-var score = 0;
-
 /* Vector */
 var values = {
   fixLength: false,
@@ -199,6 +192,12 @@ var dashItem;
 // }
 
 
+/* Target */
+var targetX = getRandomInt(10, 490);
+var targetY = 250;
+var targetPath = new Path.Circle(new Point(targetX, 250), 10);
+targetPath.fillColor = '#e5e5ff';
+var score = 0;
 
 function onMouseDown(event) {
   // Check proximity of target
@@ -330,7 +329,7 @@ function onMouseDown(event) {
 
     // Create a new random target
     targetX = getRandomInt(10, 460);
-    targetY = getRandomInt(10, 460);
+    targetY = 250;
     targetPath = new Path.Circle(new Point(targetX, targetY), 10);
     targetPath.fillColor = '#e5e5ff';
   }

@@ -11,17 +11,20 @@
 		margin-top: 9vh;
 	}
 
-	.btn-transform {
+	.btn-gray {
 		background-color: #CCCCCC;
 	}
 
-	.btn-transform:focus,
-	.btn-transform:hover {
+	.btn-gray:hover {
+		background-color: #CCCCCC;
 		opacity: 0.75;
 	}
 
-	.btn-transform:active {
-		opacity: 0.90;
+	.btn-gray:focus,
+	.btn-gray:active {
+		/*opacity: 0.90;*/
+		background-color: orange;
+		color: #FFFFFF;
 	}
 
 	.input-matrix {
@@ -114,7 +117,7 @@
 				<br>
 				<br>
 
-				<button type="button" class="btn btn-lg btn-transform" onclick="updateMatrix()">Transform</button>
+				<button type="button" class="btn btn-lg btn-gray" onclick="updateMatrix()">Transform</button>
 			</center>
 		</div>
 
@@ -122,6 +125,12 @@
 			<center>
 				<!-- Output Grid -->
 				<canvas id="outputCanvas" width="500" height="500"></canvas>
+				<br>
+				Game Options:
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">XY-Axes</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Straight Line</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Circle</button>
+				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix()">Shooting Gallery</button>
 			</center>
 		</div>
 	</div>
