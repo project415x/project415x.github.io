@@ -37,7 +37,7 @@ drawGridLines(20, 20, paper.view.bounds);
 var targetX = getRandomInt(10, 490);
 var targetY = getRandomInt(10, 490);
 var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-targetPath.fillColor = 'blue';
+targetPath.fillColor = '#e5e5ff';
 var score = 0;
 
 /* Vector */
@@ -198,7 +198,17 @@ var dashItem;
 //   processVector(inputEvent, inputEvent.modifiers.shift);
 // }
 
+
+
 function onMouseDown(event) {
+  // Check proximity of target
+  function isClose(radius) {
+    if(Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
+      return 1;
+    }
+    return 0;
+  }
+
   console.log(input);
 
   fro = new Point(250, 250);
@@ -245,30 +255,85 @@ function onMouseDown(event) {
   vectorItem.strokeColor = 'red';
   vectorItem.strokeWidth = 5;
 
+  /* Proximity Sensor */
+  // #e5e5ff, #ccccff, #b2b2ff, #9999ff, #7f7fff, #6666ff, #4c4cff, #3232ff, #1919ff, #0000ff
+  if(isClose(500)) {
+    console.log("Target proximity 500");
+    targetPath.fillColor = '#e5e5ff';
+  }
+
+  if(isClose(450)) {
+    console.log("Target proximity 450");
+    targetPath.fillColor = '#ccccff';
+  }
+
+  if(isClose(400)) {
+    console.log("Target proximity 400");
+    targetPath.fillColor = '#b2b2ff';
+  }
+
+  if(isClose(350)) {
+    console.log("Target proximity 350");
+    targetPath.fillColor = '#9999ff';
+  }
+
+  if(isClose(300)) {
+    console.log("Target proximity 300");
+    targetPath.fillColor = '#7f7fff';
+  }
+
+  if(isClose(250)) {
+    console.log("Target proximity 250");
+    targetPath.fillColor = '#6666ff';
+  }
+
+  if(isClose(200)) {
+    console.log("Target proximity 200");
+    targetPath.fillColor = '#4c4cff';
+  }
+
+  if(isClose(150)) {
+    console.log("Target proximity 150");
+    targetPath.fillColor = '#3232ff';
+  }
+
+  if(isClose(100)) {
+    console.log("Target proximity 100");
+    targetPath.fillColor = '#1919ff';
+  }
+
+  if(isClose(50)) {
+    console.log("Target proximity 50");
+    targetPath.fillColor = '#0000ff';
+  }
+
   /* If target is hit */
-  if(Math.abs(targetX - screenCoords[0]) <= 10 && Math.abs(targetY - screenCoords[1]) <= 10) {
+  if(isClose(10)) {
+    // Hide the target that was hit
     targetPath.visible = false;
     console.log("Target was hit!");
 
+    // Create the score circle
     scoreX = 460;
     scoreY = 40;
     var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
     scorePath.fillColor = '#7CFC00';
     // scorePath.opacity = 0.75;
-    score += 10;
 
+    // Change the score text
+    score += 10;
     var text = new PointText(new Point(scoreX, scoreY + 7));
     text.justification = 'center';
     text.fillColor = 'black';
     text.content = score;
     text.fontSize = 20;
 
+    // Create a new random target
     targetX = getRandomInt(10, 460);
     targetY = getRandomInt(10, 460);
     targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-    targetPath.fillColor = 'blue';
+    targetPath.fillColor = '#e5e5ff';
   }
-
 
   console.log(straightLine);
 }
