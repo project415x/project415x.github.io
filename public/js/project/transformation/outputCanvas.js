@@ -457,6 +457,51 @@ function onMouseDown(event) {
     }
 
     // Straight Line
+    if (gameMode == 3) {
+      var circleGuide = new Path.Circle(new Point(250, 250), 100);
+      circleGuide.fillColor = 'red';
+      circleGuide.opacity = 0.25;
+
+      var targetPath0 = new Path.Circle(new Point(250, 250), 10);
+      targetPath0.fillColor = '#e5e5ff';
+
+      var targetPath1 = new Path.Circle(new Point(250, 150), 10);
+      targetPath1.fillColor = '#e5e5ff';
+
+      var targetPath2 = new Path.Circle(new Point(250, 350), 10);
+      targetPath2.fillColor = '#e5e5ff';
+
+      var targetPath3 = new Path.Circle(new Point(150, 250), 10);
+      targetPath3.fillColor = '#e5e5ff';
+
+      var targetPath4 = new Path.Circle(new Point(350, 250), 10);
+      targetPath4.fillColor = '#e5e5ff';
+
+      var targetPath5 = new Path.Circle(new Point(320, 320), 10);
+      targetPath5.fillColor = '#e5e5ff';
+
+      var targetPath6 = new Path.Circle(new Point(180, 180), 10);
+      targetPath6.fillColor = '#e5e5ff';
+
+      var targetPath7 = new Path.Circle(new Point(180, 320), 10);
+      targetPath7.fillColor = '#e5e5ff';
+
+      var targetPath8 = new Path.Circle(new Point(320, 180), 10);
+      targetPath8.fillColor = '#e5e5ff';
+      //
+      // var targetPath9 = new Path.Circle(new Point(390, 390), 10);
+      // targetPath9.fillColor = '#e5e5ff';
+      //
+      // var targetPath10 = new Path.Circle(new Point(430, 430), 10);
+      // targetPath10.fillColor = '#e5e5ff';
+      //
+      // var targetPath11 = new Path.Circle(new Point(470, 470), 10);
+      // targetPath11.fillColor = '#e5e5ff';
+
+      console.log("gameMode " + gameMode + " target has been created");
+    }
+
+    // Straight Line
     if (gameMode == 2) {
       var targetPath0 = new Path.Circle(new Point(30, 30), 10);
       targetPath0.fillColor = '#e5e5ff';
