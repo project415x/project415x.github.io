@@ -192,12 +192,59 @@ var dashItem;
 // }
 
 
-/* Target */
+/**
+ * Target
+ */
 // Default Mode
 var score = 0;
 var targetX;
 var targetY;
 var targetPath;
+
+
+/**
+ * Target bounds
+ */
+ // 0, 0
+var point00 = convertToMathCoords(0, 0);
+var point00MatrixApplied = applyMatrix(point00[0], point00[1], matrix);
+var point00ScreenCoords = convertToScreenCoords(point00MatrixApplied[0], point00MatrixApplied[1]);
+
+console.log("point00: " + point00ScreenCoords);
+
+// 0, 500
+var point01 = convertToMathCoords(0, 500);
+var point01MatrixApplied = applyMatrix(point01[0], point01[1], matrix);
+var point01ScreenCoords = convertToScreenCoords(point01MatrixApplied[0], point01MatrixApplied[1]);
+
+console.log("point01: " + point01ScreenCoords);
+
+// 500, 0
+var point10 = convertToMathCoords(0, 500);
+var point10MatrixApplied = applyMatrix(point10[0], point10[1], matrix);
+var point10ScreenCoords = convertToScreenCoords(point10MatrixApplied[0], point10MatrixApplied[1]);
+
+console.log("point10: " + point10ScreenCoords);
+
+// 500, 500
+var point11 = convertToMathCoords(500, 500);
+var point11MatrixApplied = applyMatrix(point11[0], point11[1], matrix);
+var point11ScreenCoords = convertToScreenCoords(point11MatrixApplied[0], point11MatrixApplied[1]);
+
+console.log("point11: " + point11ScreenCoords);
+
+// Get max and min values
+var xBounds = [point00ScreenCoords[0], point01ScreenCoords[0], point10ScreenCoords[0], point11ScreenCoords[0]];
+var yBounds = [point00ScreenCoords[1], point01ScreenCoords[1], point10ScreenCoords[1], point11ScreenCoords[1]];
+var minBoundX = (Math.min.apply(Math, xBounds) < 0) ? 0 : Math.min.apply(Math, xBounds);
+var maxBoundX = (Math.max.apply(Math, xBounds) > 500) ? 500 : Math.max.apply(Math, xBounds);
+var minBoundY = (Math.min.apply(Math, yBounds) < 0) ? 0 : Math.min.apply(Math, yBounds);
+var maxBoundY = (Math.max.apply(Math, yBounds) > 500) ? 500 : Math.max.apply(Math, yBounds);
+
+console.log("minBoundX : " + minBoundX);
+console.log("maxBoundX: " + maxBoundX);
+console.log("minBoundY: " + minBoundY);
+console.log("maxBoundY: " + maxBoundY);
 
 /**
  * Game Modes
@@ -208,22 +255,25 @@ var targetPath;
  * 4 - Shooting Gallery
  */
 
+
+// Default
 if(gameMode == 0) {
-  targetX = getRandomInt(10, 490);
-  targetY = getRandomInt(10, 490);
+  targetX = getRandomInt(minBoundX, maxBoundX);
+  targetY = getRandomInt(minBoundY, maxBoundY);
   targetPath = new Path.Circle(new Point(targetX, targetY), 10);
   targetPath.fillColor = '#e5e5ff';
 }
 
+// XY-Axes
 if(gameMode == 1) {
   var randomNumber = getRandomInt(1, 10);
 
   if(randomNumber >= 5) {
-    targetX = getRandomInt(10, 490);
+    targetX = getRandomInt(minBoundX, maxBoundX);
     targetY = 250;
   } else {
     targetX = 250;
-    targetY = getRandomInt(10, 490);
+    targetY = getRandomInt(minBoundY, maxBoundY);
   }
 
   targetPath = new Path.Circle(new Point(targetX, targetY), 10);
@@ -368,8 +418,8 @@ function onMouseDown(event) {
     // Default
     if(gameMode == 0) {
       // Create a new random target
-      targetX = getRandomInt(10, 490);
-      targetY = getRandomInt(10, 490);
+      targetX = getRandomInt(minBoundX, maxBoundX);
+      targetY = getRandomInt(minBoundY, maxBoundY);
       targetPath = new Path.Circle(new Point(targetX, targetY), 10);
       targetPath.fillColor = '#e5e5ff';
       console.log("gameMode " + gameMode + " target has been created");
@@ -380,11 +430,11 @@ function onMouseDown(event) {
       randomNumber = getRandomInt(1, 10);
 
       if(randomNumber >= 5) {
-        targetX = getRandomInt(10, 490);
+        targetX = getRandomInt(minBoundX, maxBoundX);
         targetY = 250;
       } else {
         targetX = 250;
-        targetY = getRandomInt(10, 490);
+        targetY = getRandomInt(minBoundY, maxBoundY);
       }
 
       targetPath = new Path.Circle(new Point(targetX, targetY), 10);
