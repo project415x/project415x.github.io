@@ -293,7 +293,11 @@ if (gameMode == 1) {
   targetPath.fillColor = '#e5e5ff';
 }
 
-function onMouseDown(event) {
+// function onMouseDown(event) {}
+function outputCanvasTick() {
+  var pscope2 = PaperScope.get(2);
+  pscope2.activate();
+
   // Check proximity of target
   function isClose(radius) {
     if (Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
@@ -576,6 +580,7 @@ function onMouseDown(event) {
             timer = duration;
 
             targetPath.visible = false;
+            targetText.content = '';
             console.log("Target was gone! Uh oh!");
 
             targetX = getRandomInt(10, 490);
@@ -614,5 +619,9 @@ function onMouseDown(event) {
   //   console.log("gameMode " + gameMode + " target has been created");
   // }
 
+  pscope2.view.update();
+
   console.log(straightLine);
 }
+
+setInterval(outputCanvasTick, 33);
