@@ -456,6 +456,47 @@ function onMouseDown(event) {
       console.log("gameMode " + gameMode + " target has been created");
     }
 
+    // Straight Line
+    if (gameMode == 2) {
+      var targetPath0 = new Path.Circle(new Point(30, 30), 10);
+      targetPath0.fillColor = '#e5e5ff';
+
+      var targetPath1 = new Path.Circle(new Point(70, 70), 10);
+      targetPath1.fillColor = '#e5e5ff';
+
+      var targetPath2 = new Path.Circle(new Point(110, 110), 10);
+      targetPath2.fillColor = '#e5e5ff';
+
+      var targetPath3 = new Path.Circle(new Point(150, 150), 10);
+      targetPath3.fillColor = '#e5e5ff';
+
+      var targetPath4 = new Path.Circle(new Point(190, 190), 10);
+      targetPath4.fillColor = '#e5e5ff';
+
+      var targetPath5 = new Path.Circle(new Point(230, 230), 10);
+      targetPath5.fillColor = '#e5e5ff';
+
+      var targetPath6 = new Path.Circle(new Point(270, 270), 10);
+      targetPath6.fillColor = '#e5e5ff';
+
+      var targetPath7 = new Path.Circle(new Point(310, 310), 10);
+      targetPath7.fillColor = '#e5e5ff';
+
+      var targetPath8 = new Path.Circle(new Point(350, 350), 10);
+      targetPath8.fillColor = '#e5e5ff';
+
+      var targetPath9 = new Path.Circle(new Point(390, 390), 10);
+      targetPath9.fillColor = '#e5e5ff';
+
+      var targetPath10 = new Path.Circle(new Point(430, 430), 10);
+      targetPath10.fillColor = '#e5e5ff';
+
+      var targetPath11 = new Path.Circle(new Point(470, 470), 10);
+      targetPath11.fillColor = '#e5e5ff';
+
+      console.log("gameMode " + gameMode + " target has been created");
+    }
+
     // Shooting Gallery
     if (gameMode == 4) {
       targetX = getRandomInt(10, 490);
