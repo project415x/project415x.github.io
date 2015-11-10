@@ -45,7 +45,7 @@ var values = {
 var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
-function processVector(event, drag) {
+function processVectorOutput(event, drag) {
   vector = event.point - vectorStart;
   if (vectorPrevious) {
     if (values.fixLength && values.fixAngle) {
@@ -56,10 +56,10 @@ function processVector(event, drag) {
       vector = vector.project(vectorPrevious);
     }
   }
-  drawVector(drag);
+  drawVectorOutput(drag);
 }
 
-function drawVector(drag) {
+function drawVectorOutput(drag) {
 
   console.log(drag);
 
@@ -96,14 +96,14 @@ function drawVector(drag) {
   }
   // Draw Labels
   if (values.showAngleLength) {
-    drawAngle(vectorStart, vector, !drag);
+    drawAngleOutput(vectorStart, vector, !drag);
     if (!drag)
-      drawLength(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
+      drawLengthOutput(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
   }
   var quadrant = vector.quadrant;
   if (values.showCoordinates && !drag) {
-    drawLength(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
-    drawLength(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
+    drawLengthOutput(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
+    drawLengthOutput(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
   }
   for (var i = 0, l = dashedItems.length; i < l; i++) {
     var item = dashedItems[i];
@@ -118,7 +118,7 @@ function drawVector(drag) {
   values.angle = vector.angle;
 }
 
-function drawAngle(center, vector, label) {
+function drawAngleOutput(center, vector, label) {
   var radius = 25,
     threshold = 10;
   if (vector.length < radius + threshold || Math.abs(vector.angle) < 15)
@@ -145,7 +145,7 @@ function drawAngle(center, vector, label) {
   }
 }
 
-function drawLength(from, to, sign, label, value, prefix) {
+function drawLengthOutput(from, to, sign, label, value, prefix) {
   var lengthSize = 5;
   if ((to - from).length < lengthSize * 4)
     return;
@@ -188,7 +188,7 @@ var dashItem;
 // function onMouseDrag(inputEvent) {
 //   if (!inputEvent.modifiers.shift && values.fixLength && values.fixAngle)
 //     vectorStart = inputEvent.point;
-//   processVector(inputEvent, inputEvent.modifiers.shift);
+//   processVectorOutput(inputEvent, inputEvent.modifiers.shift);
 // }
 
 
