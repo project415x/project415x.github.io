@@ -259,6 +259,8 @@ function onMouseDrag(event) {
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
+
+  // triggerMouseEvent(targetNode, "mousedown");
 }
 
 function onMouseUp(event) {
@@ -271,6 +273,7 @@ function onMouseUp(event) {
 
   vectorPrevious = vector;
 
+  // Trigger Mouse Event
   var targetNode = document.getElementById("outputCanvas");
   triggerMouseEvent(targetNode, "mousedown");
 }
