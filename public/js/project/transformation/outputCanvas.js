@@ -246,6 +246,19 @@ console.log("maxBoundX: " + maxBoundX);
 console.log("minBoundY: " + minBoundY);
 console.log("maxBoundY: " + maxBoundY);
 
+// Add padding
+var minBoundX = minBoundX + 10;
+var maxBoundX = maxBoundX - 10;
+var minBoundY = minBoundY + 10;
+var maxBoundY = maxBoundY - 10;
+
+console.log("minBoundX : " + minBoundX);
+console.log("maxBoundX: " + maxBoundX);
+console.log("minBoundY: " + minBoundY);
+console.log("maxBoundY: " + maxBoundY);
+
+
+
 /**
  * Game Modes
  * 0 - Default
