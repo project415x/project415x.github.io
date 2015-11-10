@@ -463,7 +463,7 @@ function onMouseDown(event) {
       targetPath = new Path.Circle(new Point(targetX, targetY), 20);
       targetPath.fillColor = '#e5e5ff';
 
-      // Change the score text
+      // Change target text
       var targetText = new PointText(new Point(targetX, targetY + 5));
       targetText.justification = 'center';
       targetText.fillColor = 'white';
@@ -485,8 +485,24 @@ function onMouseDown(event) {
 
           console.log(seconds);
 
+          // When the time comes... :)
           if (--timer < 0) {
             timer = duration;
+
+            targetPath.visible = false;
+            console.log("Target was gone! Uh oh!");
+
+            targetX = getRandomInt(10, 490);
+            targetY = getRandomInt(10, 490);
+            targetPath = new Path.Circle(new Point(targetX, targetY), 20);
+            targetPath.fillColor = '#e5e5ff';
+
+            // Change the score text
+            targetText = new PointText(new Point(targetX, targetY + 5));
+            targetText.justification = 'center';
+            targetText.fillColor = 'white';
+            targetText.content = '30';
+            targetText.fontSize = 12;
           }
         }, 1000);
       }
