@@ -205,7 +205,7 @@ var targetPath;
 /**
  * Target bounds
  */
- // 0, 0
+// 0, 0
 var point00 = convertToMathCoords(0, 0);
 var point00MatrixApplied = applyMatrix(point00[0], point00[1], matrix);
 var point00ScreenCoords = convertToScreenCoords(point00MatrixApplied[0], point00MatrixApplied[1]);
@@ -270,7 +270,7 @@ console.log("maxBoundY: " + maxBoundY);
 
 
 // Default
-if(gameMode == 0) {
+if (gameMode == 0) {
   targetX = getRandomInt(minBoundX, maxBoundX);
   targetY = getRandomInt(minBoundY, maxBoundY);
   targetPath = new Path.Circle(new Point(targetX, targetY), 10);
@@ -278,10 +278,10 @@ if(gameMode == 0) {
 }
 
 // XY-Axes
-if(gameMode == 1) {
+if (gameMode == 1) {
   var randomNumber = getRandomInt(1, 10);
 
-  if(randomNumber >= 5) {
+  if (randomNumber >= 5) {
     targetX = getRandomInt(minBoundX, maxBoundX);
     targetY = 250;
   } else {
@@ -296,7 +296,7 @@ if(gameMode == 1) {
 function onMouseDown(event) {
   // Check proximity of target
   function isClose(radius) {
-    if(Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
+    if (Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
       return 1;
     }
     return 0;
@@ -350,58 +350,58 @@ function onMouseDown(event) {
 
   /* Proximity Sensor */
   // #e5e5ff, #ccccff, #b2b2ff, #9999ff, #7f7fff, #6666ff, #4c4cff, #3232ff, #1919ff, #0000ff
-  if(isClose(500)) {
+  if (isClose(500)) {
     console.log("Target proximity 500");
     targetPath.fillColor = '#e5e5ff';
   }
 
-  if(isClose(450)) {
+  if (isClose(450)) {
     console.log("Target proximity 450");
     targetPath.fillColor = '#ccccff';
   }
 
-  if(isClose(400)) {
+  if (isClose(400)) {
     console.log("Target proximity 400");
     targetPath.fillColor = '#b2b2ff';
   }
 
-  if(isClose(350)) {
+  if (isClose(350)) {
     console.log("Target proximity 350");
     targetPath.fillColor = '#9999ff';
   }
 
-  if(isClose(300)) {
+  if (isClose(300)) {
     console.log("Target proximity 300");
     targetPath.fillColor = '#7f7fff';
   }
 
-  if(isClose(250)) {
+  if (isClose(250)) {
     console.log("Target proximity 250");
     targetPath.fillColor = '#6666ff';
   }
 
-  if(isClose(200)) {
+  if (isClose(200)) {
     console.log("Target proximity 200");
     targetPath.fillColor = '#4c4cff';
   }
 
-  if(isClose(150)) {
+  if (isClose(150)) {
     console.log("Target proximity 150");
     targetPath.fillColor = '#3232ff';
   }
 
-  if(isClose(100)) {
+  if (isClose(100)) {
     console.log("Target proximity 100");
     targetPath.fillColor = '#1919ff';
   }
 
-  if(isClose(50)) {
+  if (isClose(50)) {
     console.log("Target proximity 50");
     targetPath.fillColor = '#0000ff';
   }
 
   /* If target is hit */
-  if(isClose(10)) {
+  if (isClose(10)) {
     // Hide the target that was hit
     targetPath.visible = false;
     console.log("Target was hit!");
@@ -429,7 +429,7 @@ function onMouseDown(event) {
     // targetPath.fillColor = '#e5e5ff';
 
     // Default
-    if(gameMode == 0) {
+    if (gameMode == 0) {
       // Create a new random target
       targetX = getRandomInt(minBoundX, maxBoundX);
       targetY = getRandomInt(minBoundY, maxBoundY);
@@ -439,10 +439,10 @@ function onMouseDown(event) {
     }
 
     // XY-Axes
-    if(gameMode == 1) {
+    if (gameMode == 1) {
       randomNumber = getRandomInt(1, 10);
 
-      if(randomNumber >= 5) {
+      if (randomNumber >= 5) {
         targetX = getRandomInt(minBoundX, maxBoundX);
         targetY = 250;
       } else {
@@ -457,11 +457,41 @@ function onMouseDown(event) {
     }
 
     // Shooting Gallery
-    if(gameMode == 4) {
+    if (gameMode == 4) {
       targetX = getRandomInt(10, 490);
       targetY = getRandomInt(10, 490);
-      targetPath = new Path.Circle(new Point(targetX, targetY), 10);
+      targetPath = new Path.Circle(new Point(targetX, targetY), 20);
       targetPath.fillColor = '#e5e5ff';
+
+      // Change the score text
+      var targetText = new PointText(new Point(targetX, targetY + 5));
+      targetText.justification = 'center';
+      targetText.fillColor = 'white';
+      targetText.content = '30';
+      targetText.fontSize = 12;
+
+      function startTimer(duration) {
+        var timer = duration,
+          minutes, seconds;
+        setInterval(function() {
+          minutes = parseInt(timer / 60, 10)
+          seconds = parseInt(timer % 60, 10);
+
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          targetText.visible = seconds;
+          targetText.content = seconds;
+
+          console.log(seconds);
+
+          if (--timer < 0) {
+            timer = duration;
+          }
+        }, 1000);
+      }
+
+      startTimer(30);
     }
   }
 
