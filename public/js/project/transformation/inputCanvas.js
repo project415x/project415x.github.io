@@ -3,34 +3,7 @@
  * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
-/* Grid */
-var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
-  var width_per_rectangle = boundingRect.width / num_rectangles_wide;
-  var height_per_rectangle = boundingRect.height / num_rectangles_tall;
-  for (var i = 0; i <= num_rectangles_wide; i++) {
-    var xPos = boundingRect.left + i * width_per_rectangle;
-    var topPoint = new paper.Point(xPos, boundingRect.top);
-    var bottomPoint = new paper.Point(xPos, boundingRect.bottom);
-    var aLine = new paper.Path.Line(topPoint, bottomPoint);
-    aLine.strokeColor = 'black';
-
-    if (i == num_rectangles_wide / 2) {
-      aLine.strokeWidth = 5;
-    }
-  }
-  for (var i = 0; i <= num_rectangles_tall; i++) {
-    var yPos = boundingRect.top + i * height_per_rectangle;
-    var leftPoint = new paper.Point(boundingRect.left, yPos);
-    var rightPoint = new paper.Point(boundingRect.right, yPos);
-    var aLine = new paper.Path.Line(leftPoint, rightPoint);
-    aLine.strokeColor = 'black';
-
-    if (i == num_rectangles_tall / 2) {
-      aLine.strokeWidth = 5;
-    }
-  }
-}
-
+// Draw the grid. This function is in utils.js
 drawGridLines(20, 20, paper.view.bounds);
 
 
@@ -156,74 +129,10 @@ function drawVector(drag) {
   input.length = values.length / 10;
   input.angle = values.angle;
 
-  console.log("values: " + values);
+  //console.log("values: " + values);
 }
 
-function drawAngle(center, vector, label) {
-  var radius = 25,
-    threshold = 10;
-  if (vector.length < radius + threshold || Math.abs(vector.angle) < 15)
-    return;
-  var from = new Point(radius, 0);
-  var through = from.rotate(vector.angle / 2);
-  var to = from.rotate(vector.angle);
-  var end = center + to;
-  dashedItems.push(new Path.Line(center,
-    center + new Point(radius + threshold, 0)));
-  dashedItems.push(new Path.Arc(center + from, center + through, end));
-  var arrowVector = to.normalize(7.5).rotate(vector.angle < 0 ? -90 : 90);
-  dashedItems.push(new Path([
-    end + arrowVector.rotate(135),
-    end,
-    end + arrowVector.rotate(-135)
-  ]));
-  if (label) {
-    // Angle Label
-    var text = new PointText(center + through.normalize(radius + 10) + new Point(0, 3));
-    text.content = Math.floor(vector.angle * 100) / 100 + '°';
-    text.fillColor = 'black';
-    items.push(text);
-  }
-}
-
-function drawLength(from, to, sign, label, value, prefix) {
-  var lengthSize = 5;
-  if ((to - from).length < lengthSize * 4)
-    return;
-  var vector = to - from;
-  var awayVector = vector.normalize(lengthSize).rotate(90 * sign);
-  var upVector = vector.normalize(lengthSize).rotate(45 * sign);
-  var downVector = upVector.rotate(-90 * sign);
-  var lengthVector = vector.normalize(
-    vector.length / 2 - lengthSize * Math.sqrt(2));
-  var line = new Path();
-  line.add(from + awayVector);
-  line.lineBy(upVector);
-  line.lineBy(lengthVector);
-  line.lineBy(upVector);
-  var middle = line.lastSegment.point;
-  line.lineBy(downVector);
-  line.lineBy(lengthVector);
-  line.lineBy(downVector);
-  dashedItems.push(line);
-  if (label) {
-    // Length Label
-    var textAngle = Math.abs(vector.angle) > 90 ? textAngle = 180 + vector.angle : vector.angle;
-    // Label needs to move away by different amounts based on the
-    // vector's quadrant:
-    var away = (sign >= 0 ? [1, 4] : [2, 3]).indexOf(vector.quadrant) != -1 ? 8 : 0;
-    value = value || vector.length;
-    var text = new PointText({
-      point: middle + awayVector.normalize(away + lengthSize),
-      content: (prefix || '') + Math.floor(value * 1000) / 1000,
-      fillColor: 'black',
-      justification: 'center'
-    });
-    text.rotate(textAngle);
-    items.push(text);
-  }
-}
-
+// Stores a list of vectors that will be drawn in a dashed-line style.
 var dashItem;
 
 function onMouseDown(event) {
@@ -242,8 +151,8 @@ function onMouseDown(event) {
     vectorStart = event.point;
 
     // Debug
-    console.log("even.point: " + event.point);
-    console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
+    //console.log("event.point: " + event.point);
+    //console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
   }
   if (create) {
     dashItem = vectorItem;
@@ -260,7 +169,12 @@ function onMouseDrag(event) {
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
 
-  renderVector();
+  // From Joseph's attempt to have the input canvas call a function in the output canvas:
+  // renderVector();
+
+  // This causes everything to lock up:
+  //var targetNode = document.getElementById("outputCanvas");
+  //triggerMouseEvent(targetNode, "mousedown");
 }
 
 function onMouseUp(event) {
@@ -284,7 +198,8 @@ function triggerMouseEvent(node, eventType) {
   node.dispatchEvent(clickEvent);
 }
 
-/* Export */
+// Export these variables to the global variables located in _includes/transformation.html
+// Isn't this only called once, at initialization? How does this help?
 input.x = values.x;
 input.y = values.y;
 input.length = values.length;

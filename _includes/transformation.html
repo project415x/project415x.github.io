@@ -32,36 +32,50 @@
 
 <!-- Configurations -->
 <script type="text/javascript">
+	
+	// Stores the x and y coordinates of the input vector. (In pixel coordinates.)
 	var input = {};
+	
+	// Starting matrix.
 	var matrix = [
 		[2, 1],
 		[1, -1]
 	];
-	var inputEvent;
-	var renderVector;
+	
+	// From Joseph's attempt to have the input canvas call a function in the output canvas:
+	// var renderVector;
 
+	// This is called when the user clicks the button to apply whatever matrix has been typed in.
 	function updateMatrix() {
-
+		
+		// Get new matrix from the input panes.
 		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value : matrix[0][0];
 		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value : matrix[0][1];
 		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value : matrix[1][0];
 		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value : matrix[1][1];
 
+		// Set the values into 'matrix.' This is a global variable used directly by outputCanvas.js.
 		matrix = [
 			[m00, m01],
 			[m10, m11]
 		];
 
-		var targetNode = document.getElementById("outputCanvas");
-		triggerMouseEvent(targetNode, "mousedown");
+		// Call a mouse event on the output canvas to re-draw the target vector since the matrix has changed.
+		// var targetNode = document.getElementById("outputCanvas");
+		// triggerMouseEvent(targetNode, "mousedown");
 	}
 
-	// Trigger Mouse Events
+	// A general function to trigger a mouse event on a given element in the page.
+	/*
 	function triggerMouseEvent(node, eventType) {
 		var clickEvent = document.createEvent('MouseEvents');
 		clickEvent.initEvent(eventType, true, true);
 		node.dispatchEvent(clickEvent);
 	}
+	*/
+	
+	
+	
 	// Initalize updateOutput function, then update on PaperScript
 	// var updateOutput = function() {};
 </script>
@@ -69,8 +83,8 @@
 <script src="../public/js/project/utilities/utils.js"></script>
 
 <!-- PapersScript Canvas Import -->
-<script type="text/paperscript" src="../public/js/project/transformation/inputCanvas.js" canvas="inputCanvas"></script>
-<script type="text/paperscript" src="../public/js/project/transformation/outputCanvas.js" canvas="outputCanvas"></script>
+<script type="text/paperscript" src="../public/js/project/transformation/inputCanvas.js" canvas="inputCanvas" data-script-scope="add"></script>
+<script type="text/paperscript" src="../public/js/project/transformation/outputCanvas.js" canvas="outputCanvas" data-script-scope="add"></script>
 
 <div class="container-fluid">
 	<div class="row">

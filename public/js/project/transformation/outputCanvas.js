@@ -1,36 +1,12 @@
 /**
  * Output Canvas
  * This is where the output vector is being generated and shown in the DOM
+ * All variables and functions not defined here are in the following two files:
+ * _includes/transformation.html
+ * public/js/project/utilities/utils.js
  */
 
-/* Grid */
-var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
-  var width_per_rectangle = boundingRect.width / num_rectangles_wide;
-  var height_per_rectangle = boundingRect.height / num_rectangles_tall;
-  for (var i = 0; i <= num_rectangles_wide; i++) {
-    var xPos = boundingRect.left + i * width_per_rectangle;
-    var topPoint = new paper.Point(xPos, boundingRect.top);
-    var bottomPoint = new paper.Point(xPos, boundingRect.bottom);
-    var aLine = new paper.Path.Line(topPoint, bottomPoint);
-    aLine.strokeColor = 'black';
-
-    if (i == num_rectangles_wide / 2) {
-      aLine.strokeWidth = 5;
-    }
-  }
-  for (var i = 0; i <= num_rectangles_tall; i++) {
-    var yPos = boundingRect.top + i * height_per_rectangle;
-    var leftPoint = new paper.Point(boundingRect.left, yPos);
-    var rightPoint = new paper.Point(boundingRect.right, yPos);
-    var aLine = new paper.Path.Line(leftPoint, rightPoint);
-    aLine.strokeColor = 'black';
-
-    if (i == num_rectangles_tall / 2) {
-      aLine.strokeWidth = 5;
-    }
-  }
-}
-
+// Draw the grid. This function is in utils.js
 drawGridLines(20, 20, paper.view.bounds);
 
 /* Target */
@@ -40,168 +16,20 @@ var targetPath = new Path.Circle(new Point(targetX, targetY), 10);
 targetPath.fillColor = '#e5e5ff';
 var score = 0;
 
-/* Vector */
-var values = {
-  fixLength: false,
-  fixAngle: false,
-  showCircle: false,
-  showAngleLength: false,
-  showCoordinates: false
-};
+// A variable that holds the vector drawn in the output canvas.
+var vectorItem;
 
-var vectorStart, vector, vectorPrevious;
-var vectorItem, items, dashedItems;
+// Called whenever the mouse is pressed down while hovering over the output canvas.
+// This was originally being called from transformation.html whenever the mouse was released from the input canvas.
+// Now we're changing it so that this is always called.
+// Note that the 'event' argument is not used.
+//function onMouseDown(event) {
+function outputCanvasTick() {
+	
+	var pscope2 = PaperScope.get(2)
+	pscope2.activate()
 
-function processVector(event, drag) {
-  vector = event.point - vectorStart;
-  if (vectorPrevious) {
-    if (values.fixLength && values.fixAngle) {
-      vector = vectorPrevious;
-    } else if (values.fixLength) {
-      vector.length = vectorPrevious.length;
-    } else if (values.fixAngle) {
-      vector = vector.project(vectorPrevious);
-    }
-  }
-  drawVector(drag);
-}
-
-function drawVector(drag) {
-
-  console.log(drag);
-
-  if (items) {
-    for (var i = 0, l = items.length; i < l; i++) {
-      items[i].remove();
-    }
-  }
-  if (vectorItem)
-    vectorItem.remove();
-  items = [];
-  var arrowVector = vector.normalize(10);
-  var end = vectorStart + vector;
-  vectorItem = new Group([
-    new Path([vectorStart, end]),
-    new Path([
-      end + arrowVector.rotate(135),
-      end,
-      end + arrowVector.rotate(-135)
-    ])
-  ]);
-  vectorItem.strokeWidth = 5;
-  vectorItem.strokeColor = '#e4141b';
-
-  // Display:
-  dashedItems = [];
-
-  // Draw Circle
-  if (values.showCircle) {
-    dashedItems.push(new Path.Circle({
-      center: vectorStart,
-      radius: vector.length
-    }));
-  }
-  // Draw Labels
-  if (values.showAngleLength) {
-    drawAngle(vectorStart, vector, !drag);
-    if (!drag)
-      drawLength(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
-  }
-  var quadrant = vector.quadrant;
-  if (values.showCoordinates && !drag) {
-    drawLength(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
-    drawLength(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
-  }
-  for (var i = 0, l = dashedItems.length; i < l; i++) {
-    var item = dashedItems[i];
-    item.strokeColor = 'black';
-    item.dashArray = [1, 2];
-    items.push(item);
-  }
-  // Update palette
-  values.x = vector.x;
-  values.y = vector.y;
-  values.length = vector.length;
-  values.angle = vector.angle;
-}
-
-function drawAngle(center, vector, label) {
-  var radius = 25,
-    threshold = 10;
-  if (vector.length < radius + threshold || Math.abs(vector.angle) < 15)
-    return;
-  var from = new Point(radius, 0);
-  var through = from.rotate(vector.angle / 2);
-  var to = from.rotate(vector.angle);
-  var end = center + to;
-  dashedItems.push(new Path.Line(center,
-    center + new Point(radius + threshold, 0)));
-  dashedItems.push(new Path.Arc(center + from, center + through, end));
-  var arrowVector = to.normalize(7.5).rotate(vector.angle < 0 ? -90 : 90);
-  dashedItems.push(new Path([
-    end + arrowVector.rotate(135),
-    end,
-    end + arrowVector.rotate(-135)
-  ]));
-  if (label) {
-    // Angle Label
-    var text = new PointText(center + through.normalize(radius + 10) + new Point(0, 3));
-    text.content = Math.floor(vector.angle * 100) / 100 + '°';
-    text.fillColor = 'black';
-    items.push(text);
-  }
-}
-
-function drawLength(from, to, sign, label, value, prefix) {
-  var lengthSize = 5;
-  if ((to - from).length < lengthSize * 4)
-    return;
-  var vector = to - from;
-  var awayVector = vector.normalize(lengthSize).rotate(90 * sign);
-  var upVector = vector.normalize(lengthSize).rotate(45 * sign);
-  var downVector = upVector.rotate(-90 * sign);
-  var lengthVector = vector.normalize(
-    vector.length / 2 - lengthSize * Math.sqrt(2));
-  var line = new Path();
-  line.add(from + awayVector);
-  line.lineBy(upVector);
-  line.lineBy(lengthVector);
-  line.lineBy(upVector);
-  var middle = line.lastSegment.point;
-  line.lineBy(downVector);
-  line.lineBy(lengthVector);
-  line.lineBy(downVector);
-  dashedItems.push(line);
-  if (label) {
-    // Length Label
-    var textAngle = Math.abs(vector.angle) > 90 ? textAngle = 180 + vector.angle : vector.angle;
-    // Label needs to move away by different amounts based on the
-    // vector's quadrant:
-    var away = (sign >= 0 ? [1, 4] : [2, 3]).indexOf(vector.quadrant) != -1 ? 8 : 0;
-    value = value || vector.length;
-    var text = new PointText({
-      point: middle + awayVector.normalize(away + lengthSize),
-      content: (prefix || '') + Math.floor(value * 1000) / 1000,
-      fillColor: 'black',
-      justification: 'center'
-    });
-    text.rotate(textAngle);
-    items.push(text);
-  }
-}
-
-var dashItem;
-
-// function onMouseDrag(inputEvent) {
-//   if (!inputEvent.modifiers.shift && values.fixLength && values.fixAngle)
-//     vectorStart = inputEvent.point;
-//   processVector(inputEvent, inputEvent.modifiers.shift);
-// }
-
-
-
-function onMouseDown(event) {
-  // Check proximity of target
+  // A function to check proximity of target.
   function isClose(radius) {
     if(Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
       return 1;
@@ -209,18 +37,21 @@ function onMouseDown(event) {
     return 0;
   }
 
-  console.log(input);
+  // 'input' is a global variable defined in transformation.html.
+  //console.log(input);
 
-  fro = new Point(250, 250);
-
-  /* Same as input */
-  // to = new Point(250 + input.x, 250 + input.y);
-
-  /* New Formula  */
-  var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
+  /* New Formula. Same great taste! */
+  
+  /* These functions are located in utils.js:
+   * convertToMathCoords, applyMatrix, convertToScreenCoords
+   * The variable 'matrix' is located in transformation.html: matrix */
+  var mathCoords = convertToMathCoords(halfCanvasWidth + input.x, halfCanvasWidth + input.y);
   var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
   var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
   to = new Point(screenCoords[0], screenCoords[1]);
+  
+  // The vector to be drawn has tail at the center of the output pane.
+  fro = new Point(halfCanvasWidth, halfCanvasWidth);
 
   straightLine = to - fro;
 
@@ -232,14 +63,9 @@ function onMouseDown(event) {
   // Draw New Vector
   vectorItem = new Group([
     new Path([{
-      x: 250,
-      y: 250
+      x: halfCanvasWidth,
+      y: halfCanvasWidth
     }, {
-      /* Same as input */
-      // x: 250 + input.x,
-      // y: 250 + input.y
-
-      /* New Formula */
       x: screenCoords[0],
       y: screenCoords[1]
     }]),
@@ -335,80 +161,10 @@ function onMouseDown(event) {
     targetPath.fillColor = '#e5e5ff';
   }
 
-  console.log(straightLine);
+  //console.log(straightLine);
+  
+  pscope2.view.update()
 }
 
-renderVector = function() {
-  console.log(input);
-
-  fro = new Point(250, 250);
-
-  /* Same as input */
-  // to = new Point(250 + input.x, 250 + input.y);
-
-  /* New Formula  */
-  var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
-  var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
-  var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
-  to = new Point(screenCoords[0], screenCoords[1]);
-
-  straightLine = to - fro;
-
-  var arrowVector = straightLine.normalize(10);
-
-  if (vectorItem)
-    vectorItem.remove();
-
-  // Draw New Vector
-  vectorItem = new Group([
-    new Path([{
-      x: 250,
-      y: 250
-    }, {
-      /* Same as input */
-      // x: 250 + input.x,
-      // y: 250 + input.y
-
-      /* New Formula */
-      x: screenCoords[0],
-      y: screenCoords[1]
-    }]),
-
-    // Arrows
-    new Path([
-      to + arrowVector.rotate(135),
-      to,
-      to + arrowVector.rotate(-135)
-    ])
-  ]);
-
-  vectorItem.strokeColor = 'red';
-  vectorItem.strokeWidth = 5;
-
-  /* If target is hit */
-  if(Math.abs(targetX - screenCoords[0]) <= 10 && Math.abs(targetY - screenCoords[1]) <= 10) {
-    targetPath.visible = false;
-    console.log("Target was hit!");
-
-    scoreX = 460;
-    scoreY = 40;
-    var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
-    scorePath.fillColor = '#7CFC00';
-    // scorePath.opacity = 0.75;
-    score += 10;
-
-    var text = new PointText(new Point(scoreX, scoreY + 7));
-    text.justification = 'center';
-    text.fillColor = 'black';
-    text.content = score;
-    text.fontSize = 20;
-
-    targetX = getRandomInt(10, 460);
-    targetY = getRandomInt(10, 460);
-    targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-    targetPath.fillColor = 'blue';
-  }
-
-
-  console.log(straightLine);
-}
+// Basic game loop. Calls the function outputCanvasTick every 33ms.
+setInterval(outputCanvasTick, 33);
