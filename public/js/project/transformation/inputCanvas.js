@@ -187,6 +187,7 @@ function onMouseUp(event) {
 
   vectorPrevious = vector;
 
+  // Trigger Mouse Event
   var targetNode = document.getElementById("outputCanvas");
   triggerMouseEvent(targetNode, "mousedown");
 }
