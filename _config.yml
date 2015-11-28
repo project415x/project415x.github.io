@@ -1,10 +1,11 @@
 # Dependencies
 markdown: redcarpet
 hightlighter: pygments
+gems:
+  - jekyll-paginate
 
 # Permalinks
 permalink: pretty
-relative_permalinks: true
 
 # Setup
 title: Project 415x
