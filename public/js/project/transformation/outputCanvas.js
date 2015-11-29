@@ -3,10 +3,16 @@
  * This is where the output vector is being generated and shown in the DOM
  */
 
-// Set up grid system (See grid.js)
-drawGridLines(20, 20, paper.view.bounds);
+ /**
+ * Grid
+ * @description: Set up grid system (See grid.js)
+ */
+ drawGridLines(20, 20, paper.view.bounds);
 
-/* Vector */
+/**
+* Vector Config
+* @description: Configurations for the vector
+*/
 var values = {
   fixLength: false,
   fixAngle: false,
@@ -15,196 +21,53 @@ var values = {
   showCoordinates: false
 };
 
+/**
+* Local Variables
+* @description: Initalize them here
+*/
 var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
-function processVectorOutput(event, drag) {
-  vector = event.point - vectorStart;
-  if (vectorPrevious) {
-    if (values.fixLength && values.fixAngle) {
-      vector = vectorPrevious;
-    } else if (values.fixLength) {
-      vector.length = vectorPrevious.length;
-    } else if (values.fixAngle) {
-      vector = vector.project(vectorPrevious);
-    }
-  }
-  drawVectorOutput(drag);
-}
-
-function drawVectorOutput(drag) {
-
-  console.log(drag);
-
-  if (items) {
-    for (var i = 0, l = items.length; i < l; i++) {
-      items[i].remove();
-    }
-  }
-  if (vectorItem)
-    vectorItem.remove();
-  items = [];
-  var arrowVector = vector.normalize(10);
-  var end = vectorStart + vector;
-  vectorItem = new Group([
-    new Path([vectorStart, end]),
-    new Path([
-      end + arrowVector.rotate(135),
-      end,
-      end + arrowVector.rotate(-135)
-    ])
-  ]);
-  vectorItem.strokeWidth = 5;
-  vectorItem.strokeColor = '#e4141b';
-
-  // Display:
-  dashedItems = [];
-
-  // Draw Circle
-  if (values.showCircle) {
-    dashedItems.push(new Path.Circle({
-      center: vectorStart,
-      radius: vector.length
-    }));
-  }
-  // Draw Labels
-  if (values.showAngleLength) {
-    drawAngleOutput(vectorStart, vector, !drag);
-    if (!drag)
-      drawLengthOutput(vectorStart, end, vector.angle < 0 ? -1 : 1, true);
-  }
-  var quadrant = vector.quadrant;
-  if (values.showCoordinates && !drag) {
-    drawLengthOutput(vectorStart, vectorStart + [vector.x, 0], [1, 3].indexOf(quadrant) != -1 ? -1 : 1, true, vector.x, 'x: ');
-    drawLengthOutput(vectorStart, vectorStart + [0, vector.y], [1, 3].indexOf(quadrant) != -1 ? 1 : -1, true, vector.y, 'y: ');
-  }
-  for (var i = 0, l = dashedItems.length; i < l; i++) {
-    var item = dashedItems[i];
-    item.strokeColor = 'black';
-    item.dashArray = [1, 2];
-    items.push(item);
-  }
-  // Update palette
-  values.x = vector.x;
-  values.y = vector.y;
-  values.length = vector.length;
-  values.angle = vector.angle;
-}
-
-function drawAngleOutput(center, vector, label) {
-  var radius = 25,
-    threshold = 10;
-  if (vector.length < radius + threshold || Math.abs(vector.angle) < 15)
-    return;
-  var from = new Point(radius, 0);
-  var through = from.rotate(vector.angle / 2);
-  var to = from.rotate(vector.angle);
-  var end = center + to;
-  dashedItems.push(new Path.Line(center,
-    center + new Point(radius + threshold, 0)));
-  dashedItems.push(new Path.Arc(center + from, center + through, end));
-  var arrowVector = to.normalize(7.5).rotate(vector.angle < 0 ? -90 : 90);
-  dashedItems.push(new Path([
-    end + arrowVector.rotate(135),
-    end,
-    end + arrowVector.rotate(-135)
-  ]));
-  if (label) {
-    // Angle Label
-    var text = new PointText(center + through.normalize(radius + 10) + new Point(0, 3));
-    text.content = Math.floor(vector.angle * 100) / 100 + '°';
-    text.fillColor = 'black';
-    items.push(text);
-  }
-}
-
-function drawLengthOutput(from, to, sign, label, value, prefix) {
-  var lengthSize = 5;
-  if ((to - from).length < lengthSize * 4)
-    return;
-  var vector = to - from;
-  var awayVector = vector.normalize(lengthSize).rotate(90 * sign);
-  var upVector = vector.normalize(lengthSize).rotate(45 * sign);
-  var downVector = upVector.rotate(-90 * sign);
-  var lengthVector = vector.normalize(
-    vector.length / 2 - lengthSize * Math.sqrt(2));
-  var line = new Path();
-  line.add(from + awayVector);
-  line.lineBy(upVector);
-  line.lineBy(lengthVector);
-  line.lineBy(upVector);
-  var middle = line.lastSegment.point;
-  line.lineBy(downVector);
-  line.lineBy(lengthVector);
-  line.lineBy(downVector);
-  dashedItems.push(line);
-  if (label) {
-    // Length Label
-    var textAngle = Math.abs(vector.angle) > 90 ? textAngle = 180 + vector.angle : vector.angle;
-    // Label needs to move away by different amounts based on the
-    // vector's quadrant:
-    var away = (sign >= 0 ? [1, 4] : [2, 3]).indexOf(vector.quadrant) != -1 ? 8 : 0;
-    value = value || vector.length;
-    var text = new PointText({
-      point: middle + awayVector.normalize(away + lengthSize),
-      content: (prefix || '') + Math.floor(value * 1000) / 1000,
-      fillColor: 'black',
-      justification: 'center'
-    });
-    text.rotate(textAngle);
-    items.push(text);
-  }
-}
-
-var dashItem;
-
-// function onMouseDrag(inputEvent) {
-//   if (!inputEvent.modifiers.shift && values.fixLength && values.fixAngle)
-//     vectorStart = inputEvent.point;
-//   processVectorOutput(inputEvent, inputEvent.modifiers.shift);
-// }
-
-
 /**
  * Target
+ * @description: Target varibale (defalt mode)
  */
-// Default Mode
 var score = 0;
 var targetX;
 var targetY;
 var targetPath;
 
-
 /**
  * Target bounds
+ * @description: Get the bounds for all 4 corners of the grid
  */
 // 0, 0
 var point00 = convertToMathCoords(0, 0);
 var point00MatrixApplied = applyMatrix(point00[0], point00[1], matrix);
 var point00ScreenCoords = convertToScreenCoords(point00MatrixApplied[0], point00MatrixApplied[1]);
 
-console.log("point00: " + point00ScreenCoords);
+// console.log("point00: " + point00ScreenCoords);
 
 // 0, 500
 var point01 = convertToMathCoords(0, 500);
 var point01MatrixApplied = applyMatrix(point01[0], point01[1], matrix);
 var point01ScreenCoords = convertToScreenCoords(point01MatrixApplied[0], point01MatrixApplied[1]);
 
-console.log("point01: " + point01ScreenCoords);
+// console.log("point01: " + point01ScreenCoords);
 
 // 500, 0
 var point10 = convertToMathCoords(0, 500);
 var point10MatrixApplied = applyMatrix(point10[0], point10[1], matrix);
 var point10ScreenCoords = convertToScreenCoords(point10MatrixApplied[0], point10MatrixApplied[1]);
 
-console.log("point10: " + point10ScreenCoords);
+// console.log("point10: " + point10ScreenCoords);
 
 // 500, 500
 var point11 = convertToMathCoords(500, 500);
 var point11MatrixApplied = applyMatrix(point11[0], point11[1], matrix);
 var point11ScreenCoords = convertToScreenCoords(point11MatrixApplied[0], point11MatrixApplied[1]);
 
-console.log("point11: " + point11ScreenCoords);
+// console.log("point11: " + point11ScreenCoords);
 
 // Get max and min values
 var xBounds = [point00ScreenCoords[0], point01ScreenCoords[0], point10ScreenCoords[0], point11ScreenCoords[0]];
@@ -214,10 +77,11 @@ var maxBoundX = (Math.max.apply(Math, xBounds) > 500) ? 500 : Math.max.apply(Mat
 var minBoundY = (Math.min.apply(Math, yBounds) < 0) ? 0 : Math.min.apply(Math, yBounds);
 var maxBoundY = (Math.max.apply(Math, yBounds) > 500) ? 500 : Math.max.apply(Math, yBounds);
 
-console.log("minBoundX : " + minBoundX);
-console.log("maxBoundX: " + maxBoundX);
-console.log("minBoundY: " + minBoundY);
-console.log("maxBoundY: " + maxBoundY);
+// Debug messages
+// console.log("minBoundX : " + minBoundX);
+// console.log("maxBoundX: " + maxBoundX);
+// console.log("minBoundY: " + minBoundY);
+// console.log("maxBoundY: " + maxBoundY);
 
 // Add padding
 var minBoundX = minBoundX + 10;
@@ -225,10 +89,11 @@ var maxBoundX = maxBoundX - 10;
 var minBoundY = minBoundY + 10;
 var maxBoundY = maxBoundY - 10;
 
-console.log("minBoundX : " + minBoundX);
-console.log("maxBoundX: " + maxBoundX);
-console.log("minBoundY: " + minBoundY);
-console.log("maxBoundY: " + maxBoundY);
+// Debug messages
+// console.log("minBoundX : " + minBoundX);
+// console.log("maxBoundX: " + maxBoundX);
+// console.log("minBoundY: " + minBoundY);
+// console.log("maxBoundY: " + maxBoundY);
 
 
 

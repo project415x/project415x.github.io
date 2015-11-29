@@ -3,19 +3,16 @@
  * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
-// Set up grid system (See grid.js)
+/**
+* Grid
+* @description: Set up grid system (See grid.js)
+*/
 drawGridLines(20, 20, paper.view.bounds);
 
-
-// Origin
-var xOrigin;
-var yOrigin;
-var vectorOrigin = {
-  x: 250,
-  y: 250
-}
-
-/* Vector */
+/**
+* Vector Config
+* @description: Configurations for the vector
+*/
 var values = {
   fixLength: false,
   fixAngle: false,
@@ -24,11 +21,33 @@ var values = {
   showCoordinates: false
 };
 
+/**
+* Local Variables
+* @description: Initalize them here
+*/
 var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
-function processVector(event, drag) {
+// Override for arrowHead
+var arrowVectorTemp;
 
+/**
+* Origin
+* @description: Set origin at (250, 250)
+*/
+var xOrigin;
+var yOrigin;
+var vectorOrigin = {
+  x: 250,
+  y: 250
+}
+
+/**
+* processVector
+* @description: Processes the vector event (drag)
+* @override: Override existing processVector
+*/
+function processVector(event, drag) {
   // Gets vector relative to starting point
   // If vectorStart = vectorOrigin, the input vector doesn't draw
   vector = event.point - vectorStart;
@@ -49,6 +68,11 @@ function processVector(event, drag) {
   drawVector(drag);
 }
 
+/**
+* drawVector
+* @description: raws the vector based on the proccessed data
+* @override: Override existing drawVector
+*/
 function drawVector(drag) {
   // Go through all of the vectors present, and then delete them
   if (items) {
@@ -58,8 +82,9 @@ function drawVector(drag) {
   }
 
   // Delete vector, and set items array to empty
-  if (vectorItem)
+  if (vectorItem) {
     vectorItem.remove();
+  }
   items = [];
 
   var arrowVector = arrowVectorTemp.normalize(10);
@@ -130,71 +155,6 @@ function drawVector(drag) {
   input.angle = values.angle;
 
   console.log(values);
-}
-
-function drawAngle(center, vector, label) {
-  var radius = 25,
-    threshold = 10;
-  if (vector.length < radius + threshold || Math.abs(vector.angle) < 15)
-    return;
-  var from = new Point(radius, 0);
-  var through = from.rotate(vector.angle / 2);
-  var to = from.rotate(vector.angle);
-  var end = center + to;
-  dashedItems.push(new Path.Line(center,
-    center + new Point(radius + threshold, 0)));
-  dashedItems.push(new Path.Arc(center + from, center + through, end));
-  var arrowVector = to.normalize(7.5).rotate(vector.angle < 0 ? -90 : 90);
-  dashedItems.push(new Path([
-    end + arrowVector.rotate(135),
-    end,
-    end + arrowVector.rotate(-135)
-  ]));
-  if (label) {
-    // Angle Label
-    var text = new PointText(center + through.normalize(radius + 10) + new Point(0, 3));
-    text.content = Math.floor(vector.angle * 100) / 100 + '°';
-    text.fillColor = 'black';
-    items.push(text);
-  }
-}
-
-function drawLength(from, to, sign, label, value, prefix) {
-  var lengthSize = 5;
-  if ((to - from).length < lengthSize * 4)
-    return;
-  var vector = to - from;
-  var awayVector = vector.normalize(lengthSize).rotate(90 * sign);
-  var upVector = vector.normalize(lengthSize).rotate(45 * sign);
-  var downVector = upVector.rotate(-90 * sign);
-  var lengthVector = vector.normalize(
-    vector.length / 2 - lengthSize * Math.sqrt(2));
-  var line = new Path();
-  line.add(from + awayVector);
-  line.lineBy(upVector);
-  line.lineBy(lengthVector);
-  line.lineBy(upVector);
-  var middle = line.lastSegment.point;
-  line.lineBy(downVector);
-  line.lineBy(lengthVector);
-  line.lineBy(downVector);
-  dashedItems.push(line);
-  if (label) {
-    // Length Label
-    var textAngle = Math.abs(vector.angle) > 90 ? textAngle = 180 + vector.angle : vector.angle;
-    // Label needs to move away by different amounts based on the
-    // vector's quadrant:
-    var away = (sign >= 0 ? [1, 4] : [2, 3]).indexOf(vector.quadrant) != -1 ? 8 : 0;
-    value = value || vector.length;
-    var text = new PointText({
-      point: middle + awayVector.normalize(away + lengthSize),
-      content: (prefix || '') + Math.floor(value * 1000) / 1000,
-      fillColor: 'black',
-      justification: 'center'
-    });
-    text.rotate(textAngle);
-    items.push(text);
-  }
 }
 
 var dashItem;
