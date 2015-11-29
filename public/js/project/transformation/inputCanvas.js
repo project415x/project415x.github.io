@@ -1,6 +1,6 @@
 /**
  * Input Canvas
- * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
+ * @description: This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
 /**
@@ -30,6 +30,9 @@ var vectorItem, items, dashedItems;
 
 // Override for arrowHead
 var arrowVectorTemp;
+
+// Dash items
+var dashItem;
 
 /**
 * Origin
@@ -157,13 +160,16 @@ function drawVector(drag) {
   console.log(values);
 }
 
-var dashItem;
-
+/**
+* onMouseDown
+* @description: On mousedown trigger event, anchor the starting point of the vector which should be the origin (0, 0) -> (250, 250)
+* @param: Mouse event
+*/
 function onMouseDown(event) {
   // Endpoint for previous vector
   var end = vectorStart + vector;
-
   var create = false;
+
   // If shift key is entered, multiple vectors could be added
   if (event.modifiers.shift && vectorItem) {
     vectorStart = end;
@@ -175,8 +181,8 @@ function onMouseDown(event) {
     vectorStart = event.point;
 
     // Debug
-    console.log("even.point: " + event.point);
-    console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
+    // console.log("even.point: " + event.point);
+    // console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
   }
   if (create) {
     dashItem = vectorItem;
@@ -186,16 +192,24 @@ function onMouseDown(event) {
   processVector(event, true);
 }
 
+/**
+* onMouseDrag
+* @description: On mousedrag trigger event, draw and render the vector from the origin to wherever the mouse points in the grid (event.point)
+* @param: Mouse event
+*/
 function onMouseDrag(event) {
   inputEvent = event;
 
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
-
-  // triggerMouseEvent(targetNode, "mousedown");
 }
 
+/**
+* onMouseDrag
+* @description: On mouseup trigger event, stop rendering the vector and pass data to the next functions
+* @param: Mouse event
+*/
 function onMouseUp(event) {
   processVector(event, false);
 
@@ -211,14 +225,10 @@ function onMouseUp(event) {
   triggerMouseEvent(targetNode, "mousedown");
 }
 
-// Trigger Mouse Events
-function triggerMouseEvent(node, eventType) {
-  var clickEvent = document.createEvent('MouseEvents');
-  clickEvent.initEvent(eventType, true, true);
-  node.dispatchEvent(clickEvent);
-}
-
-/* Export */
+/**
+* Export
+* @description: Exports the data from this canvas to the middle-man
+*/
 input.x = values.x;
 input.y = values.y;
 input.length = values.length;
