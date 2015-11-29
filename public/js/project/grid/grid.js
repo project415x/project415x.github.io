@@ -11,7 +11,6 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_wide / 2) {
       aLine.strokeWidth = 5;
-      xOrigin = num_rectangles_wide / 2;
     }
   }
   for (var i = 0; i <= num_rectangles_tall; i++) {
@@ -23,9 +22,6 @@ var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingR
 
     if (i == num_rectangles_tall / 2) {
       aLine.strokeWidth = 5;
-      yOrigin = num_rectangles_tall / 2;
     }
   }
 }
-
-drawGridLines(20, 20, paper.view.bounds);
