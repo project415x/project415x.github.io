@@ -157,7 +157,7 @@ function drawVector(drag) {
   input.length = values.length / 10;
   input.angle = values.angle;
 
-  console.log(values);
+  // console.log(values);
 }
 
 /**

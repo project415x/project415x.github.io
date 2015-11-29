@@ -148,7 +148,7 @@ function outputCanvasTick() {
     return 0;
   }
 
-  console.log(input);
+  // console.log(input);
 
   fro = new Point(250, 250);
 
@@ -203,52 +203,52 @@ function outputCanvasTick() {
   */
   // #e5e5ff, #ccccff, #b2b2ff, #9999ff, #7f7fff, #6666ff, #4c4cff, #3232ff, #1919ff, #0000ff
   if (isClose(500)) {
-    console.log("Target proximity 500");
+    // console.log("Target proximity 500");
     targetPath.fillColor = '#e5e5ff';
   }
 
   if (isClose(450)) {
-    console.log("Target proximity 450");
+    // console.log("Target proximity 450");
     targetPath.fillColor = '#ccccff';
   }
 
   if (isClose(400)) {
-    console.log("Target proximity 400");
+    // console.log("Target proximity 400");
     targetPath.fillColor = '#b2b2ff';
   }
 
   if (isClose(350)) {
-    console.log("Target proximity 350");
+    // console.log("Target proximity 350");
     targetPath.fillColor = '#9999ff';
   }
 
   if (isClose(300)) {
-    console.log("Target proximity 300");
+    // console.log("Target proximity 300");
     targetPath.fillColor = '#7f7fff';
   }
 
   if (isClose(250)) {
-    console.log("Target proximity 250");
+    // console.log("Target proximity 250");
     targetPath.fillColor = '#6666ff';
   }
 
   if (isClose(200)) {
-    console.log("Target proximity 200");
+    // console.log("Target proximity 200");
     targetPath.fillColor = '#4c4cff';
   }
 
   if (isClose(150)) {
-    console.log("Target proximity 150");
+    // console.log("Target proximity 150");
     targetPath.fillColor = '#3232ff';
   }
 
   if (isClose(100)) {
-    console.log("Target proximity 100");
+    // console.log("Target proximity 100");
     targetPath.fillColor = '#1919ff';
   }
 
   if (isClose(50)) {
-    console.log("Target proximity 50");
+    // console.log("Target proximity 50");
     targetPath.fillColor = '#0000ff';
   }
 
@@ -256,8 +256,8 @@ function outputCanvasTick() {
   if (isClose(10)) {
     // Hide the target that was hit
     targetPath.visible = false;
-    console.log("Target was hit!");
-    console.log("Target hit in gameMode " + gameMode);
+    // console.log("Target was hit!");
+    // console.log("Target hit in gameMode " + gameMode);
 
     // Create the score circle
     scoreX = 460;
@@ -295,7 +295,7 @@ function outputCanvasTick() {
       targetY = getRandomInt(minBoundY, maxBoundY);
       targetPath = new Path.Circle(new Point(targetX, targetY), 10);
       targetPath.fillColor = '#e5e5ff';
-      console.log("gameMode " + gameMode + " target has been created");
+      // console.log("gameMode " + gameMode + " target has been created");
     }
 
     /**
@@ -316,7 +316,7 @@ function outputCanvasTick() {
       targetPath = new Path.Circle(new Point(targetX, targetY), 10);
       targetPath.fillColor = '#e5e5ff';
 
-      console.log("gameMode " + gameMode + " target has been created");
+      // console.log("gameMode " + gameMode + " target has been created");
     }
 
     /**
@@ -360,7 +360,7 @@ function outputCanvasTick() {
       var targetPath11 = new Path.Circle(new Point(470, 470), 10);
       targetPath11.fillColor = '#e5e5ff';
 
-      console.log("gameMode " + gameMode + " target has been created");
+      // console.log("gameMode " + gameMode + " target has been created");
     }
 
     /**
@@ -399,7 +399,7 @@ function outputCanvasTick() {
       var targetPath8 = new Path.Circle(new Point(320, 180), 10);
       targetPath8.fillColor = '#e5e5ff';
 
-      console.log("gameMode " + gameMode + " target has been created");
+      // console.log("gameMode " + gameMode + " target has been created");
     }
 
     /**
@@ -432,7 +432,7 @@ function outputCanvasTick() {
           targetText.visible = seconds;
           targetText.content = seconds;
 
-          console.log(seconds);
+          // console.log(seconds);
 
           // When the time comes... :)
           if (--timer < 0) {
@@ -440,7 +440,7 @@ function outputCanvasTick() {
 
             targetPath.visible = false;
             targetText.content = '';
-            console.log("Target was gone! Uh oh!");
+            // console.log("Target was gone! Uh oh!");
 
             targetX = getRandomInt(10, 490);
             targetY = getRandomInt(10, 490);
@@ -465,7 +465,7 @@ function outputCanvasTick() {
   pscope2.view.update();
 
   // Debug
-  console.log(straightLine);
+  // console.log(straightLine);
 }
 
 setInterval(outputCanvasTick, 33);
