@@ -106,7 +106,6 @@ var maxBoundY = maxBoundY - 10;
  * 4 - Shooting Gallery
  */
 
-
 // Default
 if (gameMode == 0) {
   targetX = getRandomInt(minBoundX, maxBoundX);
@@ -131,8 +130,13 @@ if (gameMode == 1) {
   targetPath.fillColor = '#e5e5ff';
 }
 
-// function onMouseDown(event) {}
+/**
+* outputCanvasTick
+* @description: Updates the canvas every a couple of seconds. This was a clever solution created by Prof. Malkiewich to solve the update on the fly problem
+*/
 function outputCanvasTick() {
+  // Set canvas scopes
+  // Kudos to Prof. Sapir for this :)
   var pscope2 = PaperScope.get(2);
   pscope2.activate();
 
@@ -151,7 +155,10 @@ function outputCanvasTick() {
   /* Same as input */
   // to = new Point(250 + input.x, 250 + input.y);
 
-  /* New Formula  */
+  /**
+  * Math Coordinate to Screen Coordinate Conversion
+  * @description: Basically, the grid system relies on a screen coordinate system meaning that the top left corner would be (0, 0), top right would be (500, 0) and so on. This conversion mechanism would transform the math coordinates with the transformation matrix accordingly and convert it to screen coordinates.
+  */
   var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
   var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
   var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
@@ -190,7 +197,10 @@ function outputCanvasTick() {
   vectorItem.strokeColor = 'red';
   vectorItem.strokeWidth = 5;
 
-  /* Proximity Sensor */
+  /**
+  * Proximity Sensor
+  * @description: This detects the proximity of the target to the endpoint of the vector, and changes the color of the target as the proximity changes.
+  */
   // #e5e5ff, #ccccff, #b2b2ff, #9999ff, #7f7fff, #6666ff, #4c4cff, #3232ff, #1919ff, #0000ff
   if (isClose(500)) {
     console.log("Target proximity 500");
@@ -254,7 +264,6 @@ function outputCanvasTick() {
     scoreY = 40;
     var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
     scorePath.fillColor = '#7CFC00';
-    // scorePath.opacity = 0.75;
 
     // Change the score text
     score += 10;
@@ -270,7 +279,16 @@ function outputCanvasTick() {
     // targetPath = new Path.Circle(new Point(targetX, targetY), 10);
     // targetPath.fillColor = '#e5e5ff';
 
-    // Default
+    /**
+    * ==============
+    * = MINI GAMES =
+    * ==============
+    */
+
+    /**
+    * Default Game Mode
+    * @description: This is the Default Game Mode. It can be triggered by changing the value of the gameMode variable to 0. Vectors can be created normally, with the introduction of targets.
+    */
     if (gameMode == 0) {
       // Create a new random target
       targetX = getRandomInt(minBoundX, maxBoundX);
@@ -280,7 +298,10 @@ function outputCanvasTick() {
       console.log("gameMode " + gameMode + " target has been created");
     }
 
-    // XY-Axes
+    /**
+    * XY-Axes Game Mode
+    * @description: This is the XY-Axes Game Mode. It can be triggered by changing the value of the gameMode variable to 1. The targets only appear on the XY-Axes.
+    */
     if (gameMode == 1) {
       randomNumber = getRandomInt(1, 10);
 
@@ -298,52 +319,10 @@ function outputCanvasTick() {
       console.log("gameMode " + gameMode + " target has been created");
     }
 
-    // Straight Line
-    if (gameMode == 3) {
-      var circleGuide = new Path.Circle(new Point(250, 250), 100);
-      circleGuide.fillColor = 'red';
-      circleGuide.opacity = 0.25;
-
-      var targetPath0 = new Path.Circle(new Point(250, 250), 10);
-      targetPath0.fillColor = '#e5e5ff';
-
-      var targetPath1 = new Path.Circle(new Point(250, 150), 10);
-      targetPath1.fillColor = '#e5e5ff';
-
-      var targetPath2 = new Path.Circle(new Point(250, 350), 10);
-      targetPath2.fillColor = '#e5e5ff';
-
-      var targetPath3 = new Path.Circle(new Point(150, 250), 10);
-      targetPath3.fillColor = '#e5e5ff';
-
-      var targetPath4 = new Path.Circle(new Point(350, 250), 10);
-      targetPath4.fillColor = '#e5e5ff';
-
-      var targetPath5 = new Path.Circle(new Point(320, 320), 10);
-      targetPath5.fillColor = '#e5e5ff';
-
-      var targetPath6 = new Path.Circle(new Point(180, 180), 10);
-      targetPath6.fillColor = '#e5e5ff';
-
-      var targetPath7 = new Path.Circle(new Point(180, 320), 10);
-      targetPath7.fillColor = '#e5e5ff';
-
-      var targetPath8 = new Path.Circle(new Point(320, 180), 10);
-      targetPath8.fillColor = '#e5e5ff';
-      //
-      // var targetPath9 = new Path.Circle(new Point(390, 390), 10);
-      // targetPath9.fillColor = '#e5e5ff';
-      //
-      // var targetPath10 = new Path.Circle(new Point(430, 430), 10);
-      // targetPath10.fillColor = '#e5e5ff';
-      //
-      // var targetPath11 = new Path.Circle(new Point(470, 470), 10);
-      // targetPath11.fillColor = '#e5e5ff';
-
-      console.log("gameMode " + gameMode + " target has been created");
-    }
-
-    // Straight Line
+    /**
+    * Straight Line Game Mode
+    * @description: This is the Straight Line Game Mode. It can be triggered by changing the value of the gameMode variable to 2. The targets appear in a straight line through the origin.
+    */
     if (gameMode == 2) {
       var targetPath0 = new Path.Circle(new Point(30, 30), 10);
       targetPath0.fillColor = '#e5e5ff';
@@ -384,7 +363,49 @@ function outputCanvasTick() {
       console.log("gameMode " + gameMode + " target has been created");
     }
 
-    // Shooting Gallery
+    /**
+    * Circle Game Mode
+    * @description: This is the Circle Game Mode. It can be triggered by changing the value of the gameMode variable to 3. The targets appear in a circle.
+    */
+    if (gameMode == 3) {
+      var circleGuide = new Path.Circle(new Point(250, 250), 100);
+      circleGuide.fillColor = 'red';
+      circleGuide.opacity = 0.25;
+
+      var targetPath0 = new Path.Circle(new Point(250, 250), 10);
+      targetPath0.fillColor = '#e5e5ff';
+
+      var targetPath1 = new Path.Circle(new Point(250, 150), 10);
+      targetPath1.fillColor = '#e5e5ff';
+
+      var targetPath2 = new Path.Circle(new Point(250, 350), 10);
+      targetPath2.fillColor = '#e5e5ff';
+
+      var targetPath3 = new Path.Circle(new Point(150, 250), 10);
+      targetPath3.fillColor = '#e5e5ff';
+
+      var targetPath4 = new Path.Circle(new Point(350, 250), 10);
+      targetPath4.fillColor = '#e5e5ff';
+
+      var targetPath5 = new Path.Circle(new Point(320, 320), 10);
+      targetPath5.fillColor = '#e5e5ff';
+
+      var targetPath6 = new Path.Circle(new Point(180, 180), 10);
+      targetPath6.fillColor = '#e5e5ff';
+
+      var targetPath7 = new Path.Circle(new Point(180, 320), 10);
+      targetPath7.fillColor = '#e5e5ff';
+
+      var targetPath8 = new Path.Circle(new Point(320, 180), 10);
+      targetPath8.fillColor = '#e5e5ff';
+
+      console.log("gameMode " + gameMode + " target has been created");
+    }
+
+    /**
+    * Shooting Gallery Game Mode
+    * @description: This is the Shooting Gallery Game Mode. It can be triggered by changing the value of the gameMode variable to 4. The targets appear randomly and would disappear after the preset time. The goal of this game mode is to shoot the targets before the timer on the targets run out.
+    */
     if (gameMode == 4) {
       targetX = getRandomInt(10, 490);
       targetY = getRandomInt(10, 490);
@@ -440,25 +461,10 @@ function outputCanvasTick() {
     }
   }
 
-  // Shooting Gallery
-  // if(gameMode == 4) {
-  //   targetX = getRandomInt(10, 490);
-  //   targetY = getRandomInt(10, 490);
-  //   targetPath = new Path.Circle(new Point(targetX, targetY), 10);
-  //   // targetPath.fillColor = '#e5e5ff';
-  //
-  //   function removeTarget() {
-  //     targetPath.visible = false;
-  //     console.log("Target was removed!");
-  //   }
-  //
-  //   setInterval(removeTarget(), 1000);
-  //
-  //   console.log("gameMode " + gameMode + " target has been created");
-  // }
-
+  // Update the PaperScript scope
   pscope2.view.update();
 
+  // Debug
   console.log(straightLine);
 }
 
