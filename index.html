@@ -92,7 +92,7 @@ setTimeout(function() {
 
       <h3>Team</h3>
       <br>
-      
+
       Faculty
       <ul>
         <li><a href="http://math.uiuc.edu/~cmalkiew/" target="_blank">Cary Malkiewich</a></li>
@@ -111,9 +111,27 @@ setTimeout(function() {
 
     <div class="row levelInfoRow">
       <div class="col-md-6">
-        <button type="button" class="btn btn-primary btn-sm infoLeft">
+        <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#gameModal">
           <span class="glyphicon glyphicon-question-sign"></span>
         </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Game Modal</h4>
+              </div>
+              <div class="modal-body">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
         <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
@@ -145,9 +163,27 @@ setTimeout(function() {
 
     <div class="row levelInfoRow">
       <div class="col-md-6">
-        <button type="button" class="btn btn-primary btn-sm infoLeft">
+        <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#guideModal">
           <span class="glyphicon glyphicon-question-sign"></span>
         </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="guideModal" tabindex="-1" role="dialog" aria-labelledby="guideModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Guide Modal</h4>
+              </div>
+              <div class="modal-body">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
         <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
