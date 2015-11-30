@@ -32,7 +32,7 @@ function loadPage(id, levelMove){
   <!-- Nav tabs -->
   <ul class="nav nav-tabs nav-justified" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-    <li role="presentation"><a href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+    <li role="presentation" onclick='loadPage("iframeLevel", "0")'><a href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
     <li role="presentation"><a href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
   </ul>
 
@@ -46,9 +46,8 @@ function loadPage(id, levelMove){
 
         <div role="tabpanel" class="tab-pane fade" id="game">
           <div id="iframeLevel" frameborder="0" width="100%">
-            <object type="text/html" data="level1/index.html" height="100%" width="100%"></object>
+            Hello, World!
           </div>
-
 
           <center>
             <div class="btn-group" role="group" aria-label="Game Navigation">
