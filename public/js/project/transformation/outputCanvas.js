@@ -30,7 +30,7 @@ var vectorItem, items, dashedItems;
 
 /**
  * Target
- * @description: Target varibale (defalt mode)
+ * @description: Target varibale (default mode)
  */
 var score = 0;
 var targetX;
@@ -459,6 +459,8 @@ function outputCanvasTick() {
 
       startTimer(30);
     }
+
+    levelScore = score;
   }
 
   // Update the PaperScript scope
