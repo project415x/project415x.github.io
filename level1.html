@@ -114,37 +114,15 @@ title: "Level 1: Catch The Dot"
 			<center>
 				<br>
 				<br>
-				<br> Click and drag a vector on the left, then enter a matrix to see the linear transformation on the right
-				<br>
-
-				<span class="glyphicon glyphicon-arrow-right arrow"></span>
-
 				<br>
 				<br>
-
-				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix00" type="text" class="form-control" placeholder="2" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
-				</div>
-
-				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix01" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
-				</div>
-
 				<br>
-
-				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix10" type="text" class="form-control" placeholder="1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
-				</div>
-
-				<div class="input-group input-group-lg input-matrix">
-					<input id="matrix11" type="text" class="form-control" placeholder="-1" onkeydown="if(event.keyCode == 13){ updateMatrix(0) }">
-				</div>
-
+				<br>
 				<br>
 				<br>
 				<br>
 
-				<button type="button" class="btn btn-lg btn-gray" onclick="updateMatrix(0)">Transform</button>
+				<span class="glyphicon glyphicon-arrow-right arrow"></span>
 			</center>
 		</div>
 
@@ -152,13 +130,6 @@ title: "Level 1: Catch The Dot"
 			<center>
 				<!-- Output Grid -->
 				<canvas id="outputCanvas" width="500" height="500"></canvas>
-				<br>
-				Game Options:
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(0)">Default</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(1)">XY-Axes</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(2)">Straight Line</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(3)">Circle</button>
-				<button type="button" class="btn btn-sm btn-gray" onclick="updateMatrix(4)">Shooting Gallery</button>
 			</center>
 		</div>
 	</div>
