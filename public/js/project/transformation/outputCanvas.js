@@ -2,6 +2,7 @@
  * Output Canvas
  * This is where the output vector is being generated and shown in the DOM
  */
+ 
 
  /**
  * Grid
