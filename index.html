@@ -3,100 +3,32 @@ layout: project
 title: Home
 ---
 
-<style>
-body {
-  background: #3883d8;
-  font-family: "Source Sans Pro", Arial, sans-serif;
-  font-size: 13px;
-  tap-highlight-color: rgba(0,0,0,0);
-}
-body,
-html {
-  height: 100%;
-}
-</style>
+<div class="container">
+  <center>
+    <h2>Project 415x</h2>
+  </center>
 
-<div class="project">
-  <header role="banner">
-    <!-- <img src="public/calculator.png" width="64" height="auto" alt="scroll magic" /> -->
-  </header>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+    <li role="presentation"><a href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+    <li role="presentation"><a href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
+  </ul>
 
-  <div id="content-wrapper">
-
-    <section id="pin" class="scroll-magic-section">
-      <h1 id="hlpin">
-        Project 415x
-        <br>
-        <span class="subtitle">A Linear Algebra Experience</span>
-      </h1>
-
-      <div id="wipe0">
-        <div class="container">
-          <h1>What is Project 415x?</h1>
-        </div>
+  <!-- Tab panes -->
+  <div class="container">
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="home">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
       </div>
 
-      <div id="wipe1">
-        <div class="container">
-          <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
-        </div>
+      <div role="tabpanel" class="tab-pane fade" id="game">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
       </div>
 
-      <div id="slide0">
-        <div class="container">
-          <h1>Shall we get started?</h1>
-          <h1>Get ready</h1>
-        </div>
+      <div role="tabpanel" class="tab-pane fade" id="mathguide">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
       </div>
-
-      <div id="slide1">
-        <div class="container">
-          <h1>Lesson 1: <br> Linear Transformations</h1>
-        </div>
-      </div>
-
-      <div id="wipe2">
-        <div class="container-fluid">
-          <h2>Linear Transformation</h2>
-
-          {% include transformation.html %}
-        </div>
-      </div>
-
-      <div id="wipe3">
-        <div class="container-fluid">
-          {% include transformation_info.html %}
-        </div>
-      </div>
-
-      <!-- <div id="slide2">
-        <div class="container">
-          <h1>Lesson 2: <br> Matrices</h1>
-        </div>
-      </div>
-
-      <div id="wipe4">
-        <div class="container">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique eros id magna commodo, et congue quam interdum. Mauris porttitor lectus ex, finibus faucibus dui cursus nec.</p>
-        </div>
-      </div> -->
-
-      <div id="unpin">
-        <div class="container">
-          <h1>
-            End
-            <br><br>
-            <img src="{{ site.baseurl }}public/img/imark-white.png" style="margin-top: 0;"/>
-            <br>
-            <span class="subtitle">
-              University of Illinois at Urbana-Champaign
-              2015
-            </span>
-          </h1>
-
-        </div>
-      </div>
-
-    </section>
+    </div>
   </div>
 </div>
