@@ -7,4 +7,16 @@ title: "Level 1: Catch The Dot"
 	setTimeout(function() {
 	  gameMode = 0;
 	}, 1000);
+
+	var isBroadcasted = 0;
+	window.setInterval(function(){
+	  /// call your function here
+		if(isBroadcasted == 0) {
+			if(parseInt(levelScore) == 200) {
+				isBroadcasted = 1;
+				// document.getElementById('upperBound').click();
+				alert("Congratulations! Proceed to next level");
+			}
+		}
+	}, 1000);
 </script>
