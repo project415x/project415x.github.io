@@ -1,21 +1,18 @@
 /**
  * Input Canvas
- * This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
+ * @description: This is where the input vector is being accepted into the system, manipulated by the matrix input, and then passed on to the output canvas
  */
 
-// Draw the grid. This function is in utils.js
+/**
+* Grid
+* @description: Set up grid system (See grid.js)
+*/
 drawGridLines(20, 20, paper.view.bounds);
 
-
-// Origin
-var xOrigin;
-var yOrigin;
-var vectorOrigin = {
-  x: 250,
-  y: 250
-}
-
-/* Vector */
+/**
+* Vector Config
+* @description: Configurations for the vector
+*/
 var values = {
   fixLength: false,
   fixAngle: false,
@@ -24,11 +21,36 @@ var values = {
   showCoordinates: false
 };
 
+/**
+* Local Variables
+* @description: Initalize them here
+*/
 var vectorStart, vector, vectorPrevious;
 var vectorItem, items, dashedItems;
 
-function processVector(event, drag) {
+// Override for arrowHead
+var arrowVectorTemp;
 
+// Dash items
+var dashItem;
+
+/**
+* Origin
+* @description: Set origin at (250, 250)
+*/
+var xOrigin;
+var yOrigin;
+var vectorOrigin = {
+  x: 250,
+  y: 250
+}
+
+/**
+* processVector
+* @description: Processes the vector event (drag)
+* @override: Override existing processVector
+*/
+function processVector(event, drag) {
   // Gets vector relative to starting point
   // If vectorStart = vectorOrigin, the input vector doesn't draw
   vector = event.point - vectorStart;
@@ -49,6 +71,11 @@ function processVector(event, drag) {
   drawVector(drag);
 }
 
+/**
+* drawVector
+* @description: raws the vector based on the proccessed data
+* @override: Override existing drawVector
+*/
 function drawVector(drag) {
   // Go through all of the vectors present, and then delete them
   if (items) {
@@ -58,8 +85,9 @@ function drawVector(drag) {
   }
 
   // Delete vector, and set items array to empty
-  if (vectorItem)
+  if (vectorItem) {
     vectorItem.remove();
+  }
   items = [];
 
   var arrowVector = arrowVectorTemp.normalize(10);
@@ -129,17 +157,19 @@ function drawVector(drag) {
   input.length = values.length / 10;
   input.angle = values.angle;
 
-  //console.log("values: " + values);
+  // console.log(values);
 }
 
-// Stores a list of vectors that will be drawn in a dashed-line style.
-var dashItem;
-
+/**
+* onMouseDown
+* @description: On mousedown trigger event, anchor the starting point of the vector which should be the origin (0, 0) -> (250, 250)
+* @param: Mouse event
+*/
 function onMouseDown(event) {
   // Endpoint for previous vector
   var end = vectorStart + vector;
-
   var create = false;
+
   // If shift key is entered, multiple vectors could be added
   if (event.modifiers.shift && vectorItem) {
     vectorStart = end;
@@ -151,8 +181,8 @@ function onMouseDown(event) {
     vectorStart = event.point;
 
     // Debug
-    //console.log("event.point: " + event.point);
-    //console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
+    // console.log("even.point: " + event.point);
+    // console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
   }
   if (create) {
     dashItem = vectorItem;
@@ -162,21 +192,24 @@ function onMouseDown(event) {
   processVector(event, true);
 }
 
+/**
+* onMouseDrag
+* @description: On mousedrag trigger event, draw and render the vector from the origin to wherever the mouse points in the grid (event.point)
+* @param: Mouse event
+*/
 function onMouseDrag(event) {
   inputEvent = event;
 
   if (!event.modifiers.shift && values.fixLength && values.fixAngle)
     vectorStart = event.point;
   processVector(event, event.modifiers.shift);
-
-  // From Joseph's attempt to have the input canvas call a function in the output canvas:
-  // renderVector();
-
-  // This causes everything to lock up:
-  //var targetNode = document.getElementById("outputCanvas");
-  //triggerMouseEvent(targetNode, "mousedown");
 }
 
+/**
+* onMouseDrag
+* @description: On mouseup trigger event, stop rendering the vector and pass data to the next functions
+* @param: Mouse event
+*/
 function onMouseUp(event) {
   processVector(event, false);
 
@@ -192,15 +225,10 @@ function onMouseUp(event) {
   triggerMouseEvent(targetNode, "mousedown");
 }
 
-// Trigger Mouse Events
-function triggerMouseEvent(node, eventType) {
-  var clickEvent = document.createEvent('MouseEvents');
-  clickEvent.initEvent(eventType, true, true);
-  node.dispatchEvent(clickEvent);
-}
-
-// Export these variables to the global variables located in _includes/transformation.html
-// Isn't this only called once, at initialization? How does this help?
+/**
+* Export
+* @description: Exports the data from this canvas to the middle-man
+*/
 input.x = values.x;
 input.y = values.y;
 input.length = values.length;

@@ -4,99 +4,209 @@ title: Home
 ---
 
 <style>
-body {
-  background: #3883d8;
-  font-family: "Source Sans Pro", Arial, sans-serif;
-  font-size: 13px;
-  tap-highlight-color: rgba(0,0,0,0);
+.frameDiv {
+  background-color: #FFFFFF;
+  height: 700px;
+  /*overflow-y: scroll;*/
+  overflow: hidden;
+  color: #000000;
+  white-space: pre-wrap;
 }
-body,
-html {
-  height: 100%;
+
+.levelInfoRow {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.infoLeft {
+  display: none;
+}
+
+.infoRight {
+  float: right;
 }
 </style>
 
-<div class="project">
-  <header role="banner">
-    <!-- <img src="public/calculator.png" width="64" height="auto" alt="scroll magic" /> -->
-  </header>
+<script>
+// Track the levels
+var levelTracking = 1;
+function loadPage(id, levelMove, guide){
+  var currentLevel = levelTracking + parseInt(levelMove);
 
-  <div id="content-wrapper">
+  if(currentLevel < 1) {
+    document.getElementById("lowerBound").disabled = "disabled";
+    document.getElementById("upperBound").disabled = "";
+    levelTracking = 1;
+  } else if ( currentLevel > 3 ) {
+    document.getElementById("lowerBound").disabled = "";
+    document.getElementById("upperBound").disabled = "disabled";
+    levelTracking = 3;
+  } else {
+    document.getElementById("lowerBound").disabled = "";
+    document.getElementById("upperBound").disabled = "";
+    levelTracking = currentLevel;
+  }
 
-    <section id="pin" class="scroll-magic-section">
-      <h1 id="hlpin">
-        Project 415x
-        <br>
-        <span class="subtitle">A Linear Algebra Experience</span>
-      </h1>
+  var dataText = "level" + levelTracking
+  if(guide == 0) {
+    dataText = dataText + "/index.html";
+  } else if(guide == 1) {
+    dataText = dataText + "guide/index.html";
+  }
 
-      <div id="wipe0">
-        <div class="container">
-          <h1>What is Project 415x?</h1>
+  document.getElementById(id).innerHTML='<object type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
+}
+
+
+// Show info button after a certain amount of time
+setTimeout(function() {
+  $('.infoLeft').fadeIn();
+}, 5000);
+</script>
+
+
+<div class="container">
+  <center>
+    <h2>Project 415x</h2>
+  </center>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+    <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+    <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
+  </ul>
+</div>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="home">
+    <div class="container">
+      <h3>Project 415x</h3>
+      <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
+
+      <h3>About</h3>
+      <p>
+        Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
+      </p>
+
+      <h3>Team</h3>
+      <br>
+
+      Faculty
+      <ul>
+        <li><a href="http://math.uiuc.edu/~cmalkiew/" target="_blank">Cary Malkiewich</a></li>
+        <li><a href="http://www.math.illinois.edu/~jsapir2/" target="_blank">Jenya Sapir</a></li>
+      </ul>
+
+      Student/s
+      <ul>
+        <li><a href="https://josephmilla.com/" target="_blank">Joseph Milla</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade" id="game">
+    <br>
+
+    <div class="row levelInfoRow">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#gameModal">
+          <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Game Modal</h4>
+              </div>
+              <div class="modal-body">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
+      </div>
+    </div>
 
-      <div id="wipe1">
-        <div class="container">
-          <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
+    <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
+      Hello, World!
+    </div>
+
+    <br>
+
+    <center>
+      <div class="btn-group" role="group" aria-label="Game Navigation">
+        <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
+          <span class="glyphicon glyphicon-menu-left"></span>
+        </button>
+        <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
+          <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
+      </div>
+    </center>
+
+    <br>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade" id="mathguide">
+    <br>
+
+    <div class="row levelInfoRow">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#guideModal">
+          <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="guideModal" tabindex="-1" role="dialog" aria-labelledby="guideModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Guide Modal</h4>
+              </div>
+              <div class="modal-body">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div id="slide0">
-        <div class="container">
-          <h1>Shall we get started?</h1>
-          <h1>Get ready</h1>
-        </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
       </div>
+    </div>
 
-      <div id="slide1">
-        <div class="container">
-          <h1>Lesson 1: <br> Linear Transformations</h1>
-        </div>
+    <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
+      Hello, World!
+    </div>
+
+    <br>
+
+    <center>
+      <div class="btn-group" role="group" aria-label="Game Navigation">
+        <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
+          <span class="glyphicon glyphicon-menu-left"></span>
+        </button>
+        <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
+          <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
       </div>
+    </center>
 
-      <div id="wipe2">
-        <div class="container-fluid">
-          <h2>Linear Transformation</h2>
-
-          {% include transformation.html %}
-        </div>
-      </div>
-
-      <div id="wipe3">
-        <div class="container-fluid">
-          {% include transformation_info.html %}
-        </div>
-      </div>
-
-      <!-- <div id="slide2">
-        <div class="container">
-          <h1>Lesson 2: <br> Matrices</h1>
-        </div>
-      </div>
-
-      <div id="wipe4">
-        <div class="container">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique eros id magna commodo, et congue quam interdum. Mauris porttitor lectus ex, finibus faucibus dui cursus nec.</p>
-        </div>
-      </div> -->
-
-      <div id="unpin">
-        <div class="container">
-          <h1>
-            End
-            <br><br>
-            <img src="{{ site.baseurl }}public/img/imark-white.png" style="margin-top: 0;"/>
-            <br>
-            <span class="subtitle">
-              University of Illinois at Urbana-Champaign
-              2015
-            </span>
-          </h1>
-
-        </div>
-      </div>
-
-    </section>
+    <br>
   </div>
 </div>
