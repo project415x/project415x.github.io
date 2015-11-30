@@ -6,8 +6,9 @@ title: Home
 <style>
 .frameDiv {
   background-color: #FFFFFF;
-  height: 500px;
-  overflow-y: scroll;
+  height: 700px;
+  /*overflow-y: scroll;*/
+  overflow: hidden;
   color: #000000;
   white-space: pre-wrap;
 }
@@ -27,6 +28,7 @@ title: Home
 </style>
 
 <script>
+// Track the levels
 var levelTracking = 1;
 function loadPage(id, levelMove, guide){
   var currentLevel = levelTracking + parseInt(levelMove);
@@ -74,80 +76,100 @@ setTimeout(function() {
     <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
     <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
   </ul>
+</div>
 
-  <!-- Tab panes -->
-  <div class="container">
-    <div class="row">
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="home">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
-        </div>
+<!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="home">
+    <div class="container">
+      <h3>Project 415x</h3>
+      <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
 
-        <div role="tabpanel" class="tab-pane fade" id="game">
-          <br>
+      <h3>About</h3>
+      <p>
+        Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
+      </p>
 
-          <div class="row levelInfoRow">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-primary btn-sm infoLeft">
-                <span class="glyphicon glyphicon-question-sign"></span>
-              </button>
-            </div>
-            <div class="col-md-6">
-              <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
-            </div>
-          </div>
+      <h3>Team</h3>
+      <br>
+      
+      Faculty
+      <ul>
+        <li><a href="http://math.uiuc.edu/~cmalkiew/" target="_blank">Cary Malkiewich</a></li>
+        <li><a href="http://www.math.illinois.edu/~jsapir2/" target="_blank">Jenya Sapir</a></li>
+      </ul>
 
-          <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
-            Hello, World!
-          </div>
+      Student/s
+      <ul>
+        <li><a href="https://josephmilla.com/" target="_blank">Joseph Milla</a></li>
+      </ul>
+    </div>
+  </div>
 
-          <br>
+  <div role="tabpanel" class="tab-pane fade" id="game">
+    <br>
 
-          <center>
-            <div class="btn-group" role="group" aria-label="Game Navigation">
-              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
-                <span class="glyphicon glyphicon-menu-left"></span>
-              </button>
-              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
-                <span class="glyphicon glyphicon-menu-right"></span>
-              </button>
-            </div>
-          </center>
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="mathguide">
-          <br>
-
-          <div class="row levelInfoRow">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-primary btn-sm infoLeft">
-                <span class="glyphicon glyphicon-question-sign"></span>
-              </button>
-            </div>
-            <div class="col-md-6">
-              <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
-            </div>
-          </div>
-
-          <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
-            Hello, World!
-          </div>
-
-          <br>
-
-          <center>
-            <div class="btn-group" role="group" aria-label="Game Navigation">
-              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
-                <span class="glyphicon glyphicon-menu-left"></span>
-              </button>
-              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
-                <span class="glyphicon glyphicon-menu-right"></span>
-              </button>
-            </div>
-          </center>
-        </div>
+    <div class="row levelInfoRow">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoLeft">
+          <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
       </div>
     </div>
+
+    <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
+      Hello, World!
+    </div>
+
+    <br>
+
+    <center>
+      <div class="btn-group" role="group" aria-label="Game Navigation">
+        <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
+          <span class="glyphicon glyphicon-menu-left"></span>
+        </button>
+        <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
+          <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
+      </div>
+    </center>
+
+    <br>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade" id="mathguide">
+    <br>
+
+    <div class="row levelInfoRow">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoLeft">
+          <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
+      </div>
+    </div>
+
+    <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
+      Hello, World!
+    </div>
+
+    <br>
+
+    <center>
+      <div class="btn-group" role="group" aria-label="Game Navigation">
+        <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
+          <span class="glyphicon glyphicon-menu-left"></span>
+        </button>
+        <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
+          <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
+      </div>
+    </center>
 
     <br>
   </div>
