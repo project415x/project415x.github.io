@@ -381,8 +381,6 @@ function outputCanvasTick() {
 
       startTimer(30);
     }
-
-    levelScore = score;
   }
 
   /**
@@ -395,7 +393,7 @@ function outputCanvasTick() {
   */
   if (gameMode == 2) {
     targetPath.visible = false;
-    
+
     var targetPath0 = new Path.Circle(new Point(30, 30), 10);
     targetPath0.fillColor = '#e5e5ff';
 
@@ -560,6 +558,9 @@ function outputCanvasTick() {
 
     // console.log("gameMode " + gameMode + " target has been created");
   }
+
+  // Update Score
+  levelScore = score;
 
   // Update the PaperScript scope
   pscope2.view.update();
