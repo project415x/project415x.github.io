@@ -36,7 +36,8 @@ var score = 0;
 var targetX;
 var targetY;
 var targetPath;
-var targetVisibility = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var targetVisibilitySL = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var targetVisibilityCR = [1, 1, 1, 1, 1, 1, 1, 1];
 
 /**
  * Target bounds
@@ -381,8 +382,6 @@ function outputCanvasTick() {
 
       startTimer(30);
     }
-
-    levelScore = score;
   }
 
   /**
@@ -395,7 +394,7 @@ function outputCanvasTick() {
   */
   if (gameMode == 2) {
     targetPath.visible = false;
-    
+
     var targetPath0 = new Path.Circle(new Point(30, 30), 10);
     targetPath0.fillColor = '#e5e5ff';
 
@@ -438,7 +437,7 @@ function outputCanvasTick() {
     // targetPath11.visible = false;
 
     for(var i = 0; i < targetObjects.length; i++) {
-      if(targetVisibility[i] == 0) {
+      if(targetVisibilitySL[i] == 0) {
         eval('targetPath' + i + '.visible = false;');
 
       }
@@ -499,7 +498,7 @@ function outputCanvasTick() {
         // Hide the target that was hit
         targetObjects[i].fillColor = '#FF0000';
 
-        if(targetVisibility[i] != 0) {
+        if(targetVisibilitySL[i] != 0) {
           // Create the score circle
           scoreX = 460;
           scoreY = 40;
@@ -515,7 +514,7 @@ function outputCanvasTick() {
           text.fontSize = 20;
         }
 
-        targetVisibility[i] = 0;
+        targetVisibilitySL[i] = 0;
       }
     }
 
@@ -527,9 +526,17 @@ function outputCanvasTick() {
   * @description: This is the Circle Game Mode. It can be triggered by changing the value of the gameMode variable to 3. The targets appear in a circle.
   */
   if (gameMode == 3) {
-    var circleGuide = new Path.Circle(new Point(250, 250), 100);
-    circleGuide.fillColor = 'red';
-    circleGuide.opacity = 0.25;
+    targetPath.visible = false;
+
+    // var circleGuide = new Path.Circle(new Point(250, 250), 100);
+    // circleGuide.fillColor = 'red';
+    // circleGuide.opacity = 0.01;
+
+    var circleGuide = new Shape.Circle({
+      center: [250, 250],
+      radius: 100,
+      strokeColor: 'black'
+    });
 
     var targetPath0 = new Path.Circle(new Point(250, 250), 10);
     targetPath0.fillColor = '#e5e5ff';
@@ -558,8 +565,99 @@ function outputCanvasTick() {
     var targetPath8 = new Path.Circle(new Point(320, 180), 10);
     targetPath8.fillColor = '#e5e5ff';
 
-    // console.log("gameMode " + gameMode + " target has been created");
+
+    // START HERE
+    var targetCoordinatesX = [250, 250, 250, 150, 350, 320, 180, 180, 320];
+    var targetCoordinatesY = [250, 150, 350, 250, 250, 320, 180, 320, 180]
+    var targetObjects = [targetPath0, targetPath1, targetPath2, targetPath3, targetPath4, targetPath5, targetPath6, targetPath7, targetPath8, targetPath9, targetPath10, targetPath11];
+
+    // targetPath11.visible = false;
+
+    for(var i = 0; i < targetObjects.length; i++) {
+      if(targetVisibilityCR[i] == 0) {
+        eval('targetPath' + i + '.visible = false;');
+
+      }
+    }
+
+    for(var i = 0; i < targetObjects.length; i++) {
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 500)) {
+        // console.log("Target proximity 500");
+        targetObjects[i].fillColor = '#e5e5ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 450)) {
+        // console.log("Target proximity 450");
+        targetObjects[i].fillColor = '#ccccff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 400)) {
+        // console.log("Target proximity 400");
+        targetObjects[i].fillColor = '#b2b2ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 350)) {
+        // console.log("Target proximity 350");
+        targetObjects[i].fillColor = '#9999ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 300)) {
+        // console.log("Target proximity 300");
+        targetObjects[i].fillColor = '#7f7fff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 250)) {
+        // console.log("Target proximity 250");
+        targetObjects[i].fillColor = '#6666ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 200)) {
+        // console.log("Target proximity 200");
+        targetObjects[i].fillColor = '#4c4cff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 150)) {
+        // console.log("Target proximity 150");
+        targetObjects[i].fillColor = '#3232ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 100)) {
+        // console.log("Target proximity 100");
+        targetObjects[i].fillColor = '#1919ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 50)) {
+        // console.log("Target proximity 50");
+        targetObjects[i].fillColor = '#0000ff';
+      }
+
+      if (isClose(targetCoordinatesX[i], targetCoordinatesY[i], 10)) {
+        // Hide the target that was hit
+        targetObjects[i].fillColor = '#FF0000';
+
+        if(targetVisibilityCR[i] != 0) {
+          // Create the score circle
+          scoreX = 460;
+          scoreY = 40;
+          var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
+          scorePath.fillColor = '#7CFC00';
+
+          // Change the score text
+          score += 10;
+          var text = new PointText(new Point(scoreX, scoreY + 7));
+          text.justification = 'center';
+          text.fillColor = 'black';
+          text.content = score;
+          text.fontSize = 20;
+        }
+
+        targetVisibilityCR[i] = 0;
+      }
+    }
   }
+
+  // Update Score
+  levelScore = score;
 
   // Update the PaperScript scope
   pscope2.view.update();
