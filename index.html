@@ -4,18 +4,27 @@ title: Home
 ---
 
 <style>
-#iframeLevel {
+.frameDiv {
   background-color: #FFFFFF;
   height: 500px;
   overflow-y: scroll;
   color: #000000;
   white-space: pre-wrap;
 }
+
+.levelInfoRow {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.infoRight {
+  float: right;
+}
 </style>
 
 <script>
 var levelTracking = 1;
-function loadPage(id, levelMove){
+function loadPage(id, levelMove, guide){
   var currentLevel = levelTracking + parseInt(levelMove);
 
   if(currentLevel < 1) {
@@ -32,7 +41,13 @@ function loadPage(id, levelMove){
     levelTracking = currentLevel;
   }
 
-  var dataText = "level" + levelTracking + "/index.html";
+  var dataText = "level" + levelTracking
+  if(guide == 0) {
+    dataText = dataText + "/index.html";
+  } else if(guide == 1) {
+    dataText = dataText + "guide/index.html";
+  }
+
   document.getElementById(id).innerHTML='<object type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
 }
 </script>
@@ -46,8 +61,8 @@ function loadPage(id, levelMove){
   <!-- Nav tabs -->
   <ul class="nav nav-tabs nav-justified" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-    <li role="presentation" onclick='loadPage("iframeLevel", "0")'><a href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
-    <li role="presentation"><a href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
+    <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+    <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -59,16 +74,31 @@ function loadPage(id, levelMove){
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="game">
-          <div id="iframeLevel" frameborder="0" width="100%">
+          <br>
+
+          <div class="row levelInfoRow">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-sm infoLeft">
+                <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
+            </div>
+          </div>
+
+          <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
             Hello, World!
           </div>
 
+          <br>
+
           <center>
             <div class="btn-group" role="group" aria-label="Game Navigation">
-              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "-1")'>
+              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
                 <span class="glyphicon glyphicon-menu-left"></span>
               </button>
-              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "1")'>
+              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
                 <span class="glyphicon glyphicon-menu-right"></span>
               </button>
             </div>
@@ -76,7 +106,35 @@ function loadPage(id, levelMove){
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="mathguide">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
+          <br>
+
+          <div class="row levelInfoRow">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-sm infoLeft">
+                <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
+            </div>
+          </div>
+
+          <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
+            Hello, World!
+          </div>
+
+          <br>
+
+          <center>
+            <div class="btn-group" role="group" aria-label="Game Navigation">
+              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
+                <span class="glyphicon glyphicon-menu-left"></span>
+              </button>
+              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
+                <span class="glyphicon glyphicon-menu-right"></span>
+              </button>
+            </div>
+          </center>
         </div>
       </div>
     </div>
