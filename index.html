@@ -3,6 +3,27 @@ layout: project
 title: Home
 ---
 
+<style>
+#iframeLevel {
+  background-color: #FFFFFF;
+  height: 500px;
+  overflow-y: scroll;
+  color: #000000;
+  white-space: pre-wrap;
+}
+</style>
+
+<script>
+var levelTracking = 1;
+function loadPage(id, levelMove){
+  levelTracking = (levelTracking + parseInt(levelMove)) < 1 ? 1 : (levelTracking + parseInt(levelMove));
+  levelTracking = (levelTracking) > 3 ? 3 : (levelTracking);
+  var dataText = "level" + levelTracking + "/index.html";
+  document.getElementById(id).innerHTML='<object type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
+}
+</script>
+
+
 <div class="container">
   <center>
     <h2>Project 415x</h2>
@@ -17,18 +38,36 @@ title: Home
 
   <!-- Tab panes -->
   <div class="container">
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane fade in active" id="home">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
-      </div>
+    <div class="row">
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="home">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
+        </div>
 
-      <div role="tabpanel" class="tab-pane fade" id="game">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
-      </div>
+        <div role="tabpanel" class="tab-pane fade" id="game">
+          <div id="iframeLevel" frameborder="0" width="100%">
+            <object type="text/html" data="level1/index.html" height="100%" width="100%"></object>
+          </div>
 
-      <div role="tabpanel" class="tab-pane fade" id="mathguide">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
+
+          <center>
+            <div class="btn-group" role="group" aria-label="Game Navigation">
+              <button type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "-1")'>
+                <span class="glyphicon glyphicon-menu-left"></span>
+              </button>
+              <button type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "1")'>
+                <span class="glyphicon glyphicon-menu-right"></span>
+              </button>
+            </div>
+          </center>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="mathguide">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at magna tempor nisl malesuada convallis eget vel tortor. Pellentesque sem leo, euismod vel aliquam sit amet, mollis a quam. Pellentesque varius dictum ultrices. Donec iaculis felis non ipsum finibus, eget auctor nibh accumsan. Integer semper nisl ac semper faucibus. Proin faucibus, purus at egestas finibus, metus ligula facilisis nunc, sit amet placerat erat enim sed tortor. In id ante viverra, luctus magna ut, suscipit elit. Proin maximus, urna nec varius vulputate, nibh velit tincidunt mi, maximus placerat augue turpis eget turpis.
+        </div>
       </div>
     </div>
+
+    <br>
   </div>
 </div>
