@@ -16,8 +16,22 @@ title: Home
 <script>
 var levelTracking = 1;
 function loadPage(id, levelMove){
-  levelTracking = (levelTracking + parseInt(levelMove)) < 1 ? 1 : (levelTracking + parseInt(levelMove));
-  levelTracking = (levelTracking) > 3 ? 3 : (levelTracking);
+  var currentLevel = levelTracking + parseInt(levelMove);
+
+  if(currentLevel < 1) {
+    document.getElementById("lowerBound").disabled = "disabled";
+    document.getElementById("upperBound").disabled = "";
+    levelTracking = 1;
+  } else if ( currentLevel > 3 ) {
+    document.getElementById("lowerBound").disabled = "";
+    document.getElementById("upperBound").disabled = "disabled";
+    levelTracking = 3;
+  } else {
+    document.getElementById("lowerBound").disabled = "";
+    document.getElementById("upperBound").disabled = "";
+    levelTracking = currentLevel;
+  }
+
   var dataText = "level" + levelTracking + "/index.html";
   document.getElementById(id).innerHTML='<object type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
 }
@@ -51,10 +65,10 @@ function loadPage(id, levelMove){
 
           <center>
             <div class="btn-group" role="group" aria-label="Game Navigation">
-              <button type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "-1")'>
+              <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "-1")'>
                 <span class="glyphicon glyphicon-menu-left"></span>
               </button>
-              <button type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "1")'>
+              <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("iframeLevel", "1")'>
                 <span class="glyphicon glyphicon-menu-right"></span>
               </button>
             </div>
