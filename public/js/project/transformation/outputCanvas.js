@@ -36,6 +36,7 @@ var score = 0;
 var targetX;
 var targetY;
 var targetPath;
+var targetVisibility = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 /**
  * Target bounds
@@ -141,8 +142,8 @@ function outputCanvasTick() {
   pscope2.activate();
 
   // Check proximity of target
-  function isClose(radius) {
-    if (Math.abs(targetX - screenCoords[0]) <= radius && Math.abs(targetY - screenCoords[1]) <= radius) {
+  function isClose(tX, tY, radius) {
+    if (Math.abs(tX - screenCoords[0]) <= radius && Math.abs(tY - screenCoords[1]) <= radius) {
       return 1;
     }
     return 0;
@@ -198,62 +199,72 @@ function outputCanvasTick() {
   vectorItem.strokeWidth = 5;
 
   /**
+  * ==============
+  * = MINI GAMES =
+  * ==============
+  */
+
+  /**
+  * Single targets
+  */
+
+  /**
   * Proximity Sensor
   * @description: This detects the proximity of the target to the endpoint of the vector, and changes the color of the target as the proximity changes.
   */
   // #e5e5ff, #ccccff, #b2b2ff, #9999ff, #7f7fff, #6666ff, #4c4cff, #3232ff, #1919ff, #0000ff
-  if (isClose(500)) {
+  if (isClose(targetX, targetY, 500)) {
     // console.log("Target proximity 500");
     targetPath.fillColor = '#e5e5ff';
   }
 
-  if (isClose(450)) {
+  if (isClose(targetX, targetY, 450)) {
     // console.log("Target proximity 450");
     targetPath.fillColor = '#ccccff';
   }
 
-  if (isClose(400)) {
+  if (isClose(targetX, targetY, 400)) {
     // console.log("Target proximity 400");
     targetPath.fillColor = '#b2b2ff';
   }
 
-  if (isClose(350)) {
+  if (isClose(targetX, targetY, 350)) {
     // console.log("Target proximity 350");
     targetPath.fillColor = '#9999ff';
   }
 
-  if (isClose(300)) {
+  if (isClose(targetX, targetY, 300)) {
     // console.log("Target proximity 300");
     targetPath.fillColor = '#7f7fff';
   }
 
-  if (isClose(250)) {
+  if (isClose(targetX, targetY, 250)) {
     // console.log("Target proximity 250");
     targetPath.fillColor = '#6666ff';
   }
 
-  if (isClose(200)) {
+  if (isClose(targetX, targetY, 200)) {
     // console.log("Target proximity 200");
     targetPath.fillColor = '#4c4cff';
   }
 
-  if (isClose(150)) {
+  if (isClose(targetX, targetY, 150)) {
     // console.log("Target proximity 150");
     targetPath.fillColor = '#3232ff';
   }
 
-  if (isClose(100)) {
+  if (isClose(targetX, targetY, 100)) {
     // console.log("Target proximity 100");
     targetPath.fillColor = '#1919ff';
   }
 
-  if (isClose(50)) {
+  if (isClose(targetX, targetY, 50)) {
     // console.log("Target proximity 50");
     targetPath.fillColor = '#0000ff';
   }
 
   /* If target is hit */
-  if (isClose(10)) {
+  if (isClose(targetX, targetY,10)) {
     // Hide the target that was hit
     targetPath.visible = false;
     // console.log("Target was hit!");
@@ -278,12 +289,6 @@ function outputCanvasTick() {
     // targetY = 250;
     // targetPath = new Path.Circle(new Point(targetX, targetY), 10);
     // targetPath.fillColor = '#e5e5ff';
-
-    /**
-    * ==============
-    * = MINI GAMES =
-    * ==============
-    */
 
     /**
     * Default Game Mode
@@ -315,89 +320,6 @@ function outputCanvasTick() {
 
       targetPath = new Path.Circle(new Point(targetX, targetY), 10);
       targetPath.fillColor = '#e5e5ff';
-
-      // console.log("gameMode " + gameMode + " target has been created");
-    }
-
-    /**
-    * Straight Line Game Mode
-    * @description: This is the Straight Line Game Mode. It can be triggered by changing the value of the gameMode variable to 2. The targets appear in a straight line through the origin.
-    */
-    if (gameMode == 2) {
-      var targetPath0 = new Path.Circle(new Point(30, 30), 10);
-      targetPath0.fillColor = '#e5e5ff';
-
-      var targetPath1 = new Path.Circle(new Point(70, 70), 10);
-      targetPath1.fillColor = '#e5e5ff';
-
-      var targetPath2 = new Path.Circle(new Point(110, 110), 10);
-      targetPath2.fillColor = '#e5e5ff';
-
-      var targetPath3 = new Path.Circle(new Point(150, 150), 10);
-      targetPath3.fillColor = '#e5e5ff';
-
-      var targetPath4 = new Path.Circle(new Point(190, 190), 10);
-      targetPath4.fillColor = '#e5e5ff';
-
-      var targetPath5 = new Path.Circle(new Point(230, 230), 10);
-      targetPath5.fillColor = '#e5e5ff';
-
-      var targetPath6 = new Path.Circle(new Point(270, 270), 10);
-      targetPath6.fillColor = '#e5e5ff';
-
-      var targetPath7 = new Path.Circle(new Point(310, 310), 10);
-      targetPath7.fillColor = '#e5e5ff';
-
-      var targetPath8 = new Path.Circle(new Point(350, 350), 10);
-      targetPath8.fillColor = '#e5e5ff';
-
-      var targetPath9 = new Path.Circle(new Point(390, 390), 10);
-      targetPath9.fillColor = '#e5e5ff';
-
-      var targetPath10 = new Path.Circle(new Point(430, 430), 10);
-      targetPath10.fillColor = '#e5e5ff';
-
-      var targetPath11 = new Path.Circle(new Point(470, 470), 10);
-      targetPath11.fillColor = '#e5e5ff';
-
-      // console.log("gameMode " + gameMode + " target has been created");
-    }
-
-    /**
-    * Circle Game Mode
-    * @description: This is the Circle Game Mode. It can be triggered by changing the value of the gameMode variable to 3. The targets appear in a circle.
-    */
-    if (gameMode == 3) {
-      var circleGuide = new Path.Circle(new Point(250, 250), 100);
-      circleGuide.fillColor = 'red';
-      circleGuide.opacity = 0.25;
-
-      var targetPath0 = new Path.Circle(new Point(250, 250), 10);
-      targetPath0.fillColor = '#e5e5ff';
-
-      var targetPath1 = new Path.Circle(new Point(250, 150), 10);
-      targetPath1.fillColor = '#e5e5ff';
-
-      var targetPath2 = new Path.Circle(new Point(250, 350), 10);
-      targetPath2.fillColor = '#e5e5ff';
-
-      var targetPath3 = new Path.Circle(new Point(150, 250), 10);
-      targetPath3.fillColor = '#e5e5ff';
-
-      var targetPath4 = new Path.Circle(new Point(350, 250), 10);
-      targetPath4.fillColor = '#e5e5ff';
-
-      var targetPath5 = new Path.Circle(new Point(320, 320), 10);
-      targetPath5.fillColor = '#e5e5ff';
-
-      var targetPath6 = new Path.Circle(new Point(180, 180), 10);
-      targetPath6.fillColor = '#e5e5ff';
-
-      var targetPath7 = new Path.Circle(new Point(180, 320), 10);
-      targetPath7.fillColor = '#e5e5ff';
-
-      var targetPath8 = new Path.Circle(new Point(320, 180), 10);
-      targetPath8.fillColor = '#e5e5ff';
 
       // console.log("gameMode " + gameMode + " target has been created");
     }
@@ -461,6 +383,182 @@ function outputCanvasTick() {
     }
 
     levelScore = score;
+  }
+
+  /**
+  * Multiple targets
+  */
+
+  /**
+  * Straight Line Game Mode
+  * @description: This is the Straight Line Game Mode. It can be triggered by changing the value of the gameMode variable to 2. The targets appear in a straight line through the origin.
+  */
+  if (gameMode == 2) {
+    targetPath.visible = false;
+    
+    var targetPath0 = new Path.Circle(new Point(30, 30), 10);
+    targetPath0.fillColor = '#e5e5ff';
+
+    var targetPath1 = new Path.Circle(new Point(70, 70), 10);
+    targetPath1.fillColor = '#e5e5ff';
+
+    var targetPath2 = new Path.Circle(new Point(110, 110), 10);
+    targetPath2.fillColor = '#e5e5ff';
+
+    var targetPath3 = new Path.Circle(new Point(150, 150), 10);
+    targetPath3.fillColor = '#e5e5ff';
+
+    var targetPath4 = new Path.Circle(new Point(190, 190), 10);
+    targetPath4.fillColor = '#e5e5ff';
+
+    var targetPath5 = new Path.Circle(new Point(230, 230), 10);
+    targetPath5.fillColor = '#e5e5ff';
+
+    var targetPath6 = new Path.Circle(new Point(270, 270), 10);
+    targetPath6.fillColor = '#e5e5ff';
+
+    var targetPath7 = new Path.Circle(new Point(310, 310), 10);
+    targetPath7.fillColor = '#e5e5ff';
+
+    var targetPath8 = new Path.Circle(new Point(350, 350), 10);
+    targetPath8.fillColor = '#e5e5ff';
+
+    var targetPath9 = new Path.Circle(new Point(390, 390), 10);
+    targetPath9.fillColor = '#e5e5ff';
+
+    var targetPath10 = new Path.Circle(new Point(430, 430), 10);
+    targetPath10.fillColor = '#e5e5ff';
+
+    var targetPath11 = new Path.Circle(new Point(470, 470), 10);
+    targetPath11.fillColor = '#e5e5ff';
+
+    var targetCoordinates = [30, 70, 110, 150, 190, 230, 270, 310, 350, 390, 430, 470];
+    var targetObjects = [targetPath0, targetPath1, targetPath2, targetPath3, targetPath4, targetPath5, targetPath6, targetPath7, targetPath8, targetPath9, targetPath10, targetPath11];
+
+    // targetPath11.visible = false;
+
+    for(var i = 0; i < targetObjects.length; i++) {
+      if(targetVisibility[i] == 0) {
+        eval('targetPath' + i + '.visible = false;');
+
+      }
+    }
+
+    for(var i = 0; i < targetObjects.length; i++) {
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 500)) {
+        // console.log("Target proximity 500");
+        targetObjects[i].fillColor = '#e5e5ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 450)) {
+        // console.log("Target proximity 450");
+        targetObjects[i].fillColor = '#ccccff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 400)) {
+        // console.log("Target proximity 400");
+        targetObjects[i].fillColor = '#b2b2ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 350)) {
+        // console.log("Target proximity 350");
+        targetObjects[i].fillColor = '#9999ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 300)) {
+        // console.log("Target proximity 300");
+        targetObjects[i].fillColor = '#7f7fff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 250)) {
+        // console.log("Target proximity 250");
+        targetObjects[i].fillColor = '#6666ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 200)) {
+        // console.log("Target proximity 200");
+        targetObjects[i].fillColor = '#4c4cff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 150)) {
+        // console.log("Target proximity 150");
+        targetObjects[i].fillColor = '#3232ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 100)) {
+        // console.log("Target proximity 100");
+        targetObjects[i].fillColor = '#1919ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 50)) {
+        // console.log("Target proximity 50");
+        targetObjects[i].fillColor = '#0000ff';
+      }
+
+      if (isClose(targetCoordinates[i], targetCoordinates[i], 10)) {
+        // Hide the target that was hit
+        targetObjects[i].fillColor = '#FF0000';
+
+        if(targetVisibility[i] != 0) {
+          // Create the score circle
+          scoreX = 460;
+          scoreY = 40;
+          var scorePath = new Path.Circle(new Point(scoreX, scoreY), 30);
+          scorePath.fillColor = '#7CFC00';
+
+          // Change the score text
+          score += 10;
+          var text = new PointText(new Point(scoreX, scoreY + 7));
+          text.justification = 'center';
+          text.fillColor = 'black';
+          text.content = score;
+          text.fontSize = 20;
+        }
+
+        targetVisibility[i] = 0;
+      }
+    }
+
+    // console.log("gameMode " + gameMode + " target has been created");
+  }
+
+  /**
+  * Circle Game Mode
+  * @description: This is the Circle Game Mode. It can be triggered by changing the value of the gameMode variable to 3. The targets appear in a circle.
+  */
+  if (gameMode == 3) {
+    var circleGuide = new Path.Circle(new Point(250, 250), 100);
+    circleGuide.fillColor = 'red';
+    circleGuide.opacity = 0.25;
+
+    var targetPath0 = new Path.Circle(new Point(250, 250), 10);
+    targetPath0.fillColor = '#e5e5ff';
+
+    var targetPath1 = new Path.Circle(new Point(250, 150), 10);
+    targetPath1.fillColor = '#e5e5ff';
+
+    var targetPath2 = new Path.Circle(new Point(250, 350), 10);
+    targetPath2.fillColor = '#e5e5ff';
+
+    var targetPath3 = new Path.Circle(new Point(150, 250), 10);
+    targetPath3.fillColor = '#e5e5ff';
+
+    var targetPath4 = new Path.Circle(new Point(350, 250), 10);
+    targetPath4.fillColor = '#e5e5ff';
+
+    var targetPath5 = new Path.Circle(new Point(320, 320), 10);
+    targetPath5.fillColor = '#e5e5ff';
+
+    var targetPath6 = new Path.Circle(new Point(180, 180), 10);
+    targetPath6.fillColor = '#e5e5ff';
+
+    var targetPath7 = new Path.Circle(new Point(180, 320), 10);
+    targetPath7.fillColor = '#e5e5ff';
+
+    var targetPath8 = new Path.Circle(new Point(320, 180), 10);
+    targetPath8.fillColor = '#e5e5ff';
+
+    // console.log("gameMode " + gameMode + " target has been created");
   }
 
   // Update the PaperScript scope
