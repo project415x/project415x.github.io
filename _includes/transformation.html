@@ -35,11 +35,16 @@
 
 <!-- Configurations -->
 <script type="text/javascript">
+
+	// Stores the x and y coordinates of the input vector. (In pixel coordinates.)
 	var input = {};
+
+	// Starting matrix.
 	var matrix = [
 		[2, 1],
 		[1, -1]
 	];
+
 
 	// var matrix = [
 	// 	[0.5, 0],
@@ -50,6 +55,7 @@
 	var gameMode;
 
 	function updateMatrix(mode) {
+		// Get new matrix from the input panes. Also, do... something with the game mode?
 		/**
 		 * Game Modes
 		 * 0 - Default
@@ -67,21 +73,25 @@
 		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value : matrix[1][0];
 		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value : matrix[1][1];
 
+		// Set the values into 'matrix.' This is a global variable used directly by outputCanvas.js.
 		matrix = [
 			[m00, m01],
 			[m10, m11]
 		];
 
-		var targetNode = document.getElementById("outputCanvas");
-		triggerMouseEvent(targetNode, "mousedown");
+		// Call a mouse event on the output canvas to re-draw the target vector since the matrix has changed.
+		// var targetNode = document.getElementById("outputCanvas");
+		// triggerMouseEvent(targetNode, "mousedown");
 	}
 
-	// Trigger Mouse Events
+	// A general function to trigger a mouse event on a given element in the page.
+	/*
 	function triggerMouseEvent(node, eventType) {
 		var clickEvent = document.createEvent('MouseEvents');
 		clickEvent.initEvent(eventType, true, true);
 		node.dispatchEvent(clickEvent);
 	}
+	*/
 
 	gameMode = gameMode ? gameMode : 0;
 
