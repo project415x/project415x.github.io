@@ -1,4 +1,4 @@
-#home {
+#start {
   background: #cccccc url("morning.png");
   background-size: cover;
   background-attachment: fixed;
@@ -26,7 +26,25 @@
     float: right;
   }
 
+  .tab-content {
+    .tab-pane,
+    .container {
+      background-color: #FFFFFF;
+    }
+
+    #home,
+    #game,
+    #mathguide {
+      background-color: #FFFFFF;
+    }
+  }
+
   h2 {
     font-family: 'Press Start 2P', sans-serif;
+    color: #FFFFFF;
+
+    a {
+      color: #FFFFFF;
+    }
   }
 }
