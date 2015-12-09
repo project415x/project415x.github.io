@@ -1,0 +1,27 @@
+#home {
+  .frameDiv {
+    background-color: #FFFFFF;
+    height: 700px;
+    /*overflow-y: scroll;*/
+    overflow: hidden;
+    color: #000000;
+    white-space: pre-wrap;
+  }
+
+  .levelInfoRow {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .infoLeft {
+    display: none;
+  }
+
+  .infoRight {
+    float: right;
+  }
+
+  h2 {
+    font-family: 'Press Start 2P', sans-serif;
+  }
+}
