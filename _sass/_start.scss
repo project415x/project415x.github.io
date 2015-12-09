@@ -47,4 +47,10 @@
       color: #FFFFFF;
     }
   }
+
+  @include media-query($screen-sm-min) {
+    h2 {
+      font-size: 28px;
+    }
+  }
 }
