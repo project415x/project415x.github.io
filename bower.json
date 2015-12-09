@@ -23,6 +23,7 @@
     "gsap": "~1.18.0",
     "modernizr": "~3.0.0",
     "normalize.css": "~3.0.3",
-    "paper": "~0.9.24"
+    "paper": "~0.9.24",
+    "typed.js": "~1.1.1"
   }
 }
