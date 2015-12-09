@@ -11,7 +11,7 @@ title: Start
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs nav-justified" role="tablist">
-      <li role="presentation" class="active"><a href="#home" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+      <li role="presentation" class="active"><a href="/start" aria-controls="info">Info</a></li>
       <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
       <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
     </ul>
@@ -87,10 +87,10 @@ title: Start
 
       <center>
         <div class="btn-group" role="group" aria-label="Game Navigation">
-          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
+          <button id="lowerBoundLevel" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
             <span class="glyphicon glyphicon-menu-left"></span>
           </button>
-          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
+          <button id="upperBoundLevel" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
             <span class="glyphicon glyphicon-menu-right"></span>
           </button>
         </div>
@@ -139,10 +139,10 @@ title: Start
 
       <center>
         <div class="btn-group" role="group" aria-label="Game Navigation">
-          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
+          <button id="lowerBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
             <span class="glyphicon glyphicon-menu-left"></span>
           </button>
-          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
+          <button id="upperBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
             <span class="glyphicon glyphicon-menu-right"></span>
           </button>
         </div>
@@ -151,6 +151,14 @@ title: Start
       <br>
     </div>
   </div>
+</div>
+
+<div id="foot" class="row">
+  <center>
+    <span class="font-code inline heart">
+      Made with ♥ by <a href="https://josephmilla.com/" target="_blank">Joseph</a>
+    </span>
+  </center>
 </div>
 
 <script src="../public/js/project/levelTracking.js"></script>

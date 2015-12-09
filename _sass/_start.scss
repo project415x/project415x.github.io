@@ -82,17 +82,19 @@
 
       &:hover,
       &:focus {
-        img {
-          -webkit-filter: grayscale(0);
-          filter: grayscale(0);
-        }
+        // img {
+        //   -webkit-filter: grayscale(0);
+        //   filter: grayscale(0);
+        // }
+        opacity: 0.75;
       }
 
       &:active {
-        img {
-          -webkit-filter: grayscale(0.95);
-          filter: grayscale(0.95);
-        }
+        // img {
+        //   -webkit-filter: grayscale(0.95);
+        //   filter: grayscale(0.95);
+        // }
+        opacity: 0.95;
       }
     }
   }
