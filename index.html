@@ -1,154 +1,20 @@
 ---
 layout: project
-title: Start
+title: Home
 ---
 
-<div id="start">
+<a href="https://github.com/project415x/project415x.github.io" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+<div id="home">
   <div class="container">
     <center>
       <h2><a href="/">Project 415x</a></h2>
+
+      <a href="/start">
+        <button type="button" class="btn orange" aria-label="Left Align">
+          Start
+        </button>
+      </a>
     </center>
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs nav-justified" role="tablist">
-      <li role="presentation" class="active"><a href="/" aria-controls="info">Info</a></li>
-      <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
-      <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
-    </ul>
-  </div>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active" id="home">
-      <div class="container">
-        <h3>Project 415x</h3>
-        <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
-
-        <h3>About</h3>
-        <p>
-          Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
-        </p>
-
-        <h3>Team</h3>
-        <br>
-
-        Faculty
-        <ul>
-          <li><a href="http://math.uiuc.edu/~cmalkiew/" target="_blank">Cary Malkiewich</a></li>
-          <li><a href="http://www.math.illinois.edu/~jsapir2/" target="_blank">Jenya Sapir</a></li>
-        </ul>
-
-        Student/s
-        <ul>
-          <li><a href="https://josephmilla.com/" target="_blank">Joseph Milla</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div role="tabpanel" class="tab-pane fade" id="game">
-      <br>
-
-      <div class="row levelInfoRow">
-        <div class="col-md-6">
-          <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#gameModal">
-            <span class="glyphicon glyphicon-question-sign"></span>
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Game Modal</h4>
-                </div>
-                <div class="modal-body">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
-        </div>
-      </div>
-
-      <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
-        Hello, World!
-      </div>
-
-      <br>
-
-      <center>
-        <div class="btn-group" role="group" aria-label="Game Navigation">
-          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
-            <span class="glyphicon glyphicon-menu-left"></span>
-          </button>
-          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
-            <span class="glyphicon glyphicon-menu-right"></span>
-          </button>
-        </div>
-      </center>
-
-      <br>
-    </div>
-
-    <div role="tabpanel" class="tab-pane fade" id="mathguide">
-      <br>
-
-      <div class="row levelInfoRow">
-        <div class="col-md-6">
-          <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#guideModal">
-            <span class="glyphicon glyphicon-question-sign"></span>
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="guideModal" tabindex="-1" role="dialog" aria-labelledby="guideModal">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Guide Modal</h4>
-                </div>
-                <div class="modal-body">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
-        </div>
-      </div>
-
-      <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
-        Hello, World!
-      </div>
-
-      <br>
-
-      <center>
-        <div class="btn-group" role="group" aria-label="Game Navigation">
-          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
-            <span class="glyphicon glyphicon-menu-left"></span>
-          </button>
-          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
-            <span class="glyphicon glyphicon-menu-right"></span>
-          </button>
-        </div>
-      </center>
-
-      <br>
-    </div>
   </div>
 </div>
-
-<script src="public/js/project/levelTracking.js"></script>
