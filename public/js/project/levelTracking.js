@@ -9,16 +9,22 @@ function loadPage(id, levelMove, guide){
   var currentLevel = levelTracking + parseInt(levelMove);
 
   if(currentLevel < 1) {
-    document.getElementById("lowerBound").disabled = "disabled";
-    document.getElementById("upperBound").disabled = "";
+    document.getElementById("lowerBoundLevel").disabled = "disabled";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "disabled";
+    document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = 1;
   } else if ( currentLevel > 3 ) {
-    document.getElementById("lowerBound").disabled = "";
-    document.getElementById("upperBound").disabled = "disabled";
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "disabled";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "disabled";
     levelTracking = 3;
   } else {
-    document.getElementById("lowerBound").disabled = "";
-    document.getElementById("upperBound").disabled = "";
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = currentLevel;
   }
 
