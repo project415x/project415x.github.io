@@ -59,10 +59,14 @@
   }
 
   h3 {
-    // font-family: 'Roboto', sans-serif;
-    font-family: 'Press Start 2P', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    // font-family: 'Press Start 2P', sans-serif;
     // font-weight: 600;
     color: #000000;
+    font-size: 36px;
+  }
+
+  h4 {
     font-size: 24px;
   }
 
@@ -78,6 +82,11 @@
     // -webkit-filter: grayscale(1);
     // filter: grayscale(1);
     display: block;
+  }
+
+  .thumbnail {
+    height: 100%;
+    width: 100%;
   }
 
   .people {
