@@ -15,7 +15,10 @@ title: "Level 1: Catch The Dot"
 			if(parseInt(levelScore) == 200) {
 				isBroadcasted = 1;
 				// document.getElementById('upperBound').click();
-				alert("Congratulations! Proceed to next level");
+				var r = confirm("Congratulations! Proceed to next level");
+				if (r == true) {
+				  window.location = "../level2/index.html";
+				}
 			}
 		}
 	}, 1000);

@@ -1,6 +1,21 @@
 <div role="tabpanel" class="tab-pane fade" id="game">
   <br>
 
+  <div class="container">
+    <div id="nextLevel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nextLevelLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="alert alert-success fade in">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <strong>
+              <span class="glyphicon glyphicon-ok"></span>
+              Congratulations!
+            </strong>
+            Proceed to the next level
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row levelInfoRow">
     <div class="col-md-6">
       <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#gameModal">
