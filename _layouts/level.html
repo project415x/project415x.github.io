@@ -2,11 +2,7 @@
 layout: minimum
 ---
 
-<center>
-  <h3>{{ page.title }}</h3>
-</center>
 
-<br>
 
 <!-- TODO: Make sure that the styling will be in a SCSS file -->
 <style>
@@ -41,6 +37,10 @@ layout: minimum
 		width: 50px;
 		display: inline-block;
 	}
+
+  h3 {
+    font-family: 'Press Start 2P', sans-serif;
+  }
 </style>
 
 <!-- Configurations -->
@@ -106,6 +106,12 @@ layout: minimum
 <!-- PapersScript Canvas Import -->
 <script type="text/paperscript" src="../public/js/project/transformation/inputCanvas.js" canvas="inputCanvas" data-script-scope="add"></script>
 <script type="text/paperscript" src="../public/js/project/transformation/outputCanvas.js" canvas="outputCanvas" data-script-scope="add"></script>
+
+<center>
+  <h3>{{ page.title }}</h3>
+</center>
+
+<br>
 
 <div class="container-fluid">
 	<div class="row">
