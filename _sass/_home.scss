@@ -1,4 +1,9 @@
 #home {
+  background: #cccccc url("morning.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+
   .frameDiv {
     background-color: #FFFFFF;
     height: 700px;
