@@ -22,7 +22,7 @@ function loadPage(id, levelMove, guide){
     levelTracking = currentLevel;
   }
 
-  var dataText = "level" + levelTracking
+  var dataText = "../level" + levelTracking
   if(guide == 0) {
     dataText = dataText + "/index.html";
   } else if(guide == 1) {
