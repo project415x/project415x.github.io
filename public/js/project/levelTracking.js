@@ -29,13 +29,16 @@ function loadPage(id, levelMove, guide){
   }
 
   var dataText = "../level" + levelTracking
+  var idText = "level" + levelTracking;
   if(guide == 0) {
     dataText = dataText + "/index.html";
+    idText = idText + "Game";
   } else if(guide == 1) {
     dataText = dataText + "guide/index.html";
+    idText = idText + "Guide";
   }
 
-  document.getElementById(id).innerHTML='<object type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
+  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
 }
 
 // Show info button after a certain amount of time
