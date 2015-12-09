@@ -1,0 +1,154 @@
+---
+layout: project
+title: Start
+---
+
+<div id="start">
+  <div class="container">
+    <center>
+      <h2><a href="/">Project 415x</a></h2>
+    </center>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+      <li role="presentation" class="active"><a href="#home" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+      <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+      <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math Guide</a></li>
+    </ul>
+  </div>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active">
+      <div class="container">
+        <h3>Project 415x</h3>
+        <p>Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
+
+        <h3>About</h3>
+        <p>
+          Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
+        </p>
+
+        <h3>Team</h3>
+        <br>
+
+        Faculty
+        <ul>
+          <li><a href="http://math.uiuc.edu/~cmalkiew/" target="_blank">Cary Malkiewich</a></li>
+          <li><a href="http://www.math.illinois.edu/~jsapir2/" target="_blank">Jenya Sapir</a></li>
+        </ul>
+
+        Student/s
+        <ul>
+          <li><a href="https://josephmilla.com/" target="_blank">Joseph Milla</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="game">
+      <br>
+
+      <div class="row levelInfoRow">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#gameModal">
+            <span class="glyphicon glyphicon-question-sign"></span>
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Game Modal</h4>
+                </div>
+                <div class="modal-body">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#guideLink").trigger("click")'>Explain Level</button>
+        </div>
+      </div>
+
+      <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
+        Hello, World!
+      </div>
+
+      <br>
+
+      <center>
+        <div class="btn-group" role="group" aria-label="Game Navigation">
+          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'>
+            <span class="glyphicon glyphicon-menu-left"></span>
+          </button>
+          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'>
+            <span class="glyphicon glyphicon-menu-right"></span>
+          </button>
+        </div>
+      </center>
+
+      <br>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="mathguide">
+      <br>
+
+      <div class="row levelInfoRow">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#guideModal">
+            <span class="glyphicon glyphicon-question-sign"></span>
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="guideModal" tabindex="-1" role="dialog" aria-labelledby="guideModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Guide Modal</h4>
+                </div>
+                <div class="modal-body">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
+        </div>
+      </div>
+
+      <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
+        Hello, World!
+      </div>
+
+      <br>
+
+      <center>
+        <div class="btn-group" role="group" aria-label="Game Navigation">
+          <button id="lowerBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
+            <span class="glyphicon glyphicon-menu-left"></span>
+          </button>
+          <button id="upperBound" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
+            <span class="glyphicon glyphicon-menu-right"></span>
+          </button>
+        </div>
+      </center>
+
+      <br>
+    </div>
+  </div>
+</div>
+
+<script src="../public/js/project/levelTracking.js"></script>
