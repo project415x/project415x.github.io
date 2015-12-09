@@ -66,6 +66,10 @@
     font-size: 36px;
   }
 
+  h4 {
+    font-size: 24px;
+  }
+
   @include media-query($screen-sm-min) {
     h2 {
       font-size: 28px;
@@ -78,6 +82,11 @@
     // -webkit-filter: grayscale(1);
     // filter: grayscale(1);
     display: block;
+  }
+
+  .thumbnail {
+    height: 100%;
+    width: 100%;
   }
 
   .people {
