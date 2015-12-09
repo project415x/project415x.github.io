@@ -48,9 +48,52 @@
     }
   }
 
+  h3 {
+    font-family: 'Press Start 2P', sans-serif;
+    color: #000000;
+    font-size: 24px;
+  }
+
   @include media-query($screen-sm-min) {
     h2 {
       font-size: 28px;
+    }
+  }
+
+  img {
+    height: 200px;
+    width: 200px;
+    // -webkit-filter: grayscale(1);
+    // filter: grayscale(1);
+    display: block;
+  }
+
+  .people {
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+
+      a {
+        text-decoration: none;
+        color: #000000;
+        font-size: 14px;
+      }
+
+      &:hover,
+      &:focus {
+        img {
+          -webkit-filter: grayscale(0);
+          filter: grayscale(0);
+        }
+      }
+
+      &:active {
+        img {
+          -webkit-filter: grayscale(0.95);
+          filter: grayscale(0.95);
+        }
+      }
     }
   }
 }
