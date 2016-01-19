@@ -666,4 +666,7 @@ function outputCanvasTick() {
   // console.log(straightLine);
 }
 
+/*
+ * Calls the outputCanvasTick every 33ms (about 30 times a second)
+ */
 setInterval(outputCanvasTick, 33);

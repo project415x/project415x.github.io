@@ -1,3 +1,4 @@
+// Is this file needed if we don't use the magic scrolling? -Cary
 var controller = new ScrollMagic.Controller({
   globalSceneOptions: {
       triggerHook: "onLeave"
