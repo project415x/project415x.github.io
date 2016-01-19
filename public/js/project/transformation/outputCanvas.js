@@ -147,9 +147,9 @@ function outputCanvasTick() {
   /**
   * Math Coordinate to Screen Coordinate Conversion
   * @description: Basically, the grid system relies on a screen coordinate system meaning that the top left corner would be (0, 0), top right would be (500, 0) and so on. This conversion mechanism would transform the math coordinates with the transformation matrix accordingly and convert it to screen coordinates.
+  * The "middleman" variable called "input" and located in level.html (or transformation.html for the test version) stores the math coordinates of the input vector as input.x and input.y. Here we pull those values and plug them into the matrix also located in level.html.
   */
-  var mathCoords = convertToMathCoords(250 + input.x, 250 + input.y);
-  var matrixApplied = applyMatrix(mathCoords[0], mathCoords[1], matrix);
+  var matrixApplied = applyMatrix(input.x, input.y, matrix);
   var screenCoords = convertToScreenCoords(matrixApplied[0], matrixApplied[1]);
   to = new Point(screenCoords[0], screenCoords[1]);
 

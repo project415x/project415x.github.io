@@ -15,7 +15,7 @@ drawGridLines(20, 20, paper.view.bounds);
 */
 var vectorItem, end;
 // Override for arrowHead
-var arrowVector, arrowVectorTemp;
+var arrowVector, arrowVectorTemp, mathCoordsVector;
 
 /**
 * Origin
@@ -58,16 +58,17 @@ function drawVector(event) {
   
 	  /**
 	* Export
-	* @description: Exports the data from this canvas to the middle-man
+	* @description: Exports the data from this canvas to the middle-man. The exported data is in "math coordinates",
+	* as opposed to screen coordinates.
 	*/
   // Set inputs for the ouputCanvas
-  input.x0 = vectorOrigin.x
-  input.y0 = vectorOrigin.y
-  tempVector = end - vectorOrigin;
-  input.x = tempVector.x;
-  input.y = tempVector.y;
-
-  // console.log(values);
+  mathCoordsVector = convertToMathCoords(end.x, end.y);
+  //console.log(mathCoordsVector);
+  
+  input.x = mathCoordsVector[0];
+  input.y = mathCoordsVector[1];
+  // console.log(mathCoordsVector[0]);
+  // console.log(input.x);
 }
 
 /**
