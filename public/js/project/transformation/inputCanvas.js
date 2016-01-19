@@ -13,14 +13,9 @@ drawGridLines(20, 20, paper.view.bounds);
 * Local Variables
 * @description: Initalize them here
 */
-var vectorStart, vector, vectorPrevious;
-var vectorItem, items, dashedItems;
-
+var vectorItem, end;
 // Override for arrowHead
-var arrowVectorTemp;
-
-// Dash items
-var dashItem;
+var arrowVector, arrowVectorTemp;
 
 /**
 * Origin
@@ -37,26 +32,20 @@ var vectorOrigin = {
 * @override: Override existing drawVector
 */
 function drawVector(event) {
-	
-  arrowVectorTemp =  event.point - vectorOrigin;
 
   // Delete vector, and set items array to empty
   if (vectorItem) {
     vectorItem.remove();
   }
 
-  var arrowVector = arrowVectorTemp.normalize(10);
+  // The vector starts at vectorOrigin and ends at event.point
+  end = event.point;
+  arrowVectorTemp =  end - vectorOrigin;
+  arrowVector = arrowVectorTemp.normalize(10);
 
-  // Set inputs for the ouputCanvas
-  input.x0 = vectorOrigin.x
-  input.y0 = vectorOrigin.y
-
-  // This is the endpoint of the vector
-  // If vectorStart = vectorOrigin
-  var end = event.point;
-
+  // Draw the shaft and arrow tip of the vector
   vectorItem = new Group([
-    new Path([vectorOrigin, event.point]),
+    new Path([vectorOrigin, end]),
     // This is for the arrow
     new Path([
       end + arrowVector.rotate(135),
@@ -71,7 +60,10 @@ function drawVector(event) {
 	* Export
 	* @description: Exports the data from this canvas to the middle-man
 	*/
-  tempVector = event.point - vectorOrigin;
+  // Set inputs for the ouputCanvas
+  input.x0 = vectorOrigin.x
+  input.y0 = vectorOrigin.y
+  tempVector = end - vectorOrigin;
   input.x = tempVector.x;
   input.y = tempVector.y;
 
