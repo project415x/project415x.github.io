@@ -3,6 +3,11 @@
  * This file includes all of the utilities needed for manipulating the coordinate system
  */
 
+// For now these are fixed. It would be nice to make them able to be varied.
+canvasScale = 25;
+// halfCanvasHeight = 250;
+// halfCanvasWidth = 250;
+
 /**
 * convertToMathCoords
 * @description: Convert Screen Coordinates to Math Coordinates
@@ -10,8 +15,12 @@
 *   - x, y: Vector coordinates
 */
 function convertToMathCoords(x, y) {
-  var newX = (x - 250) / 25;
-  var newY = -(y - 250) / 25;
+  // If anything goes wacko, this is supposed to be 250.
+  halfCanvasHeight = 0.5 * paper.view.bounds.height;
+  halfCanvasWidth = 0.5 * paper.view.bounds.width;
+  
+  var newX = (x - halfCanvasWidth) / canvasScale;
+  var newY = -(y - halfCanvasHeight) / canvasScale;
 
   return [newX, newY];
 }
@@ -23,8 +32,11 @@ function convertToMathCoords(x, y) {
 *   - x, y: Vector coordinates
 */
 function convertToScreenCoords(x, y) {
-  var newX = 25 * x + 250;
-  var newY = -25 * y + 250;
+  halfCanvasHeight = 0.5 * paper.view.bounds.height;
+  halfCanvasWidth = 0.5 * paper.view.bounds.width;
+  
+  var newX = canvasScale * x + halfCanvasWidth;
+  var newY = -canvasScale * y + halfCanvasHeight;
 
   return [newX, newY];
 }

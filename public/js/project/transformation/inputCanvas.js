@@ -5,7 +5,7 @@
 
 /**
 * Grid
-* @description: Set up grid system (See grid.js)
+* @description: Set up grid system (See grid.js). It'll always be 10 units away from the origin in each direction.
 */
 drawGridLines(20, 20, paper.view.bounds);
 
@@ -22,8 +22,8 @@ var arrowVector, arrowVectorTemp;
 * @description: Set origin at (250, 250)
 */
 var vectorOrigin = {
-  x: 250,
-  y: 250
+  x: 0.5 * paper.view.bounds.width,
+  y: 0.5 * paper.view.bounds.height
 }
 
 /**
