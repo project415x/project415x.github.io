@@ -10,27 +10,14 @@
  drawGridLines(20, 20, paper.view.bounds);
 
 /**
-* Vector Config
-* @description: Configurations for the vector
-*/
-var values = {
-  fixLength: false,
-  fixAngle: false,
-  showCircle: false,
-  showAngleLength: false,
-  showCoordinates: false
-};
-
-/**
 * Local Variables
 * @description: Initalize them here
 */
-var vectorStart, vector, vectorPrevious;
-var vectorItem, items, dashedItems;
+var vectorItem;
 
 /**
  * Target
- * @description: Target varibale (default mode)
+ * @description: Target variable (default mode)
  */
 var score = 0;
 var targetX;
