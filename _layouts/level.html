@@ -46,21 +46,18 @@ layout: minimum
 
 <!-- Configurations -->
 <script type="text/javascript">
+	
+	// The input variable is modified by inputCanvas.js, and read by outputCanvas.js.
 	var input = {};
 	var matrix = [
 		[2, 1],
 		[1, -1]
 	];
-  var levelScore;
-
-	// var matrix = [
-	// 	[0.5, 0],
-	// 	[0, 0.5]
-	// ];
-
+	var levelScore;
 	var inputEvent;
 	var gameMode;
 
+	// Updates the matrix and/or the game mode.
 	function updateMatrix(mode) {
 		/**
 		 * Game Modes
@@ -83,25 +80,15 @@ layout: minimum
 			[m00, m01],
 			[m10, m11]
 		];
-
-		var targetNode = document.getElementById("outputCanvas");
-		triggerMouseEvent(targetNode, "mousedown");
 	}
 
-	// Trigger Mouse Events
-	function triggerMouseEvent(node, eventType) {
-		var clickEvent = document.createEvent('MouseEvents');
-		clickEvent.initEvent(eventType, true, true);
-		node.dispatchEvent(clickEvent);
-	}
-
+	// Set gameMode to 0 if it isn't defined (I think) -Cary
 	gameMode = gameMode ? gameMode : 0;
 
-	// Initalize updateOutput function, then update on PaperScript
-	// var updateOutput = function() {};
 </script>
 
-<script src="../public/js/project/grid/grid.js"></script>
+<!-- Important: these have to be listed before the canvases. The canvas code depends on the code in these files. -->
+<script src="../public/js/project/utilities/grid.js"></script>
 <script src="../public/js/project/utilities/utils.js"></script>
 
 <!-- PapersScript Canvas Import -->
