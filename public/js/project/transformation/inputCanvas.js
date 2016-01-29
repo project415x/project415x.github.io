@@ -78,10 +78,10 @@ function drawVector(event) {
 */
 function onMouseDown(event) {
 
-
+  console.log('event ',event);
     // Debug
-    // console.log("even.point: " + event.point);
-    // console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
+    console.log("even.point: " + event.point);
+    console.log("xy-origin: { x: " + xOrigin + ", y: " + yOrigin + " }");
 
   drawVector(event);
 }
