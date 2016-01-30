@@ -12,10 +12,10 @@
 * USAGE: var left = canvas(settings);
 */
 function canvas(settings) {
-  
-  //input error handling 
-  this.minX = settings.minX || -10, 
-  this.minY = settings.minY || -10, 
+
+  //input error handling
+  this.minX = settings.minX || -10,
+  this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
   this.pixelWidth = settings.pixelWidth || 500,
@@ -31,7 +31,7 @@ function canvas(settings) {
     // If anything goes wacko, this is supposed to be 250.
     halfCanvasHeight = 0.5 * paper.view.bounds.height;
     halfCanvasWidth = 0.5 * paper.view.bounds.width;
-    
+
     var newX = (x - halfCanvasWidth) / canvasScale;
     var newY = -(y - halfCanvasHeight) / canvasScale;
 
@@ -47,7 +47,7 @@ function canvas(settings) {
   function convertToScreenCoords(x, y) {
     halfCanvasHeight = 0.5 * paper.view.bounds.height;
     halfCanvasWidth = 0.5 * paper.view.bounds.width;
-    
+
     var newX = canvasScale * x + halfCanvasWidth;
     var newY = -canvasScale * y + halfCanvasHeight;
 
@@ -85,16 +85,13 @@ function canvas(settings) {
     }
   }
 
+
   function drawVector(vector) {
 
   }
 
-  function drawTarget(target) {
-
-  }
-
   /**
-  * 
+  *
   *
   */
 
@@ -107,6 +104,9 @@ function canvas(settings) {
   *
   */
 
+
+
+
   function proximity(outputVector, target) {
 
   }
@@ -116,6 +116,10 @@ function canvas(settings) {
   *
   *
   */
+
+  function drawTarget(target) {
+
+  }
 
   function drawTargets(targets) {
     // just a for loop with drawTarget
