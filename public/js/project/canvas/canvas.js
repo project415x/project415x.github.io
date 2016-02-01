@@ -19,7 +19,9 @@ function canvas(settings) {
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
   this.pixelWidth = settings.pixelWidth || 500,
-  this.pixelHeight = settings.pixelHeight || 500;
+  this.pixelHeight = settings.pixelHeight || 500,
+  this.Origin = [x: 0.5 * this.pixelWidth, y: 0.5 * this.pixelHeight] || [x: 250, y: 250];
+
 
   /**
   * convertToMathCoords
@@ -58,7 +60,7 @@ function canvas(settings) {
   * drawGridLines
   * @description: Provides the grid lines in the system
   */
-  var drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
+  function drawGridLines(num_rectangles_wide, num_rectangles_tall, boundingRect) {
     var width_per_rectangle = boundingRect.width / num_rectangles_wide;
     var height_per_rectangle = boundingRect.height / num_rectangles_tall;
     for (var i = 0; i <= num_rectangles_wide; i++) {
@@ -91,27 +93,75 @@ function canvas(settings) {
       vector.drawingObject.remove();
     }
 
-    
+    var end = [x: vector.x, y: vector.y];
+    var arrowVectorTemp = end - this.Origin;
+    //Change the param of normalize() based on settings (maybe vetor.?);
+    var arrowVector = arrowVectorTemp.normalize(10);
 
+    vector.drawingObject = new Group([
+      new Path([this.Origin, end]),
+      // This is for the arrow
+      new Path([
+        end + arrowVector.rotate(135),
+        end,
+        end + arrowVector.rotate(-135)
+      ])
+    ]);
+    //Change the params based on settings (maybe vetor.?);
+    vector.drawingObject.strokeWidth = 5;
+    vector.drawingObject.strokeColor = '#e4141b';
   }
 
   /**
   *
   *
   */
-
   function checkCollisions(oldVector,newVector,targets) {
-
+    var start_x = oldVector.x,
+        start_y = oldVector.y,
+        end_x = newVector.x,
+        end_y = newVector.y,
+        results = [];
+    for (i = 0; i < targets.length; i++) {
+      var tar_x = targets[i].x,
+          tar_y = targets[i].y;
+      //10 pixels is from Joseph's old settings
+      if (isClose(end_x,end_y,tar_x,tar_y,10)) {
+        results[i] = true;
+      }
+      else {
+        var param =(tar_x - start_x) * (end_x - start_x) + (tar_y - start_y) * (end_y - start_y);
+        var temp = Math.sqrt(Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2));
+        param /= temp;
+        var dis_x = start_x + param * (end_x - start_x);
+        var dis_y = start_y + param * (end_y - start_y;
+        //10 pixels is from Joseph's old settings
+        if (isClose(dis_x,dis_y,tar_x,tar_y,10)) {
+          results[i] = true;
+        }
+        else {
+          results[i] = false;
+        }
+      }
+    }
+    return results;
   }
+
+
+  function isClose(oX, oY, tX, tY, radius) {
+    var dis = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
+    if (dis <= radius) {
+      return true;
+    }
+    return false;
+  }
+
+
 
   /**
   *
   *
   */
-
-
-
-
   function proximity(outputVector, target) {
 
   }
@@ -121,7 +171,6 @@ function canvas(settings) {
   *
   *
   */
-
   function drawTarget(target) {
 
   }
