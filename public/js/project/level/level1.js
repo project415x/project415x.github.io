@@ -50,7 +50,7 @@ function startLevel1() {
 		// check collision (use line segments)
 		var result = outputCanvas.checkCollisions(oldOutputVector,outputVector,targets);
 
-		if(result.length !== 0)
+		if(result.length !== 0) {
 
 			for(var i = 0; i < result.length; i++) {
 				// change x,y values for target
@@ -72,6 +72,6 @@ function startLevel1() {
 
 	// accepts a single target object as input
 	function randomizeTarget(target) {
-		target.update(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9));
+		target.updateColor(getRandomArbitrary(-9,9), getRandomArbitrary(-9,9));
 	}
 }
