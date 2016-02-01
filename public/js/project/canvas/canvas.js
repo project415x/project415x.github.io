@@ -131,7 +131,7 @@ function canvas(settings) {
       }
       else {
         var param =(tar_x - start_x) * (end_x - start_x) + (tar_y - start_y) * (end_y - start_y);
-        var temp = Math.sqrt(Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2));
+        var temp = Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2);
         param /= temp;
         var dis_x = start_x + param * (end_x - start_x);
         var dis_y = start_y + param * (end_y - start_y;
