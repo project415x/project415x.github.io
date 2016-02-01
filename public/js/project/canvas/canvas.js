@@ -87,6 +87,11 @@ function canvas(settings) {
 
 
   function drawVector(vector) {
+    if (vector.drawingObject){
+      vector.drawingObject.remove();
+    }
+
+    
 
   }
 
