@@ -156,27 +156,73 @@ function canvas(settings) {
     return false;
   }
 
+function proximity(outputVector, target) {
 
 
-  /**
-  *
-  *
-  */
-  function proximity(outputVector, target) {
+    if (isClose(targetX, targetY, 500)) {
+      // console.log("Target proximity 500");
+      target.updateColor('#e5e5ff');
+    }
 
+    else if (isClose(targetX, targetY, 450)) {
+      // console.log("Target proximity 450");
+      target.updateColor('#ccccff');
+    }
+
+    else if (isClose(targetX, targetY, 400)) {
+      // console.log("Target proximity 400");
+      target.updateColor('#b2b2ff');
+    }
+
+    else if (isClose(targetX, targetY, 350)) {
+      // console.log("Target proximity 350");
+      target.updateColor('#9999ff');
+    }
+
+    else if (isClose(targetX, targetY, 300)) {
+      // console.log("Target proximity 300");
+      target.updateColor('#7f7fff');
+    }
+
+    else if (isClose(targetX, targetY, 250)) {
+      // console.log("Target proximity 250");
+      target.updateColor('#6666ff');
+    }
+
+    else if (isClose(targetX, targetY, 200)) {
+      // console.log("Target proximity 200");
+      target.updateColor('#4c4cff');
+    }
+
+    else if (isClose(targetX, targetY, 150)) {
+      // console.log("Target proximity 150");
+      target.updateColor('#3232ff');
+    }
+
+    else if (isClose(targetX, targetY, 100)) {
+      // console.log("Target proximity 100");
+      target.updateColor('#1919ff');
+    }
+
+    else if (isClose(targetX, targetY, 50)) {
+      // console.log("Target proximity 50");
+      target.updateColor('#0000ff');
+    }
   }
 
-
   /**
-  *
-  *
+  * @PARAM target object as described in target.js
+  * @RETURNS nothing
   */
   function drawTarget(target) {
-
+    targetPath = new Path.Circle(new Point(target.x, target.y), 10);
+    targetPath.fillColor = '#e5e5ff';
   }
 
   function drawTargets(targets) {
     // just a for loop with drawTarget
+    for( var i = 0; i < targets.length; i++ ) {
+      drawTarget(targets[i]);
+    }
   }
-
-}
+} // end of constructor
