@@ -11,7 +11,7 @@
   }
 * USAGE: var left = canvas(settings);
 */
-function canvas(settings) {
+function Canvas(settings) {
 
   //input error handling
   this.minX = settings.minX || -10,
@@ -20,33 +20,23 @@ function canvas(settings) {
   this.maxY = settings.maxY || 10,
   this.pixelWidth = settings.pixelWidth || 500,
   this.pixelHeight = settings.pixelHeight || 500,
-  this.Origin = [x: 0.5 * this.pixelWidth, y: 0.5 * this.pixelHeight] || [x: 250, y: 250];
+  this.originX = (0.5 * this.pixelWidth) || 250,
+  this.originY = (0.5 * this.pixelHeight) || 250;
+  // , 
+  // this.origin = {
+  //   x: this.originX,
+  //   y: this.originY
+  // };
 
+} // end of constructor
 
-  /**
-  * convertToMathCoords
-  * @description: Convert Screen Coordinates to Math Coordinates
-  * @param:
-  *   - x, y: Vector coordinates
-  */
-  function convertToMathCoords(x, y) {
-    // If anything goes wacko, this is supposed to be 250.
-    halfCanvasHeight = 0.5 * paper.view.bounds.height;
-    halfCanvasWidth = 0.5 * paper.view.bounds.width;
-
-    var newX = (x - halfCanvasWidth) / canvasScale;
-    var newY = -(y - halfCanvasHeight) / canvasScale;
-
-    return [newX, newY];
-  }
-
-  /**
+ /**
   * convertToScreenCoords
   * @description: Convert the Math Coordinates back to Screen Coordinates
   * @param:
   *   - x, y: Vector coordinates
   */
-  function convertToScreenCoords(x, y) {
+  Canvas.prototype.convertToScreenCoords = function(x,y) {
     halfCanvasHeight = 0.5 * paper.view.bounds.height;
     halfCanvasWidth = 0.5 * paper.view.bounds.width;
 
@@ -56,11 +46,25 @@ function canvas(settings) {
     return [newX, newY];
   }
 
+  Canvas.prototype.drawAxes = function() {
+    var axis = d3.svg.axis();
+    console.log('axis ', axis);
+    d3.select("#input-canvas").append("svg")
+      .attr("class", "axis")
+      .attr("width", this.pixelWidth)
+      .attr("height", this.pixelHeight)
+    .append("g")
+      .attr("transform", "translate(0,30)")
+      .call(axis);
+
+    console.log('axes drawn');
+  }
+
   /**
   * drawGridLines
   * @description: Provides the grid lines in the system
   */
-  function drawGridLines(num_rectangles_wide, num_rectangles_tall, boundingRect) {
+  Canvas.prototype.drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
     var width_per_rectangle = boundingRect.width / num_rectangles_wide;
     var height_per_rectangle = boundingRect.height / num_rectangles_tall;
     for (var i = 0; i <= num_rectangles_wide; i++) {
@@ -88,16 +92,26 @@ function canvas(settings) {
   }
 
 
-  function drawVector(vector) {
+  Canvas.prototype.drawVector = function(vector) {
     if (vector.drawingObject){
       vector.drawingObject.remove();
     }
 
-    var end = [x: vector.x, y: vector.y];
-    var arrowVectorTemp = end - this.Origin;
+    var end = {
+      x: vector.x, 
+      y: vector.y
+    };
+
+    var arrowVectorTemp = {
+      x: end.x - this.origin.x, 
+      y: end.y - this.origin.y
+    };
+
     //Change the param of normalize() based on settings (maybe vetor.?);
+    // TODO NORMALIZE THE VECTOR
     var arrowVector = arrowVectorTemp.normalize(10);
 
+    // PAPERSCRIPT OR WEBGL
     vector.drawingObject = new Group([
       new Path([this.Origin, end]),
       // This is for the arrow
@@ -116,7 +130,7 @@ function canvas(settings) {
   *
   *
   */
-  function checkCollisions(oldVector,newVector,targets) {
+  Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
     var start_x = oldVector.x,
         start_y = oldVector.y,
         end_x = newVector.x,
@@ -134,7 +148,7 @@ function canvas(settings) {
         var temp = Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2);
         param /= temp;
         var dis_x = start_x + param * (end_x - start_x);
-        var dis_y = start_y + param * (end_y - start_y;
+        var dis_y = start_y + param * (end_y - start_y);
         //10 pixels is from Joseph's old settings
         if (isClose(dis_x,dis_y,tar_x,tar_y,10)) {
           results[i] = true;
@@ -148,7 +162,7 @@ function canvas(settings) {
   }
 
 
-  function isClose(oX, oY, tX, tY, radius) {
+  Canvas.prototype.isClose = function(oX, oY, tX, tY, radius) {
     var dis = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
     if (dis <= radius) {
       return true;
@@ -156,8 +170,7 @@ function canvas(settings) {
     return false;
   }
 
-function proximity(outputVector, target) {
-
+Canvas.prototype.proximity = function(outputVector, target) {
 
     if (isClose(targetX, targetY, 500)) {
       // console.log("Target proximity 500");
@@ -214,15 +227,14 @@ function proximity(outputVector, target) {
   * @PARAM target object as described in target.js
   * @RETURNS nothing
   */
-  function drawTarget(target) {
+  Canvas.prototype.drawTarget = function(target) {
     targetPath = new Path.Circle(new Point(target.x, target.y), 10);
     targetPath.fillColor = '#e5e5ff';
   }
 
-  function drawTargets(targets) {
+  Canvas.prototype.drawTargets = function(targets) {
     // just a for loop with drawTarget
     for( var i = 0; i < targets.length; i++ ) {
       drawTarget(targets[i]);
     }
   }
-} // end of constructor
