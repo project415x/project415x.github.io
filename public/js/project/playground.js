@@ -16,6 +16,8 @@ var outputSettings = {
 	pixelHeight: 500
 };
 
+document.body.style.backgroundColor = "red";
+
 var inputCanvas = new Canvas(inputSettings);
 
 // draw grid

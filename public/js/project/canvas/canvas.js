@@ -21,7 +21,7 @@ function Canvas(settings) {
   this.pixelWidth = settings.pixelWidth || 500,
   this.pixelHeight = settings.pixelHeight || 500,
   this.originX = (0.5 * this.pixelWidth) || 250,
-  this.originY = (0.5 * this.pixelHeight) || 250, 
+  this.originY = (0.5 * this.pixelHeight) || 250,
   this.origin = {
     x: this.originX,
     y: this.originY
@@ -52,6 +52,32 @@ function Canvas(settings) {
     height = this.pixelHeight;
 
     var inputSvg = d3.select('#input-canvas').append('svg')
+                                             .attr('width', 500)
+                                             .attr('height', 500);
+    var background = d3.select('#input-canvas').append('canvas')
+                                               .attr("id", "background")
+                                               .attr("width", 500)
+                                               .attr("height", 500);
+    var bg = document.getElementById("background");
+    bg.style.background = "white";
+
+    var context = bg.getContext('2d');
+
+    var imageObj = new Image();
+    imageObj.onload= function() {
+      context.drawImage(imageObj, 0, 0, 500, 500);
+      context.font = "30px Arial";
+      context.fillStyle = "white";
+      context.fillText("Hello World", 250, 250);
+    };
+    imageObj.src = 'https://lh3.googleusercontent.com/a2iU2NvLNxsVt3rbgZ7HTE2mORK3QvCSnP4NCIIo8ebbdjz2ms_2SoObFCxAXZQumdpJ3w=s190';
+
+    inputSvg.append('image')
+            .attr('xlink:href', bg.toDataURL())
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 500)
+            .attr('height', 500);
 
   }
 
@@ -92,18 +118,18 @@ function Canvas(settings) {
   Canvas.prototype.drawVector = function(vector) {
 
     var end = {
-      x: vector.x, 
+      x: vector.x,
       y: vector.y
     };
 
     var arrowVectorTemp = {
-      x: end.x - this.origin.x, 
+      x: end.x - this.origin.x,
       y: end.y - this.origin.y
     };
 
     /*
     Basis of drawing a line
-    append.line("line")  
+    append.line("line")
         .attr("x1", this.origin.x)
         .attr("y1", this.origin.y)
         .attr("x2", end.x)
