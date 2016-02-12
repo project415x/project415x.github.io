@@ -53,16 +53,27 @@ function Canvas(settings) {
 
     var inputSvg = d3.select('#input-canvas').append('svg')
                                              .attr('width', 500)
-                                             .attr('height', 500);
-    var background = d3.select('#input-canvas').append('canvas')
+                                             .attr('height', 500)
+                                             .attr("id","in_vec_svg");
+    var outputSvg = d3.select('#output-canvas').append('svg')
+                                             .attr('width', 500)
+                                             .attr('height', 500)
+                                             .attr("id","out_vec_svg");
+
+    //Make two svgs transparent
+    //var in_svg = document.getElementById("in_vec_svg");
+    //in_svg.style.opacity = "0.0";
+    //var out_svg = document.getElementById("out_vec_svg");
+    //out_svg.style.opacity = "0.0";
+
+    /* var background = d3.select('#input-canvas').append('canvas')
                                                .attr("id", "background")
                                                .attr("width", 500)
-                                               .attr("height", 500);
+                                               .attr("height", 500)
+                                               .attr("x", 0)
+                                               .attr("y", 0);
     var bg = document.getElementById("background");
-    bg.style.background = "white";
-
     var context = bg.getContext('2d');
-
     var imageObj = new Image();
     imageObj.onload= function() {
       context.drawImage(imageObj, 0, 0, 500, 500);
@@ -70,14 +81,15 @@ function Canvas(settings) {
       context.fillStyle = "white";
       context.fillText("Hello World", 250, 250);
     };
-    imageObj.src = 'https://lh3.googleusercontent.com/a2iU2NvLNxsVt3rbgZ7HTE2mORK3QvCSnP4NCIIo8ebbdjz2ms_2SoObFCxAXZQumdpJ3w=s190';
+    imageObj.src = 'https://lh3.googleusercontent.com/SaBjjBtJORUHymTGvxFc4IGBbjPXjOm1xNHWZyygvG5zQMv9g_djwEq9uKx8n29FoTU4qQ=s190';
+    */
 
-    inputSvg.append('image')
-            .attr('xlink:href', bg.toDataURL())
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', 500)
-            .attr('height', 500);
+    //Style Things
+    //vec_svg.style.opacity = "0.0";
+    //vec_svg.style.position = "absolute";
+    //vec_svg.style.top = "0px";
+    //vec_svg.style.left = "0px";
+
 
   }
 
