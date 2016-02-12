@@ -21,12 +21,11 @@ function Canvas(settings) {
   this.pixelWidth = settings.pixelWidth || 500,
   this.pixelHeight = settings.pixelHeight || 500,
   this.originX = (0.5 * this.pixelWidth) || 250,
-  this.originY = (0.5 * this.pixelHeight) || 250;
-  // , 
-  // this.origin = {
-  //   x: this.originX,
-  //   y: this.originY
-  // };
+  this.originY = (0.5 * this.pixelHeight) || 250, 
+  this.origin = {
+    x: this.originX,
+    y: this.originY
+  };
 
 } // end of constructor
 
@@ -46,18 +45,14 @@ function Canvas(settings) {
     return [newX, newY];
   }
 
-  Canvas.prototype.drawAxes = function() {
-    var axis = d3.svg.axis();
-    console.log('axis ', axis);
-    d3.select("#input-canvas").append("svg")
-      .attr("class", "axis")
-      .attr("width", this.pixelWidth)
-      .attr("height", this.pixelHeight)
-    .append("g")
-      .attr("transform", "translate(0,30)")
-      .call(axis);
+  Canvas.prototype.drawGrid = function() {
 
-    console.log('axes drawn');
+    var margin = {top: 20, right: 100, bottom: 30, left: 100},
+    width = this.pixelWidth,
+    height = this.pixelHeight;
+
+    var inputSvg = d3.select('#input-canvas').append('svg')
+
   }
 
   /**
@@ -68,11 +63,13 @@ function Canvas(settings) {
     var width_per_rectangle = boundingRect.width / num_rectangles_wide;
     var height_per_rectangle = boundingRect.height / num_rectangles_tall;
     for (var i = 0; i <= num_rectangles_wide; i++) {
+      /*
       var xPos = boundingRect.left + i * width_per_rectangle;
       var topPoint = new paper.Point(xPos, boundingRect.top);
       var bottomPoint = new paper.Point(xPos, boundingRect.bottom);
       var aLine = new paper.Path.Line(topPoint, bottomPoint);
       aLine.strokeColor = 'black';
+      */
 
       if (i == num_rectangles_wide / 2) {
         aLine.strokeWidth = 5;
@@ -93,9 +90,6 @@ function Canvas(settings) {
 
 
   Canvas.prototype.drawVector = function(vector) {
-    if (vector.drawingObject){
-      vector.drawingObject.remove();
-    }
 
     var end = {
       x: vector.x, 
@@ -106,6 +100,15 @@ function Canvas(settings) {
       x: end.x - this.origin.x, 
       y: end.y - this.origin.y
     };
+
+    /*
+    Basis of drawing a line
+    append.line("line")  
+        .attr("x1", this.origin.x)
+        .attr("y1", this.origin.y)
+        .attr("x2", end.x)
+        .attr("y2", end.y)
+    */
 
     //Change the param of normalize() based on settings (maybe vetor.?);
     // TODO NORMALIZE THE VECTOR
@@ -162,64 +165,64 @@ function Canvas(settings) {
   }
 
 
-  Canvas.prototype.isClose = function(oX, oY, tX, tY, radius) {
-    var dis = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-    if (dis <= radius) {
-      return true;
-    }
-    return false;
+Canvas.prototype.isClose = function(oX, oY, tX, tY, radius) {
+  var dis = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
+  if (dis <= radius) {
+    return true;
   }
+  return false;
+}
 
 Canvas.prototype.proximity = function(outputVector, target) {
 
     if (isClose(targetX, targetY, 500)) {
       // console.log("Target proximity 500");
-      target.updateColor('#e5e5ff');
+      target.updateColor('#e5e5ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 450)) {
       // console.log("Target proximity 450");
-      target.updateColor('#ccccff');
+      target.updateColor('#ccccff', target.id);
     }
 
     else if (isClose(targetX, targetY, 400)) {
       // console.log("Target proximity 400");
-      target.updateColor('#b2b2ff');
+      target.updateColor('#b2b2ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 350)) {
       // console.log("Target proximity 350");
-      target.updateColor('#9999ff');
+      target.updateColor('#9999ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 300)) {
       // console.log("Target proximity 300");
-      target.updateColor('#7f7fff');
+      target.updateColor('#7f7fff', target.id);
     }
 
     else if (isClose(targetX, targetY, 250)) {
       // console.log("Target proximity 250");
-      target.updateColor('#6666ff');
+      target.updateColor('#6666ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 200)) {
       // console.log("Target proximity 200");
-      target.updateColor('#4c4cff');
+      target.updateColor('#4c4cff', target.id);
     }
 
     else if (isClose(targetX, targetY, 150)) {
       // console.log("Target proximity 150");
-      target.updateColor('#3232ff');
+      target.updateColor('#3232ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 100)) {
       // console.log("Target proximity 100");
-      target.updateColor('#1919ff');
+      target.updateColor('#1919ff', target.id);
     }
 
     else if (isClose(targetX, targetY, 50)) {
       // console.log("Target proximity 50");
-      target.updateColor('#0000ff');
+      target.updateColor('#0000ff', target.id);
     }
   }
 
@@ -228,6 +231,11 @@ Canvas.prototype.proximity = function(outputVector, target) {
   * @RETURNS nothing
   */
   Canvas.prototype.drawTarget = function(target) {
+    // grab svg container
+    svg.append("circle")
+      .attr("cx", target.x)
+      .attr("cy", target.y)
+      .attr("r",10)
     targetPath = new Path.Circle(new Point(target.x, target.y), 10);
     targetPath.fillColor = '#e5e5ff';
   }
