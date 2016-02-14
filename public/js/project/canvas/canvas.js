@@ -26,6 +26,7 @@ function Canvas(settings) {
     x: this.originX,
     y: this.originY
   };
+  this.type = settings.type || "input";
 
 } // end of constructor
 
@@ -36,50 +37,71 @@ function Canvas(settings) {
   *   - x, y: Vector coordinates
   */
   Canvas.prototype.convertToScreenCoords = function(x,y) {
+    /*
+    var halfCanvasHeight = this.height * 0.5,
+        halfCanvasWidth = this.width * 0.5;
+    */
     halfCanvasHeight = 0.5 * paper.view.bounds.height;
     halfCanvasWidth = 0.5 * paper.view.bounds.width;
 
+    // what is canvas scale... 
+    // ahhh global variables galore!
     var newX = canvasScale * x + halfCanvasWidth;
     var newY = -canvasScale * y + halfCanvasHeight;
 
     return [newX, newY];
   }
 
-  Canvas.prototype.drawGrid = function() {
+  Canvas.prototype.drawInputCanvas = function(){
+    d3.select('#input-canvas').append('svg')
+      .attr({
+        id: "input-svg",
+        width: this.pixelWidth,
+        height: this.pixelHeight
+      });
+  };
 
-    width = this.pixelWidth,
-    height = this.pixelHeight;
+  Canvas.prototype.drawOutputCanvas = function(){
+    console.log('draw output canvas')
+    d3.select('#output-canvas').append('svg')
+      .attr({
+        id: "output-svg",
+        width: this.pixelWidth,
+        height: this.pixelHeight
+      })
+  };
+  // TODO: Clean up this function
+  // Z: Where can we break this up into smaller functions?
+  //    How can we migrate this CSS into an external file?
+  Canvas.prototype.drawCanvas = function() {
 
-    var inputSvg = d3.select('#input-canvas').append('svg')
-                  .attr("id", "inputSvg")
-                  .attr('width', 500)
-                  .attr('height', 500);
-
-    var background = d3.select('#input-canvas').append('canvas')
-                       .attr("id", "background")
-                       .attr("width", 500)
-                       .attr("height", 500);
-                       .attr('width', 500)
-                       .attr('height', 500)
-                       .attr("id","in_vec_svg");
-    var outputSvg = d3.select('#output-canvas').append('svg')
-                                             .attr('width', 500)
-                                             .attr('height', 500)
-                                             .attr("id","out_vec_svg");
+    if(this.type === "input") {
+      this.drawInputCanvas();
+    }
+    else if(this.type === "output") {
+      this.drawOutputCanvas();
+    }
+    else {
+      console.log("Invalid canvas type: ",this.type)
+    }
 
     //Make two svgs transparent
-    //var in_svg = document.getElementById("in_vec_svg");
-    //in_svg.style.opacity = "0.0";
-    //var out_svg = document.getElementById("out_vec_svg");
-    //out_svg.style.opacity = "0.0";
+    var in_svg = document.getElementById("in_vec_svg");
+    // in_svg.style.opacity = "0.0";
+    var out_svg = document.getElementById("out_vec_svg");
+    // out_svg.style.opacity = "0.0";
 
-    /* var background = d3.select('#input-canvas').append('canvas')
+
+
+     var background = d3.select('#input-canvas').append('canvas')
                                                .attr("id", "background")
                                                .attr("width", 500)
                                                .attr("height", 500)
                                                .attr("x", 0)
                                                .attr("y", 0);
->>>>>>> oop-migration
+    
+    // not quite sure what this does..
+    // could you clean it up Z?
     var bg = document.getElementById("background");
     var context = bg.getContext('2d');
     var imageObj = new Image();
@@ -89,28 +111,20 @@ function Canvas(settings) {
       context.fillStyle = "white";
       context.fillText("Hello World", 250, 250);
     };
-<<<<<<< HEAD
-    // imageObj.src = 'https://lh3.googleusercontent.com/a2iU2NvLNxsVt3rbgZ7HTE2mORK3QvCSnP4NCIIo8ebbdjz2ms_2SoObFCxAXZQumdpJ3w=s190';
-
-    inputSvg.append('image')
-      .attr({
-        'xlink:href': bg.toDataURL()
-      });
-=======
-    imageObj.src = 'https://lh3.googleusercontent.com/SaBjjBtJORUHymTGvxFc4IGBbjPXjOm1xNHWZyygvG5zQMv9g_djwEq9uKx8n29FoTU4qQ=s190';
-    */
-
     //Style Things
-    //vec_svg.style.opacity = "0.0";
-    //vec_svg.style.position = "absolute";
-    //vec_svg.style.top = "0px";
-    //vec_svg.style.left = "0px";
+    /*
+    vec_svg.style.opacity = "0.0";
+    vec_svg.style.position = "absolute";
+    vec_svg.style.top = "0px";
+    vec_svg.style.left = "0px";
+    */
 
   }
 
   /**
   * drawGridLines
   * @description: Provides the grid lines in the system
+  *  DON'T THINK WE NEED THIS
   */
   Canvas.prototype.drawGridLines = function(num_rectangles_wide, num_rectangles_tall, boundingRect) {
     var width_per_rectangle = boundingRect.width / num_rectangles_wide;
@@ -291,11 +305,11 @@ Canvas.prototype.proximity = function(outputVector, target) {
       .attr("r",10)
     targetPath = new Path.Circle(new Point(target.x, target.y), 10);
     targetPath.fillColor = '#e5e5ff';
-  }
+  };
 
   Canvas.prototype.drawTargets = function(targets) {
     // just a for loop with drawTarget
     for( var i = 0; i < targets.length; i++ ) {
       drawTarget(targets[i]);
     }
-  }
+  };
