@@ -52,74 +52,19 @@ function Canvas(settings) {
     return [newX, newY];
   }
 
-  Canvas.prototype.drawInputCanvas = function(){
-    d3.select('#input-canvas').append('svg')
+  Canvas.prototype.drawCanvas = function() {
+    if(this.type) {
+      d3.select('#'+this.type+'-canvas').append('svg')
       .attr({
-        id: "input-svg",
+        id: this.type+"-svg",
         width: this.pixelWidth,
         height: this.pixelHeight
       });
-  };
-
-  Canvas.prototype.drawOutputCanvas = function(){
-    console.log('draw output canvas')
-    d3.select('#output-canvas').append('svg')
-      .attr({
-        id: "output-svg",
-        width: this.pixelWidth,
-        height: this.pixelHeight
-      })
-  };
-  // TODO: Clean up this function
-  // Z: Where can we break this up into smaller functions?
-  //    How can we migrate this CSS into an external file?
-  Canvas.prototype.drawCanvas = function() {
-
-    if(this.type === "input") {
-      this.drawInputCanvas();
-    }
-    else if(this.type === "output") {
-      this.drawOutputCanvas();
     }
     else {
       console.log("Invalid canvas type: ",this.type)
     }
-
-    //Make two svgs transparent
-    var in_svg = document.getElementById("in_vec_svg");
-    // in_svg.style.opacity = "0.0";
-    var out_svg = document.getElementById("out_vec_svg");
-    // out_svg.style.opacity = "0.0";
-
-
-
-     var background = d3.select('#input-canvas').append('canvas')
-                                               .attr("id", "background")
-                                               .attr("width", 500)
-                                               .attr("height", 500)
-                                               .attr("x", 0)
-                                               .attr("y", 0);
-    
-    // not quite sure what this does..
-    // could you clean it up Z?
-    var bg = document.getElementById("background");
-    var context = bg.getContext('2d');
-    var imageObj = new Image();
-    imageObj.onload= function() {
-      context.drawImage(imageObj, 0, 0, 500, 500);
-      context.font = "30px Arial";
-      context.fillStyle = "white";
-      context.fillText("Hello World", 250, 250);
-    };
-    //Style Things
-    /*
-    vec_svg.style.opacity = "0.0";
-    vec_svg.style.position = "absolute";
-    vec_svg.style.top = "0px";
-    vec_svg.style.left = "0px";
-    */
-
-  }
+  };
 
   /**
   * drawGridLines
@@ -167,15 +112,6 @@ function Canvas(settings) {
       x: end.x - this.origin.x,
       y: end.y - this.origin.y
     };
-
-    /*
-    Basis of drawing a line
-    append.line("line")
-        .attr("x1", this.origin.x)
-        .attr("y1", this.origin.y)
-        .attr("x2", end.x)
-        .attr("y2", end.y)
-    */
 
     //Change the param of normalize() based on settings (maybe vetor.?);
     // TODO NORMALIZE THE VECTOR
@@ -233,62 +169,42 @@ function Canvas(settings) {
 
 
 Canvas.prototype.isClose = function(oX, oY, tX, tY, radius) {
-  var dis = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-  if (dis <= radius) {
+  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
+  if (dist <= radius) {
     return true;
   }
   return false;
 }
 
 Canvas.prototype.proximity = function(outputVector, target) {
-
     if (isClose(targetX, targetY, 500)) {
-      // console.log("Target proximity 500");
       target.updateColor('#e5e5ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 450)) {
-      // console.log("Target proximity 450");
       target.updateColor('#ccccff', target.id);
     }
-
     else if (isClose(targetX, targetY, 400)) {
-      // console.log("Target proximity 400");
       target.updateColor('#b2b2ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 350)) {
-      // console.log("Target proximity 350");
       target.updateColor('#9999ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 300)) {
-      // console.log("Target proximity 300");
       target.updateColor('#7f7fff', target.id);
     }
-
     else if (isClose(targetX, targetY, 250)) {
-      // console.log("Target proximity 250");
       target.updateColor('#6666ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 200)) {
-      // console.log("Target proximity 200");
       target.updateColor('#4c4cff', target.id);
     }
-
     else if (isClose(targetX, targetY, 150)) {
-      // console.log("Target proximity 150");
       target.updateColor('#3232ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 100)) {
-      // console.log("Target proximity 100");
       target.updateColor('#1919ff', target.id);
     }
-
     else if (isClose(targetX, targetY, 50)) {
-      // console.log("Target proximity 50");
       target.updateColor('#0000ff', target.id);
     }
   }

@@ -48,22 +48,33 @@ var outputVectorSettings = {
 	}
 }
 
-// Create objects needed for game
-var inputCanvas = new Canvas(inputCanvasSettings),
-		inputVector = new Vector(inputVectorSettings),
-		outputVector = new Vector(outputVectorSettings),
-		outputCanvas = new Canvas(outputCanvasSettings);
+function initPlayground() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(inputCanvasSettings),
+			inputVector = new Vector(inputVectorSettings),
+			outputVector = new Vector(outputVectorSettings),
+			outputCanvas = new Canvas(outputCanvasSettings);
 
-// draw grid(s)
-inputCanvas.drawCanvas();
-outputCanvas.drawCanvas();
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
 
-// draw vector(s)
-inputVector.init();
-outputVector.init();
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+}
 
+function startPlayground() {
+	// all objects are created and drawn
+	initPlayground();
+	// here is where are listing functions are defined and started
+	// update();
+}
 // onclick canvas && drag event listeners to handle movement of vectors
 // apply linear transformations
+
+// think of this as the main function :) 
+startPlayground();
 
 
 //Style Things, should be put into a separate CSS file or function?

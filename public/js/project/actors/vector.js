@@ -41,49 +41,26 @@ Vector.prototype.init = function() {
 * NO PARAMS. NO RETURNS
 */
 Vector.prototype.drawVector = function() {
-	if(this.type === "input") {
-		this.drawInputVector();
-	} 
-	else if(this.type === "output") {
-		this.drawOutputVector();
+	if(this.type) {
+		d3.select('#'+this.type+'-svg')
+			.append("path") // vector itself
+			.attr({
+				"stroke": "red",
+	    	"stroke-width":3,
+	    	// "fill": "value" // test this with a graphic?
+	    	"d": this.generatePath(this),
+	    	"id": this.type+'-vector'
+			});
 	}
 	else {
 		console.log("Invalid vector type: ",this.type);
 	}
 }
 
-/*
-* SELECTS INPUT SVG and DRAWS ontop of it
-* ADDS ID TO INPUT VECTOR
-*/
-Vector.prototype.drawInputVector = function() {
-	d3.select("#input-svg")
-		.append("path") // vector itself
-		.attr({
-			"stroke": "red",
-    	"stroke-width":3,
-    	// "fill": "value" // test this with a graphic?
-    	"d": this.generatePath(this),
-    	"id": "input_vector"
-		});
-}
-
-/*
-* SELECTS INPUT SVG and DRAWS ontop of it
-* ADDS ID TO OUTPUT VECTOR
-*/
-Vector.prototype.drawOutputVector = function() {
-	d3.select("#output-svg")
-		.append("path") // vector itself
-		.attr({
-			"stroke": "red",
-    	"stroke-width":3,
-    	// "fill": "value" // test this with a graphic?
-    	"d": this.generatePath(this),
-    	"id": "output_vector"
-		});
-}
-
+// Instad of creating a new vector... update the current one
+Vector.prototype.updateVector = function() {
+	
+};
 /*
 * Generates path value based on properties on instance of vector
 * param optional
@@ -92,20 +69,13 @@ Vector.prototype.drawOutputVector = function() {
 Vector.prototype.generatePath = function(vector) {
 	return "M"+vector.tail.x+" "+vector.tail.y+" L"+vector.head.x+" "+vector.head.y+" z" ||
 		"M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
-}
+};
+
+Vector.prototype.updatePath = function() {
+
+};
 
 // TODO
-Vector.prototype.generateVectorHead = function(vector) {
-
-}
-
-// might not be needed as well
-Vector.prototype.update = function(x, y) {
-		this.x = x;
-		this.y = y;
-}
-
-// might not be needed
-Vector.prototype.copy = function(x,y) {
+Vector.prototype.drawVectorHead = function(vector) {
 
 }
