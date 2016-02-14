@@ -5,32 +5,48 @@
 	x: 2,
 	y: 2,
 	ttl: 30,
-	color: ,	
+	color:  ,	
   };
 *
 */
 
 function Target(settings) {
-	this.x = settings.x;
-	this.y = settings.y;
+	this.x = settings.x || 300;
+	this.y = settings.y || 300;
+	this.r = settings.r || 15;
 	this.ttl = settings.ttl;
-	this.color = '#FF0000';
-	this.id;
-	// also include drawing object
-	// this.drawingObject = [];
-
-}
-
-Target.prototype.update = function(x,y) {
-		this.x = x;
-		this.y = y;
+	this.color = settings.color || '#FF0000';
+	this.type = settings.type || "output";
+	this.isScore = settings.isScore || false;
 }
 
 Target.prototype.updateColor = function(dist, n) {
 		this.color = dist;
 		// select specific target
 		// change color attribute
-		d3.select("#target_"+n)
-			.attr("color",this.color)
+}
 
+Target.prototype.init = function() {
+	if(this.isScore) {
+		setTimeout(this.drawTarget(), 10000)
+	}
+	else {
+		this.drawTarget();
+	}
+}
+
+Target.prototype.drawTarget = function() {
+	var score = 0;
+	var circle = d3.select('#'+this.type+'-svg').append("circle")
+		.attr({
+			"cx": this.x,
+			"cy": this.y,
+			"r": this.r
+		})
+		.style({"fill": this.color});
+		
+	if(this.isScore) {
+		circle.append("text")
+			.text("Score ")
+	}
 }

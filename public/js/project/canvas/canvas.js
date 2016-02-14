@@ -9,10 +9,9 @@
     pixelWidth: 500,
     pixelHeight: 500
   }
-* USAGE: var left = canvas(settings);
+* USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
 function Canvas(settings) {
-
   //input error handling
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
@@ -26,8 +25,7 @@ function Canvas(settings) {
     x: this.originX,
     y: this.originY
   };
-  this.type = settings.type || "input";
-
+  this.type = settings.type || "not a valid type";
 } // end of constructor
 
  /**
@@ -59,6 +57,9 @@ function Canvas(settings) {
         id: this.type+"-svg",
         width: this.pixelWidth,
         height: this.pixelHeight
+      })
+      .on("click", function(d, i) {
+        console.log('d3 event', d3.event)
       });
     }
     else {
@@ -215,12 +216,13 @@ Canvas.prototype.proximity = function(outputVector, target) {
   */
   Canvas.prototype.drawTarget = function(target) {
     // grab svg container
-    svg.append("circle")
-      .attr("cx", target.x)
-      .attr("cy", target.y)
-      .attr("r",10)
-    targetPath = new Path.Circle(new Point(target.x, target.y), 10);
-    targetPath.fillColor = '#e5e5ff';
+    d3.select('#'+this.type+'-canvas').append("circle")
+      .attr({
+        cx: target.x,
+        cy: target.y,
+        r: target.r,
+        color: target.color
+      });
   };
 
   Canvas.prototype.drawTargets = function(targets) {

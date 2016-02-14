@@ -1,7 +1,7 @@
 // TODO:
-// Migrate this to an external settings.json
+// Migrate this to an external config.json
 // so we can to something like
-// var inputCanvas = settings.inputCanvas;
+// var inputCanvas = Canvas(config.inputCanvas);
 // ISOMORPHIC!!!
 
 var inputCanvasSettings = {
@@ -48,12 +48,30 @@ var outputVectorSettings = {
 	}
 }
 
+var targetSettings = {
+	x: 355,
+	y: 50,
+	r: 20,
+	color: "black",
+	isScore: false
+};
+
+var scoreSettings = {
+	x: 100,
+	y: 100,
+	r: 40,
+	color: "green",
+	isScore: true
+}
+
 function initPlayground() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(inputCanvasSettings),
 			inputVector = new Vector(inputVectorSettings),
 			outputVector = new Vector(outputVectorSettings),
-			outputCanvas = new Canvas(outputCanvasSettings);
+			outputCanvas = new Canvas(outputCanvasSettings),
+			outputTarget = new Target(targetSettings),
+			scoreTarget = new Target(scoreSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -62,22 +80,22 @@ function initPlayground() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+
+	// generate target(s)
+	outputTarget.init()
+	scoreTarget.init();
+
 }
 
 function startPlayground() {
-	// all objects are created and drawn
 	initPlayground();
-	// here is where are listing functions are defined and started
-	// update();
 }
-// onclick canvas && drag event listeners to handle movement of vectors
-// apply linear transformations
 
 // think of this as the main function :) 
 startPlayground();
 
 
-//Style Things, should be put into a separate CSS file or function?
+//Style Things, should be put into a separate CSS file and include in header
 var in_div = document.getElementById('input-canvas');
 in_div.style.height = '500px';
 in_div.style.width = '500px';
