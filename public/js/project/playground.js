@@ -16,11 +16,13 @@ var outputSettings = {
 	pixelHeight: 500
 };
 
-document.body.style.backgroundColor = "red";
-
-var inputCanvas = new Canvas(inputSettings);
+var inputCanvas = new Canvas(inputSettings),
+		inputVector = new Vector();
 
 // draw grid
+// console.log(inputCanvas)
 inputCanvas.drawGrid();
+inputVector.init();
+
 
 // draw vector

@@ -47,17 +47,19 @@ function Canvas(settings) {
 
   Canvas.prototype.drawGrid = function() {
 
-    var margin = {top: 20, right: 100, bottom: 30, left: 100},
     width = this.pixelWidth,
     height = this.pixelHeight;
 
     var inputSvg = d3.select('#input-canvas').append('svg')
-                                             .attr('width', 500)
-                                             .attr('height', 500);
+                  .attr("id", "inputSvg")
+                  .attr('width', 500)
+                  .attr('height', 500);
+
     var background = d3.select('#input-canvas').append('canvas')
-                                               .attr("id", "background")
-                                               .attr("width", 500)
-                                               .attr("height", 500);
+                       .attr("id", "background")
+                       .attr("width", 500)
+                       .attr("height", 500);
+
     var bg = document.getElementById("background");
     bg.style.background = "white";
 
@@ -70,15 +72,12 @@ function Canvas(settings) {
       context.fillStyle = "white";
       context.fillText("Hello World", 250, 250);
     };
-    imageObj.src = 'https://lh3.googleusercontent.com/a2iU2NvLNxsVt3rbgZ7HTE2mORK3QvCSnP4NCIIo8ebbdjz2ms_2SoObFCxAXZQumdpJ3w=s190';
+    // imageObj.src = 'https://lh3.googleusercontent.com/a2iU2NvLNxsVt3rbgZ7HTE2mORK3QvCSnP4NCIIo8ebbdjz2ms_2SoObFCxAXZQumdpJ3w=s190';
 
     inputSvg.append('image')
-            .attr('xlink:href', bg.toDataURL())
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', 500)
-            .attr('height', 500);
-
+      .attr({
+        'xlink:href': bg.toDataURL()
+      });
   }
 
   /**
