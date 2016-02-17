@@ -28,7 +28,6 @@ Target.prototype.updateColor = function(dist, n) {
 
 Target.prototype.init = function() {
 	if(this.isScore) {
-		setTimeout(this.drawTarget(), 10000)
 	}
 	else {
 		this.drawTarget();

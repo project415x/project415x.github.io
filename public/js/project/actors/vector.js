@@ -26,7 +26,8 @@ function Vector(settings) {
 	}
 	this.color = settings.color || "red";
 	this.type = settings.type || "input";
-}
+	this.stroke = settings.stroke || 5;
+};
 
 /*
 * INITIALIZES vector on a page
@@ -34,7 +35,7 @@ function Vector(settings) {
 */
 Vector.prototype.init = function() {
 	this.drawVector(this.type);
-}
+};
 
 /*
 * Draws a vector depending on which canvas
@@ -45,37 +46,28 @@ Vector.prototype.drawVector = function() {
 		d3.select('#'+this.type+'-svg')
 			.append("path") // vector itself
 			.attr({
-				"stroke": "red",
-	    	"stroke-width":7,
+				"stroke": this.color,
+	    	"stroke-width":this.stroke,
 	    	// "fill": "value" // test this with a graphic?
 	    	"d": this.generatePath(this),
-	    	"id": this.type+'-vector'
-			});
+	    	"id": this.type+'-vector',
+			})
+			.call(this.dragInputVector);
 	}
 	else {
 		console.log("Invalid vector type: ",this.type);
 	}
-}
-
-// Instad of creating a new vector... update the current one
-function updateVector(d, i, vector) {
-  var drag = d3.behavior.drag()
-  console.log(d3.event)
-    .on("drag", function(d,i) {
-        d.x += d3.event.dx
-        d.y += d3.event.dy
-        d3.select(this).attr("transform", function(d,i){
-            return "translate(" + [ d.x,d.y ] + ")"
-        })
-    });
-
-	d3.select('#'+this.type+'-vector').call(drag);
 };
 
-// TODO
-Vector.prototype.updateVectorHead = function(vector) {
-	this.head.x = d3.event.dx;
-	this.head.y = d3.event.dy;
+// selects vector being dragged
+// regenerates input vector path
+// updates output vector
+Vector.prototype.dragInputVector = function() {
+	d3.select('#'+this.type+'-vector')	
+};
+
+Vector.prototype.updateVector = function() {
+	d3.select('#')
 };
 /*
 * Generates path value based on properties on instance of vector
@@ -85,11 +77,6 @@ Vector.prototype.updateVectorHead = function(vector) {
 Vector.prototype.generatePath = function(vector) {
 	return "M"+vector.tail.x+" "+vector.tail.y+" L"+vector.head.x+" "+vector.head.y+" z" ||
 		"M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
-};
-
-// TODO
-Vector.prototype.updatePath = function() {
-
 };
 
 // TODO
