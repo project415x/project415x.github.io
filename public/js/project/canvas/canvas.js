@@ -36,8 +36,10 @@ Canvas.prototype.drawCanvas = function() {
       width: this.pixelWidth,
       height: this.pixelHeight
     })
-    .on("click", function(d, i) {
-      console.log('d3 event', d3.event)
+    .on("click", function() {
+      var point = d3.mouse(this),
+      p = [point[0], point[1]];
+      console.log(p);
     });
   }
   else {
@@ -144,3 +146,21 @@ Canvas.prototype.drawTargets = function(targets) {
     drawTarget(targets[i]);
   }
 };
+
+Canvas.prototype.checkProximity = function(vector, target) {
+  return this.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
+}
+
+Canvas.prototype.ScreenToMath = function(x,y) {
+  return [(x - this.originX) * this.maxX / this.originX, - (y - this.originY) * this.maxY / this.originY];
+}
+
+Canvas.prototype.MathToScreen = function(x,y) {
+  return [x * this.originX / this.maxX + this.originX, - y * this.originY / this.maxY + this.originY];
+}
+
+Canvas.prototype.applyMatrix = function(sX,sY,matrix) {
+  var math_coord = this.ScreenToMath(sX,sY),
+      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+  return this.MathToScreen(applied_coord[0],applied_coord[1]);
+}

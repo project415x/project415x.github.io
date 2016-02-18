@@ -84,6 +84,7 @@ function initPlayground() {
 	// generate target(s)
 	outputTarget.init()
 	scoreTarget.init();
+	
 
 }
 
