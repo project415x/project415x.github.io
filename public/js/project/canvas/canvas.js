@@ -164,3 +164,37 @@ Canvas.prototype.applyMatrix = function(sX,sY,matrix) {
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
   return this.MathToScreen(applied_coord[0],applied_coord[1]);
 }
+
+Canvas.prototype.getRandom = function(min,max) {
+  return Math.random() * (max - min) + min;
+}
+
+Canvas.prototype.generateTarget = function(matrix) {
+  var legal = false,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+  var newX, newY;
+
+  while (legal == false) {
+    newX = this.getRandom(0,500);
+    newY = this.getRandom(0,500);
+    var pre = this.ScreenToMath(newX,newY);
+    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
+    pre = this.MathToScreen(prex,prey);
+
+    if (pre[0] >= 0 && pre[0] <= this.pixelWidth && pre[1] >= 0 && pre[1] <= this.pixelHeight) {
+      legal = true;
+      var targetSettings = {
+      	x: newX,
+      	y: newY,
+      	r: 20,
+      	color: "black",
+      	isScore: false
+      };
+      var newTarget = new Target(targetSettings);
+      newTarget.drawTarget();
+    }
+
+  }
+
+}

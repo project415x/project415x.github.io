@@ -84,7 +84,11 @@ function initPlayground() {
 	// generate target(s)
 	outputTarget.init()
 	scoreTarget.init();
-	
+
+	// generate random new target
+	var matrix = [[1,3],[2,0]];
+	outputCanvas.generateTarget(matrix);
+
 
 }
 
