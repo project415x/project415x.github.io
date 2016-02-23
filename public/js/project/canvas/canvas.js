@@ -11,7 +11,8 @@
   }
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
-
+// import vector.js
+// var vector = require('../actors/vector.js');
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -20,8 +21,8 @@ function Canvas(settings) {
   this.maxY = settings.maxY || 10,
   this.pixelWidth = settings.pixelWidth || 500,
   this.pixelHeight = settings.pixelHeight || 500,
-  this.originX = (0.5 * this.pixelWidth) || 250,
-  this.originY = (0.5 * this.pixelHeight) || 250,
+  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 250,
+  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 250,
   this.origin = {
     x: this.originX,
     y: this.originY
@@ -37,11 +38,15 @@ Canvas.prototype.drawCanvas = function() {
       width: this.pixelWidth,
       height: this.pixelHeight
     })
+    // remove this and notify eye of sauron instead
+    // updateLog(d) as example
     .on("click", function() {
       var d = {
+		// id: this.type+"-vector"
         x: d3.event.x,
         y: d3.event.y
       };
+      // in theory this would be Vector.updateInputVector(d);
       updateInputVector(d);
       updateOutputVector(d);
     });
@@ -64,12 +69,13 @@ function updateInputVector(d){
 };
 
 function updateOutputVector(d) {
-  i = applyMatrix(d.x,d.y);
+  var i = applyMatrix(d.x,d.y);
   d3.select('#output-vector').remove();
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "red",
       "stroke-width":"4",
+      //"fill": "/path/to/here",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
