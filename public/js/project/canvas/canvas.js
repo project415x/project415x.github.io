@@ -11,6 +11,7 @@
   }
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
+
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -37,9 +38,12 @@ Canvas.prototype.drawCanvas = function() {
       height: this.pixelHeight
     })
     .on("click", function() {
-      var point = d3.mouse(this),
-      p = [point[0], point[1]];
-      console.log(p);
+      var d = {
+        x: d3.event.x,
+        y: d3.event.y
+      };
+      updateInputVector(d);
+      updateOutputVector(d);
     });
   }
   else {
@@ -47,6 +51,29 @@ Canvas.prototype.drawCanvas = function() {
   }
 };
 
+function updateInputVector(d){
+// redraw input vector
+  d3.select('#input-vector').remove();
+  d3.select('#input-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "id": 'input-vector'
+  });
+};
+
+function updateOutputVector(d) {
+  i = applyMatrix(d.x,d.y);
+  d3.select('#output-vector').remove();
+  d3.select('#output-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+      "id": 'output-vector'
+  });
+};
 
 /**
 *
@@ -151,18 +178,19 @@ Canvas.prototype.checkProximity = function(vector, target) {
   return this.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
 }
 
-Canvas.prototype.ScreenToMath = function(x,y) {
-  return [(x - this.originX) * this.maxX / this.originX, - (y - this.originY) * this.maxY / this.originY];
+function screenToMath(x,y) {
+  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 }
 
-Canvas.prototype.MathToScreen = function(x,y) {
-  return [x * this.originX / this.maxX + this.originX, - y * this.originY / this.maxY + this.originY];
+function mathToScreen(x,y) {
+  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
 }
 
-Canvas.prototype.applyMatrix = function(sX,sY,matrix) {
-  var math_coord = this.ScreenToMath(sX,sY),
+function applyMatrix(sX,sY,matrix) {
+  var matrix = matrix || [[1,3],[2,0]]; 
+  var math_coord = screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return this.MathToScreen(applied_coord[0],applied_coord[1]);
+  return mathToScreen(applied_coord[0],applied_coord[1]);
 }
 
 Canvas.prototype.getRandom = function(min,max) {
@@ -173,8 +201,8 @@ Canvas.prototype.generateTarget = function(matrix) {
   var legal = false,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
   var newX, newY;
-
-  while (legal == false) {
+/*
+  while (!legal) {
     newX = this.getRandom(0,500);
     newY = this.getRandom(0,500);
     var pre = this.ScreenToMath(newX,newY);
@@ -194,7 +222,7 @@ Canvas.prototype.generateTarget = function(matrix) {
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
     }
-
   }
+*/
 
 }

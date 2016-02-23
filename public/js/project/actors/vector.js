@@ -37,6 +37,22 @@ Vector.prototype.init = function() {
 	this.drawVector(this.type);
 };
 
+var drag = d3.behavior.drag()
+		.on("dragstart", dragstart)
+    .on("drag", dragmove)
+    .on("dragend", dragend);
+
+function dragstart(d,i) {
+	console.log('drag start');
+}
+function dragmove(d) {
+	console.log('dragging');
+}
+
+function dragend(d) {
+	console.log('end of drag')
+}
+
 /*
 * Draws a vector depending on which canvas
 * NO PARAMS. NO RETURNS
@@ -49,10 +65,10 @@ Vector.prototype.drawVector = function() {
 				"stroke": this.color,
 	    	"stroke-width":this.stroke,
 	    	// "fill": "value" // test this with a graphic?
-	    	"d": this.generatePath(this),
+	    	"d": this.generatePath(),
 	    	"id": this.type+'-vector',
 			})
-			.call(this.dragInputVector);
+			.call(drag);
 	}
 	else {
 		console.log("Invalid vector type: ",this.type);
@@ -62,21 +78,19 @@ Vector.prototype.drawVector = function() {
 // selects vector being dragged
 // regenerates input vector path
 // updates output vector
-Vector.prototype.dragInputVector = function() {
-	d3.select('#'+this.type+'-vector')	
+Vector.prototype.dragInputVector = function(){
 };
 
 Vector.prototype.updateVector = function() {
-	d3.select('#')
+	return "M 250 250 L"+d.x+" "+d.y+" z" 
 };
 /*
 * Generates path value based on properties on instance of vector
 * param optional
 * RETURNS path to be drawn 
 */
-Vector.prototype.generatePath = function(vector) {
-	return "M"+vector.tail.x+" "+vector.tail.y+" L"+vector.head.x+" "+vector.head.y+" z" ||
-		"M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
+Vector.prototype.generatePath = function() {
+	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
 };
 
 // TODO
