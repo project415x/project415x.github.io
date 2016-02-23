@@ -11,6 +11,7 @@
   }
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
+
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -36,8 +37,13 @@ Canvas.prototype.drawCanvas = function() {
       width: this.pixelWidth,
       height: this.pixelHeight
     })
-    .on("click", function(d, i) {
-      console.log('d3 event', d3.event)
+    .on("click", function() {
+      var d = {
+        x: d3.event.x,
+        y: d3.event.y
+      };
+      updateInputVector(d);
+      updateOutputVector(d);
     });
   }
   else {
@@ -45,6 +51,29 @@ Canvas.prototype.drawCanvas = function() {
   }
 };
 
+function updateInputVector(d){
+// redraw input vector
+  d3.select('#input-vector').remove();
+  d3.select('#input-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "id": 'input-vector'
+  });
+};
+
+function updateOutputVector(d) {
+  i = applyMatrix(d.x,d.y);
+  d3.select('#output-vector').remove();
+  d3.select('#output-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+      "id": 'output-vector'
+  });
+};
 
 /**
 *
@@ -144,3 +173,56 @@ Canvas.prototype.drawTargets = function(targets) {
     drawTarget(targets[i]);
   }
 };
+
+Canvas.prototype.checkProximity = function(vector, target) {
+  return this.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
+}
+
+function screenToMath(x,y) {
+  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
+}
+
+function mathToScreen(x,y) {
+  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+}
+
+function applyMatrix(sX,sY,matrix) {
+  var matrix = matrix || [[1,3],[2,0]]; 
+  var math_coord = screenToMath(sX,sY),
+      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+  return mathToScreen(applied_coord[0],applied_coord[1]);
+}
+
+Canvas.prototype.getRandom = function(min,max) {
+  return Math.random() * (max - min) + min;
+}
+
+Canvas.prototype.generateTarget = function(matrix) {
+  var legal = false,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+  var newX, newY;
+/*
+  while (!legal) {
+    newX = this.getRandom(0,500);
+    newY = this.getRandom(0,500);
+    var pre = this.ScreenToMath(newX,newY);
+    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
+    pre = this.MathToScreen(prex,prey);
+
+    if (pre[0] >= 0 && pre[0] <= this.pixelWidth && pre[1] >= 0 && pre[1] <= this.pixelHeight) {
+      legal = true;
+      var targetSettings = {
+      	x: newX,
+      	y: newY,
+      	r: 20,
+      	color: "black",
+      	isScore: false
+      };
+      var newTarget = new Target(targetSettings);
+      newTarget.drawTarget();
+    }
+  }
+*/
+
+}

@@ -1,0 +1,16 @@
+#input-canvas {
+  height: 500px;
+  width: 500px;
+  float: left;
+  background-image: url(../public/img/input_background.gif);
+  background-repeat: no-repeat;
+}
+
+
+#output-canvas {
+  height: 500px;
+  width: 500px;
+  float: right;
+  background-image: url(../public/img/output_background.png);
+  background-repeat: no-repeat;
+}

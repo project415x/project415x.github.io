@@ -85,28 +85,16 @@ function initPlayground() {
 	outputTarget.init()
 	scoreTarget.init();
 
+	// generate random new target
+	var matrix = [[1,3],[2,0]];
+	outputCanvas.generateTarget(matrix);
+
+
 }
 
 function startPlayground() {
 	initPlayground();
 }
 
-// think of this as the main function :) 
+// think of this as the main function :)
 startPlayground();
-
-
-//Style Things, should be put into a separate CSS file and include in header
-var in_div = document.getElementById('input-canvas');
-in_div.style.height = '500px';
-in_div.style.width = '500px';
-in_div.style.float = 'left';
-in_div.style.backgroundImage = 'url(../public/img/input_background.gif)';
-in_div.style.backgroundRepeat = 'no-repeat';
-
-var out_div = document.getElementById('output-canvas');
-out_div.style.height = '500px';
-out_div.style.width = '500px';
-out_div.style.float = 'right';
-out_div.style.backgroundImage = 'url(../public/img/output_background.png)';
-out_div.style.backgroundRepeat = 'no-repeat';
-
