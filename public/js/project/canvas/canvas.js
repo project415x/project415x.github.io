@@ -30,8 +30,7 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type";
 }
 
-Canvas.prototype.drawCanvas = function() {
-
+Canvas.prototype.vectorDrag = function() {
   var drag = d3.behavior.drag()
               .on("dragstart", function (){
                 var d = {
@@ -52,7 +51,12 @@ Canvas.prototype.drawCanvas = function() {
                 // in theory this would be Vector.updateInputVector(d);
                 updateInputVector(d);
                 updateOutputVector(d);
-              })
+              });
+    return drag;
+
+}
+
+Canvas.prototype.drawCanvas = function() {
 
   if(this.type) {
     d3.select('#'+this.type+'-canvas').append('svg')
@@ -61,7 +65,7 @@ Canvas.prototype.drawCanvas = function() {
       width: this.pixelWidth,
       height: this.pixelHeight
     })
-    .call(drag)
+    .call(this.vectorDrag())
     // remove this and notify eye of sauron instead
     // updateLog(d) as example
   }
