@@ -53,8 +53,7 @@ Canvas.prototype.vectorDrag = function() {
                 updateOutputVector(d);
               });
     return drag;
-
-}
+};
 
 Canvas.prototype.drawCanvas = function() {
 
