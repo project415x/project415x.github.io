@@ -31,6 +31,29 @@ function Canvas(settings) {
 }
 
 Canvas.prototype.drawCanvas = function() {
+
+  var drag = d3.behavior.drag()
+              .on("dragstart", function (){
+                var d = {
+              // id: this.type+"-vector"
+                  x: d3.event.sourceEvent.x,
+                  y: d3.event.sourceEvent.y
+                };
+                // in theory this would be Vector.updateInputVector(d);
+                updateInputVector(d);
+                updateOutputVector(d);
+              })
+              .on("drag", function(d) {
+              var d = {
+              // id: this.type+"-vector"
+                  x: d3.event.x,
+                  y: d3.event.y
+                };
+                // in theory this would be Vector.updateInputVector(d);
+                updateInputVector(d);
+                updateOutputVector(d);
+              })
+
   if(this.type) {
     d3.select('#'+this.type+'-canvas').append('svg')
     .attr({
@@ -38,18 +61,9 @@ Canvas.prototype.drawCanvas = function() {
       width: this.pixelWidth,
       height: this.pixelHeight
     })
+    .call(drag)
     // remove this and notify eye of sauron instead
     // updateLog(d) as example
-    .on("click", function() {
-      var d = {
-		// id: this.type+"-vector"
-        x: d3.event.x,
-        y: d3.event.y
-      };
-      // in theory this would be Vector.updateInputVector(d);
-      updateInputVector(d);
-      updateOutputVector(d);
-    });
   }
   else {
     console.log("Invalid canvas type: ",this.type)
