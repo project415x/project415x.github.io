@@ -26,7 +26,7 @@ function Canvas(settings) {
   this.origin = {
     x: this.originX,
     y: this.originY
-  };
+  },
   this.type = settings.type || "not a valid type";
 }
 
@@ -42,6 +42,7 @@ Canvas.prototype.drawCanvas = function() {
                 // in theory this would be Vector.updateInputVector(d);
                 updateInputVector(d);
                 updateOutputVector(d);
+                updateTargets(d);
               })
               .on("drag", function(d) {
               var d = {
@@ -52,6 +53,7 @@ Canvas.prototype.drawCanvas = function() {
                 // in theory this would be Vector.updateInputVector(d);
                 updateInputVector(d);
                 updateOutputVector(d);
+                updateTargets(d);
               })
 
   if(this.type) {
@@ -69,6 +71,28 @@ Canvas.prototype.drawCanvas = function() {
     console.log("Invalid canvas type: ",this.type)
   }
 };
+
+// Still in progress
+Canvas.prototype.drawProgressBar = function() {
+  var bar = d3.select('body').append('div')
+              .attr({
+                "class": "progress-bar progress-bar-striped active",
+                "role": "progressbar",
+                "aria-valuenow": "10",
+                "aria-valuemin": "0",
+                "aria-valuemax": "100",
+                "style": "width:285px; height: 30px; position: absolute; top: 200px; left: 505px",
+                "id" : "progressbar"
+              });
+  bar.append("text")
+    .attr("x", "50%")
+    .attr("y", "50%")
+    .attr("font-family","sans-serif")
+    .attr("font-size", "18")
+    .attr("fill", "white")
+    .attr("id", "score")
+    .text("0%");
+}
 
 function updateInputVector(d){
 // redraw input vector
@@ -95,6 +119,27 @@ function updateOutputVector(d) {
   });
 };
 
+function updateTargets(d) {
+  var x = d3.selectAll("circle").attr("cx"),
+      y = d3.selectAll("circle").attr("cy"),
+      r = d3.selectAll("circle").attr("r"),
+      i = applyMatrix(d.x,d.y);
+  if (isClose(i[0],i[1],x,y,r)) {
+    d3.selectAll("circle").remove();
+    updateProgress();
+    generateTarget([[1,3],[2,0]]);
+
+  }
+}
+
+// Still in progress
+function updateProgress() {
+    var bar = d3.select('#progressbar'),
+        text = d3.select('#score'),
+        curr = bar.attr('aria-valuenow');
+    bar.attr('aria-valuenow', curr + 5)
+    text.attr('text', (curr + 5) + "%");
+}
 /**
 *
 *
@@ -131,7 +176,7 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
 }
 
 
-Canvas.prototype.isClose = function(oX, oY, tX, tY, radius) {
+function isClose(oX, oY, tX, tY, radius) {
   var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
   if (dist <= radius) {
     return true;
@@ -213,24 +258,24 @@ function applyMatrix(sX,sY,matrix) {
   return mathToScreen(applied_coord[0],applied_coord[1]);
 }
 
-Canvas.prototype.getRandom = function(min,max) {
+function getRandom(min,max) {
   return Math.random() * (max - min) + min;
 }
 
-Canvas.prototype.generateTarget = function(matrix) {
+function generateTarget(matrix) {
   var legal = false,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
   var newX, newY;
 
   while (!legal) {
-    newX = this.getRandom(0,500);
-    newY = this.getRandom(0,500);
+    newX = getRandom(0,500);
+    newY = getRandom(0,500);
     var pre = screenToMath(newX,newY);
     var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = mathToScreen(prex,prey);
 
-    if (pre[0] >= 0 && pre[0] <= this.pixelWidth && pre[1] >= 0 && pre[1] <= this.pixelHeight) {
+    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
       legal = true;
       var targetSettings = {
       	x: newX,
