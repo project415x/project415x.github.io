@@ -1,7 +1,7 @@
 /**
 VECTOR constuctor
 Sample settings object
-	
+
 	var inputVectorSettings = {
 		type: "input",
 		tail: {
@@ -38,6 +38,7 @@ Vector.prototype.init = function() {
 	this.drawVector(this.type);
 };
 
+/*
 var drag = d3.behavior.drag()
 		.on("dragstart", dragstart)
     .on("drag", dragmove)
@@ -53,6 +54,7 @@ function dragmove(d) {
 function dragend(d) {
 	console.log('end of drag')
 }
+*/
 
 /*
 * Draws a vector depending on which canvas
@@ -68,8 +70,7 @@ Vector.prototype.drawVector = function() {
 	    	// "fill": "value" // test this with a graphic?
 	    	"d": this.generatePath(),
 	    	"id": this.type+'-vector',
-			})
-			.call(drag);
+			});
 	}
 	else {
 		console.log("Invalid vector type: ",this.type);
@@ -83,12 +84,12 @@ Vector.prototype.dragInputVector = function(){
 };
 
 Vector.prototype.updateVector = function() {
-	return "M 250 250 L"+d.x+" "+d.y+" z" 
+	return "M 250 250 L"+d.x+" "+d.y+" z"
 };
 /*
 * Generates path value based on properties on instance of vector
 * param optional
-* RETURNS path to be drawn 
+* RETURNS path to be drawn
 */
 Vector.prototype.generatePath = function() {
 	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";

@@ -52,17 +52,13 @@ Canvas.prototype.vectorDrag = function() {
                 // in theory this would be Vector.updateInputVector(d);
                 updateInputVector(d);
                 updateOutputVector(d);
-<<<<<<< HEAD
                 updateTargets(d);
-              })
-=======
               });
+
     return drag;
 };
 
 Canvas.prototype.drawCanvas = function() {
->>>>>>> a8f7680fb4ed10bd66bf34e7cb4573d2b8945c8d
-
   if(this.type) {
     d3.select('#'+this.type+'-canvas').append('svg')
     .attr({
@@ -81,24 +77,26 @@ Canvas.prototype.drawCanvas = function() {
 
 // Still in progress
 Canvas.prototype.drawProgressBar = function() {
-  var bar = d3.select('body').append('div')
+  var container = d3.select('body').append('div')
               .attr({
-                "class": "progress-bar progress-bar-striped active",
-                "role": "progressbar",
-                "aria-valuenow": "10",
-                "aria-valuemin": "0",
-                "aria-valuemax": "100",
-                "style": "width:285px; height: 30px; position: absolute; top: 200px; left: 505px",
-                "id" : "progressbar"
+                "class": "progress",
+                "id": "progress-container",
+                "style": "width:270px; height: 30px; position: absolute; top: 200px; left: 505px",
               });
-  bar.append("text")
-    .attr("x", "50%")
-    .attr("y", "50%")
-    .attr("font-family","sans-serif")
-    .attr("font-size", "18")
-    .attr("fill", "white")
-    .attr("id", "score")
-    .text("0%");
+      container.append('div')
+                .attr({
+                  "class": "progress-bar progress-bar-striped active",
+                  "role": "progressbar",
+                  "aria-valuenow": "0",
+                  "aria-valuemin": "0",
+                  "aria-valuemax": "100",
+                  "style": "position: absolute; width: 0%",
+                  "id" : "progressbar"
+                });
+      container.append('span')
+         .attr("style", "position: absolute; width: 100%; color: black; top:15%; text-align: center")
+         .attr("id", "score")
+         .text("0% Complete");
 }
 
 function updateInputVector(d){
@@ -135,18 +133,26 @@ function updateTargets(d) {
     d3.selectAll("circle").remove();
     updateProgress();
     generateTarget([[1,3],[2,0]]);
-
   }
 }
 
-// Still in progress
 function updateProgress() {
     var bar = d3.select('#progressbar'),
-        text = d3.select('#score'),
-        curr = bar.attr('aria-valuenow');
-    bar.attr('aria-valuenow', curr + 5)
-    text.attr('text', (curr + 5) + "%");
+        score = d3.select('#score');
+        curr = bar.attr("aria-valuenow");
+        if (Number(curr) >= 100) {
+          curr = 100;
+          score.text("Proceed To Next Level!");
+        }
+        else {
+          curr = Number(curr) + 5;
+          score.text(curr + "% Complete");
+        }
+
+        bar.style("width", curr + "%");
+        bar.attr("aria-valuenow", curr);
 }
+
 /**
 *
 *
