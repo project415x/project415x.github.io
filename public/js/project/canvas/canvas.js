@@ -75,13 +75,13 @@ Canvas.prototype.drawCanvas = function() {
   }
 };
 
-// Still in progress
+// @TODO separate static css part
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('body').append('div')
               .attr({
                 "class": "progress",
                 "id": "progress-container",
-                "style": "width:270px; height: 30px; position: absolute; top: 200px; left: 505px",
+                "style": "width:270px; height: 30px; position: absolute; top: 250px; left: 50%; margin: -15px 0 0 -135px",
               });
       container.append('div')
                 .attr({
