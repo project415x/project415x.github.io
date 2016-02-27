@@ -60,25 +60,16 @@ Canvas.prototype.vectorDrag = function() {
 
 Canvas.prototype.drawCanvas = function() {
   if(this.type) {
-    if(this.type === "input") {
-      d3.select('#'+this.type+'-canvas').append('svg')
-      .attr({
-        id: this.type+"-svg",
-        width: this.pixelWidth,
-        height: this.pixelHeight
-      })
-      .call(this.vectorDrag());
+      var canvas = d3.select('#'+this.type+'-canvas').append('svg')
+                     .attr({
+                       id: this.type+"-svg",
+                       width: this.pixelWidth,
+                       height: this.pixelHeight
+                     });
+      if(this.type === "input")
+        canvas.call(this.vectorDrag());
       // remove this and notify eye of sauron instead
       // updateLog(d) as example
-    }
-    else {
-      d3.select('#'+this.type+'-canvas').append('svg')
-      .attr({
-        id: this.type+"-svg",
-        width: this.pixelWidth,
-        height: this.pixelHeight
-      });
-    }
   }
   else {
     console.log("Invalid canvas type: ",this.type)
