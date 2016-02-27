@@ -68,6 +68,29 @@ Canvas.prototype.drawCanvas = function() {
                      });
       if(this.type === "input")
         canvas.call(this.vectorDrag());
+
+      if(this.type === "output") {
+        // Define defs to store target image pattern
+        // Maybe figure out a better place for this code later
+        var defs = d3.select('#'+this.type+'-svg').append('defs')
+                                  .attr("id", "canvas-defs");
+        defs.append('pattern')
+            .attr({
+              "id": "tar_img",
+              "x": "0",
+              "y": "0",
+              "height": "40",
+              "width": "40"
+            });
+        d3.select('#tar_img').append('image')
+                             .attr({
+                               "x": "0",
+                               "y": "0",
+                               "width": "40",
+                               "height": "40",
+                               "xlink:href": "../public/img/target.gif"
+                             });
+      }
       // remove this and notify eye of sauron instead
       // updateLog(d) as example
   }
