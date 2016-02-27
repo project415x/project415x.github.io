@@ -101,11 +101,7 @@ Canvas.prototype.drawCanvas = function() {
 
 
 Canvas.prototype.drawProgressBar = function() {
-  var container = d3.select('body').append('div')
-              .attr({
-                "class": "progress",
-                "id": "progress-container"
-              });
+  var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
                   "class": "progress-bar progress-bar-striped active",
