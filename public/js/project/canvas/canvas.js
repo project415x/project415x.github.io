@@ -76,13 +76,12 @@ Canvas.prototype.drawCanvas = function() {
   }
 };
 
-// @TODO separate static css part
+
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('body').append('div')
               .attr({
                 "class": "progress",
-                "id": "progress-container",
-                "style": "width:270px; height: 30px; position: absolute; top: 250px; left: 50%; margin: -15px 0 0 -135px",
+                "id": "progress-container"
               });
       container.append('div')
                 .attr({
@@ -91,11 +90,10 @@ Canvas.prototype.drawProgressBar = function() {
                   "aria-valuenow": "0",
                   "aria-valuemin": "0",
                   "aria-valuemax": "100",
-                  "style": "position: absolute; width: 0%",
+                  //"style": "width: 0%",
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("style", "position: absolute; width: 100%; color: black; top:15%; text-align: center")
          .attr("id", "score")
          .text("0% Complete");
 }
