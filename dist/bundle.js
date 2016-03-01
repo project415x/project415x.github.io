@@ -174,7 +174,8 @@ module.exports = Vector;
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
 // import vector.js
-// var vector = require('../actors/vector.js');
+var Vector = require('../actors/vector.js'),
+    Target = require('../actors/target.js');
 
 function Canvas(settings) {
   //input error handling
@@ -485,7 +486,7 @@ function generateTarget(matrix) {
 }
 
 module.exports = Canvas;
-},{}],4:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2}],4:[function(require,module,exports){
 function startLevel1() {
 
 
