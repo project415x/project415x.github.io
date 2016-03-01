@@ -1,0 +1,4 @@
+for now i'm going to commit with node_modules/ full but will remove for size purposes once we all have it setup
+1. Install node.js if you do not have it already
+2. npm install
+3. See Cam if you have any errors :)

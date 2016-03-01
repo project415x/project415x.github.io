@@ -74,4 +74,3 @@ function startLevel1() {
 	function randomizeTarget(target) {
 		target.update(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9));
 	}
-}

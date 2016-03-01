@@ -17,6 +17,7 @@ function Target(settings) {
 	this.ttl = settings.ttl;
 	// No need for color if we use image pattern as fill
 	// this.color = settings.color || '#FF0000';
+	// test
 	this.type = settings.type || "output";
 	this.isScore = settings.isScore || false;
 }
@@ -50,3 +51,5 @@ Target.prototype.drawTarget = function() {
 			.text("Score ")
 	}
 }
+
+module.exports = Target;
