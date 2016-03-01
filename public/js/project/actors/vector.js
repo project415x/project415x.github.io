@@ -99,3 +99,5 @@ Vector.prototype.generatePath = function() {
 Vector.prototype.drawVectorHead = function(vector) {
 
 };
+
+module.exports = Vector;

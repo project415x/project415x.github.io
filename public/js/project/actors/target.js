@@ -51,3 +51,5 @@ Target.prototype.drawTarget = function() {
 			.text("Score ")
 	}
 }
+
+module.exports = Target;

@@ -13,6 +13,7 @@
 */
 // import vector.js
 // var vector = require('../actors/vector.js');
+
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -319,5 +320,6 @@ function generateTarget(matrix) {
       newTarget.drawTarget();
     }
   }
-
 }
+
+module.exports = Canvas;

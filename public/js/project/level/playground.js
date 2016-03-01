@@ -64,6 +64,10 @@ var scoreSettings = {
 	isScore: true
 }
 
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js');
+
 function initPlayground() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(inputCanvasSettings),

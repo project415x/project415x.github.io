@@ -53,6 +53,7 @@ Target.prototype.drawTarget = function() {
 	}
 }
 
+module.exports = Target;
 },{}],2:[function(require,module,exports){
 /**
 VECTOR constuctor
@@ -156,6 +157,8 @@ Vector.prototype.drawVectorHead = function(vector) {
 
 };
 
+module.exports = Vector;
+
 },{}],3:[function(require,module,exports){
 /**
 * CLASS CONSTRUCTOR
@@ -172,6 +175,7 @@ Vector.prototype.drawVectorHead = function(vector) {
 */
 // import vector.js
 // var vector = require('../actors/vector.js');
+
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -478,9 +482,9 @@ function generateTarget(matrix) {
       newTarget.drawTarget();
     }
   }
-
 }
 
+module.exports = Canvas;
 },{}],4:[function(require,module,exports){
 function startLevel1() {
 
@@ -674,6 +678,10 @@ var scoreSettings = {
 	isScore: true
 }
 
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js');
+
 function initPlayground() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(inputCanvasSettings),
@@ -706,7 +714,7 @@ function startPlayground() {
 // think of this as the main function :)
 startPlayground();
 
-},{}],7:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3}],7:[function(require,module,exports){
 function applyMatrix(x, y, matrix) {
   var matrixApplied = [matrix[0][0] * x + matrix[0][1] * y, matrix[1][0] * x + matrix[1][1] * y];
 
