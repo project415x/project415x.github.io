@@ -44,7 +44,8 @@ Target.prototype.drawTarget = function() {
 			"cy": this.y,
 			"r": this.r
 		})
-		.style({"fill": "url(#tar_img)"});
+	var tar_num = Math.floor(Math.random() * 10) + 1;
+	circle.style({"fill": "url(#tar" + tar_num + ")"});
 
 	if(this.isScore) {
 		circle.append("text")

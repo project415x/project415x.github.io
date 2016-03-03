@@ -81,6 +81,8 @@ function initPlayground() {
 	inputCanvas.drawCanvas();
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
+	// load arts we need and store them into defs
+	outputCanvas.loadArts();
 
 	// draw vector(s)
 	inputVector.init();
