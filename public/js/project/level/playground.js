@@ -62,11 +62,16 @@ var scoreSettings = {
 	r: 40,
 	color: "green",
 	isScore: true
+};
+
+var EyeOfSauron = {
+	matrix: [[1,2,],[2,1]]
 }
 
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js');
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js');
 
 function initPlayground() {
 	// Create objects needed for game
@@ -89,7 +94,6 @@ function initPlayground() {
 	// generate target(s)
 	outputTarget.init()
 	scoreTarget.init();
-
 
 }
 
