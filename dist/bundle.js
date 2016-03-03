@@ -284,6 +284,22 @@ Canvas.prototype.loadArts = function() {
                              "xlink:href": "../public/img/items/target" + i + ".gif"
                            });
     }
+    defs.append('pattern')
+        .attr({
+          "id": "arm",
+          "x": "0",
+          "y": "0",
+          "height": "100%",
+          "width": "100%"
+        });
+    d3.select('#tar' + i).append('image')
+                         .attr({
+                           "x": "0",
+                           "y": "0",
+                           "width": "20",
+                           "height": "20",
+                           "xlink:href": "../public/img/robotarm.gif"
+                         });
   }
 }
 
@@ -293,7 +309,7 @@ function updateInputVector(d){
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "red",
-      "stroke-width":"4",
+      "stroke-width":"5",
       "d": "M 250 250 L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
   });
