@@ -107,7 +107,6 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 module.exports = new Sauron();
-// 
 // module.exports = {
 // 	applyTransformation: function(sX,sY,matrix){
 // 	  var matrix = matrix || [[1,3],[2,0]];
