@@ -60,23 +60,64 @@ Canvas.prototype.vectorDrag = function() {
     return drag;
 };
 
-Canvas.prototype.drawCanvas = function() {
-  if(this.type) {
-      var canvas = d3.select('#'+this.type+'-canvas').append('svg')
-                     .attr({
-                       id: this.type+"-svg",
+// returns DOM element associated to the canvas 
+Canvas.prototype.getCanvas = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-canvas');
+};
+
+Canvas.prototype.getSvg = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-svg');
+};
+
+// returns svg def associated with the instance type
+Canvas.prototype.getDefs = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-defs');
+};
+
+Canvas.prototype.appendSvg = function(type) {
+  var id = type || this.type;
+  var canvas = this.getCanvas(id).append('svg')
+                .attr({
+                       id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-      if(this.type === "input")
-        canvas.call(this.vectorDrag());
+};
 
-      if(this.type === "output") {
-        // Define defs to store target image pattern
-        // Maybe figure out a better place for this code later
-        var defs = d3.select('#'+this.type+'-svg').append('defs')
-                                  .attr("id", "canvas-defs");
-        defs.append('pattern')
+Canvas.prototype.addImage = function() {
+  var image = this.getImage();
+  image.append('image')
+       .attr({
+         "x": "0",
+         "y": "0",
+         "width": "40",
+         "height": "40",
+         "xlink:href": "../public/img/target.gif"
+       });
+};
+
+Canvas.prototype.getTar = function() {
+  return d3.select('#tar_img');
+};
+
+Canvas.prototype.appendImageToPattern = function() {
+  var tar = this.getTar();
+  tar.append('image')
+   .attr({
+     "x": "0",
+     "y": "0",
+     "width": "40",
+     "height": "40",
+     "xlink:href": "../public/img/target.gif"
+   });
+};
+
+Canvas.prototype.appendPatternToDefs = function() {
+  var defs = this.getDefs();
+  defs.append('pattern')
             .attr({
               "id": "tar_img",
               "x": "0",
@@ -84,23 +125,36 @@ Canvas.prototype.drawCanvas = function() {
               "height": "40",
               "width": "40"
             });
-        d3.select('#tar_img').append('image')
-                             .attr({
-                               "x": "0",
-                               "y": "0",
-                               "width": "40",
-                               "height": "40",
-                               "xlink:href": "../public/img/target.gif"
-                             });
-      }
-      // remove this and notify eye of sauron instead
-      // updateLog(d) as example
-  }
-  else {
-    console.log("Invalid canvas type: ",this.type)
-  }
 };
 
+Canvas.prototype.appendDefsToSvg = function(){
+  var canvas = this.getSvg();
+   canvas.append('defs')
+      .attr("id", "output-defs");
+};
+
+Canvas.prototype.drawCanvas = function() {
+  if(!this.type) {
+    console.log('Invalid Canvas Type')
+    return;
+  }
+  // append a svg to the canvas
+  this.appendSvg();
+
+  // add drag functionality to vector
+  if(this.type === "input") {
+    this.getCanvas().call(this.vectorDrag());
+  }
+  else if(this.type === "output") {
+    this.drawTargetsOnCanvas();
+  } 
+};
+
+Canvas.prototype.drawTargetsOnCanvas = function() {
+  this.appendDefsToSvg();
+  this.appendPatternToDefs();
+  this.appendImageToPattern();
+};
 
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');

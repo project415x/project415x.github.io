@@ -24,9 +24,7 @@ function Target(settings) {
 
 Target.prototype.updateColor = function(dist, n) {
 		this.color = dist;
-		// select specific target
-		// change color attribute
-}
+};
 
 Target.prototype.init = function() {
 	if(this.isScore) {
@@ -34,7 +32,7 @@ Target.prototype.init = function() {
 	else {
 		this.drawTarget();
 	}
-}
+};
 
 Target.prototype.drawTarget = function() {
 	var score = 0;
@@ -50,6 +48,6 @@ Target.prototype.drawTarget = function() {
 		circle.append("text")
 			.text("Score ")
 	}
-}
+};
 
 module.exports = Target;

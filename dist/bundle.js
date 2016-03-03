@@ -25,9 +25,7 @@ function Target(settings) {
 
 Target.prototype.updateColor = function(dist, n) {
 		this.color = dist;
-		// select specific target
-		// change color attribute
-}
+};
 
 Target.prototype.init = function() {
 	if(this.isScore) {
@@ -35,7 +33,7 @@ Target.prototype.init = function() {
 	else {
 		this.drawTarget();
 	}
-}
+};
 
 Target.prototype.drawTarget = function() {
 	var score = 0;
@@ -51,7 +49,7 @@ Target.prototype.drawTarget = function() {
 		circle.append("text")
 			.text("Score ")
 	}
-}
+};
 
 module.exports = Target;
 },{}],2:[function(require,module,exports){
@@ -71,7 +69,10 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates. These should be math coordinates. When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, *for that canvas*.
+// Really the vector shouldn't know about its screen coordinates. 
+// These should be math coordinates. 
+// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, 
+// *for that canvas*.
 function Vector(settings) {
 	this.head = {
 		x: settings.head.x || 150,
@@ -96,24 +97,6 @@ Vector.prototype.init = function() {
 };
 
 /*
-var drag = d3.behavior.drag()
-		.on("dragstart", dragstart)
-    .on("drag", dragmove)
-    .on("dragend", dragend);
-
-function dragstart(d,i) {
-	console.log('drag start');
-}
-function dragmove(d) {
-	console.log('dragging');
-}
-
-function dragend(d) {
-	console.log('end of drag')
-}
-*/
-
-/*
 * Draws a vector depending on which canvas
 * NO PARAMS. NO RETURNS
 */
@@ -134,12 +117,6 @@ Vector.prototype.drawVector = function() {
 	}
 };
 
-// selects vector being dragged
-// regenerates input vector path
-// updates output vector
-Vector.prototype.dragInputVector = function(){
-};
-
 Vector.prototype.updateVector = function() {
 	return "M 250 250 L"+d.x+" "+d.y+" z"
 };
@@ -150,11 +127,6 @@ Vector.prototype.updateVector = function() {
 */
 Vector.prototype.generatePath = function() {
 	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
-};
-
-// TODO
-Vector.prototype.drawVectorHead = function(vector) {
-
 };
 
 module.exports = Vector;
@@ -222,23 +194,64 @@ Canvas.prototype.vectorDrag = function() {
     return drag;
 };
 
-Canvas.prototype.drawCanvas = function() {
-  if(this.type) {
-      var canvas = d3.select('#'+this.type+'-canvas').append('svg')
-                     .attr({
-                       id: this.type+"-svg",
+// returns DOM element associated to the canvas 
+Canvas.prototype.getCanvas = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-canvas');
+};
+
+Canvas.prototype.getSvg = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-svg');
+};
+
+// returns svg def associated with the instance type
+Canvas.prototype.getDefs = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-defs');
+};
+
+Canvas.prototype.appendSvg = function(type) {
+  var id = type || this.type;
+  var canvas = this.getCanvas(id).append('svg')
+                .attr({
+                       id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-      if(this.type === "input")
-        canvas.call(this.vectorDrag());
+};
 
-      if(this.type === "output") {
-        // Define defs to store target image pattern
-        // Maybe figure out a better place for this code later
-        var defs = d3.select('#'+this.type+'-svg').append('defs')
-                                  .attr("id", "canvas-defs");
-        defs.append('pattern')
+Canvas.prototype.addImage = function() {
+  var image = this.getImage();
+  image.append('image')
+       .attr({
+         "x": "0",
+         "y": "0",
+         "width": "40",
+         "height": "40",
+         "xlink:href": "../public/img/target.gif"
+       });
+};
+
+Canvas.prototype.getTar = function() {
+  return d3.select('#tar_img');
+};
+
+Canvas.prototype.appendImageToPattern = function() {
+  var tar = this.getTar();
+  tar.append('image')
+   .attr({
+     "x": "0",
+     "y": "0",
+     "width": "40",
+     "height": "40",
+     "xlink:href": "../public/img/target.gif"
+   });
+};
+
+Canvas.prototype.appendPatternToDefs = function() {
+  var defs = this.getDefs();
+  defs.append('pattern')
             .attr({
               "id": "tar_img",
               "x": "0",
@@ -246,23 +259,36 @@ Canvas.prototype.drawCanvas = function() {
               "height": "40",
               "width": "40"
             });
-        d3.select('#tar_img').append('image')
-                             .attr({
-                               "x": "0",
-                               "y": "0",
-                               "width": "40",
-                               "height": "40",
-                               "xlink:href": "../public/img/target.gif"
-                             });
-      }
-      // remove this and notify eye of sauron instead
-      // updateLog(d) as example
-  }
-  else {
-    console.log("Invalid canvas type: ",this.type)
-  }
 };
 
+Canvas.prototype.appendDefsToSvg = function(){
+  var canvas = this.getSvg();
+   canvas.append('defs')
+      .attr("id", "output-defs");
+};
+
+Canvas.prototype.drawCanvas = function() {
+  if(!this.type) {
+    console.log('Invalid Canvas Type')
+    return;
+  }
+  // append a svg to the canvas
+  this.appendSvg();
+
+  // add drag functionality to vector
+  if(this.type === "input") {
+    this.getCanvas().call(this.vectorDrag());
+  }
+  else if(this.type === "output") {
+    this.drawTargetsOnCanvas();
+  } 
+};
+
+Canvas.prototype.drawTargetsOnCanvas = function() {
+  this.appendDefsToSvg();
+  this.appendPatternToDefs();
+  this.appendImageToPattern();
+};
 
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
@@ -716,6 +742,31 @@ function startPlayground() {
 startPlayground();
 
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3}],7:[function(require,module,exports){
+function Sauron(setting) {
+	this.matrix = setting.matrix || [[1,2],[2,1]];
+}
+
+Sauron.prototype.applyTransformation = function(argument){
+	 // body...  
+};
+
+Sauron.prototype.updateInputVector = function(){
+	 updateVector('input-vector');
+};
+
+Sauron.prototype.updateOutputVector = function(){
+	 updateVector('output-vector');
+};
+
+Sauron.prototype.applyMatrix = function(sX,sY,matrix){
+  var matrix = matrix || [[1,3],[2,0]];
+  var math_coord = screenToMath(sX,sY),
+      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+  return mathToScreen(applied_coord[0],applied_coord[1]);  
+};
+
+module.exports = Sauron;
+},{}],8:[function(require,module,exports){
 function applyMatrix(x, y, matrix) {
   var matrixApplied = [matrix[0][0] * x + matrix[0][1] * y, matrix[1][0] * x + matrix[1][1] * y];
 
@@ -740,4 +791,4 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-},{}]},{},[1,2,3,4,5,6,7]);
+},{}]},{},[1,2,3,4,5,6,7,8]);

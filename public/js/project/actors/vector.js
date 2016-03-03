@@ -14,7 +14,10 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates. These should be math coordinates. When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, *for that canvas*.
+// Really the vector shouldn't know about its screen coordinates. 
+// These should be math coordinates. 
+// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, 
+// *for that canvas*.
 function Vector(settings) {
 	this.head = {
 		x: settings.head.x || 150,
@@ -39,24 +42,6 @@ Vector.prototype.init = function() {
 };
 
 /*
-var drag = d3.behavior.drag()
-		.on("dragstart", dragstart)
-    .on("drag", dragmove)
-    .on("dragend", dragend);
-
-function dragstart(d,i) {
-	console.log('drag start');
-}
-function dragmove(d) {
-	console.log('dragging');
-}
-
-function dragend(d) {
-	console.log('end of drag')
-}
-*/
-
-/*
 * Draws a vector depending on which canvas
 * NO PARAMS. NO RETURNS
 */
@@ -77,12 +62,6 @@ Vector.prototype.drawVector = function() {
 	}
 };
 
-// selects vector being dragged
-// regenerates input vector path
-// updates output vector
-Vector.prototype.dragInputVector = function(){
-};
-
 Vector.prototype.updateVector = function() {
 	return "M 250 250 L"+d.x+" "+d.y+" z"
 };
@@ -93,11 +72,6 @@ Vector.prototype.updateVector = function() {
 */
 Vector.prototype.generatePath = function() {
 	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
-};
-
-// TODO
-Vector.prototype.drawVectorHead = function(vector) {
-
 };
 
 module.exports = Vector;
