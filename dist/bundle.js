@@ -576,12 +576,12 @@ module.exports = {
 	inputVectorSettings : {
 		type: "input",
 		tail: {
-			x: 250,
-			y: 250
+			x: null,
+			y: null
 		},
 		head: {
-			x: 350,
-			y: 100
+			x: null,
+			y: null
 		}
 	},
 
