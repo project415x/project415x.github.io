@@ -1,10 +1,13 @@
 var util = require('../utilities/math.js'),
 		Target = require('../actors/target.js');
 
+// Sauron is alive!
 function Sauron(setting) {
 	this.matrix = [[1,2],[2,1]];
 }
 
+// Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
+// Returns LinearTransformationScreen(x,y) coordinates 
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
@@ -12,9 +15,9 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   return util.mathToScreen(applied_coord[0],applied_coord[1]);  
 };
 
+// Sauron destroys a vector and creates a new one
 Sauron.prototype.updateInputVector = function(d){
-// redraw input vector
-  d3.select('#input-vector').remove();
+  this.removeVector('input');
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "red",
@@ -24,9 +27,15 @@ Sauron.prototype.updateInputVector = function(d){
   });
 };
 
+// Sauron takes no pitty on a vector and destroys it.
+Sauron.prototype.removeVector = function(type) {
+  d3.select('#'+type+'-vector').remove();
+};
+
+// Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
   var i = this.applyTransformation(d.x,d.y);
-  d3.select('#output-vector').remove();
+  this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "red",
@@ -36,6 +45,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   });
 };
 
+// After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
   var x = d3.selectAll("circle").attr("cx"),
       y = d3.selectAll("circle").attr("cy"),
@@ -48,12 +58,14 @@ Sauron.prototype.updateTargets = function(d) {
   }
 };
 
+// Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(d) {
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
 };
 
+// Strategy 
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
@@ -61,6 +73,7 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   return util.mathToScreen(applied_coord[0],applied_coord[1]);  
 };
 
+// Sauron alerts his generals of the new progress
 Sauron.prototype.updateProgress = function(){
   var bar = d3.select('#progressbar'),
       score = d3.select('#score');
@@ -78,12 +91,13 @@ Sauron.prototype.updateProgress = function(){
       bar.attr("aria-valuenow", curr);
 }
 
+// The Sauron's army grows larger
 Sauron.prototype.generateTarget = function(matrix) {
-  var legal = false,
-      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-  var newX, newY;
+  var isLegal = false,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+      newX, newY;
 
-  while (!legal) {
+  while (!isLegal) {
     newX = util.getRandom(0,500);
     newY = util.getRandom(0,500);
     var pre = util.screenToMath(newX,newY);
@@ -92,7 +106,7 @@ Sauron.prototype.generateTarget = function(matrix) {
     pre = util.mathToScreen(prex,prey);
 
     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-      legal = true;
+      isLegal = true;
       var targetSettings = {
       	x: newX,
       	y: newY,
@@ -106,6 +120,7 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 }
 
+// Sauron is mobilized via Smaug!
 module.exports = new Sauron();
 // module.exports = {
 // 	applyTransformation: function(sX,sY,matrix){

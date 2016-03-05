@@ -93,7 +93,7 @@ function Vector(settings) {
 * NO PARAM NO RETURNS
 */
 Vector.prototype.init = function() {
-	this.drawVector(this.type);
+	this.drawVector();
 };
 
 /*
@@ -117,9 +117,6 @@ Vector.prototype.drawVector = function() {
 	}
 };
 
-Vector.prototype.updateVector = function() {
-	return "M 250 250 L"+d.x+" "+d.y+" z"
-};
 /*
 * Generates path value based on properties on instance of vector
 * param optional
@@ -165,50 +162,54 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type";
 }
 
+// Return modified d3 drag listener
+// using this inside of return statement refers to d3, not Canvas
+// so, self = this is used to differentiate between canvas object and d3 object. 
 Canvas.prototype.vectorDrag = function() {
-  var drag = d3.behavior.drag()
+  self = this;
+  return d3.behavior.drag()
               .on("dragstart", function (){
-                var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.sourceEvent.x,
-                  y: d3.event.sourceEvent.y
-                };
-                Sauron.tellSauron(d);
+                Sauron.tellSauron(self.getD());
               })
-              .on("drag", function(d) {
-              var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.x,
-                  y: d3.event.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                Sauron.tellSauron(d);
+              .on("drag", function() {
+                Sauron.tellSauron(self.getD());
               });
-
-    return drag;
 };
 
-// returns DOM element associated to the canvas 
+// Return JS object with (x,y) coords of current d3 event
+Canvas.prototype.getD = function() {
+  return {
+    x: d3.event.sourceEvent.x,
+    y: d3.event.sourceEvent.y
+  }
+};
+
+// returns div DOM element associated to the canvas 
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-canvas');
 };
 
+// returns SVG DOM element associated with 
 Canvas.prototype.getSvg = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-svg');
 };
 
 // returns svg def associated with the instance type
+// not quite sure what a def is... 
+// let's ask Z because he wrote the code to generate the oil cans
 Canvas.prototype.getDefs = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-defs');
 };
 
+// See Z on purpose of tar_img
 Canvas.prototype.getTar = function() {
   return d3.select('#tar_img');
 };
 
+// Appends SVG DOM element to a div.
 Canvas.prototype.appendSvg = function(type) {
   var id = type || this.type;
   var canvas = this.getCanvas(id).append('svg')
@@ -219,18 +220,8 @@ Canvas.prototype.appendSvg = function(type) {
                      });
 };
 
-Canvas.prototype.addImage = function() {
-  var image = this.getImage();
-  image.append('image')
-       .attr({
-         "x": "0",
-         "y": "0",
-         "width": "40",
-         "height": "40",
-         "xlink:href": "../public/img/target.gif"
-       });
-};
-
+// Adds image on top of Circle (Target).
+// To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
   var tar = this.getTar();
   tar.append('image')
@@ -243,6 +234,7 @@ Canvas.prototype.appendImageToPattern = function() {
    });
 };
 
+// grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
   defs.append('pattern')
@@ -255,12 +247,16 @@ Canvas.prototype.appendPatternToDefs = function() {
             });
 };
 
+// grabs svg and adds def to it
 Canvas.prototype.appendDefsToSvg = function(){
-  var canvas = this.getSvg();
-   canvas.append('defs')
+  var svg = this.getSvg();
+   svg.append('defs')
       .attr("id", "output-defs");
 };
 
+// Draw our canvas depending on the type
+// adds listener to input canvas
+// draws targets on output
 Canvas.prototype.drawCanvas = function() {
   if(!this.type) {
     console.log('Invalid Canvas Type')
@@ -278,12 +274,14 @@ Canvas.prototype.drawCanvas = function() {
   } 
 };
 
+// Wrapper function for drawing targets
 Canvas.prototype.drawTargetsOnCanvas = function() {
   this.appendDefsToSvg();
   this.appendPatternToDefs();
   this.appendImageToPattern();
 };
 
+// Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
@@ -299,10 +297,10 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
+};
 
 /**
-*
+* Currently not being used... Let's figure out if we need it.
 *
 */
 Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
@@ -334,8 +332,9 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
     }
   }
   return results;
-}
+};
 
+// Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
     if (utils.isClose(targetX, targetY, 500)) {
       target.updateColor('#e5e5ff', target.id);
@@ -611,10 +610,13 @@ module.exports = {
 var util = require('../utilities/math.js'),
 		Target = require('../actors/target.js');
 
+// Sauron is alive!
 function Sauron(setting) {
 	this.matrix = [[1,2],[2,1]];
 }
 
+// Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
+// Returns LinearTransformationScreen(x,y) coordinates 
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
@@ -622,9 +624,9 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   return util.mathToScreen(applied_coord[0],applied_coord[1]);  
 };
 
+// Sauron destroys a vector and creates a new one
 Sauron.prototype.updateInputVector = function(d){
-// redraw input vector
-  d3.select('#input-vector').remove();
+  this.removeVector('input');
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "red",
@@ -634,9 +636,15 @@ Sauron.prototype.updateInputVector = function(d){
   });
 };
 
+// Sauron takes no pitty on a vector and destroys it.
+Sauron.prototype.removeVector = function(type) {
+  d3.select('#'+type+'-vector').remove();
+};
+
+// Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
   var i = this.applyTransformation(d.x,d.y);
-  d3.select('#output-vector').remove();
+  this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "red",
@@ -646,6 +654,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   });
 };
 
+// After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
   var x = d3.selectAll("circle").attr("cx"),
       y = d3.selectAll("circle").attr("cy"),
@@ -658,12 +667,14 @@ Sauron.prototype.updateTargets = function(d) {
   }
 };
 
+// Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(d) {
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
 };
 
+// Strategy 
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
@@ -671,6 +682,7 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   return util.mathToScreen(applied_coord[0],applied_coord[1]);  
 };
 
+// Sauron alerts his generals of the new progress
 Sauron.prototype.updateProgress = function(){
   var bar = d3.select('#progressbar'),
       score = d3.select('#score');
@@ -688,12 +700,13 @@ Sauron.prototype.updateProgress = function(){
       bar.attr("aria-valuenow", curr);
 }
 
+// The Sauron's army grows larger
 Sauron.prototype.generateTarget = function(matrix) {
-  var legal = false,
-      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-  var newX, newY;
+  var isLegal = false,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+      newX, newY;
 
-  while (!legal) {
+  while (!isLegal) {
     newX = util.getRandom(0,500);
     newY = util.getRandom(0,500);
     var pre = util.screenToMath(newX,newY);
@@ -702,7 +715,7 @@ Sauron.prototype.generateTarget = function(matrix) {
     pre = util.mathToScreen(prex,prey);
 
     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-      legal = true;
+      isLegal = true;
       var targetSettings = {
       	x: newX,
       	y: newY,
@@ -716,6 +729,7 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 }
 
+// Sauron is mobilized via Smaug!
 module.exports = new Sauron();
 // module.exports = {
 // 	applyTransformation: function(sX,sY,matrix){

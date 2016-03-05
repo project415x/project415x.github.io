@@ -38,7 +38,7 @@ function Vector(settings) {
 * NO PARAM NO RETURNS
 */
 Vector.prototype.init = function() {
-	this.drawVector(this.type);
+	this.drawVector();
 };
 
 /*
@@ -62,9 +62,6 @@ Vector.prototype.drawVector = function() {
 	}
 };
 
-Vector.prototype.updateVector = function() {
-	return "M 250 250 L"+d.x+" "+d.y+" z"
-};
 /*
 * Generates path value based on properties on instance of vector
 * param optional

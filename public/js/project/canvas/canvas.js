@@ -32,50 +32,54 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type";
 }
 
+// Return modified d3 drag listener
+// using this inside of return statement refers to d3, not Canvas
+// so, self = this is used to differentiate between canvas object and d3 object. 
 Canvas.prototype.vectorDrag = function() {
-  var drag = d3.behavior.drag()
+  self = this;
+  return d3.behavior.drag()
               .on("dragstart", function (){
-                var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.sourceEvent.x,
-                  y: d3.event.sourceEvent.y
-                };
-                Sauron.tellSauron(d);
+                Sauron.tellSauron(self.getD());
               })
-              .on("drag", function(d) {
-              var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.x,
-                  y: d3.event.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                Sauron.tellSauron(d);
+              .on("drag", function() {
+                Sauron.tellSauron(self.getD());
               });
-
-    return drag;
 };
 
-// returns DOM element associated to the canvas 
+// Return JS object with (x,y) coords of current d3 event
+Canvas.prototype.getD = function() {
+  return {
+    x: d3.event.sourceEvent.x,
+    y: d3.event.sourceEvent.y
+  }
+};
+
+// returns div DOM element associated to the canvas 
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-canvas');
 };
 
+// returns SVG DOM element associated with 
 Canvas.prototype.getSvg = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-svg');
 };
 
 // returns svg def associated with the instance type
+// not quite sure what a def is... 
+// let's ask Z because he wrote the code to generate the oil cans
 Canvas.prototype.getDefs = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-defs');
 };
 
+// See Z on purpose of tar_img
 Canvas.prototype.getTar = function() {
   return d3.select('#tar_img');
 };
 
+// Appends SVG DOM element to a div.
 Canvas.prototype.appendSvg = function(type) {
   var id = type || this.type;
   var canvas = this.getCanvas(id).append('svg')
@@ -86,18 +90,8 @@ Canvas.prototype.appendSvg = function(type) {
                      });
 };
 
-Canvas.prototype.addImage = function() {
-  var image = this.getImage();
-  image.append('image')
-       .attr({
-         "x": "0",
-         "y": "0",
-         "width": "40",
-         "height": "40",
-         "xlink:href": "../public/img/target.gif"
-       });
-};
-
+// Adds image on top of Circle (Target).
+// To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
   var tar = this.getTar();
   tar.append('image')
@@ -110,6 +104,7 @@ Canvas.prototype.appendImageToPattern = function() {
    });
 };
 
+// grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
   defs.append('pattern')
@@ -122,12 +117,16 @@ Canvas.prototype.appendPatternToDefs = function() {
             });
 };
 
+// grabs svg and adds def to it
 Canvas.prototype.appendDefsToSvg = function(){
-  var canvas = this.getSvg();
-   canvas.append('defs')
+  var svg = this.getSvg();
+   svg.append('defs')
       .attr("id", "output-defs");
 };
 
+// Draw our canvas depending on the type
+// adds listener to input canvas
+// draws targets on output
 Canvas.prototype.drawCanvas = function() {
   if(!this.type) {
     console.log('Invalid Canvas Type')
@@ -145,12 +144,14 @@ Canvas.prototype.drawCanvas = function() {
   } 
 };
 
+// Wrapper function for drawing targets
 Canvas.prototype.drawTargetsOnCanvas = function() {
   this.appendDefsToSvg();
   this.appendPatternToDefs();
   this.appendImageToPattern();
 };
 
+// Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
@@ -166,10 +167,10 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
+};
 
 /**
-*
+* Currently not being used... Let's figure out if we need it.
 *
 */
 Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
@@ -201,8 +202,9 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
     }
   }
   return results;
-}
+};
 
+// Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
     if (utils.isClose(targetX, targetY, 500)) {
       target.updateColor('#e5e5ff', target.id);
