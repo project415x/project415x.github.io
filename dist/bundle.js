@@ -75,8 +75,8 @@ Sample settings object
 // *for that canvas*.
 function Vector(settings) {
 	this.head = {
-		x: settings.head.x || 150,
-		y: settings.head.y || 150
+		x: settings.head.x || 250,
+		y: settings.head.y || 250
 	};
 	// we don't want to move the tail from the origin
 	this.tail = {
@@ -389,7 +389,7 @@ Canvas.prototype.checkProximity = function(vector, target) {
 }
 
 module.exports = Canvas;
-},{"../sauron/sauron.js":7,"../utilities/math.js":8}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":8,"../utilities/math.js":9}],4:[function(require,module,exports){
 function startLevel1() {
 
 
@@ -516,89 +516,19 @@ setTimeout(function() {
 }, 5000);
 
 },{}],6:[function(require,module,exports){
-// TODO:
-// Migrate this to an external config.json
-// so we can to something like
-// var inputCanvas = Canvas(config.inputCanvas);
-// ISOMORPHIC!!!
-
-var inputCanvasSettings = {
-	type: "input",
-	minX: -10,
-	minY: -10,
-	maxX: 10,
-	maxY: 10,
-	pixelWidth: 500,
-	pixelHeight: 500
-};
-
-var outputCanvasSettings = {
-	type: "output",
-	minX: -10,
-	minY: -10,
-	maxX: 10,
-	maxY: 10,
-	pixelWidth: 500,
-	pixelHeight: 500
-};
-
-var inputVectorSettings = {
-	type: "input",
-	tail: {
-		x: 250,
-		y: 250
-	},
-	head: {
-		x: 350,
-		y: 100
-	}
-}
-
-var outputVectorSettings = {
-	type: "output",
-	tail: {
-		x: 250,
-		y: 250
-	},
-	head: {
-		x: 150,
-		y: 100
-	}
-}
-
-var targetSettings = {
-	x: 355,
-	y: 50,
-	r: 20,
-	color: "black",
-	isScore: false
-};
-
-var scoreSettings = {
-	x: 100,
-	y: 100,
-	r: 40,
-	color: "green",
-	isScore: true
-};
-
-var EyeOfSauron = {
-	matrix: [[1,2,],[2,1]]
-}
-
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js');
+		Sauron = require('../sauron/sauron.js')
+		config = require('./playgroundConfig');
 
 function initPlayground() {
 	// Create objects needed for game
-	var inputCanvas = new Canvas(inputCanvasSettings),
-			inputVector = new Vector(inputVectorSettings),
-			outputVector = new Vector(outputVectorSettings),
-			outputCanvas = new Canvas(outputCanvasSettings),
-			outputTarget = new Target(targetSettings),
-			scoreTarget = new Target(scoreSettings);
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings),
+			outputTarget = new Target(config.targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -611,8 +541,6 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	scoreTarget.init();
-
 }
 
 function startPlayground() {
@@ -622,7 +550,64 @@ function startPlayground() {
 // think of this as the main function :)
 startPlayground();
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":7}],7:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":8,"./playgroundConfig":7}],7:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: 250,
+			y: 250
+		},
+		head: {
+			x: 350,
+			y: 100
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	targetSettings : {
+		x: 355,
+		y: 50,
+		r: 20
+	},
+
+	EyeOfSauron : {
+		matrix: [[1,2,],[2,1]]
+	}
+};
+},{}],8:[function(require,module,exports){
 var util = require('../utilities/math.js'),
 		Target = require('../actors/target.js');
 
@@ -782,7 +767,7 @@ module.exports = new Sauron();
 // 	  this.updateTargets(d);
 // 	}
 // };
-},{"../actors/target.js":1,"../utilities/math.js":8}],8:[function(require,module,exports){
+},{"../actors/target.js":1,"../utilities/math.js":9}],9:[function(require,module,exports){
 module.exports = {
 	
 	screenToMath: function(x,y) {
@@ -812,4 +797,4 @@ module.exports = {
   	return false;
 	}
 };
-},{}]},{},[1,2,3,4,5,6,7,8]);
+},{}]},{},[1,2,3,4,5,6,7,8,9]);

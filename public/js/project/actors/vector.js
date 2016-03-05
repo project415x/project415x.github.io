@@ -20,8 +20,8 @@ Sample settings object
 // *for that canvas*.
 function Vector(settings) {
 	this.head = {
-		x: settings.head.x || 150,
-		y: settings.head.y || 150
+		x: settings.head.x || 250,
+		y: settings.head.y || 250
 	};
 	// we don't want to move the tail from the origin
 	this.tail = {
