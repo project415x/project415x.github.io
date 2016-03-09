@@ -12,6 +12,16 @@
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
 
+/* This file has the canvas class. In principle, the canvas class will only know its dimensions,
+ * where the math grid lies along it, and which HTML element is associated to it. It doesn't know
+ * any game logic. The member variable "type" tells which HTML element the canvas is associated to.
+ * For instance if type="input" then the element has ID #input-canvas. The functions in this class
+ * append svg tags inside the parent div tag, to draw things to the canvas.
+ * 
+ * (Any code that doesn't do this should be moved to another file!)
+ * 
+ * Cary
+ */
 var Sauron = require('../sauron/sauron.js'),
     utils = require('../utilities/math.js');
 
