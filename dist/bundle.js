@@ -25,9 +25,7 @@ function Target(settings) {
 
 Target.prototype.updateColor = function(dist, n) {
 		this.color = dist;
-		// select specific target
-		// change color attribute
-}
+};
 
 Target.prototype.init = function() {
 	if(this.isScore) {
@@ -35,7 +33,7 @@ Target.prototype.init = function() {
 	else {
 		this.drawTarget();
 	}
-}
+};
 
 Target.prototype.drawTarget = function() {
 	var score = 0;
@@ -51,7 +49,7 @@ Target.prototype.drawTarget = function() {
 		circle.append("text")
 			.text("Score ")
 	}
-}
+};
 
 module.exports = Target;
 },{}],2:[function(require,module,exports){
@@ -71,11 +69,14 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates. These should be math coordinates. When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, *for that canvas*.
+// Really the vector shouldn't know about its screen coordinates. 
+// These should be math coordinates. 
+// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, 
+// *for that canvas*.
 function Vector(settings) {
 	this.head = {
-		x: settings.head.x || 150,
-		y: settings.head.y || 150
+		x: settings.head.x || 250,
+		y: settings.head.y || 250
 	};
 	// we don't want to move the tail from the origin
 	this.tail = {
@@ -92,26 +93,8 @@ function Vector(settings) {
 * NO PARAM NO RETURNS
 */
 Vector.prototype.init = function() {
-	this.drawVector(this.type);
+	this.drawVector();
 };
-
-/*
-var drag = d3.behavior.drag()
-		.on("dragstart", dragstart)
-    .on("drag", dragmove)
-    .on("dragend", dragend);
-
-function dragstart(d,i) {
-	console.log('drag start');
-}
-function dragmove(d) {
-	console.log('dragging');
-}
-
-function dragend(d) {
-	console.log('end of drag')
-}
-*/
 
 /*
 * Draws a vector depending on which canvas
@@ -134,15 +117,6 @@ Vector.prototype.drawVector = function() {
 	}
 };
 
-// selects vector being dragged
-// regenerates input vector path
-// updates output vector
-Vector.prototype.dragInputVector = function(){
-};
-
-Vector.prototype.updateVector = function() {
-	return "M 250 250 L"+d.x+" "+d.y+" z"
-};
 /*
 * Generates path value based on properties on instance of vector
 * param optional
@@ -152,13 +126,7 @@ Vector.prototype.generatePath = function() {
 	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
 };
 
-// TODO
-Vector.prototype.drawVectorHead = function(vector) {
-
-};
-
 module.exports = Vector;
-
 },{}],3:[function(require,module,exports){
 /**
 * CLASS CONSTRUCTOR
@@ -173,9 +141,9 @@ module.exports = Vector;
   }
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
-// import vector.js
-var Vector = require('../actors/vector.js'),
-    Target = require('../actors/target.js');
+
+var Sauron = require('../sauron/sauron.js'),
+    utils = require('../utilities/math.js');
 
 function Canvas(settings) {
   //input error handling
@@ -194,51 +162,82 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type";
 }
 
+// Return modified d3 drag listener
+// using this inside of return statement refers to d3, not Canvas
+// so, self = this is used to differentiate between canvas object and d3 object. 
 Canvas.prototype.vectorDrag = function() {
-  var drag = d3.behavior.drag()
+  self = this;
+  return d3.behavior.drag()
               .on("dragstart", function (){
-                var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.sourceEvent.x,
-                  y: d3.event.sourceEvent.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                updateInputVector(d);
-                updateOutputVector(d);
-                updateTargets(d);
+                Sauron.tellSauron(self.getD());
               })
-              .on("drag", function(d) {
-              var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.x,
-                  y: d3.event.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                updateInputVector(d);
-                updateOutputVector(d);
-                updateTargets(d);
+              .on("drag", function() {
+                Sauron.tellSauron(self.getD());
               });
-
-    return drag;
 };
 
-Canvas.prototype.drawCanvas = function() {
-  if(this.type) {
-      var canvas = d3.select('#'+this.type+'-canvas').append('svg')
-                     .attr({
-                       id: this.type+"-svg",
+// Return JS object with (x,y) coords of current d3 event
+Canvas.prototype.getD = function() {
+  return {
+    x: d3.event.sourceEvent.x,
+    y: d3.event.sourceEvent.y
+  }
+};
+
+// returns div DOM element associated to the canvas 
+Canvas.prototype.getCanvas = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-canvas');
+};
+
+// returns SVG DOM element associated with 
+Canvas.prototype.getSvg = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-svg');
+};
+
+// returns svg def associated with the instance type
+// not quite sure what a def is... 
+// let's ask Z because he wrote the code to generate the oil cans
+Canvas.prototype.getDefs = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-defs');
+};
+
+// See Z on purpose of tar_img
+Canvas.prototype.getTar = function() {
+  return d3.select('#tar_img');
+};
+
+// Appends SVG DOM element to a div.
+Canvas.prototype.appendSvg = function(type) {
+  var id = type || this.type;
+  var canvas = this.getCanvas(id).append('svg')
+                .attr({
+                       id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-      if(this.type === "input")
-        canvas.call(this.vectorDrag());
+};
 
-      if(this.type === "output") {
-        // Define defs to store target image pattern
-        // Maybe figure out a better place for this code later
-        var defs = d3.select('#'+this.type+'-svg').append('defs')
-                                  .attr("id", "canvas-defs");
-        defs.append('pattern')
+// Adds image on top of Circle (Target).
+// To randomize targets write function to randomly grab a .gif from ../public/img/*
+Canvas.prototype.appendImageToPattern = function() {
+  var tar = this.getTar();
+  tar.append('image')
+   .attr({
+     "x": "0",
+     "y": "0",
+     "width": "40",
+     "height": "40",
+     "xlink:href": "../public/img/target.gif"
+   });
+};
+
+// grabs def elemetn and appends a pattern on it to prep us to add imag
+Canvas.prototype.appendPatternToDefs = function() {
+  var defs = this.getDefs();
+  defs.append('pattern')
             .attr({
               "id": "tar_img",
               "x": "0",
@@ -246,24 +245,43 @@ Canvas.prototype.drawCanvas = function() {
               "height": "40",
               "width": "40"
             });
-        d3.select('#tar_img').append('image')
-                             .attr({
-                               "x": "0",
-                               "y": "0",
-                               "width": "40",
-                               "height": "40",
-                               "xlink:href": "../public/img/target.gif"
-                             });
-      }
-      // remove this and notify eye of sauron instead
-      // updateLog(d) as example
-  }
-  else {
-    console.log("Invalid canvas type: ",this.type)
-  }
 };
 
+// grabs svg and adds def to it
+Canvas.prototype.appendDefsToSvg = function(){
+  var svg = this.getSvg();
+   svg.append('defs')
+      .attr("id", "output-defs");
+};
 
+// Draw our canvas depending on the type
+// adds listener to input canvas
+// draws targets on output
+Canvas.prototype.drawCanvas = function() {
+  if(!this.type) {
+    console.log('Invalid Canvas Type')
+    return;
+  }
+  // append a svg to the canvas
+  this.appendSvg();
+
+  // add drag functionality to vector
+  if(this.type === "input") {
+    this.getCanvas().call(this.vectorDrag());
+  }
+  else if(this.type === "output") {
+    this.drawTargetsOnCanvas();
+  } 
+};
+
+// Wrapper function for drawing targets
+Canvas.prototype.drawTargetsOnCanvas = function() {
+  this.appendDefsToSvg();
+  this.appendPatternToDefs();
+  this.appendImageToPattern();
+};
+
+// Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
@@ -279,64 +297,10 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
-
-function updateInputVector(d){
-// redraw input vector
-  d3.select('#input-vector').remove();
-  d3.select('#input-svg').append('path')
-    .attr({
-      "stroke": "red",
-      "stroke-width":"4",
-      "d": "M 250 250 L"+d.x+" "+d.y+"z",
-      "id": 'input-vector'
-  });
 };
-
-function updateOutputVector(d) {
-  var i = applyMatrix(d.x,d.y);
-  d3.select('#output-vector').remove();
-  d3.select('#output-svg').append('path')
-    .attr({
-      "stroke": "red",
-      "stroke-width":"4",
-      //"fill": "/path/to/here",
-      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-      "id": 'output-vector'
-  });
-};
-
-function updateTargets(d) {
-  var x = d3.selectAll("circle").attr("cx"),
-      y = d3.selectAll("circle").attr("cy"),
-      r = d3.selectAll("circle").attr("r"),
-      i = applyMatrix(d.x,d.y);
-  if (isClose(i[0],i[1],x,y,r)) {
-    d3.selectAll("circle").remove();
-    updateProgress();
-    generateTarget([[1,3],[2,0]]);
-  }
-}
-
-function updateProgress() {
-    var bar = d3.select('#progressbar'),
-        score = d3.select('#score');
-        curr = bar.attr("aria-valuenow");
-        if (Number(curr) >= 100) {
-          curr = 100;
-          score.text("Proceed To Next Level!");
-        }
-        else {
-          curr = Number(curr) + 5;
-          score.text(curr + "% Complete");
-        }
-
-        bar.style("width", curr + "%");
-        bar.attr("aria-valuenow", curr);
-}
 
 /**
-*
+* Currently not being used... Let's figure out if we need it.
 *
 */
 Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
@@ -349,7 +313,7 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
     var tar_x = targets[i].x,
         tar_y = targets[i].y;
     //10 pixels is from Joseph's old settings
-    if (isClose(end_x,end_y,tar_x,tar_y,10)) {
+    if (utils.isClose(end_x,end_y,tar_x,tar_y,10)) {
       results[i] = true;
     }
     else {
@@ -359,7 +323,7 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
       var dis_x = start_x + param * (end_x - start_x);
       var dis_y = start_y + param * (end_y - start_y);
       //10 pixels is from Joseph's old settings
-      if (isClose(dis_x,dis_y,tar_x,tar_y,10)) {
+      if (utils.isClose(dis_x,dis_y,tar_x,tar_y,10)) {
         results[i] = true;
       }
       else {
@@ -368,46 +332,38 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
     }
   }
   return results;
-}
+};
 
-
-function isClose(oX, oY, tX, tY, radius) {
-  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-  if (dist <= radius) {
-    return true;
-  }
-  return false;
-}
-
+// Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
-    if (isClose(targetX, targetY, 500)) {
+    if (utils.isClose(targetX, targetY, 500)) {
       target.updateColor('#e5e5ff', target.id);
     }
-    else if (isClose(targetX, targetY, 450)) {
+    else if (utils.isClose(targetX, targetY, 450)) {
       target.updateColor('#ccccff', target.id);
     }
-    else if (isClose(targetX, targetY, 400)) {
+    else if (utils.isClose(targetX, targetY, 400)) {
       target.updateColor('#b2b2ff', target.id);
     }
-    else if (isClose(targetX, targetY, 350)) {
+    else if (utils.isClose(targetX, targetY, 350)) {
       target.updateColor('#9999ff', target.id);
     }
-    else if (isClose(targetX, targetY, 300)) {
+    else if (utils.isClose(targetX, targetY, 300)) {
       target.updateColor('#7f7fff', target.id);
     }
-    else if (isClose(targetX, targetY, 250)) {
+    else if (utils.isClose(targetX, targetY, 250)) {
       target.updateColor('#6666ff', target.id);
     }
-    else if (isClose(targetX, targetY, 200)) {
+    else if (utils.isClose(targetX, targetY, 200)) {
       target.updateColor('#4c4cff', target.id);
     }
-    else if (isClose(targetX, targetY, 150)) {
+    else if (utils.isClose(targetX, targetY, 150)) {
       target.updateColor('#3232ff', target.id);
     }
-    else if (isClose(targetX, targetY, 100)) {
+    else if (utils.isClose(targetX, targetY, 100)) {
       target.updateColor('#1919ff', target.id);
     }
-    else if (isClose(targetX, targetY, 50)) {
+    else if (utils.isClose(targetX, targetY, 50)) {
       target.updateColor('#0000ff', target.id);
     }
   }
@@ -427,66 +383,12 @@ Canvas.prototype.drawTarget = function(target) {
     });
 };
 
-Canvas.prototype.drawTargets = function(targets) {
-  // just a for loop with drawTarget
-  for( var i = 0; i < targets.length; i++ ) {
-    drawTarget(targets[i]);
-  }
-};
-
 Canvas.prototype.checkProximity = function(vector, target) {
-  return this.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
-}
-
-function screenToMath(x,y) {
-  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
-}
-
-function mathToScreen(x,y) {
-  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
-}
-
-function applyMatrix(sX,sY,matrix) {
-  var matrix = matrix || [[1,3],[2,0]];
-  var math_coord = screenToMath(sX,sY),
-      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return mathToScreen(applied_coord[0],applied_coord[1]);
-}
-
-function getRandom(min,max) {
-  return Math.random() * (max - min) + min;
-}
-
-function generateTarget(matrix) {
-  var legal = false,
-      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-  var newX, newY;
-
-  while (!legal) {
-    newX = getRandom(0,500);
-    newY = getRandom(0,500);
-    var pre = screenToMath(newX,newY);
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
-        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
-    pre = mathToScreen(prex,prey);
-
-    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-      legal = true;
-      var targetSettings = {
-      	x: newX,
-      	y: newY,
-      	r: 20,
-      	color: "black",
-      	isScore: false
-      };
-      var newTarget = new Target(targetSettings);
-      newTarget.drawTarget();
-    }
-  }
+  return utils.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
 }
 
 module.exports = Canvas;
-},{"../actors/target.js":1,"../actors/vector.js":2}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":8,"../utilities/math.js":9}],4:[function(require,module,exports){
 function startLevel1() {
 
 
@@ -613,84 +515,19 @@ setTimeout(function() {
 }, 5000);
 
 },{}],6:[function(require,module,exports){
-// TODO:
-// Migrate this to an external config.json
-// so we can to something like
-// var inputCanvas = Canvas(config.inputCanvas);
-// ISOMORPHIC!!!
-
-var inputCanvasSettings = {
-	type: "input",
-	minX: -10,
-	minY: -10,
-	maxX: 10,
-	maxY: 10,
-	pixelWidth: 500,
-	pixelHeight: 500
-};
-
-var outputCanvasSettings = {
-	type: "output",
-	minX: -10,
-	minY: -10,
-	maxX: 10,
-	maxY: 10,
-	pixelWidth: 500,
-	pixelHeight: 500
-};
-
-var inputVectorSettings = {
-	type: "input",
-	tail: {
-		x: 250,
-		y: 250
-	},
-	head: {
-		x: 350,
-		y: 100
-	}
-}
-
-var outputVectorSettings = {
-	type: "output",
-	tail: {
-		x: 250,
-		y: 250
-	},
-	head: {
-		x: 150,
-		y: 100
-	}
-}
-
-var targetSettings = {
-	x: 355,
-	y: 50,
-	r: 20,
-	color: "black",
-	isScore: false
-};
-
-var scoreSettings = {
-	x: 100,
-	y: 100,
-	r: 40,
-	color: "green",
-	isScore: true
-}
-
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js');
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js')
+		config = require('./playgroundConfig');
 
 function initPlayground() {
 	// Create objects needed for game
-	var inputCanvas = new Canvas(inputCanvasSettings),
-			inputVector = new Vector(inputVectorSettings),
-			outputVector = new Vector(outputVectorSettings),
-			outputCanvas = new Canvas(outputCanvasSettings),
-			outputTarget = new Target(targetSettings),
-			scoreTarget = new Target(scoreSettings);
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings),
+			outputTarget = new Target(config.targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -703,9 +540,6 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	scoreTarget.init();
-
-
 }
 
 function startPlayground() {
@@ -715,29 +549,266 @@ function startPlayground() {
 // think of this as the main function :)
 startPlayground();
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3}],7:[function(require,module,exports){
-function applyMatrix(x, y, matrix) {
-  var matrixApplied = [matrix[0][0] * x + matrix[0][1] * y, matrix[1][0] * x + matrix[1][1] * y];
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":8,"./playgroundConfig":7}],7:[function(require,module,exports){
+module.exports = {
 
-  return matrixApplied;
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	targetSettings : {
+		x: 355,
+		y: 50,
+		r: 20
+	},
+
+	EyeOfSauron : {
+		matrix: [[1,2,],[2,1]]
+	}
+};
+},{}],8:[function(require,module,exports){
+var util = require('../utilities/math.js'),
+		Target = require('../actors/target.js');
+
+// Sauron is alive!
+function Sauron(setting) {
+	this.matrix = [[1,2],[2,1]];
 }
 
-/**
- * getRandomArbitrary
- * @description: Returns a random number between min (inclusive) and max (exclusive)
- * @param: min, max numbers in range
- */
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
+// Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
+// Returns LinearTransformationScreen(x,y) coordinates 
+Sauron.prototype.applyTransformation = function(sX,sY,matrix){
+  var matrix = matrix || [[1,3],[2,0]];
+  var math_coord = util.screenToMath(sX,sY),
+      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+};
+
+// Sauron destroys a vector and creates a new one
+Sauron.prototype.updateInputVector = function(d){
+  this.removeVector('input');
+  d3.select('#input-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "id": 'input-vector'
+  });
+};
+
+// Sauron takes no pitty on a vector and destroys it.
+Sauron.prototype.removeVector = function(type) {
+  d3.select('#'+type+'-vector').remove();
+};
+
+// Sauron makes a strategic decicision and modifies a vector
+Sauron.prototype.updateOutputVector = function(d) {
+  var i = this.applyTransformation(d.x,d.y);
+  this.removeVector('output');
+  d3.select('#output-svg').append('path')
+    .attr({
+      "stroke": "red",
+      "stroke-width":"4",
+      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+      "id": 'output-vector'
+  });
+};
+
+// After good news from the Palantir Sauron moves forces!
+Sauron.prototype.updateTargets = function(d) {
+  var x = d3.selectAll("circle").attr("cx"),
+      y = d3.selectAll("circle").attr("cy"),
+      r = d3.selectAll("circle").attr("r"),
+      i = this.applyTransformation(d.x,d.y);
+  if (util.isClose(i[0],i[1],x,y,r)) {
+    d3.selectAll("circle").remove();
+    this.updateProgress();
+    this.generateTarget([[1,3],[2,0]]);
+  }
+};
+
+// Palantir reveals new plans to Sauron
+Sauron.prototype.tellSauron = function(d) {
+  this.updateInputVector(d);
+  this.updateOutputVector(d);
+  this.updateTargets(d);
+};
+
+// Strategy 
+Sauron.prototype.applyTransformation = function(sX,sY,matrix){
+  var matrix = matrix || [[1,3],[2,0]];
+  var math_coord = util.screenToMath(sX,sY),
+      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+};
+
+// Sauron alerts his generals of the new progress
+Sauron.prototype.updateProgress = function(){
+  var bar = d3.select('#progressbar'),
+      score = d3.select('#score');
+      curr = bar.attr("aria-valuenow");
+      if (Number(curr) >= 100) {
+        curr = 100;
+        score.text("Proceed To Next Level!");
+      }
+      else {
+        curr = Number(curr) + 5;
+        score.text(curr + "% Complete");
+      }
+
+      bar.style("width", curr + "%");
+      bar.attr("aria-valuenow", curr);
 }
 
-/**
- * getRandomInt
- * @description: Returns a random integer between min (inclusive) and max (inclusive) Using Math.round() will give you a non-uniform distribution!
- * @param: min, max numbers in range
- */
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+// The Sauron's army grows larger
+Sauron.prototype.generateTarget = function(matrix) {
+  var isLegal = false,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+      newX, newY;
+
+  while (!isLegal) {
+    newX = util.getRandom(0,500);
+    newY = util.getRandom(0,500);
+    var pre = util.screenToMath(newX,newY);
+    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
+    pre = util.mathToScreen(prex,prey);
+
+    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
+      isLegal = true;
+      var targetSettings = {
+      	x: newX,
+      	y: newY,
+      	r: 20,
+      	color: "black",
+      	isScore: false
+      };
+      var newTarget = new Target(targetSettings);
+      newTarget.drawTarget();
+    }
+  }
 }
 
-},{}]},{},[1,2,3,4,5,6,7]);
+// Sauron is mobilized via Smaug!
+module.exports = new Sauron();
+// module.exports = {
+// 	applyTransformation: function(sX,sY,matrix){
+// 	  var matrix = matrix || [[1,3],[2,0]];
+// 	  var math_coord = util.screenToMath(sX,sY),
+// 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+// 	},
+
+// 	updateInputVector: function(d) {
+// 	// redraw input vector
+// 	  d3.select('#input-vector').remove();
+// 	  d3.select('#input-svg').append('path')
+// 	    .attr({
+// 	      "stroke": "red",
+// 	      "stroke-width":"4",
+// 	      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+// 	      "id": 'input-vector'
+// 	  });
+// 	},
+
+// 	updateOutputVector: function(d) {
+// 	  var i = this.applyTransformation(d.x,d.y);
+// 	  d3.select('#output-vector').remove();
+// 	  d3.select('#output-svg').append('path')
+// 	    .attr({
+// 	      "stroke": "red",
+// 	      "stroke-width":"4",
+// 	      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+// 	      "id": 'output-vector'
+// 	  });
+// 	},
+
+// 	updateTargets: function(d) {
+// 	  var x = d3.selectAll("circle").attr("cx"),
+//     y = d3.selectAll("circle").attr("cy"),
+//     r = d3.selectAll("circle").attr("r"),
+//     i = this.applyTransformation(d.x,d.y);
+// 	  if (isClose(i[0],i[1],x,y,r)) {
+// 	    d3.selectAll("circle").remove();
+// 	    updateProgress();
+// 	    generateTarget([[1,3],[2,0]]);
+// 	  }
+// 	},
+
+// 	tellSauron: function(d) {
+// 	  this.updateInputVector(d);
+// 	  this.updateOutputVector(d);
+// 	  this.updateTargets(d);
+// 	}
+// };
+},{"../actors/target.js":1,"../utilities/math.js":9}],9:[function(require,module,exports){
+module.exports = {
+	
+	screenToMath: function(x,y) {
+	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
+	},
+
+	mathToScreen: function(x,y) {
+	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+	},
+
+	applyMatrix: function(sX,sY,matrix) {
+	  var matrix = matrix || [[1,3],[2,0]];
+	  var math_coord = screenToMath(sX,sY),
+	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+	  return mathToScreen(applied_coord[0],applied_coord[1]);
+	},
+
+	getRandom: function(min,max) {
+	  return Math.random() * (max - min) + min;
+	},
+	
+	isClose: function(oX, oY, tX, tY, radius) {
+  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
+  if (dist <= radius) {
+    return true;
+  }
+  	return false;
+	}
+};
+},{}]},{},[1,2,3,4,5,6,7,8,9]);

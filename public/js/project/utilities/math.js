@@ -1,23 +1,29 @@
-function applyMatrix(x, y, matrix) {
-  var matrixApplied = [matrix[0][0] * x + matrix[0][1] * y, matrix[1][0] * x + matrix[1][1] * y];
+module.exports = {
+	
+	screenToMath: function(x,y) {
+	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
+	},
 
-  return matrixApplied;
-}
+	mathToScreen: function(x,y) {
+	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+	},
 
-/**
- * getRandomArbitrary
- * @description: Returns a random number between min (inclusive) and max (exclusive)
- * @param: min, max numbers in range
- */
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-}
+	applyMatrix: function(sX,sY,matrix) {
+	  var matrix = matrix || [[1,3],[2,0]];
+	  var math_coord = screenToMath(sX,sY),
+	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+	  return mathToScreen(applied_coord[0],applied_coord[1]);
+	},
 
-/**
- * getRandomInt
- * @description: Returns a random integer between min (inclusive) and max (inclusive) Using Math.round() will give you a non-uniform distribution!
- * @param: min, max numbers in range
- */
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+	getRandom: function(min,max) {
+	  return Math.random() * (max - min) + min;
+	},
+	
+	isClose: function(oX, oY, tX, tY, radius) {
+  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
+  if (dist <= radius) {
+    return true;
+  }
+  	return false;
+	}
+};
