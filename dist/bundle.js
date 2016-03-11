@@ -14,13 +14,13 @@
 function Target(settings) {
 	this.x = settings.x || 300;
 	this.y = settings.y || 300;
-	this.r = settings.r || 15;
+	this.width = settings.width || 40;
+	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
 	// No need for color if we use image pattern as fill
 	// this.color = settings.color || '#FF0000';
 	// test
 	this.type = settings.type || "output";
-	this.isScore = settings.isScore || false;
 }
 
 Target.prototype.updateColor = function(dist, n) {
@@ -30,28 +30,22 @@ Target.prototype.updateColor = function(dist, n) {
 }
 
 Target.prototype.init = function() {
-	if(this.isScore) {
-	}
-	else {
 		this.drawTarget();
-	}
 }
 
 Target.prototype.drawTarget = function() {
-	var score = 0;
-	var circle = d3.select('#'+this.type+'-svg').append("circle")
+	var score = 0,
+	 		real_x = this.x - this.width / 2,
+			real_y = this.y - this.height / 2;
+	var rect = d3.select('#'+this.type+'-svg').append("rect")
 		.attr({
-			"cx": this.x,
-			"cy": this.y,
-			"r": this.r
+			"x": real_x,
+			"y": real_y,
+			"width": this.width,
+			"height": this.height
 		})
-	var tar_num = Math.floor(Math.random() * 10) + 1;
-	circle.style({"fill": "url(#tar" + tar_num + ")"});
-
-	if(this.isScore) {
-		circle.append("text")
-			.text("Score ")
-	}
+	var tar_num = Math.floor(Math.random() * 19) + 1;
+	rect.style({"fill": "url(#tar" + tar_num + ")"});
 }
 
 module.exports = Target;
@@ -266,7 +260,7 @@ Canvas.prototype.loadArts = function() {
     // Maybe figure out a better place for this code later
     var defs = d3.select('#'+this.type+'-svg').append('defs')
                               .attr("id", "art-defs");
-    for (i = 1; i <= 10; i++) {
+    for (i = 1; i < 20; i++) {
       defs.append('pattern')
           .attr({
             "id": "tar" + i,
@@ -329,12 +323,14 @@ function updateOutputVector(d) {
 };
 
 function updateTargets(d) {
-  var x = d3.selectAll("circle").attr("cx"),
-      y = d3.selectAll("circle").attr("cy"),
-      r = d3.selectAll("circle").attr("r"),
+  var width = Number(d3.selectAll("rect").attr("width")),
+      height = Number(d3.selectAll("rect").attr("height")),
+      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
+      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
       i = applyMatrix(d.x,d.y);
-  if (isClose(i[0],i[1],x,y,r)) {
-    d3.selectAll("circle").remove();
+  if (isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    d3.selectAll("rect").remove();
+    console.log("ye")
     updateProgress();
     generateTarget([[1,3],[2,0]]);
   }
@@ -393,12 +389,8 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
 }
 
 
-function isClose(oX, oY, tX, tY, radius) {
-  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-  if (dist <= radius) {
-    return true;
-  }
-  return false;
+function isClose(oX, oY, tX, tY, xb, yb) {
+  return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 }
 
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -497,9 +489,9 @@ function generateTarget(matrix) {
       var targetSettings = {
       	x: newX,
       	y: newY,
-      	r: 20,
+      	width: 40,
+        height: 40,
       	color: "black",
-      	isScore: false
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -689,18 +681,10 @@ var outputVectorSettings = {
 var targetSettings = {
 	x: 355,
 	y: 50,
-	r: 20,
+	width: 40,
+	height: 40,
 	color: "black",
-	isScore: false
 };
-
-var scoreSettings = {
-	x: 100,
-	y: 100,
-	r: 40,
-	color: "green",
-	isScore: true
-}
 
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
@@ -712,8 +696,7 @@ function initPlayground() {
 			inputVector = new Vector(inputVectorSettings),
 			outputVector = new Vector(outputVectorSettings),
 			outputCanvas = new Canvas(outputCanvasSettings),
-			outputTarget = new Target(targetSettings),
-			scoreTarget = new Target(scoreSettings);
+			outputTarget = new Target(targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -728,7 +711,6 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	scoreTarget.init();
 
 
 }

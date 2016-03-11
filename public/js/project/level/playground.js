@@ -51,18 +51,10 @@ var outputVectorSettings = {
 var targetSettings = {
 	x: 355,
 	y: 50,
-	r: 20,
+	width: 40,
+	height: 40,
 	color: "black",
-	isScore: false
 };
-
-var scoreSettings = {
-	x: 100,
-	y: 100,
-	r: 40,
-	color: "green",
-	isScore: true
-}
 
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
@@ -74,8 +66,7 @@ function initPlayground() {
 			inputVector = new Vector(inputVectorSettings),
 			outputVector = new Vector(outputVectorSettings),
 			outputCanvas = new Canvas(outputCanvasSettings),
-			outputTarget = new Target(targetSettings),
-			scoreTarget = new Target(scoreSettings);
+			outputTarget = new Target(targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -90,7 +81,6 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	scoreTarget.init();
 
 
 }

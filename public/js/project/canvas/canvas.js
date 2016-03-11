@@ -102,7 +102,7 @@ Canvas.prototype.loadArts = function() {
     // Maybe figure out a better place for this code later
     var defs = d3.select('#'+this.type+'-svg').append('defs')
                               .attr("id", "art-defs");
-    for (i = 1; i <= 10; i++) {
+    for (i = 1; i < 20; i++) {
       defs.append('pattern')
           .attr({
             "id": "tar" + i,
@@ -165,12 +165,14 @@ function updateOutputVector(d) {
 };
 
 function updateTargets(d) {
-  var x = d3.selectAll("circle").attr("cx"),
-      y = d3.selectAll("circle").attr("cy"),
-      r = d3.selectAll("circle").attr("r"),
+  var width = Number(d3.selectAll("rect").attr("width")),
+      height = Number(d3.selectAll("rect").attr("height")),
+      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
+      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
       i = applyMatrix(d.x,d.y);
-  if (isClose(i[0],i[1],x,y,r)) {
-    d3.selectAll("circle").remove();
+  if (isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    d3.selectAll("rect").remove();
+    console.log("ye")
     updateProgress();
     generateTarget([[1,3],[2,0]]);
   }
@@ -229,12 +231,8 @@ Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
 }
 
 
-function isClose(oX, oY, tX, tY, radius) {
-  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-  if (dist <= radius) {
-    return true;
-  }
-  return false;
+function isClose(oX, oY, tX, tY, xb, yb) {
+  return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 }
 
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -333,9 +331,9 @@ function generateTarget(matrix) {
       var targetSettings = {
       	x: newX,
       	y: newY,
-      	r: 20,
+      	width: 40,
+        height: 40,
       	color: "black",
-      	isScore: false
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
