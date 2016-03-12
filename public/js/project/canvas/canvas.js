@@ -11,9 +11,19 @@
   }
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
-// import vector.js
-var Vector = require('../actors/vector.js'),
-    Target = require('../actors/target.js');
+
+/* This file has the canvas class. In principle, the canvas class will only know its dimensions,
+ * where the math grid lies along it, and which HTML element is associated to it. It doesn't know
+ * any game logic. The member variable "type" tells which HTML element the canvas is associated to.
+ * For instance if type="input" then the element has ID #input-canvas. The functions in this class
+ * append svg tags inside the parent div tag, to draw things to the canvas.
+ *
+ * (Any code that doesn't do this should be moved to another file!)
+ *
+ * Cary
+ */
+var Sauron = require('../sauron/sauron.js'),
+    utils = require('../utilities/math.js');
 
 function Canvas(settings) {
   //input error handling
@@ -32,53 +42,130 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type";
 }
 
+// Return modified d3 drag listener
+// using this inside of return statement refers to d3, not Canvas
+// so, self = this is used to differentiate between canvas object and d3 object.
 Canvas.prototype.vectorDrag = function() {
-  var drag = d3.behavior.drag()
+  self = this;
+  return d3.behavior.drag()
               .on("dragstart", function (){
-                var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.sourceEvent.x,
-                  y: d3.event.sourceEvent.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                updateInputVector(d);
-                updateOutputVector(d);
-                updateTargets(d);
+                Sauron.tellSauron(self.getD());
               })
-              .on("drag", function(d) {
-              var d = {
-              // id: this.type+"-vector"
-                  x: d3.event.x,
-                  y: d3.event.y
-                };
-                // in theory this would be Vector.updateInputVector(d);
-                updateInputVector(d);
-                updateOutputVector(d);
-                updateTargets(d);
+              .on("drag", function() {
+                Sauron.tellSauron(self.getD());
               });
-
-    return drag;
 };
 
-Canvas.prototype.drawCanvas = function() {
-  if(this.type) {
-      var canvas = d3.select('#'+this.type+'-canvas').append('svg')
-                     .attr({
-                       id: this.type+"-svg",
+// Return JS object with (x,y) coords of current d3 event
+Canvas.prototype.getD = function() {
+  return {
+    x: d3.event.sourceEvent.x,
+    y: d3.event.sourceEvent.y
+  }
+};
+
+// returns div DOM element associated to the canvas
+Canvas.prototype.getCanvas = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-canvas');
+};
+
+// returns SVG DOM element associated with
+Canvas.prototype.getSvg = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-svg');
+};
+
+// returns svg def associated with the instance type
+// not quite sure what a def is...
+// let's ask Z because he wrote the code to generate the oil cans
+Canvas.prototype.getDefs = function(type) {
+  var id = type || this.type;
+  return d3.select('#'+id+'-defs');
+};
+
+// See Z on purpose of tar_img
+Canvas.prototype.getTar = function(id) {
+  return d3.select('#tar' + id);
+};
+
+// Appends SVG DOM element to a div.
+Canvas.prototype.appendSvg = function(type) {
+  var id = type || this.type;
+  var canvas = this.getCanvas(id).append('svg')
+                .attr({
+                       id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-      if(this.type === "input")
-        canvas.call(this.vectorDrag());
-      // remove this and notify eye of sauron instead
-      // updateLog(d) as example
+};
+
+// Adds image on top of Circle (Target).
+// To randomize targets write function to randomly grab a .gif from ../public/img/*
+Canvas.prototype.appendImageToPattern = function() {
+  for(i = 1; i < 20; i++) {
+    var tar = this.getTar(i);
+    tar.append('image')
+     .attr({
+       "x": "0",
+       "y": "0",
+       "width": "40",
+       "height": "40",
+       "xlink:href": "../public/img/items/target" + i + ".gif"
+     });
   }
-  else {
-    console.log("Invalid canvas type: ",this.type)
+
+};
+
+// grabs def elemetn and appends a pattern on it to prep us to add imag
+Canvas.prototype.appendPatternToDefs = function() {
+  var defs = this.getDefs();
+  for(i = 1; i < 20; i++) {
+    defs.append('pattern')
+              .attr({
+                "id": "tar" + i,
+                "x": "0",
+                "y": "0",
+                "height": "40",
+                "width": "40"
+              });
   }
 };
 
+// grabs svg and adds def to it
+Canvas.prototype.appendDefsToSvg = function(){
+  var svg = this.getSvg();
+   svg.append('defs')
+      .attr("id", "output-defs");
+};
 
+// Draw our canvas depending on the type
+// adds listener to input canvas
+// draws targets on output
+Canvas.prototype.drawCanvas = function() {
+  if(!this.type) {
+    console.log('Invalid Canvas Type')
+    return;
+  }
+  // append a svg to the canvas
+  this.appendSvg();
+  // add drag functionality to vector
+  if(this.type === "input") {
+    this.getCanvas().call(this.vectorDrag());
+  }
+  else if(this.type === "output") {
+    this.drawTargetsOnCanvas();
+  }
+};
+
+// Wrapper function for drawing targets
+Canvas.prototype.drawTargetsOnCanvas = function() {
+  this.appendDefsToSvg();
+  this.appendPatternToDefs();
+  this.appendImageToPattern();
+};
+
+// Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
@@ -96,174 +183,36 @@ Canvas.prototype.drawProgressBar = function() {
          .text("0% Complete");
 }
 
-Canvas.prototype.loadArts = function() {
-  if(this.type === "output") {
-    // Define defs to store target image pattern
-    // Maybe figure out a better place for this code later
-    var defs = d3.select('#'+this.type+'-svg').append('defs')
-                              .attr("id", "art-defs");
-    for (i = 1; i < 20; i++) {
-      defs.append('pattern')
-          .attr({
-            "id": "tar" + i,
-            "x": "0",
-            "y": "0",
-            "height": "40",
-            "width": "40"
-          });
-      d3.select('#tar' + i).append('image')
-                           .attr({
-                             "x": "0",
-                             "y": "0",
-                             "width": "40",
-                             "height": "40",
-                             "xlink:href": "../public/img/items/target" + i + ".gif"
-                           });
-    }
-    defs.append('pattern')
-        .attr({
-          "id": "arm",
-          "x": "0",
-          "y": "0",
-          "height": "100%",
-          "width": "100%"
-        });
-    d3.select('#tar' + i).append('image')
-                         .attr({
-                           "x": "0",
-                           "y": "0",
-                           "width": "20",
-                           "height": "20",
-                           "xlink:href": "../public/img/robotarm.gif"
-                         });
-  }
-}
-
-function updateInputVector(d){
-// redraw input vector
-  d3.select('#input-vector').remove();
-  d3.select('#input-svg').append('path')
-    .attr({
-      "stroke": "red",
-      "stroke-width":"5",
-      "d": "M 250 250 L"+d.x+" "+d.y+"z",
-      "id": 'input-vector'
-  });
-};
-
-function updateOutputVector(d) {
-  var i = applyMatrix(d.x,d.y);
-  d3.select('#output-vector').remove();
-  d3.select('#output-svg').append('path')
-    .attr({
-      "stroke": "red",
-      "stroke-width":"4",
-      //"fill": "/path/to/here",
-      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-      "id": 'output-vector'
-  });
-};
-
-function updateTargets(d) {
-  var width = Number(d3.selectAll("rect").attr("width")),
-      height = Number(d3.selectAll("rect").attr("height")),
-      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
-      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
-      i = applyMatrix(d.x,d.y);
-  if (isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    d3.selectAll("rect").remove();
-    console.log("ye")
-    updateProgress();
-    generateTarget([[1,3],[2,0]]);
-  }
-}
-
-function updateProgress() {
-    var bar = d3.select('#progressbar'),
-        score = d3.select('#score');
-        curr = bar.attr("aria-valuenow");
-        if (Number(curr) >= 100) {
-          curr = 100;
-          score.text("Proceed To Next Level!");
-        }
-        else {
-          curr = Number(curr) + 5;
-          score.text(curr + "% Complete");
-        }
-
-        bar.style("width", curr + "%");
-        bar.attr("aria-valuenow", curr);
-}
-
-/**
-*
-*
-*/
-Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
-  var start_x = oldVector.x,
-      start_y = oldVector.y,
-      end_x = newVector.x,
-      end_y = newVector.y,
-      results = [];
-  for (i = 0; i < targets.length; i++) {
-    var tar_x = targets[i].x,
-        tar_y = targets[i].y;
-    //10 pixels is from Joseph's old settings
-    if (isClose(end_x,end_y,tar_x,tar_y,10)) {
-      results[i] = true;
-    }
-    else {
-      var param =(tar_x - start_x) * (end_x - start_x) + (tar_y - start_y) * (end_y - start_y);
-      var temp = Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2);
-      param /= temp;
-      var dis_x = start_x + param * (end_x - start_x);
-      var dis_y = start_y + param * (end_y - start_y);
-      //10 pixels is from Joseph's old settings
-      if (isClose(dis_x,dis_y,tar_x,tar_y,10)) {
-        results[i] = true;
-      }
-      else {
-        results[i] = false;
-      }
-    }
-  }
-  return results;
-}
-
-
-function isClose(oX, oY, tX, tY, xb, yb) {
-  return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
-}
-
+// Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
-    if (isClose(targetX, targetY, 500)) {
+    if (utils.isClose(targetX, targetY, 500)) {
       target.updateColor('#e5e5ff', target.id);
     }
-    else if (isClose(targetX, targetY, 450)) {
+    else if (utils.isClose(targetX, targetY, 450)) {
       target.updateColor('#ccccff', target.id);
     }
-    else if (isClose(targetX, targetY, 400)) {
+    else if (utils.isClose(targetX, targetY, 400)) {
       target.updateColor('#b2b2ff', target.id);
     }
-    else if (isClose(targetX, targetY, 350)) {
+    else if (utils.isClose(targetX, targetY, 350)) {
       target.updateColor('#9999ff', target.id);
     }
-    else if (isClose(targetX, targetY, 300)) {
+    else if (utils.isClose(targetX, targetY, 300)) {
       target.updateColor('#7f7fff', target.id);
     }
-    else if (isClose(targetX, targetY, 250)) {
+    else if (utils.isClose(targetX, targetY, 250)) {
       target.updateColor('#6666ff', target.id);
     }
-    else if (isClose(targetX, targetY, 200)) {
+    else if (utils.isClose(targetX, targetY, 200)) {
       target.updateColor('#4c4cff', target.id);
     }
-    else if (isClose(targetX, targetY, 150)) {
+    else if (utils.isClose(targetX, targetY, 150)) {
       target.updateColor('#3232ff', target.id);
     }
-    else if (isClose(targetX, targetY, 100)) {
+    else if (utils.isClose(targetX, targetY, 100)) {
       target.updateColor('#1919ff', target.id);
     }
-    else if (isClose(targetX, targetY, 50)) {
+    else if (utils.isClose(targetX, targetY, 50)) {
       target.updateColor('#0000ff', target.id);
     }
   }
@@ -282,63 +231,5 @@ Canvas.prototype.drawTarget = function(target) {
       color: target.color
     });
 };
-
-Canvas.prototype.drawTargets = function(targets) {
-  // just a for loop with drawTarget
-  for( var i = 0; i < targets.length; i++ ) {
-    drawTarget(targets[i]);
-  }
-};
-
-Canvas.prototype.checkProximity = function(vector, target) {
-  return this.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
-}
-
-function screenToMath(x,y) {
-  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
-}
-
-function mathToScreen(x,y) {
-  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
-}
-
-function applyMatrix(sX,sY,matrix) {
-  var matrix = matrix || [[1,3],[2,0]];
-  var math_coord = screenToMath(sX,sY),
-      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return mathToScreen(applied_coord[0],applied_coord[1]);
-}
-
-function getRandom(min,max) {
-  return Math.random() * (max - min) + min;
-}
-
-function generateTarget(matrix) {
-  var legal = false,
-      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-  var newX, newY;
-
-  while (!legal) {
-    newX = getRandom(0,500);
-    newY = getRandom(0,500);
-    var pre = screenToMath(newX,newY);
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
-        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
-    pre = mathToScreen(prex,prey);
-
-    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-      legal = true;
-      var targetSettings = {
-      	x: newX,
-      	y: newY,
-      	width: 40,
-        height: 40,
-      	color: "black",
-      };
-      var newTarget = new Target(targetSettings);
-      newTarget.drawTarget();
-    }
-  }
-}
 
 module.exports = Canvas;

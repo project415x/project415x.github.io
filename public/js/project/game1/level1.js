@@ -24,10 +24,10 @@ function startLevel1() {
 		matrix = [[2,1],[1,-1]],
 		score = 0,
 		inputVector = vector(),
-		oldOutputVector = vector(), 
+		oldOutputVector = vector(),
 		outputVector = vector(),
 		targets = [target(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9))];
-		// change math to our 
+		// change math to our
 
 	function updateLevel1(event) {
 

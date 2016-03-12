@@ -24,13 +24,12 @@ function Target(settings) {
 
 Target.prototype.updateColor = function(dist, n) {
 		this.color = dist;
-		// select specific target
-		// change color attribute
-}
+};
 
 Target.prototype.init = function() {
 		this.drawTarget();
-}
+};
+
 
 Target.prototype.drawTarget = function() {
 	var score = 0,
@@ -43,8 +42,10 @@ Target.prototype.drawTarget = function() {
 			"width": this.width,
 			"height": this.height
 		})
+
 	var tar_num = Math.floor(Math.random() * 19) + 1;
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
-}
+};
+
 
 module.exports = Target;
