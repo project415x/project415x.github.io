@@ -7,12 +7,12 @@ function Sauron(setting) {
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
-// Returns LinearTransformationScreen(x,y) coordinates 
+// Returns LinearTransformationScreen(x,y) coordinates
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron destroys a vector and creates a new one
@@ -47,12 +47,13 @@ Sauron.prototype.updateOutputVector = function(d) {
 
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
-  var x = d3.selectAll("circle").attr("cx"),
-      y = d3.selectAll("circle").attr("cy"),
-      r = d3.selectAll("circle").attr("r"),
-      i = this.applyTransformation(d.x,d.y);
-  if (util.isClose(i[0],i[1],x,y,r)) {
-    d3.selectAll("circle").remove();
+	var width = Number(d3.selectAll("rect").attr("width")),
+      height = Number(d3.selectAll("rect").attr("height")),
+      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
+      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
+      i = util.applyMatrix(d.x,d.y);
+  if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
   }
@@ -65,12 +66,12 @@ Sauron.prototype.tellSauron = function(d) {
   this.updateTargets(d);
 };
 
-// Strategy 
+// Strategy
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron alerts his generals of the new progress
@@ -110,9 +111,9 @@ Sauron.prototype.generateTarget = function(matrix) {
       var targetSettings = {
       	x: newX,
       	y: newY,
-      	r: 20,
-      	color: "black",
-      	isScore: false
+      	width: 40,
+				height: 40,
+      	color: "black"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -127,7 +128,7 @@ module.exports = new Sauron();
 // 	  var matrix = matrix || [[1,3],[2,0]];
 // 	  var math_coord = util.screenToMath(sX,sY),
 // 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 // 	},
 
 // 	updateInputVector: function(d) {

@@ -14,9 +14,9 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates. 
-// These should be math coordinates. 
-// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, 
+// Really the vector shouldn't know about its screen coordinates.
+// These should be math coordinates.
+// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates,
 // *for that canvas*.
 function Vector(settings) {
 	this.head = {

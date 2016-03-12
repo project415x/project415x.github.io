@@ -1,8 +1,8 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./playgroundConfig');
+		Sauron = require('../sauron/sauron.js');
+		config = require('../level/playgroundConfig');
 
 function initPlayground() {
 	// Create objects needed for game

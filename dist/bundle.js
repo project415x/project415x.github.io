@@ -14,13 +14,13 @@
 function Target(settings) {
 	this.x = settings.x || 300;
 	this.y = settings.y || 300;
-	this.r = settings.r || 15;
+	this.width = settings.width || 40;
+	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
 	// No need for color if we use image pattern as fill
 	// this.color = settings.color || '#FF0000';
 	// test
 	this.type = settings.type || "output";
-	this.isScore = settings.isScore || false;
 }
 
 Target.prototype.updateColor = function(dist, n) {
@@ -28,30 +28,29 @@ Target.prototype.updateColor = function(dist, n) {
 };
 
 Target.prototype.init = function() {
-	if(this.isScore) {
-	}
-	else {
 		this.drawTarget();
-	}
 };
+
 
 Target.prototype.drawTarget = function() {
-	var score = 0;
-	var circle = d3.select('#'+this.type+'-svg').append("circle")
+	var score = 0,
+	 		real_x = this.x - this.width / 2,
+			real_y = this.y - this.height / 2;
+	var rect = d3.select('#'+this.type+'-svg').append("rect")
 		.attr({
-			"cx": this.x,
-			"cy": this.y,
-			"r": this.r
+			"x": real_x,
+			"y": real_y,
+			"width": this.width,
+			"height": this.height
 		})
-		.style({"fill": "url(#tar_img)"});
 
-	if(this.isScore) {
-		circle.append("text")
-			.text("Score ")
-	}
+	var tar_num = Math.floor(Math.random() * 19) + 1;
+	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
+
 module.exports = Target;
+
 },{}],2:[function(require,module,exports){
 /**
 VECTOR constuctor
@@ -69,9 +68,9 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates. 
-// These should be math coordinates. 
-// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates, 
+// Really the vector shouldn't know about its screen coordinates.
+// These should be math coordinates.
+// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates,
 // *for that canvas*.
 function Vector(settings) {
 	this.head = {
@@ -127,6 +126,7 @@ Vector.prototype.generatePath = function() {
 };
 
 module.exports = Vector;
+
 },{}],3:[function(require,module,exports){
 /**
 * CLASS CONSTRUCTOR
@@ -142,6 +142,16 @@ module.exports = Vector;
 * USAGE: var inputCanvas = Canvas(inputCanvasSettings);
 */
 
+/* This file has the canvas class. In principle, the canvas class will only know its dimensions,
+ * where the math grid lies along it, and which HTML element is associated to it. It doesn't know
+ * any game logic. The member variable "type" tells which HTML element the canvas is associated to.
+ * For instance if type="input" then the element has ID #input-canvas. The functions in this class
+ * append svg tags inside the parent div tag, to draw things to the canvas.
+ *
+ * (Any code that doesn't do this should be moved to another file!)
+ *
+ * Cary
+ */
 var Sauron = require('../sauron/sauron.js'),
     utils = require('../utilities/math.js');
 
@@ -164,7 +174,7 @@ function Canvas(settings) {
 
 // Return modified d3 drag listener
 // using this inside of return statement refers to d3, not Canvas
-// so, self = this is used to differentiate between canvas object and d3 object. 
+// so, self = this is used to differentiate between canvas object and d3 object.
 Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
@@ -184,20 +194,20 @@ Canvas.prototype.getD = function() {
   }
 };
 
-// returns div DOM element associated to the canvas 
+// returns div DOM element associated to the canvas
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-canvas');
 };
 
-// returns SVG DOM element associated with 
+// returns SVG DOM element associated with
 Canvas.prototype.getSvg = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-svg');
 };
 
 // returns svg def associated with the instance type
-// not quite sure what a def is... 
+// not quite sure what a def is...
 // let's ask Z because he wrote the code to generate the oil cans
 Canvas.prototype.getDefs = function(type) {
   var id = type || this.type;
@@ -205,8 +215,8 @@ Canvas.prototype.getDefs = function(type) {
 };
 
 // See Z on purpose of tar_img
-Canvas.prototype.getTar = function() {
-  return d3.select('#tar_img');
+Canvas.prototype.getTar = function(id) {
+  return d3.select('#tar' + id);
 };
 
 // Appends SVG DOM element to a div.
@@ -223,28 +233,33 @@ Canvas.prototype.appendSvg = function(type) {
 // Adds image on top of Circle (Target).
 // To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
-  var tar = this.getTar();
-  tar.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "40",
-     "height": "40",
-     "xlink:href": "../public/img/target.gif"
-   });
+  for(i = 1; i < 20; i++) {
+    var tar = this.getTar(i);
+    tar.append('image')
+     .attr({
+       "x": "0",
+       "y": "0",
+       "width": "40",
+       "height": "40",
+       "xlink:href": "../public/img/items/target" + i + ".gif"
+     });
+  }
+
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
-  defs.append('pattern')
-            .attr({
-              "id": "tar_img",
-              "x": "0",
-              "y": "0",
-              "height": "40",
-              "width": "40"
-            });
+  for(i = 1; i < 20; i++) {
+    defs.append('pattern')
+              .attr({
+                "id": "tar" + i,
+                "x": "0",
+                "y": "0",
+                "height": "40",
+                "width": "40"
+              });
+  }
 };
 
 // grabs svg and adds def to it
@@ -264,14 +279,13 @@ Canvas.prototype.drawCanvas = function() {
   }
   // append a svg to the canvas
   this.appendSvg();
-
   // add drag functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
   }
   else if(this.type === "output") {
     this.drawTargetsOnCanvas();
-  } 
+  }
 };
 
 // Wrapper function for drawing targets
@@ -297,42 +311,7 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-};
-
-/**
-* Currently not being used... Let's figure out if we need it.
-*
-*/
-Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
-  var start_x = oldVector.x,
-      start_y = oldVector.y,
-      end_x = newVector.x,
-      end_y = newVector.y,
-      results = [];
-  for (i = 0; i < targets.length; i++) {
-    var tar_x = targets[i].x,
-        tar_y = targets[i].y;
-    //10 pixels is from Joseph's old settings
-    if (utils.isClose(end_x,end_y,tar_x,tar_y,10)) {
-      results[i] = true;
-    }
-    else {
-      var param =(tar_x - start_x) * (end_x - start_x) + (tar_y - start_y) * (end_y - start_y);
-      var temp = Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2);
-      param /= temp;
-      var dis_x = start_x + param * (end_x - start_x);
-      var dis_y = start_y + param * (end_y - start_y);
-      //10 pixels is from Joseph's old settings
-      if (utils.isClose(dis_x,dis_y,tar_x,tar_y,10)) {
-        results[i] = true;
-      }
-      else {
-        results[i] = false;
-      }
-    }
-  }
-  return results;
-};
+}
 
 // Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -383,11 +362,8 @@ Canvas.prototype.drawTarget = function(target) {
     });
 };
 
-Canvas.prototype.checkProximity = function(vector, target) {
-  return utils.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
-}
-
 module.exports = Canvas;
+
 },{"../sauron/sauron.js":8,"../utilities/math.js":9}],4:[function(require,module,exports){
 function startLevel1() {
 
@@ -415,10 +391,10 @@ function startLevel1() {
 		matrix = [[2,1],[1,-1]],
 		score = 0,
 		inputVector = vector(),
-		oldOutputVector = vector(), 
+		oldOutputVector = vector(),
 		outputVector = vector(),
 		targets = [target(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9))];
-		// change math to our 
+		// change math to our
 
 	function updateLevel1(event) {
 
@@ -465,6 +441,7 @@ function startLevel1() {
 	function randomizeTarget(target) {
 		target.update(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9));
 	}
+
 },{}],5:[function(require,module,exports){
 /**
 * Level Tracking
@@ -518,8 +495,8 @@ setTimeout(function() {
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./playgroundConfig');
+		Sauron = require('../sauron/sauron.js');
+		config = require('../level/playgroundConfig');
 
 function initPlayground() {
 	// Create objects needed for game
@@ -549,7 +526,7 @@ function startPlayground() {
 // think of this as the main function :)
 startPlayground();
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":8,"./playgroundConfig":7}],7:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":7,"../sauron/sauron.js":8}],7:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -616,12 +593,12 @@ function Sauron(setting) {
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
-// Returns LinearTransformationScreen(x,y) coordinates 
+// Returns LinearTransformationScreen(x,y) coordinates
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron destroys a vector and creates a new one
@@ -656,12 +633,13 @@ Sauron.prototype.updateOutputVector = function(d) {
 
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
-  var x = d3.selectAll("circle").attr("cx"),
-      y = d3.selectAll("circle").attr("cy"),
-      r = d3.selectAll("circle").attr("r"),
-      i = this.applyTransformation(d.x,d.y);
-  if (util.isClose(i[0],i[1],x,y,r)) {
-    d3.selectAll("circle").remove();
+	var width = Number(d3.selectAll("rect").attr("width")),
+      height = Number(d3.selectAll("rect").attr("height")),
+      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
+      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
+      i = util.applyMatrix(d.x,d.y);
+  if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
   }
@@ -674,12 +652,12 @@ Sauron.prototype.tellSauron = function(d) {
   this.updateTargets(d);
 };
 
-// Strategy 
+// Strategy
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron alerts his generals of the new progress
@@ -719,9 +697,9 @@ Sauron.prototype.generateTarget = function(matrix) {
       var targetSettings = {
       	x: newX,
       	y: newY,
-      	r: 20,
-      	color: "black",
-      	isScore: false
+      	width: 40,
+				height: 40,
+      	color: "black"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -736,7 +714,7 @@ module.exports = new Sauron();
 // 	  var matrix = matrix || [[1,3],[2,0]];
 // 	  var math_coord = util.screenToMath(sX,sY),
 // 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);  
+// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 // 	},
 
 // 	updateInputVector: function(d) {
@@ -781,9 +759,10 @@ module.exports = new Sauron();
 // 	  this.updateTargets(d);
 // 	}
 // };
+
 },{"../actors/target.js":1,"../utilities/math.js":9}],9:[function(require,module,exports){
 module.exports = {
-	
+
 	screenToMath: function(x,y) {
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
@@ -794,21 +773,18 @@ module.exports = {
 
 	applyMatrix: function(sX,sY,matrix) {
 	  var matrix = matrix || [[1,3],[2,0]];
-	  var math_coord = screenToMath(sX,sY),
+	  var math_coord = this.screenToMath(sX,sY),
 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return mathToScreen(applied_coord[0],applied_coord[1]);
+	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
 	},
 
 	getRandom: function(min,max) {
 	  return Math.random() * (max - min) + min;
 	},
-	
-	isClose: function(oX, oY, tX, tY, radius) {
-  var dist = Math.sqrt(Math.pow((tX - oX),2) + Math.pow((tY - oY),2));
-  if (dist <= radius) {
-    return true;
-  }
-  	return false;
+
+	isClose: function(oX, oY, tX, tY, xb, yb) {
+  	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	}
 };
+
 },{}]},{},[1,2,3,4,5,6,7,8,9]);

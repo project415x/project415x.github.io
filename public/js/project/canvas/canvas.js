@@ -17,9 +17,9 @@
  * any game logic. The member variable "type" tells which HTML element the canvas is associated to.
  * For instance if type="input" then the element has ID #input-canvas. The functions in this class
  * append svg tags inside the parent div tag, to draw things to the canvas.
- * 
+ *
  * (Any code that doesn't do this should be moved to another file!)
- * 
+ *
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
@@ -44,7 +44,7 @@ function Canvas(settings) {
 
 // Return modified d3 drag listener
 // using this inside of return statement refers to d3, not Canvas
-// so, self = this is used to differentiate between canvas object and d3 object. 
+// so, self = this is used to differentiate between canvas object and d3 object.
 Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
@@ -64,20 +64,20 @@ Canvas.prototype.getD = function() {
   }
 };
 
-// returns div DOM element associated to the canvas 
+// returns div DOM element associated to the canvas
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-canvas');
 };
 
-// returns SVG DOM element associated with 
+// returns SVG DOM element associated with
 Canvas.prototype.getSvg = function(type) {
   var id = type || this.type;
   return d3.select('#'+id+'-svg');
 };
 
 // returns svg def associated with the instance type
-// not quite sure what a def is... 
+// not quite sure what a def is...
 // let's ask Z because he wrote the code to generate the oil cans
 Canvas.prototype.getDefs = function(type) {
   var id = type || this.type;
@@ -85,8 +85,8 @@ Canvas.prototype.getDefs = function(type) {
 };
 
 // See Z on purpose of tar_img
-Canvas.prototype.getTar = function() {
-  return d3.select('#tar_img');
+Canvas.prototype.getTar = function(id) {
+  return d3.select('#tar' + id);
 };
 
 // Appends SVG DOM element to a div.
@@ -103,28 +103,33 @@ Canvas.prototype.appendSvg = function(type) {
 // Adds image on top of Circle (Target).
 // To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
-  var tar = this.getTar();
-  tar.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "40",
-     "height": "40",
-     "xlink:href": "../public/img/target.gif"
-   });
+  for(i = 1; i < 20; i++) {
+    var tar = this.getTar(i);
+    tar.append('image')
+     .attr({
+       "x": "0",
+       "y": "0",
+       "width": "40",
+       "height": "40",
+       "xlink:href": "../public/img/items/target" + i + ".gif"
+     });
+  }
+
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
-  defs.append('pattern')
-            .attr({
-              "id": "tar_img",
-              "x": "0",
-              "y": "0",
-              "height": "40",
-              "width": "40"
-            });
+  for(i = 1; i < 20; i++) {
+    defs.append('pattern')
+              .attr({
+                "id": "tar" + i,
+                "x": "0",
+                "y": "0",
+                "height": "40",
+                "width": "40"
+              });
+  }
 };
 
 // grabs svg and adds def to it
@@ -144,14 +149,13 @@ Canvas.prototype.drawCanvas = function() {
   }
   // append a svg to the canvas
   this.appendSvg();
-
   // add drag functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
   }
   else if(this.type === "output") {
     this.drawTargetsOnCanvas();
-  } 
+  }
 };
 
 // Wrapper function for drawing targets
@@ -177,42 +181,7 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-};
-
-/**
-* Currently not being used... Let's figure out if we need it.
-*
-*/
-Canvas.prototype.checkCollisions = function(oldVector,newVector,targets) {
-  var start_x = oldVector.x,
-      start_y = oldVector.y,
-      end_x = newVector.x,
-      end_y = newVector.y,
-      results = [];
-  for (i = 0; i < targets.length; i++) {
-    var tar_x = targets[i].x,
-        tar_y = targets[i].y;
-    //10 pixels is from Joseph's old settings
-    if (utils.isClose(end_x,end_y,tar_x,tar_y,10)) {
-      results[i] = true;
-    }
-    else {
-      var param =(tar_x - start_x) * (end_x - start_x) + (tar_y - start_y) * (end_y - start_y);
-      var temp = Math.pow((end_x - start_x),2) + Math.pow((end_y - start_y),2);
-      param /= temp;
-      var dis_x = start_x + param * (end_x - start_x);
-      var dis_y = start_y + param * (end_y - start_y);
-      //10 pixels is from Joseph's old settings
-      if (utils.isClose(dis_x,dis_y,tar_x,tar_y,10)) {
-        results[i] = true;
-      }
-      else {
-        results[i] = false;
-      }
-    }
-  }
-  return results;
-};
+}
 
 // Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -262,9 +231,5 @@ Canvas.prototype.drawTarget = function(target) {
       color: target.color
     });
 };
-
-Canvas.prototype.checkProximity = function(vector, target) {
-  return utils.isClose(vector.head.x, vector.head.y, target.x, target.y, target.r);
-}
 
 module.exports = Canvas;
