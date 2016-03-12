@@ -28,7 +28,7 @@ function Vector(settings) {
 		x: settings.tail.x || 250,
 		y: settings.tail.y || 250
 	}
-	this.color = settings.color || "red";
+	this.color = settings.color || "#92989F";
 	this.type = settings.type || "input";
 	this.stroke = settings.stroke || 5;
 };

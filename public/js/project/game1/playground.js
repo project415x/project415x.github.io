@@ -23,6 +23,7 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
+	console.log(outputVector.color)
 }
 
 function startPlayground() {

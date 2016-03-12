@@ -82,7 +82,7 @@ function Vector(settings) {
 		x: settings.tail.x || 250,
 		y: settings.tail.y || 250
 	}
-	this.color = settings.color || "red";
+	this.color = settings.color || "#92989F";
 	this.type = settings.type || "input";
 	this.stroke = settings.stroke || 5;
 };
@@ -517,6 +517,7 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
+	console.log(outputVector.color)
 }
 
 function startPlayground() {
@@ -606,7 +607,7 @@ Sauron.prototype.updateInputVector = function(d){
   this.removeVector('input');
   d3.select('#input-svg').append('path')
     .attr({
-      "stroke": "red",
+      "stroke": "#31BA29",
       "stroke-width":"4",
       "d": "M 250 250 L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
@@ -624,8 +625,8 @@ Sauron.prototype.updateOutputVector = function(d) {
   this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
-      "stroke": "red",
-      "stroke-width":"4",
+      "stroke": "#92989F",
+      "stroke-width":"5",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
