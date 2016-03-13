@@ -179,18 +179,18 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               })
               .on("drag", function() {
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               });
 };
 
 // Return JS object with (x,y) coords of current d3 event
 Canvas.prototype.getD = function() {
   return {
-    x: d3.event.sourceEvent.x,
-    y: d3.event.sourceEvent.y
+    x: d3.mouse(this)[0],
+    y: d3.mouse(this)[1]
   }
 };
 
@@ -673,10 +673,18 @@ Sauron.prototype.updateTargets = function(d) {
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(d) {
+Sauron.prototype.tellSauron = function(event) {
+	var d = this.convertMouseToCoord(event);
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
+};
+
+Sauron.prototype.convertMouseToCoord = function(event) {
+	return {
+		x: event[0],
+		y: event[1]
+	}
 };
 
 // Strategy
