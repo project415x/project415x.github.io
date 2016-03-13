@@ -186,14 +186,6 @@ Canvas.prototype.vectorDrag = function() {
               });
 };
 
-// Return JS object with (x,y) coords of current d3 event
-Canvas.prototype.getD = function() {
-  return {
-    x: d3.mouse(this)[0],
-    y: d3.mouse(this)[1]
-  }
-};
-
 // returns div DOM element associated to the canvas
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
