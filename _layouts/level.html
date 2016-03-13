@@ -3,84 +3,12 @@ layout: minimum
 ---
 
 
-
-<!-- TODO: Make sure that the styling will be in a SCSS file -->
-<style>
-	.arrow {
-		margin-top: 5vh;
-		font-family: 'Glyphicons Halflings';
-		font-size: 100px !important;
-		color: #CCCCCC !important;
-	}
-
-	canvas {
-		margin-top: 9vh;
-	}
-
-	.btn-gray {
-		background-color: #CCCCCC;
-	}
-
-	.btn-gray:hover {
-		background-color: #CCCCCC;
-		opacity: 0.75;
-	}
-
-	.btn-gray:focus,
-	.btn-gray:active {
-		/*opacity: 0.90;*/
-		background-color: orange;
-		color: #FFFFFF;
-	}
-
-	.input-matrix {
-		width: 50px;
-		display: inline-block;
-	}
-
-  h3 {
-    font-family: 'Press Start 2P', sans-serif;
-    font-size: 24px;
-  }
-</style>
-
 <!-- Configurations -->
 <script type="text/javascript">
 	
-	// The input variable is modified by inputCanvas.js, and read by outputCanvas.js.
-	var input = {};
-	var matrix = [
-		[2, 1],
-		[1, -1]
-	];
 	var levelScore;
 	var inputEvent;
 	var gameMode;
-
-	// Updates the matrix and/or the game mode.
-	function updateMatrix(mode) {
-		/**
-		 * Game Modes
-		 * 0 - Default
-		 * 1 - XY-Axes
-		 * 2 - Straight Line
-		 * 3 - Circle
-		 * 4 - Shooting Gallery
-		 */
-
-		 gameMode = mode ? mode : 0;
-		 console.log("gameMode: " + mode);
-
-		var m00 = document.getElementById('matrix00').value ? document.getElementById('matrix00').value : matrix[0][0];
-		var m01 = document.getElementById('matrix01').value ? document.getElementById('matrix01').value : matrix[0][1];
-		var m10 = document.getElementById('matrix10').value ? document.getElementById('matrix10').value : matrix[1][0];
-		var m11 = document.getElementById('matrix11').value ? document.getElementById('matrix11').value : matrix[1][1];
-
-		matrix = [
-			[m00, m01],
-			[m10, m11]
-		];
-	}
 
 	// Set gameMode to 0 if it isn't defined (I think) -Cary
 	gameMode = gameMode ? gameMode : 0;
