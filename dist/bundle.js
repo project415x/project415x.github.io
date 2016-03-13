@@ -517,16 +517,42 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	console.log(outputVector.color)
 }
 
-function startPlayground() {
+
+// think of this as the main function :)
+startPlayground = function startPlayground() {
 	initPlayground();
 }
 
-// think of this as the main function :)
-startPlayground();
+module.exports = {
 
+	initPlayground: function() {
+		// Create objects needed for game
+		var inputCanvas = new Canvas(config.inputCanvasSettings),
+				inputVector = new Vector(config.inputVectorSettings),
+				outputVector = new Vector(config.outputVectorSettings),
+				outputCanvas = new Canvas(config.outputCanvasSettings),
+				outputTarget = new Target(config.targetSettings);
+
+		// draw grid(s)
+		inputCanvas.drawCanvas();
+		outputCanvas.drawCanvas();
+		outputCanvas.drawProgressBar();
+
+		// draw vector(s)
+		inputVector.init();
+		outputVector.init();
+
+		// generate target(s)
+		outputTarget.init()
+	},
+
+	startPlayground: function() {
+		this.initPlayground();
+	}
+	
+};
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":7,"../sauron/sauron.js":8}],7:[function(require,module,exports){
 module.exports = {
 
