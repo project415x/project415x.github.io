@@ -5,7 +5,7 @@ var gulp = require('gulp'),
 		glob = require('glob'),
 		browserify = require('browserify');
 
-gulp.task('browserify', function() {
+gulp.task('default', function() {
 	var files = glob.sync('./public/js/project/**/*.js')
 	browserify(files)
 		.bundle()

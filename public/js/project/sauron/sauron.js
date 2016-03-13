@@ -60,10 +60,18 @@ Sauron.prototype.updateTargets = function(d) {
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(d) {
+Sauron.prototype.tellSauron = function(event) {
+	var d = this.convertMouseToCoord(event);
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
+};
+
+Sauron.prototype.convertMouseToCoord = function(event) {
+	return {
+		x: event[0],
+		y: event[1]
+	}
 };
 
 // Strategy

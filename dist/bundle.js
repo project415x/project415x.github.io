@@ -179,18 +179,18 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               })
               .on("drag", function() {
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               });
 };
 
 // Return JS object with (x,y) coords of current d3 event
 Canvas.prototype.getD = function() {
   return {
-    x: d3.event.sourceEvent.x,
-    y: d3.event.sourceEvent.y
+    x: d3.mouse(this)[0],
+    y: d3.mouse(this)[1]
   }
 };
 
@@ -517,16 +517,42 @@ function initPlayground() {
 
 	// generate target(s)
 	outputTarget.init()
-	console.log(outputVector.color)
 }
 
-function startPlayground() {
+
+// think of this as the main function :)
+startPlayground = function startPlayground() {
 	initPlayground();
 }
 
-// think of this as the main function :)
-startPlayground();
+module.exports = {
 
+	initPlayground: function() {
+		// Create objects needed for game
+		var inputCanvas = new Canvas(config.inputCanvasSettings),
+				inputVector = new Vector(config.inputVectorSettings),
+				outputVector = new Vector(config.outputVectorSettings),
+				outputCanvas = new Canvas(config.outputCanvasSettings),
+				outputTarget = new Target(config.targetSettings);
+
+		// draw grid(s)
+		inputCanvas.drawCanvas();
+		outputCanvas.drawCanvas();
+		outputCanvas.drawProgressBar();
+
+		// draw vector(s)
+		inputVector.init();
+		outputVector.init();
+
+		// generate target(s)
+		outputTarget.init()
+	},
+
+	startPlayground: function() {
+		this.initPlayground();
+	}
+	
+};
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":7,"../sauron/sauron.js":8}],7:[function(require,module,exports){
 module.exports = {
 
@@ -647,10 +673,18 @@ Sauron.prototype.updateTargets = function(d) {
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(d) {
+Sauron.prototype.tellSauron = function(event) {
+	var d = this.convertMouseToCoord(event);
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
+};
+
+Sauron.prototype.convertMouseToCoord = function(event) {
+	return {
+		x: event[0],
+		y: event[1]
+	}
 };
 
 // Strategy

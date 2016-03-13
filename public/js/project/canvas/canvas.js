@@ -49,18 +49,18 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               })
               .on("drag", function() {
-                Sauron.tellSauron(self.getD());
+                Sauron.tellSauron(d3.mouse(this));
               });
 };
 
 // Return JS object with (x,y) coords of current d3 event
 Canvas.prototype.getD = function() {
   return {
-    x: d3.event.sourceEvent.x,
-    y: d3.event.sourceEvent.y
+    x: d3.mouse(this)[0],
+    y: d3.mouse(this)[1]
   }
 };
 
