@@ -3,7 +3,11 @@ layout: level
 title: "Level 2: Line Up"
 ---
 
-<script>
+<script type="text/javascript">
+	$(window).bind("load", function() { 
+		startPlayground();
+	});
+
 	setTimeout(function() {
 		gameMode = 2;
 	}, 1000);
@@ -11,8 +15,8 @@ title: "Level 2: Line Up"
 	var isBroadcasted = 0;
 	window.setInterval(function(){
 	  /// call your function here
-		if(isBroadcasted == 0) {
-			if(parseInt(levelScore) == 100) {
+		if(isBroadcasted === 0) {
+			if(parseInt(levelScore) === 100) {
 				isBroadcasted = 1;
 				// document.getElementById('upperBound').click();
 				var r = confirm("Congratulations! Proceed to next level");
