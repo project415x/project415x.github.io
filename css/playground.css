@@ -1,4 +1,20 @@
+/*#start {
+  background-color: #495B5A
+}
+.container {
+  background-color: #495B5A
+}
+
+body {
+  background-color: #495B5A
+}*/
+ul {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 #input-canvas {
+  margin-left: 10px;
   height: 500px;
   width: 500px;
   float: left;
@@ -9,6 +25,7 @@
 
 
 #output-canvas {
+  margin-right: 10px;
   height: 500px;
   width: 500px;
   float: right;
