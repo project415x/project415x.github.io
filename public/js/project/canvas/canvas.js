@@ -106,7 +106,15 @@ Canvas.prototype.appendImageToPattern = function() {
        "xlink:href": "../public/img/items/target" + i + ".gif"
      });
   }
-
+  var arm = this.getTar(arm);
+  arm.append('image')
+   .attr({
+     "x": "0",
+     "y": "0",
+     "width": "30px",
+     "height": "100px",
+     "xlink:href": "../public/img/robotarm.gif"
+   })
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
@@ -122,6 +130,14 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "width": "40"
               });
   }
+  defs.append('pattern')
+            .attr({
+              "id": "tararm",
+              "x": "0",
+              "y": "0",
+              "height": "100px",
+              "width": "30px"
+            });
 };
 
 // grabs svg and adds def to it

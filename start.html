@@ -5,26 +5,20 @@ title: Start
 
 <div id="start">
   <div class="container">
-    <center>
-      <h2><a href="/">Project 415x</a></h2>
-    </center>
-
     <!-- Nav tabs -->
     <ul class="nav nav-tabs nav-justified" role="tablist">
       <li role="presentation" class="active"><a href="/start" aria-controls="info">Info</a></li>
       <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
       <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
     </ul>
-  </div>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    {% include info.html %}
-    {% include game.html %}
-    {% include guide.html %}
+    <!-- Tab panes -->
+    <div class="tab-content">
+      {% include info.html %}
+      {% include game.html %}
+      {% include guide.html %}
+    </div>
   </div>
 </div>
-
-{% include credit.html %}
 
 <script src="../public/js/project/levelTracking.js"></script>

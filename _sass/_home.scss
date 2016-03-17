@@ -1,6 +1,6 @@
 #home {
   height: 100vh;
-  background: #cccccc url(morning.png);
+  background: #cccccc url(Project_415x.png);
   background-size: cover;
   background-attachment: fixed;
   background-position: 50% 50%;
@@ -23,7 +23,7 @@
     }
   }
   .container {
-    padding-top: 15%;
+    padding-top: 0%;
   }
   @include media-query($screen-sm-min) {
     h2 {

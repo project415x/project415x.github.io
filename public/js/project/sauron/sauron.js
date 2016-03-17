@@ -1,9 +1,9 @@
 var util = require('../utilities/math.js'),
-		Target = require('../actors/target.js');
+    Target = require('../actors/target.js');
 
 // Sauron is alive!
 function Sauron(setting) {
-	this.matrix = [[1,2],[2,1]];
+  this.matrix = [[1,2],[2,1]];
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -47,7 +47,7 @@ Sauron.prototype.updateOutputVector = function(d) {
 
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
-	var width = Number(d3.selectAll("rect").attr("width")),
+  var width = Number(d3.selectAll("rect").attr("width")),
       height = Number(d3.selectAll("rect").attr("height")),
       x = Number(d3.selectAll("rect").attr("x")) + width / 2,
       y = Number(d3.selectAll("rect").attr("y")) + height / 2,
@@ -62,17 +62,17 @@ Sauron.prototype.updateTargets = function(d) {
 
 // Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(event) {
-	var d = this.convertMouseToCoord(event);
+  var d = this.convertMouseToCoord(event);
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
-	return {
-		x: event[0],
-		y: event[1]
-	}
+  return {
+    x: event[0],
+    y: event[1]
+  }
 };
 
 // Strategy
@@ -121,11 +121,11 @@ Sauron.prototype.generateTarget = function(matrix) {
     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
       isValidCoordinate = true;
       var targetSettings = {
-      	x: newX,
-      	y: newY,
-      	width: 40,
-				height: 40,
-      	color: "black"
+        x: newX,
+        y: newY,
+        width: 40,
+        height: 40,
+        color: "black"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
