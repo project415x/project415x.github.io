@@ -25,7 +25,6 @@ function initPlayground() {
 	outputTarget.init()
 }
 
-
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
@@ -57,5 +56,4 @@ module.exports = {
 	startPlayground: function() {
 		this.initPlayground();
 	}
-	
 };

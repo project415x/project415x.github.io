@@ -236,7 +236,15 @@ Canvas.prototype.appendImageToPattern = function() {
        "xlink:href": "../public/img/items/target" + i + ".gif"
      });
   }
-
+  var arm = this.getTar(arm);
+  arm.append('image')
+   .attr({
+     "x": "0",
+     "y": "0",
+     "width": "30px",
+     "height": "100px",
+     "xlink:href": "../public/img/robotarm.gif"
+   })
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
@@ -252,6 +260,14 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "width": "40"
               });
   }
+  defs.append('pattern')
+            .attr({
+              "id": "tararm",
+              "x": "0",
+              "y": "0",
+              "height": "100px",
+              "width": "30px"
+            });
 };
 
 // grabs svg and adds def to it
@@ -511,7 +527,6 @@ function initPlayground() {
 	outputTarget.init()
 }
 
-
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
@@ -543,8 +558,8 @@ module.exports = {
 	startPlayground: function() {
 		this.initPlayground();
 	}
-	
 };
+
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":7,"../sauron/sauron.js":8}],7:[function(require,module,exports){
 module.exports = {
 
@@ -648,6 +663,7 @@ Sauron.prototype.updateOutputVector = function(d) {
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
+	d3.select("#output-svg").append("rect").attr("x", 245).attr("y", 210).attr("width", 471).attr("height", 30).style("fill", "url(#tararm)")
 };
 
 // After good news from the Palantir Sauron moves forces!
@@ -695,6 +711,8 @@ Sauron.prototype.updateProgress = function(){
       if (Number(curr) >= 100) {
         curr = 100;
         score.text("Proceed To Next Level!");
+				// Consider exports Joseph's old loadPage function to use here (levelTracking.loadPage())
+				//.on("click", loadPage("frameLevel", "1", "0"));
       }
       else {
         curr = Number(curr) + 5;

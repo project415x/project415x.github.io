@@ -43,6 +43,7 @@ Sauron.prototype.updateOutputVector = function(d) {
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
+	d3.select("#output-svg").append("rect").attr("x", 245).attr("y", 210).attr("width", 471).attr("height", 30).style("fill", "url(#tararm)")
 };
 
 // After good news from the Palantir Sauron moves forces!
@@ -90,6 +91,8 @@ Sauron.prototype.updateProgress = function(){
       if (Number(curr) >= 100) {
         curr = 100;
         score.text("Proceed To Next Level!");
+				// Consider exports Joseph's old loadPage function to use here (levelTracking.loadPage())
+				//.on("click", loadPage("frameLevel", "1", "0"));
       }
       else {
         curr = Number(curr) + 5;
