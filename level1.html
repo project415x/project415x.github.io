@@ -7,24 +7,26 @@ title: "Level 1: Pickup the Parts"
 	$(window).bind("load", function() { 
 		startPlayground();
 	});
-</script>
-<script>
+
+	// level switcher
 	setTimeout(function() {
 	  gameMode = 0;
 	}, 1000);
 
-	var isBroadcasted = 0;
+	var isBroadcasted = 0,
+			levelScore = 0;
+			
 	window.setInterval(function(){
-	  /// call your function here
-		if(isBroadcasted == 0) {
-			if(parseInt(levelScore) == 200) {
-				isBroadcasted = 1;
-				// document.getElementById('upperBound').click();
+		if(isBroadcasted === 0) {
+				levelScore = document.getElementById('score').innerHTML;
+				isBroadcasted = 0;
+			if(parseInt(levelScore) === 10) {
 				var r = confirm("Congratulations! Proceed to next level");
-				if (r == true) {
+				if (r === true) {
 				  window.location = "../level2/index.html";
 				}
 			}
-		}
+		} 
 	}, 1000);
+
 </script>

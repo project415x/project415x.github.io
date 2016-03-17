@@ -3,49 +3,49 @@
 * TARGET CONSTRUCTOR
 *
   var settings = {
-	x: 2,
-	y: 2,
-	ttl: 30,
-	color:  ,
+  x: 2,
+  y: 2,
+  ttl: 30,
+  color:  ,
   };
 *
 */
 
 function Target(settings) {
-	this.x = settings.x || 300;
-	this.y = settings.y || 300;
-	this.width = settings.width || 40;
-	this.height = settings.height || 40;
-	this.ttl = settings.ttl;
-	// No need for color if we use image pattern as fill
-	// this.color = settings.color || '#FF0000';
-	// test
-	this.type = settings.type || "output";
+  this.x = settings.x || 300;
+  this.y = settings.y || 300;
+  this.width = settings.width || 40;
+  this.height = settings.height || 40;
+  this.ttl = settings.ttl;
+  // No need for color if we use image pattern as fill
+  // this.color = settings.color || '#FF0000';
+  // test
+  this.type = settings.type || "output";
 }
 
 Target.prototype.updateColor = function(dist, n) {
-		this.color = dist;
+    this.color = dist;
 };
 
 Target.prototype.init = function() {
-		this.drawTarget();
+    this.drawTarget();
 };
 
 
 Target.prototype.drawTarget = function() {
-	var score = 0,
-	 		real_x = this.x - this.width / 2,
-			real_y = this.y - this.height / 2;
-	var rect = d3.select('#'+this.type+'-svg').append("rect")
-		.attr({
-			"x": real_x,
-			"y": real_y,
-			"width": this.width,
-			"height": this.height
-		})
+  var score = 0,
+      real_x = this.x - this.width / 2,
+      real_y = this.y - this.height / 2;
+  var rect = d3.select('#'+this.type+'-svg').append("rect")
+    .attr({
+      "x": real_x,
+      "y": real_y,
+      "width": this.width,
+      "height": this.height
+    })
 
-	var tar_num = Math.floor(Math.random() * 19) + 1;
-	rect.style({"fill": "url(#tar" + tar_num + ")"});
+  var tar_num = Math.floor(Math.random() * 19) + 1;
+  rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
 
@@ -56,35 +56,35 @@ module.exports = Target;
 VECTOR constuctor
 Sample settings object
 
-	var inputVectorSettings = {
-		type: "input",
-		tail: {
-			x: 250,
-			y: 250
-		},
-		head: {
-			x: 350,
-			y: 100
-		}
-	}
+  var inputVectorSettings = {
+    type: "input",
+    tail: {
+      x: 250,
+      y: 250
+    },
+    head: {
+      x: 350,
+      y: 100
+    }
+  }
 */
 // Really the vector shouldn't know about its screen coordinates.
 // These should be math coordinates.
 // When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates,
 // *for that canvas*.
 function Vector(settings) {
-	this.head = {
-		x: settings.head.x || 250,
-		y: settings.head.y || 250
-	};
-	// we don't want to move the tail from the origin
-	this.tail = {
-		x: settings.tail.x || 250,
-		y: settings.tail.y || 250
-	}
-	this.color = settings.color || "#92989F";
-	this.type = settings.type || "input";
-	this.stroke = settings.stroke || 5;
+  this.head = {
+    x: settings.head.x || 250,
+    y: settings.head.y || 250
+  };
+  // we don't want to move the tail from the origin
+  this.tail = {
+    x: settings.tail.x || 250,
+    y: settings.tail.y || 250
+  }
+  this.color = settings.color || "#92989F";
+  this.type = settings.type || "input";
+  this.stroke = settings.stroke || 150;
 };
 
 /*
@@ -92,7 +92,7 @@ function Vector(settings) {
 * NO PARAM NO RETURNS
 */
 Vector.prototype.init = function() {
-	this.drawVector();
+  this.drawVector();
 };
 
 /*
@@ -100,20 +100,20 @@ Vector.prototype.init = function() {
 * NO PARAMS. NO RETURNS
 */
 Vector.prototype.drawVector = function() {
-	if(this.type) {
-		d3.select('#'+this.type+'-svg')
-			.append("path") // vector itself
-			.attr({
-				"stroke": this.color,
-	    	"stroke-width":this.stroke,
-	    	// "fill": "value" // test this with a graphic?
-	    	"d": this.generatePath(),
-	    	"id": this.type+'-vector',
-			});
-	}
-	else {
-		console.log("Invalid vector type: ",this.type);
-	}
+  if(this.type) {
+    d3.select('#'+this.type+'-svg')
+      .append("path") // vector itself
+      .attr({
+        "stroke": this.color,
+        "stroke-width":this.stroke,
+        // "fill": "value" // test this with a graphic?
+        "d": this.generatePath(),
+        "id": this.type+'-vector',
+      });
+  }
+  else {
+    console.log("Invalid vector type: ",this.type);
+  }
 };
 
 /*
@@ -122,7 +122,7 @@ Vector.prototype.drawVector = function() {
 * RETURNS path to be drawn
 */
 Vector.prototype.generatePath = function() {
-	return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
+  return "M"+this.tail.x+" "+this.tail.y+" L"+this.head.x+" "+this.head.y+" z";
 };
 
 module.exports = Vector;
@@ -236,15 +236,7 @@ Canvas.prototype.appendImageToPattern = function() {
        "xlink:href": "../public/img/items/target" + i + ".gif"
      });
   }
-  var arm = this.getTar(arm);
-  arm.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "30px",
-     "height": "100px",
-     "xlink:href": "../public/img/robotarm.gif"
-   })
+
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
@@ -260,14 +252,6 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "width": "40"
               });
   }
-  defs.append('pattern')
-            .attr({
-              "id": "tararm",
-              "x": "0",
-              "y": "0",
-              "height": "100px",
-              "width": "30px"
-            });
 };
 
 // grabs svg and adds def to it
@@ -372,85 +356,7 @@ Canvas.prototype.drawTarget = function(target) {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":8,"../utilities/math.js":9}],4:[function(require,module,exports){
-function startLevel1() {
-
-
-	var inputSettings = {
-	    minX: -10,
-	    minY: -10,
-	    maxX: 10,
-	    maxY: 10,
-	    pixelWidth: 500,
-	    pixelHeight: 500
-	};
-
-	var outputSettings = {
-	    minX: -10,
-	    minY: -10,
-	    maxX: 10,
-	    maxY: 10,
-	    pixelWidth: 500,
-	    pixelHeight: 500
-	};
-
-	var inputCanvas = canvas(inputSettings),
-		outputCanvas = canvas(outputSettings),
-		matrix = [[2,1],[1,-1]],
-		score = 0,
-		inputVector = vector(),
-		oldOutputVector = vector(),
-		outputVector = vector(),
-		targets = [target(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9))];
-		// change math to our
-
-	function updateLevel1(event) {
-
-		// get coordinates
-		var x = event.point.x,
-			y = event.point.y;
-
-		// update input/output vectors
-		inputVector.updateVector(x,y);
-		newCoordinates = applyMatrix(x,y,matrix);
-
-		// this should copy the new into the old.
-		oldOutputVector.copy(outputVector);
-		outputVector.updateVector(newCoordinates[0],newCoordinates[1]);
-
-		// draw input/output vectors
-		inputCanvas.drawVector(inputVector);
-		outputCanvas.drawVector(outputVector);
-
-		// check collision (use line segments)
-		var result = outputCanvas.checkCollisions(oldOutputVector,outputVector,targets);
-
-		if(result.length !== 0)
-
-			for(var i = 0; i < result.length; i++) {
-				// change x,y values for target
-				this.randomizeTarget(result[i]);
-				score += 10;
-			}
-		}
-		// calculate proximity to target and update target color
-		var dist = 0;
-
-		for(var i = 0; i < targets.length; i++) {
-			dist = outputCanvas.proximity(outputVector, targets[i]);
-			this.target[i].updateColor(dist);
-		}
-
-		outputCanvas.drawTargets(targets);
-
-	}
-
-	// accepts a single target object as input
-	function randomizeTarget(target) {
-		target.update(Math.getRandomArbitrary(-9,9), Math.getRandomArbitrary(-9,9));
-	}
-
-},{}],5:[function(require,module,exports){
+},{"../sauron/sauron.js":7,"../utilities/math.js":8}],4:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -499,131 +405,105 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js');
-		config = require('../level/playgroundConfig');
+    Vector = require('../actors/vector.js'),
+    Target = require('../actors/target.js'),
+    Sauron = require('../sauron/sauron.js');
+    config = require('../level/playgroundConfig');
 
 function initPlayground() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings),
-			outputTarget = new Target(config.targetSettings);
+  // Create objects needed for game
+  var inputCanvas = new Canvas(config.inputCanvasSettings),
+      inputVector = new Vector(config.inputVectorSettings),
+      outputVector = new Vector(config.outputVectorSettings),
+      outputCanvas = new Canvas(config.outputCanvasSettings),
+      outputTarget = new Target(config.targetSettings);
 
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
+  // draw grid(s)
+  inputCanvas.drawCanvas();
+  outputCanvas.drawCanvas();
+  outputCanvas.drawProgressBar();
 
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
+  // draw vector(s)
+  inputVector.init();
+  outputVector.init();
 
-	// generate target(s)
-	outputTarget.init()
+  // generate target(s)
+  outputTarget.init()
 }
+
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
-	initPlayground();
+  // var Sauron = new Sauron(config);
+  // Sauron.createArmy(1);
+  initPlayground();
 }
-
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":6,"../sauron/sauron.js":7}],6:[function(require,module,exports){
 module.exports = {
 
-	initPlayground: function() {
-		// Create objects needed for game
-		var inputCanvas = new Canvas(config.inputCanvasSettings),
-				inputVector = new Vector(config.inputVectorSettings),
-				outputVector = new Vector(config.outputVectorSettings),
-				outputCanvas = new Canvas(config.outputCanvasSettings),
-				outputTarget = new Target(config.targetSettings);
+  inputCanvasSettings : {
+    type: "input",
+    minX: -10,
+    minY: -10,
+    maxX: 10,
+    maxY: 10,
+    pixelWidth: 500,
+    pixelHeight: 500
+  },
 
-		// draw grid(s)
-		inputCanvas.drawCanvas();
-		outputCanvas.drawCanvas();
-		outputCanvas.drawProgressBar();
+  outputCanvasSettings : {
+    type: "output",
+    minX: -10,
+    minY: -10,
+    maxX: 10,
+    maxY: 10,
+    pixelWidth: 500,
+    pixelHeight: 500
+  },
 
-		// draw vector(s)
-		inputVector.init();
-		outputVector.init();
+  inputVectorSettings : {
+    type: "input",
+    tail: {
+      x: null,
+      y: null
+    },
+    head: {
+      x: null,
+      y: null
+    }
+  },
 
-		// generate target(s)
-		outputTarget.init()
-	},
+  outputVectorSettings : {
+    type: "output",
+    tail: {
+      x: null,
+      y: null
+    },
+    head: {
+      x: null,
+      y: null
+    }
+  },
 
-	startPlayground: function() {
-		this.initPlayground();
-	}
+  targetSettings : {
+    x: 355,
+    y: 50,
+    r: 20
+  },
+
+  EyeOfSauron : {
+    matrix: [[1,2,],[2,1]]
+  }
 };
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":7,"../sauron/sauron.js":8}],7:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	targetSettings : {
-		x: 355,
-		y: 50,
-		r: 20
-	},
-
-	EyeOfSauron : {
-		matrix: [[1,2,],[2,1]]
-	}
-};
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var util = require('../utilities/math.js'),
-		Target = require('../actors/target.js');
+    Target = require('../actors/target.js');
 
 // Sauron is alive!
 function Sauron(setting) {
-	this.matrix = [[1,2],[2,1]];
+  this.matrix = [[1,2],[2,1]];
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -641,7 +521,7 @@ Sauron.prototype.updateInputVector = function(d){
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "#31BA29",
-      "stroke-width":"4",
+      "stroke-width":"8",
       "d": "M 250 250 L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
   });
@@ -663,16 +543,16 @@ Sauron.prototype.updateOutputVector = function(d) {
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
-	d3.select("#output-svg").append("rect").attr("x", 245).attr("y", 210).attr("width", 471).attr("height", 30).style("fill", "url(#tararm)")
 };
 
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d) {
-	var width = Number(d3.selectAll("rect").attr("width")),
+  var width = Number(d3.selectAll("rect").attr("width")),
       height = Number(d3.selectAll("rect").attr("height")),
       x = Number(d3.selectAll("rect").attr("x")) + width / 2,
       y = Number(d3.selectAll("rect").attr("y")) + height / 2,
       i = util.applyMatrix(d.x,d.y);
+  // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
     d3.selectAll("rect").remove();
     this.updateProgress();
@@ -682,21 +562,21 @@ Sauron.prototype.updateTargets = function(d) {
 
 // Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(event) {
-	var d = this.convertMouseToCoord(event);
+  var d = this.convertMouseToCoord(event);
   this.updateInputVector(d);
   this.updateOutputVector(d);
   this.updateTargets(d);
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
-	return {
-		x: event[0],
-		y: event[1]
-	}
+  return {
+    x: event[0],
+    y: event[1]
+  }
 };
 
 // Strategy
-Sauron.prototype.applyTransformation = function(sX,sY,matrix){
+Sauron.prototype.applyTransformation = function(sX,sY,matrix) {
   var matrix = matrix || [[1,3],[2,0]];
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
@@ -704,32 +584,33 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
 };
 
 // Sauron alerts his generals of the new progress
-Sauron.prototype.updateProgress = function(){
+Sauron.prototype.updateProgress = function() {
   var bar = d3.select('#progressbar'),
-      score = d3.select('#score');
-      curr = bar.attr("aria-valuenow");
-      if (Number(curr) >= 100) {
-        curr = 100;
-        score.text("Proceed To Next Level!");
-				// Consider exports Joseph's old loadPage function to use here (levelTracking.loadPage())
-				//.on("click", loadPage("frameLevel", "1", "0"));
+      scoreBox = d3.select('#score');
+      currScore = bar.attr("aria-valuenow");
+      if (Number(currScore) >= 100) {
+        currScore = 100;
+        scoreBox.text("Proceed To Next Level!");
       }
       else {
-        curr = Number(curr) + 5;
-        score.text(curr + "% Complete");
+        currScore = Number(currScore) + 5;
+        scoreBox.text(currScore + "% Complete");
       }
 
-      bar.style("width", curr + "%");
-      bar.attr("aria-valuenow", curr);
+      bar.style("width", currScore + "%");
+      bar.attr("aria-valuenow", currScore);
 }
 
 // The Sauron's army grows larger
+// Slightly not optimal
+// If matrix is invertible 
+// Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
-  var isLegal = false,
+  var isValidCoordinate = false,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
       newX, newY;
 
-  while (!isLegal) {
+  while (!isValidCoordinate) {
     newX = util.getRandom(0,500);
     newY = util.getRandom(0,500);
     var pre = util.screenToMath(newX,newY);
@@ -738,13 +619,13 @@ Sauron.prototype.generateTarget = function(matrix) {
     pre = util.mathToScreen(prex,prey);
 
     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-      isLegal = true;
+      isValidCoordinate = true;
       var targetSettings = {
-      	x: newX,
-      	y: newY,
-      	width: 40,
-				height: 40,
-      	color: "black"
+        x: newX,
+        y: newY,
+        width: 40,
+        height: 40,
+        color: "black"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -754,82 +635,32 @@ Sauron.prototype.generateTarget = function(matrix) {
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
-// module.exports = {
-// 	applyTransformation: function(sX,sY,matrix){
-// 	  var matrix = matrix || [[1,3],[2,0]];
-// 	  var math_coord = util.screenToMath(sX,sY),
-// 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-// 	  return util.mathToScreen(applied_coord[0],applied_coord[1]);
-// 	},
 
-// 	updateInputVector: function(d) {
-// 	// redraw input vector
-// 	  d3.select('#input-vector').remove();
-// 	  d3.select('#input-svg').append('path')
-// 	    .attr({
-// 	      "stroke": "red",
-// 	      "stroke-width":"4",
-// 	      "d": "M 250 250 L"+d.x+" "+d.y+"z",
-// 	      "id": 'input-vector'
-// 	  });
-// 	},
-
-// 	updateOutputVector: function(d) {
-// 	  var i = this.applyTransformation(d.x,d.y);
-// 	  d3.select('#output-vector').remove();
-// 	  d3.select('#output-svg').append('path')
-// 	    .attr({
-// 	      "stroke": "red",
-// 	      "stroke-width":"4",
-// 	      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-// 	      "id": 'output-vector'
-// 	  });
-// 	},
-
-// 	updateTargets: function(d) {
-// 	  var x = d3.selectAll("circle").attr("cx"),
-//     y = d3.selectAll("circle").attr("cy"),
-//     r = d3.selectAll("circle").attr("r"),
-//     i = this.applyTransformation(d.x,d.y);
-// 	  if (isClose(i[0],i[1],x,y,r)) {
-// 	    d3.selectAll("circle").remove();
-// 	    updateProgress();
-// 	    generateTarget([[1,3],[2,0]]);
-// 	  }
-// 	},
-
-// 	tellSauron: function(d) {
-// 	  this.updateInputVector(d);
-// 	  this.updateOutputVector(d);
-// 	  this.updateTargets(d);
-// 	}
-// };
-
-},{"../actors/target.js":1,"../utilities/math.js":9}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../utilities/math.js":8}],8:[function(require,module,exports){
 module.exports = {
 
-	screenToMath: function(x,y) {
-	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
-	},
+  screenToMath: function(x,y) {
+    return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
+  },
 
-	mathToScreen: function(x,y) {
-	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
-	},
+  mathToScreen: function(x,y) {
+    return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+  },
 
-	applyMatrix: function(sX,sY,matrix) {
-	  var matrix = matrix || [[1,3],[2,0]];
-	  var math_coord = this.screenToMath(sX,sY),
-	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
-	},
+  applyMatrix: function(sX,sY,matrix) {
+    var matrix = matrix || [[1,3],[2,0]];
+    var math_coord = this.screenToMath(sX,sY),
+        applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+    return this.mathToScreen(applied_coord[0],applied_coord[1]);
+  },
 
-	getRandom: function(min,max) {
-	  return Math.random() * (max - min) + min;
-	},
+  getRandom: function(min,max) {
+    return Math.random() * (max - min) + min;
+  },
 
-	isClose: function(oX, oY, tX, tY, xb, yb) {
-  	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
-	}
+  isClose: function(oX, oY, tX, tY, xb, yb) {
+    return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
+  }
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9]);
+},{}]},{},[1,2,3,4,5,6,7,8]);

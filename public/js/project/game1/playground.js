@@ -25,35 +25,10 @@ function initPlayground() {
 	outputTarget.init()
 }
 
+
 // think of this as the main function :)
 startPlayground = function startPlayground() {
+	// var Sauron = new Sauron(config);
+	// Sauron.createArmy(1);
 	initPlayground();
 }
-
-module.exports = {
-
-	initPlayground: function() {
-		// Create objects needed for game
-		var inputCanvas = new Canvas(config.inputCanvasSettings),
-				inputVector = new Vector(config.inputVectorSettings),
-				outputVector = new Vector(config.outputVectorSettings),
-				outputCanvas = new Canvas(config.outputCanvasSettings),
-				outputTarget = new Target(config.targetSettings);
-
-		// draw grid(s)
-		inputCanvas.drawCanvas();
-		outputCanvas.drawCanvas();
-		outputCanvas.drawProgressBar();
-
-		// draw vector(s)
-		inputVector.init();
-		outputVector.init();
-
-		// generate target(s)
-		outputTarget.init()
-	},
-
-	startPlayground: function() {
-		this.initPlayground();
-	}
-};
