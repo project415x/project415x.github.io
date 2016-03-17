@@ -2,6 +2,15 @@ ul {
   margin-left: 0px;
   margin-right: 0px;
 }
+h3 {
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+.question {
+  top: 565px;
+  left: 1%;
+  position: absolute;
+}
 
 #input-canvas {
   margin-left: 10px;
@@ -12,7 +21,6 @@ ul {
   background-repeat: no-repeat;
   /*cursor: url(../public/cursor.gif), pointer;*/
 }
-
 
 #output-canvas {
   margin-right: 10px;
@@ -27,8 +35,8 @@ ul {
   height: 30px;
   width:270px;
   position: absolute;
-  top: 525px;
-  left: 13%;
+  top: 580px;
+  left: 25%;
   margin: -15px 0 0 -135px;
 }
 
