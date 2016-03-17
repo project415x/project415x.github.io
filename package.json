@@ -18,6 +18,7 @@
   "homepage": "https://github.com/linearlearning/linearlearning.github.io#readme",
   "dependencies": {
     "browserify": "^13.0.0",
+    "escodegen": "^1.8.0",
     "glob": "^7.0.0",
     "gulp": "^3.9.1",
     "gulp-uglify": "^1.5.3",
