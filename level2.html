@@ -12,16 +12,17 @@ title: "Level 2: Line Up"
 		gameMode = 2;
 	}, 1000);
 
-	var isBroadcasted = 0;
+	var isBroadcasted = 0,
+			levelScore = 0;
+			
 	window.setInterval(function(){
-	  /// call your function here
 		if(isBroadcasted === 0) {
-			if(parseInt(levelScore) === 100) {
+				// levelScore = document.getElementById('score').innerHTML[0,2];
+			if(parseInt(levelScore) === 5) {
 				isBroadcasted = 1;
-				// document.getElementById('upperBound').click();
 				var r = confirm("Congratulations! Proceed to next level");
-				if (r == true) {
-					window.location = "../level3/index.html";
+				if (r === true) {
+				  window.location = "../level2/index.html";
 				}
 			}
 		}

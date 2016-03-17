@@ -30,7 +30,7 @@ function Vector(settings) {
 	}
 	this.color = settings.color || "#92989F";
 	this.type = settings.type || "input";
-	this.stroke = settings.stroke || 5;
+	this.stroke = settings.stroke || 150;
 };
 
 /*
