@@ -1,0 +1,39 @@
+#input-canvas {
+  height: 500px;
+  width: 500px;
+  float: left;
+  background-image: url(../public/img/input_background.gif);
+  background-repeat: no-repeat;
+  /*cursor: url(../public/cursor.gif), pointer;*/
+}
+
+
+#output-canvas {
+  height: 500px;
+  width: 500px;
+  float: right;
+  background-image: url(../public/img/output_background.gif);
+  background-repeat: no-repeat;
+}
+
+#progress-container {
+  height: 30px;
+  width:270px;
+  position: absolute;
+  top: 250px;
+  left: 50%;
+  margin: -15px 0 0 -135px;
+}
+
+#progressbar {
+  width: 0%;
+  position: absolute;
+}
+
+#score {
+  width: 100%;
+  position: absolute;
+  top: 15%;
+  color: black;
+  text-align: center;
+}

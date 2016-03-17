@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/linearlearning/linearlearning.github.io/issues"
   },
-  "homepage": "https://github.com/linearlearning/linearlearning.github.io#readme"
+  "homepage": "https://github.com/linearlearning/linearlearning.github.io#readme",
+  "dependencies": {
+    "browserify": "^13.0.0",
+    "glob": "^7.0.0",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "vinyl-source-stream": "^1.1.0"
+  }
 }
