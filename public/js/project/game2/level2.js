@@ -1,16 +1,15 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js');
-		config = require('../level/playgroundConfig');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('../game2/config.js');
 
-function initPlayground() {
+function initLevel2() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings),
 			inputVector = new Vector(config.inputVectorSettings),
 			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings),
-			outputTarget = new Target(config.targetSettings);
+			outputCanvas = new Canvas(config.outputCanvasSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -22,11 +21,11 @@ function initPlayground() {
 	outputVector.init();
 
 	// generate target(s)
-	outputTarget.init()
+	Sauron.generateRandomLineofDeath();
 }
 
 
 // think of this as the main function :)
-startPlayground = function startPlayground() {
-	initPlayground();
+startLevel2 = function startLevel2() {
+	initLevel2();
 }
