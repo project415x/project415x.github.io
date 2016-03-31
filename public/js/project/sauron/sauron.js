@@ -1,6 +1,5 @@
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js'),
-    Canvas = require('../canvas/canvas.js');
+    Target = require('../actors/target.js');
 
 // Sauron is alive!
 function Sauron(setting) {
@@ -58,7 +57,7 @@ Sauron.prototype.updateTargets = function(d) {
     d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
-    this.drawInputCanvas(d);
+    this.drawBlips(d);
   }
 };
 
@@ -141,32 +140,30 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 }
 
-Sauron.prototype.drawInputCanvas = function(d) {
-  // Code this use canvas.getCanvas later
+Sauron.prototype.drawBlips = function(d) {
   // Move define pattern to proper functions
-  var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
-                .attr({
-                  "id": "blip",
-                  "x": "0",
-                  "y": "0",
-                  "height": "40",
-                  "width": "40"
-                }).append("image")
-      .attr({
-        "x": "0",
-        "y": "0",
-        "width": "40",
-        "height": "40",
-        "xlink:href": "../public/blip.gif"
-      });
-
+  // var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
+  //               .attr({
+  //                 "id": "blip",
+  //                 "x": "0",
+  //                 "y": "0",
+  //                 "height": "40",
+  //                 "width": "40"
+  //               }).append("image")
+  //     .attr({
+  //       "x": "0",
+  //       "y": "0",
+  //       "width": "40",
+  //       "height": "40",
+  //       "xlink:href": "../public/img/blip.gif"
+  //     });
       d3.select("#input-svg").append("circle")
                     .attr({
                       cx: d.x,
                       cy: d.y,
                       r: 20,
                     })
-                    .style({"fill": "url(#blip)"});
+                    .style({"fill": "url(#tarblip)"});
 }
 
 // Sauron is mobilized via Smaug!

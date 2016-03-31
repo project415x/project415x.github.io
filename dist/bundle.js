@@ -237,56 +237,82 @@ Canvas.prototype.appendSvg = function(type) {
 // Adds image on top of Circle (Target).
 // To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
-  for(i = 1; i < 20; i++) {
-    var tar = this.getTar(i);
-    tar.append('image')
-     .attr({
-       "x": "0",
-       "y": "0",
-       "width": "40",
-       "height": "40",
-       "xlink:href": "../public/img/items/glow/target" + i + ".gif"
-     });
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      var tar = this.getTar(i);
+      tar.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "40",
+                 "height": "40",
+                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
+               });
+    }
+    var arm = this.getTar("arm");
+    arm.append('image')
+             .attr({
+               "x": "0",
+               "y": "0",
+               "width": "30px",
+               "height": "100px",
+               "xlink:href": "../public/img/robotarm.gif"
+             });
   }
-  var arm = this.getTar(arm);
-  arm.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "30px",
-     "height": "100px",
-     "xlink:href": "../public/img/robotarm.gif"
-   })
+  if (this.type === "input") {
+    var blip = this.getTar("blip");
+    blip.append('image')
+              .attr({
+                "x": "0",
+                "y": "0",
+                "width": "40",
+                "height": "40",
+                "xlink:href": "../public/img/blip.gif"
+              });
+  }
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
-  for(i = 1; i < 20; i++) {
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tar" + i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "40",
+                  "width": "40"
+                });
+    }
     defs.append('pattern')
               .attr({
-                "id": "tar" + i,
+                "id": "tararm",
+                "x": "0",
+                "y": "0",
+                "height": "100px",
+                "width": "30px"
+              });
+  }
+  if (this.type === "input") {
+    defs.append('pattern')
+              .attr({
+                "id": "tarblip",
                 "x": "0",
                 "y": "0",
                 "height": "40",
                 "width": "40"
               });
   }
-  defs.append('pattern')
-            .attr({
-              "id": "tararm",
-              "x": "0",
-              "y": "0",
-              "height": "100px",
-              "width": "30px"
-            });
+
 };
 
 // grabs svg and adds def to it
 Canvas.prototype.appendDefsToSvg = function(){
   var svg = this.getSvg();
    svg.append('defs')
-      .attr("id", "output-defs");
+      .attr("id", this.type + "-defs");
 };
 
 // Draw our canvas depending on the type
@@ -302,6 +328,7 @@ Canvas.prototype.drawCanvas = function() {
   // add drag and double click functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
+    this.drawTargetsOnCanvas();
   }
   else if(this.type === "output") {
     this.drawTargetsOnCanvas();
@@ -529,8 +556,7 @@ module.exports = {
 arguments[4][4][0].apply(exports,arguments)
 },{"dup":4}],8:[function(require,module,exports){
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js'),
-    Canvas = require('../canvas/canvas.js');
+    Target = require('../actors/target.js');
 
 // Sauron is alive!
 function Sauron(setting) {
@@ -588,7 +614,7 @@ Sauron.prototype.updateTargets = function(d) {
     d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
-    this.drawInputCanvas(d);
+    this.drawBlips(d);
   }
 };
 
@@ -671,38 +697,36 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 }
 
-Sauron.prototype.drawInputCanvas = function(d) {
-  // Code this use canvas.getCanvas later
+Sauron.prototype.drawBlips = function(d) {
   // Move define pattern to proper functions
-  var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
-                .attr({
-                  "id": "blip",
-                  "x": "0",
-                  "y": "0",
-                  "height": "40",
-                  "width": "40"
-                }).append("image")
-      .attr({
-        "x": "0",
-        "y": "0",
-        "width": "40",
-        "height": "40",
-        "xlink:href": "../public/blip.gif"
-      });
-
+  // var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
+  //               .attr({
+  //                 "id": "blip",
+  //                 "x": "0",
+  //                 "y": "0",
+  //                 "height": "40",
+  //                 "width": "40"
+  //               }).append("image")
+  //     .attr({
+  //       "x": "0",
+  //       "y": "0",
+  //       "width": "40",
+  //       "height": "40",
+  //       "xlink:href": "../public/img/blip.gif"
+  //     });
       d3.select("#input-svg").append("circle")
                     .attr({
                       cx: d.x,
                       cy: d.y,
                       r: 20,
                     })
-                    .style({"fill": "url(#blip)"});
+                    .style({"fill": "url(#tarblip)"});
 }
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
 
-},{"../actors/target.js":1,"../canvas/canvas.js":3,"../utilities/math.js":9}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../utilities/math.js":9}],9:[function(require,module,exports){
 module.exports = {
 
 	screenToMath: function(x,y) {

@@ -107,56 +107,82 @@ Canvas.prototype.appendSvg = function(type) {
 // Adds image on top of Circle (Target).
 // To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
-  for(i = 1; i < 20; i++) {
-    var tar = this.getTar(i);
-    tar.append('image')
-     .attr({
-       "x": "0",
-       "y": "0",
-       "width": "40",
-       "height": "40",
-       "xlink:href": "../public/img/items/glow/target" + i + ".gif"
-     });
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      var tar = this.getTar(i);
+      tar.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "40",
+                 "height": "40",
+                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
+               });
+    }
+    var arm = this.getTar("arm");
+    arm.append('image')
+             .attr({
+               "x": "0",
+               "y": "0",
+               "width": "30px",
+               "height": "100px",
+               "xlink:href": "../public/img/robotarm.gif"
+             });
   }
-  var arm = this.getTar(arm);
-  arm.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "30px",
-     "height": "100px",
-     "xlink:href": "../public/img/robotarm.gif"
-   })
+  if (this.type === "input") {
+    var blip = this.getTar("blip");
+    blip.append('image')
+              .attr({
+                "x": "0",
+                "y": "0",
+                "width": "40",
+                "height": "40",
+                "xlink:href": "../public/img/blip.gif"
+              });
+  }
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
-  for(i = 1; i < 20; i++) {
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tar" + i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "40",
+                  "width": "40"
+                });
+    }
     defs.append('pattern')
               .attr({
-                "id": "tar" + i,
+                "id": "tararm",
+                "x": "0",
+                "y": "0",
+                "height": "100px",
+                "width": "30px"
+              });
+  }
+  if (this.type === "input") {
+    defs.append('pattern')
+              .attr({
+                "id": "tarblip",
                 "x": "0",
                 "y": "0",
                 "height": "40",
                 "width": "40"
               });
   }
-  defs.append('pattern')
-            .attr({
-              "id": "tararm",
-              "x": "0",
-              "y": "0",
-              "height": "100px",
-              "width": "30px"
-            });
+
 };
 
 // grabs svg and adds def to it
 Canvas.prototype.appendDefsToSvg = function(){
   var svg = this.getSvg();
    svg.append('defs')
-      .attr("id", "output-defs");
+      .attr("id", this.type + "-defs");
 };
 
 // Draw our canvas depending on the type
@@ -172,6 +198,7 @@ Canvas.prototype.drawCanvas = function() {
   // add drag and double click functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
+    this.drawTargetsOnCanvas();
   }
   else if(this.type === "output") {
     this.drawTargetsOnCanvas();
