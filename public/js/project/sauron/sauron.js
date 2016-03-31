@@ -54,6 +54,7 @@ Sauron.prototype.updateTargets = function(d) {
       i = util.applyMatrix(d.x,d.y);
   // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    console.log('update target')
     d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
@@ -134,13 +135,14 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.generateRandomLineofDeath = function() {
-  for( var i = -4; i < 5; i++ ) {
+  for( var i = 1; i < 9; i++ ) {
     var targetSetting = {
-      x: i * 10,
+      x: i * 50,
       y: i * 50,
       width: 40,
       height: 40,
-      color: "black"
+      color: "black",
+      id: "ringWraith_"+i
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();

@@ -17,9 +17,7 @@ function Target(settings) {
 	this.width = settings.width || 40;
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
-	// No need for color if we use image pattern as fill
-	// this.color = settings.color || '#FF0000';
-	// test
+	this.id = settings.id || "derp";
 	this.type = settings.type || "output";
 }
 
@@ -33,24 +31,26 @@ Target.prototype.init = function() {
 
 
 Target.prototype.drawTarget = function() {
-	var score = 0,
+	var tar_num = Math.floor(Math.random() * 19) + 1,
+			score = 0,
 	 		real_x = this.x - this.width / 2,
 			real_y = this.y - this.height / 2;
+	
 	var rect = d3.select('#'+this.type+'-svg').append("rect")
 		.attr({
 			"x": real_x,
 			"y": real_y,
 			"width": this.width,
-			"height": this.height
+			"height": this.height,
+			"id": this.id
 		})
 
-	var tar_num = Math.floor(Math.random() * 19) + 1;
+	
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
 
 module.exports = Target;
-
 },{}],2:[function(require,module,exports){
 /**
 VECTOR constuctor
@@ -651,6 +651,7 @@ Sauron.prototype.updateTargets = function(d) {
       i = util.applyMatrix(d.x,d.y);
   // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+    console.log('update target')
     d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
@@ -731,13 +732,14 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.generateRandomLineofDeath = function() {
-  for( var i = -4; i < 5; i++ ) {
+  for( var i = 1; i < 9; i++ ) {
     var targetSetting = {
-      x: i * 10,
+      x: i * 50,
       y: i * 50,
       width: 40,
       height: 40,
-      color: "black"
+      color: "black",
+      id: "ringWraith_"+i
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();
