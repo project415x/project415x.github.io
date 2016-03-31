@@ -4,7 +4,7 @@ title: "Level 1: Pickup the Parts"
 ---
 
 <script type="text/javascript">
-	$(window).bind("load", function() { 
+	$(window).bind("load", function() {
 		startPlayground();
 	});
 
@@ -15,19 +15,19 @@ title: "Level 1: Pickup the Parts"
 
 	var isBroadcasted = 0,
 			levelScore = 0;
-			
+
 	window.setInterval(function(){
 		if(isBroadcasted === 0) {
 				levelScore = document.getElementById('score').innerHTML;
 				isBroadcasted = 0;
-			if(parseInt(levelScore) === 40) {
+			if(parseInt(levelScore) === 100) {
 				isBroadcasted = 1;
 				var r = confirm("Congratulations! Proceed to next level");
 				if (r === true) {
 				  window.location = "../level2/index.html";
 				}
 			}
-		} 
+		}
 	}, 1000);
 
 </script>

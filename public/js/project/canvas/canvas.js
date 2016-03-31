@@ -49,13 +49,23 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(d3.mouse(this));
+                Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tellSauron(d3.mouse(this), "dbclick");
               })
               .on("drag", function() {
-                Sauron.tellSauron(d3.mouse(this));
+                Sauron.tellSauron(d3.mouse(this), "drag");
               });
 };
-
+/*
+Canvas.prototype.doubleClick = function() {
+  console.log(this);
+  console.log(this.getCanvas());
+  return this.getCanvas().on("dblclick", function(){
+                console.log("dclick");
+                Sauron.tellSauron(d3.mouse(this), "dbclick");
+          });
+}
+*/
 // returns div DOM element associated to the canvas
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
@@ -90,6 +100,8 @@ Canvas.prototype.appendSvg = function(type) {
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
+  if (id === "input")
+    this.getCanvas(id).attr("dclick", "false");
 };
 
 // Adds image on top of Circle (Target).
@@ -103,7 +115,7 @@ Canvas.prototype.appendImageToPattern = function() {
        "y": "0",
        "width": "40",
        "height": "40",
-       "xlink:href": "../public/img/items/target" + i + ".gif"
+       "xlink:href": "../public/img/items/glow/target" + i + ".gif"
      });
   }
   var arm = this.getTar(arm);
@@ -157,7 +169,7 @@ Canvas.prototype.drawCanvas = function() {
   }
   // append a svg to the canvas
   this.appendSvg();
-  // add drag functionality to vector
+  // add drag and double click functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
   }

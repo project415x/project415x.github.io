@@ -1,5 +1,6 @@
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js');
+    Target = require('../actors/target.js'),
+    Canvas = require('../canvas/canvas.js');
 
 // Sauron is alive!
 function Sauron(setting) {
@@ -57,15 +58,22 @@ Sauron.prototype.updateTargets = function(d) {
     d3.selectAll("rect").remove();
     this.updateProgress();
     this.generateTarget([[1,3],[2,0]]);
+    this.drawInputCanvas(d);
   }
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(event) {
+Sauron.prototype.tellSauron = function(event, type) {
   var d = this.convertMouseToCoord(event);
-  this.updateInputVector(d);
-  this.updateOutputVector(d);
-  this.updateTargets(d);
+  if (type === "drag") {
+    this.updateInputVector(d);
+    this.updateOutputVector(d);
+  }
+  else if (type === "dbclick") {
+    this.updateTargets(d);
+  }
+
+
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
@@ -103,7 +111,7 @@ Sauron.prototype.updateProgress = function() {
 
 // The Sauron's army grows larger
 // Slightly not optimal
-// If matrix is invertible 
+// If matrix is invertible
 // Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
   var isValidCoordinate = false,
@@ -131,6 +139,34 @@ Sauron.prototype.generateTarget = function(matrix) {
       newTarget.drawTarget();
     }
   }
+}
+
+Sauron.prototype.drawInputCanvas = function(d) {
+  // Code this use canvas.getCanvas later
+  // Move define pattern to proper functions
+  var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
+                .attr({
+                  "id": "blip",
+                  "x": "0",
+                  "y": "0",
+                  "height": "40",
+                  "width": "40"
+                }).append("image")
+      .attr({
+        "x": "0",
+        "y": "0",
+        "width": "40",
+        "height": "40",
+        "xlink:href": "../public/blip.gif"
+      });
+
+      d3.select("#input-svg").append("circle")
+                    .attr({
+                      cx: d.x,
+                      cy: d.y,
+                      r: 20,
+                    })
+                    .style({"fill": "url(#blip)"});
 }
 
 // Sauron is mobilized via Smaug!
