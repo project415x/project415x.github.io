@@ -8,6 +8,19 @@ title: "Level 1: Pickup the Parts"
 		startPlayground();
 	});
 
+	//tutorial
+	$(document).ready(function(){
+    $('#tutorial').popover();
+	});
+
+	setTimeout(function() {
+		$('#tutorial').popover('show');
+	}, 5000);
+
+	$(document).click(function() {
+	    $('#tutorial').popover('hide');
+	});
+
 	// level switcher
 	setTimeout(function() {
 	  gameMode = 0;

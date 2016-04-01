@@ -141,22 +141,6 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.drawBlips = function(d) {
-  // Move define pattern to proper functions
-  // var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
-  //               .attr({
-  //                 "id": "blip",
-  //                 "x": "0",
-  //                 "y": "0",
-  //                 "height": "40",
-  //                 "width": "40"
-  //               }).append("image")
-  //     .attr({
-  //       "x": "0",
-  //       "y": "0",
-  //       "width": "40",
-  //       "height": "40",
-  //       "xlink:href": "../public/img/blip.gif"
-  //     });
       d3.select("#input-svg").append("circle")
                     .attr({
                       cx: d.x,

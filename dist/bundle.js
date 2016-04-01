@@ -169,7 +169,8 @@ function Canvas(settings) {
     x: this.originX,
     y: this.originY
   },
-  this.type = settings.type || "not a valid type";
+  this.type = settings.type || "not a valid type",
+  this.timer = settings.timer || this.initTimer();
 }
 
 // Return modified d3 drag listener
@@ -180,22 +181,19 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 Sauron.tellSauron(d3.mouse(this), "drag");
-                Sauron.tellSauron(d3.mouse(this), "dbclick");
+                // If you want the single click instead of double, replace the
+                //  next four lines until but not including '})' with 
+                //  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                var newTimer = self.initTimer();
+                if (newTimer - self.timer <= 200)
+                  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                self.timer = newTimer;
               })
               .on("drag", function() {
                 Sauron.tellSauron(d3.mouse(this), "drag");
               });
 };
-/*
-Canvas.prototype.doubleClick = function() {
-  console.log(this);
-  console.log(this.getCanvas());
-  return this.getCanvas().on("dblclick", function(){
-                console.log("dclick");
-                Sauron.tellSauron(d3.mouse(this), "dbclick");
-          });
-}
-*/
+
 // returns div DOM element associated to the canvas
 Canvas.prototype.getCanvas = function(type) {
   var id = type || this.type;
@@ -408,6 +406,11 @@ Canvas.prototype.drawTarget = function(target) {
       color: target.color
     });
 };
+
+Canvas.prototype.initTimer = function() {
+  var date = new Date();
+  return date.getTime();
+}
 
 module.exports = Canvas;
 
@@ -698,22 +701,6 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.drawBlips = function(d) {
-  // Move define pattern to proper functions
-  // var input = d3.select("#input-svg").append("defs").attr("id", "input-defs").append("pattern")
-  //               .attr({
-  //                 "id": "blip",
-  //                 "x": "0",
-  //                 "y": "0",
-  //                 "height": "40",
-  //                 "width": "40"
-  //               }).append("image")
-  //     .attr({
-  //       "x": "0",
-  //       "y": "0",
-  //       "width": "40",
-  //       "height": "40",
-  //       "xlink:href": "../public/img/blip.gif"
-  //     });
       d3.select("#input-svg").append("circle")
                     .attr({
                       cx: d.x,
