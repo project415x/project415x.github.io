@@ -135,10 +135,19 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.generateRandomLineofDeath = function() {
-  for( var i = 1; i < 9; i++ ) {
+  var validPoints = util.getValidPreImagePairs(),
+      i = 0;
+  
+  for( var key in validPoints  ) {
+    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix)
+    pair.x = screenCoors[0];
+    pair.y = screenCoors[1];
+    
     var targetSetting = {
-      x: i * 50,
-      y: i * 50,
+      x: pair.x,
+      y: pair.y,
       width: 40,
       height: 40,
       color: "black",
@@ -146,8 +155,11 @@ Sauron.prototype.generateRandomLineofDeath = function() {
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();
+    i++;
   }
 };
+
+
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();

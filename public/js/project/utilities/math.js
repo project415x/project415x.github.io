@@ -21,5 +21,50 @@ module.exports = {
 
 	isClose: function(oX, oY, tX, tY, xb, yb) {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
+	},
+
+	getValidPreImagePairs: function(matrix) {
+		
+		var validPoints = [],
+				i = 1,
+				d = 2,
+		 		angle = Math.PI * Math.random(),
+				shift = Math.random() * 2,
+				unitVector = {
+					x: Math.cos(angle),
+					y: Math.sin(angle)
+				},
+				origin = {
+					x: 0,
+					y: 0
+				},
+				firstPoint = {
+					x: ((d/2) - shift) * unitVector.x,
+					y: ((d/2) - shift) * unitVector.y
+				};
+
+		// move to left most point
+		while( Math.abs(firstPoint.x) < 10 && Math.abs(firstPoint.y) < 10 ) {
+	
+			firstPoint.x = firstPoint.x - i * d * unitVector.x;
+			firstPoint.y = firstPoint.y - i * d * unitVector.y;
+			i++;
+	
+		}
+
+			
+		// validPoints.push(origin);
+		i = 1;
+
+		while ( validPoints.length < 16 ) {
+
+			validPoints.push({
+				x: firstPoint.x + i * d * unitVector.x,
+				y: firstPoint.y + i * d * unitVector.y
+			});
+			i++;
+		
+		}
+		return validPoints;
 	}
 };

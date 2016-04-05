@@ -732,10 +732,19 @@ Sauron.prototype.generateTarget = function(matrix) {
 }
 
 Sauron.prototype.generateRandomLineofDeath = function() {
-  for( var i = 1; i < 9; i++ ) {
+  var validPoints = util.getValidPreImagePairs(),
+      i = 0;
+  
+  for( var key in validPoints  ) {
+    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix)
+    pair.x = screenCoors[0];
+    pair.y = screenCoors[1];
+    
     var targetSetting = {
-      x: i * 50,
-      y: i * 50,
+      x: pair.x,
+      y: pair.y,
       width: 40,
       height: 40,
       color: "black",
@@ -743,8 +752,11 @@ Sauron.prototype.generateRandomLineofDeath = function() {
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();
+    i++;
   }
 };
+
+
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
@@ -772,6 +784,51 @@ module.exports = {
 
 	isClose: function(oX, oY, tX, tY, xb, yb) {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
+	},
+
+	getValidPreImagePairs: function(matrix) {
+		
+		var validPoints = [],
+				i = 1,
+				d = 2,
+		 		angle = Math.PI * Math.random(),
+				shift = Math.random() * 2,
+				unitVector = {
+					x: Math.cos(angle),
+					y: Math.sin(angle)
+				},
+				origin = {
+					x: 0,
+					y: 0
+				},
+				firstPoint = {
+					x: ((d/2) - shift) * unitVector.x,
+					y: ((d/2) - shift) * unitVector.y
+				};
+
+		// move to left most point
+		while( Math.abs(firstPoint.x) < 10 && Math.abs(firstPoint.y) < 10 ) {
+	
+			firstPoint.x = firstPoint.x - i * d * unitVector.x;
+			firstPoint.y = firstPoint.y - i * d * unitVector.y;
+			i++;
+	
+		}
+
+			
+		// validPoints.push(origin);
+		i = 1;
+
+		while ( validPoints.length < 16 ) {
+
+			validPoints.push({
+				x: firstPoint.x + i * d * unitVector.x,
+				y: firstPoint.y + i * d * unitVector.y
+			});
+			i++;
+		
+		}
+		return validPoints;
 	}
 };
 
