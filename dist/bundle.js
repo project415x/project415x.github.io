@@ -170,7 +170,7 @@ function Canvas(settings) {
     y: this.originY
   },
   this.type = settings.type || "not a valid type",
-  this.timer = settings.timer || this.initTimer();
+  this.timer = settings.timer || this.getTimer();
 }
 
 // Return modified d3 drag listener
@@ -181,16 +181,19 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
-                //  next four lines until but not including '})' with 
+                //  next four lines until but not including '})' with
                 //  Sauron.tellSauron(d3.mouse(this), "dbclick");
-                var newTimer = self.initTimer();
-                if (newTimer - self.timer <= 200)
+                var newTimer = self.getTimer();
+                if (newTimer - self.timer <= 200) {
                   Sauron.tellSauron(d3.mouse(this), "dbclick");
+                }
                 self.timer = newTimer;
               })
               .on("drag", function() {
                 Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(3,500);
               });
 };
 
@@ -228,8 +231,6 @@ Canvas.prototype.appendSvg = function(type) {
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-  if (id === "input")
-    this.getCanvas(id).attr("dclick", "false");
 };
 
 // Adds image on top of Circle (Target).
@@ -356,7 +357,7 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
+};
 
 // Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -407,10 +408,10 @@ Canvas.prototype.drawTarget = function(target) {
     });
 };
 
-Canvas.prototype.initTimer = function() {
+Canvas.prototype.getTimer = function() {
   var date = new Date();
   return date.getTime();
-}
+};
 
 module.exports = Canvas;
 
@@ -491,13 +492,30 @@ function initPlayground() {
 	outputTarget.init()
 }
 
+// Requires JQuery
+function initTutorial() {
+	// Initialize
+	$(window).ready(function(){
+		// Initialize Popover
+		$('#tutorial').popover();
+		// Dismissable when clicking general window elements
+		$(window).click(function() {
+				$('#tutorial').popover('hide');
+				Sauron.tutorial.show = false;
+		});
+	});
+	// Load starting tutorial
+	Sauron.tutorialControl(1,1000);
+}
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	// var Sauron = new Sauron(config);
 	// Sauron.createArmy(1);
 	initPlayground();
+	initTutorial();
 }
+
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":6,"../sauron/sauron.js":8}],6:[function(require,module,exports){
 module.exports = {
 
@@ -562,8 +580,10 @@ var util = require('../utilities/math.js'),
     Target = require('../actors/target.js');
 
 // Sauron is alive!
-function Sauron(setting) {
+function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
+  // timer: null
+  this.tutorial =  {num: 1, show: false};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -606,7 +626,7 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 // After good news from the Palantir Sauron moves forces!
-Sauron.prototype.updateTargets = function(d) {
+Sauron.prototype.updateTargets = function(d, type) {
   var width = Number(d3.selectAll("rect").attr("width")),
       height = Number(d3.selectAll("rect").attr("height")),
       x = Number(d3.selectAll("rect").attr("x")) + width / 2,
@@ -614,10 +634,15 @@ Sauron.prototype.updateTargets = function(d) {
       i = util.applyMatrix(d.x,d.y);
   // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    d3.selectAll("rect").remove();
-    this.updateProgress();
-    this.generateTarget([[1,3],[2,0]]);
-    this.drawBlips(d);
+    if (type === "collision") {
+      d3.selectAll("rect").remove();
+      this.updateProgress();
+      this.generateTarget([[1,3],[2,0]]);
+      this.drawBlips(d);
+    }
+    else if (type === "detection") {
+      this.tutorialControl(4,1);
+    }
   }
 };
 
@@ -627,9 +652,12 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
+    if (this.tutorial.show == false) {
+      this.updateTargets(d, "detection");
+    }
   }
   else if (type === "dbclick") {
-    this.updateTargets(d);
+    this.updateTargets(d, "collision");
   }
 
 
@@ -666,7 +694,7 @@ Sauron.prototype.updateProgress = function() {
 
       bar.style("width", currScore + "%");
       bar.attr("aria-valuenow", currScore);
-}
+};
 
 // The Sauron's army grows larger
 // Slightly not optimal
@@ -698,17 +726,47 @@ Sauron.prototype.generateTarget = function(matrix) {
       newTarget.drawTarget();
     }
   }
-}
+};
 
 Sauron.prototype.drawBlips = function(d) {
-      d3.select("#input-svg").append("circle")
-                    .attr({
-                      cx: d.x,
-                      cy: d.y,
-                      r: 20,
-                    })
-                    .style({"fill": "url(#tarblip)"});
-}
+  d3.select("#input-svg").append("circle")
+                          .attr({
+                            cx: d.x,
+                            cy: d.y,
+                            r: 20,
+                          })
+                          .style({"fill": "url(#tarblip)"});
+};
+
+Sauron.prototype.tutorialControl = function(num, time) {
+  if (this.tutorial.show == false && num == this.tutorial.num) {
+    if (num == 1) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
+    };
+    if (num == 2) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
+    };
+    if (num == 3) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
+    };
+    if (num == 4) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
+    };
+    setTimeout(function() {
+        $('#tutorial').popover('show');
+        this.tutorial.show = true;
+      }, time);
+    // Auto-dismiss, Want to do as a separate part, watching Sauron.tutorial.show
+    // setTimeout(function() {
+    //     $('#tutorial').popover('hide');
+    //     this.tutorial.show = false;
+    //   }, 6000);
+   }
+};
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();

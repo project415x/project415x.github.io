@@ -52,3 +52,15 @@ h3 {
   color: black;
   text-align: center;
 }
+
+#guide {
+  position: absolute;
+  top: 610px;
+  left: 95%;
+}
+
+.popover {
+  max-width: 1000px;
+  width: 400px;
+  height: 115px;
+}

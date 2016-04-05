@@ -40,7 +40,7 @@ function Canvas(settings) {
     y: this.originY
   },
   this.type = settings.type || "not a valid type",
-  this.timer = settings.timer || this.initTimer();
+  this.timer = settings.timer || this.getTimer();
 }
 
 // Return modified d3 drag listener
@@ -51,16 +51,19 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
-                //  next four lines until but not including '})' with 
+                //  next four lines until but not including '})' with
                 //  Sauron.tellSauron(d3.mouse(this), "dbclick");
-                var newTimer = self.initTimer();
-                if (newTimer - self.timer <= 200)
+                var newTimer = self.getTimer();
+                if (newTimer - self.timer <= 200) {
                   Sauron.tellSauron(d3.mouse(this), "dbclick");
+                }
                 self.timer = newTimer;
               })
               .on("drag", function() {
                 Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(3,500);
               });
 };
 
@@ -98,8 +101,6 @@ Canvas.prototype.appendSvg = function(type) {
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
-  if (id === "input")
-    this.getCanvas(id).attr("dclick", "false");
 };
 
 // Adds image on top of Circle (Target).
@@ -226,7 +227,7 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
+};
 
 // Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -277,9 +278,9 @@ Canvas.prototype.drawTarget = function(target) {
     });
 };
 
-Canvas.prototype.initTimer = function() {
+Canvas.prototype.getTimer = function() {
   var date = new Date();
   return date.getTime();
-}
+};
 
 module.exports = Canvas;
