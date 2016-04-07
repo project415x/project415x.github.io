@@ -807,6 +807,7 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 };
 
+<<<<<<< HEAD
 Sauron.prototype.drawBlips = function(d) {
   d3.select("#input-svg").append("circle")
                           .attr({
@@ -847,6 +848,8 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
+=======
+>>>>>>> c0f75b67007df5fc1298e9429333433842c703c8
 Sauron.prototype.generateRandomLineofDeath = function() {
   var validPoints = util.getValidPreImagePairs(),
       i = 0;
@@ -873,6 +876,15 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 };
 
 
+Sauron.prototype.drawBlips = function(d) {
+      d3.select("#input-svg").append("circle")
+                    .attr({
+                      cx: d.x,
+                      cy: d.y,
+                      r: 20,
+                    })
+                    .style({"fill": "url(#tarblip)"});
+}
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
