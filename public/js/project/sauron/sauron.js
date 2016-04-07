@@ -2,8 +2,11 @@ var util = require('../utilities/math.js'),
     Target = require('../actors/target.js');
 
 // Sauron is alive!
-function Sauron(setting) {
+function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
+  // timer: null
+  this.armies = [];
+  this.tutorial =  {num: 1, show: false};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -46,7 +49,10 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 // After good news from the Palantir Sauron moves forces!
-Sauron.prototype.updateTargets = function(d) {
+Sauron.prototype.updateTargets = function(d, type) {
+  for ( target in this.targets) {
+    
+  }
   var width = Number(d3.selectAll("rect").attr("width")),
       height = Number(d3.selectAll("rect").attr("height")),
       x = Number(d3.selectAll("rect").attr("x")) + width / 2,
@@ -54,19 +60,33 @@ Sauron.prototype.updateTargets = function(d) {
       i = util.applyMatrix(d.x,d.y);
   // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    console.log('update target')
-    d3.selectAll("rect").remove();
-    this.updateProgress();
-    this.generateTarget([[1,3],[2,0]]);
+    if (type === "collision") {
+      d3.selectAll("rect").remove();
+      this.updateProgress();
+      this.generateTarget([[1,3],[2,0]]);
+      this.drawBlips(d);
+    }
+    else if (type === "detection") {
+      this.tutorialControl(4,1);
+    }
   }
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(event) {
+Sauron.prototype.tellSauron = function(event, type) {
   var d = this.convertMouseToCoord(event);
-  this.updateInputVector(d);
-  this.updateOutputVector(d);
-  this.updateTargets(d);
+  if (type === "drag") {
+    this.updateInputVector(d);
+    this.updateOutputVector(d);
+    if (this.tutorial.show == false) {
+      this.updateTargets(d, "detection");
+    }
+  }
+  else if (type === "dbclick") {
+    this.updateTargets(d, "collision");
+  }
+
+
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
@@ -100,11 +120,11 @@ Sauron.prototype.updateProgress = function() {
 
       bar.style("width", currScore + "%");
       bar.attr("aria-valuenow", currScore);
-}
+};
 
 // The Sauron's army grows larger
 // Slightly not optimal
-// If matrix is invertible 
+// If matrix is invertible
 // Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
   var isValidCoordinate = false,
@@ -132,7 +152,47 @@ Sauron.prototype.generateTarget = function(matrix) {
       newTarget.drawTarget();
     }
   }
-}
+};
+
+Sauron.prototype.drawBlips = function(d) {
+  d3.select("#input-svg").append("circle")
+                          .attr({
+                            cx: d.x,
+                            cy: d.y,
+                            r: 20,
+                          })
+                          .style({"fill": "url(#tarblip)"});
+};
+
+Sauron.prototype.tutorialControl = function(num, time) {
+  if (this.tutorial.show == false && num == this.tutorial.num) {
+    if (num == 1) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
+    };
+    if (num == 2) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
+    };
+    if (num == 3) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
+    };
+    if (num == 4) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
+    };
+    setTimeout(function() {
+        $('#tutorial').popover('show');
+        this.tutorial.show = true;
+      }, time);
+    // Auto-dismiss, Want to do as a separate part, watching Sauron.tutorial.show
+    // setTimeout(function() {
+    //     $('#tutorial').popover('hide');
+    //     this.tutorial.show = false;
+    //   }, 6000);
+   }
+};
 
 Sauron.prototype.generateRandomLineofDeath = function() {
   var validPoints = util.getValidPreImagePairs(),

@@ -25,8 +25,24 @@ function initPlayground() {
 	outputTarget.init()
 }
 
+// Requires JQuery
+function initTutorial() {
+	// Initialize
+	$(window).ready(function(){
+		// Initialize Popover
+		$('#tutorial').popover();
+		// Dismissable when clicking general window elements
+		$(window).click(function() {
+				$('#tutorial').popover('hide');
+				Sauron.tutorial.show = false;
+		});
+	});
+	// Load starting tutorial
+	Sauron.tutorialControl(1,1000);
+}
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
+	initTutorial();
 }

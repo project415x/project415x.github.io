@@ -169,7 +169,8 @@ function Canvas(settings) {
     x: this.originX,
     y: this.originY
   },
-  this.type = settings.type || "not a valid type";
+  this.type = settings.type || "not a valid type",
+  this.timer = settings.timer || this.getTimer();
 }
 
 // Return modified d3 drag listener
@@ -179,10 +180,20 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(d3.mouse(this));
+                Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(2,500);
+                // If you want the single click instead of double, replace the
+                //  next four lines until but not including '})' with
+                //  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                var newTimer = self.getTimer();
+                if (newTimer - self.timer <= 200) {
+                  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                }
+                self.timer = newTimer;
               })
               .on("drag", function() {
-                Sauron.tellSauron(d3.mouse(this));
+                Sauron.tellSauron(d3.mouse(this), "drag");
+                Sauron.tutorialControl(3,500);
               });
 };
 
@@ -225,56 +236,82 @@ Canvas.prototype.appendSvg = function(type) {
 // Adds image on top of Circle (Target).
 // To randomize targets write function to randomly grab a .gif from ../public/img/*
 Canvas.prototype.appendImageToPattern = function() {
-  for(i = 1; i < 20; i++) {
-    var tar = this.getTar(i);
-    tar.append('image')
-     .attr({
-       "x": "0",
-       "y": "0",
-       "width": "40",
-       "height": "40",
-       "xlink:href": "../public/img/items/target" + i + ".gif"
-     });
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      var tar = this.getTar(i);
+      tar.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "40",
+                 "height": "40",
+                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
+               });
+    }
+    var arm = this.getTar("arm");
+    arm.append('image')
+             .attr({
+               "x": "0",
+               "y": "0",
+               "width": "30px",
+               "height": "100px",
+               "xlink:href": "../public/img/robotarm.gif"
+             });
   }
-  var arm = this.getTar(arm);
-  arm.append('image')
-   .attr({
-     "x": "0",
-     "y": "0",
-     "width": "30px",
-     "height": "100px",
-     "xlink:href": "../public/img/robotarm.gif"
-   })
+  if (this.type === "input") {
+    var blip = this.getTar("blip");
+    blip.append('image')
+              .attr({
+                "x": "0",
+                "y": "0",
+                "width": "40",
+                "height": "40",
+                "xlink:href": "../public/img/blip.gif"
+              });
+  }
 };
 
 // grabs def elemetn and appends a pattern on it to prep us to add imag
 Canvas.prototype.appendPatternToDefs = function() {
   var defs = this.getDefs();
-  for(i = 1; i < 20; i++) {
+  if (this.type === "output") {
+    for(i = 1; i < 20; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tar" + i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "40",
+                  "width": "40"
+                });
+    }
     defs.append('pattern')
               .attr({
-                "id": "tar" + i,
+                "id": "tararm",
+                "x": "0",
+                "y": "0",
+                "height": "100px",
+                "width": "30px"
+              });
+  }
+  if (this.type === "input") {
+    defs.append('pattern')
+              .attr({
+                "id": "tarblip",
                 "x": "0",
                 "y": "0",
                 "height": "40",
                 "width": "40"
               });
   }
-  defs.append('pattern')
-            .attr({
-              "id": "tararm",
-              "x": "0",
-              "y": "0",
-              "height": "100px",
-              "width": "30px"
-            });
+
 };
 
 // grabs svg and adds def to it
 Canvas.prototype.appendDefsToSvg = function(){
   var svg = this.getSvg();
    svg.append('defs')
-      .attr("id", "output-defs");
+      .attr("id", this.type + "-defs");
 };
 
 // Draw our canvas depending on the type
@@ -287,9 +324,10 @@ Canvas.prototype.drawCanvas = function() {
   }
   // append a svg to the canvas
   this.appendSvg();
-  // add drag functionality to vector
+  // add drag and double click functionality to vector
   if(this.type === "input") {
     this.getCanvas().call(this.vectorDrag());
+    this.drawTargetsOnCanvas();
   }
   else if(this.type === "output") {
     this.drawTargetsOnCanvas();
@@ -319,7 +357,7 @@ Canvas.prototype.drawProgressBar = function() {
       container.append('span')
          .attr("id", "score")
          .text("0% Complete");
-}
+};
 
 // Also not currently being used. Let's figure out if we need it.
 Canvas.prototype.proximity = function(outputVector, target) {
@@ -368,6 +406,11 @@ Canvas.prototype.drawTarget = function(target) {
       r: target.r,
       color: target.color
     });
+};
+
+Canvas.prototype.getTimer = function() {
+  var date = new Date();
+  return date.getTime();
 };
 
 module.exports = Canvas;
@@ -449,11 +492,28 @@ function initPlayground() {
 	outputTarget.init()
 }
 
+// Requires JQuery
+function initTutorial() {
+	// Initialize
+	$(window).ready(function(){
+		// Initialize Popover
+		$('#tutorial').popover();
+		// Dismissable when clicking general window elements
+		$(window).click(function() {
+				$('#tutorial').popover('hide');
+				Sauron.tutorial.show = false;
+		});
+	});
+	// Load starting tutorial
+	Sauron.tutorialControl(1,1000);
+}
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
+	initTutorial();
 }
+
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":9,"../sauron/sauron.js":11}],6:[function(require,module,exports){
 module.exports = {
 
@@ -599,8 +659,10 @@ var util = require('../utilities/math.js'),
     Target = require('../actors/target.js');
 
 // Sauron is alive!
-function Sauron(setting) {
+function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
+  // timer: null
+  this.tutorial =  {num: 1, show: false};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -643,7 +705,7 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 // After good news from the Palantir Sauron moves forces!
-Sauron.prototype.updateTargets = function(d) {
+Sauron.prototype.updateTargets = function(d, type) {
   var width = Number(d3.selectAll("rect").attr("width")),
       height = Number(d3.selectAll("rect").attr("height")),
       x = Number(d3.selectAll("rect").attr("x")) + width / 2,
@@ -651,19 +713,33 @@ Sauron.prototype.updateTargets = function(d) {
       i = util.applyMatrix(d.x,d.y);
   // collison detection occurs here
   if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    console.log('update target')
-    d3.selectAll("rect").remove();
-    this.updateProgress();
-    this.generateTarget([[1,3],[2,0]]);
+    if (type === "collision") {
+      d3.selectAll("rect").remove();
+      this.updateProgress();
+      this.generateTarget([[1,3],[2,0]]);
+      this.drawBlips(d);
+    }
+    else if (type === "detection") {
+      this.tutorialControl(4,1);
+    }
   }
 };
 
 // Palantir reveals new plans to Sauron
-Sauron.prototype.tellSauron = function(event) {
+Sauron.prototype.tellSauron = function(event, type) {
   var d = this.convertMouseToCoord(event);
-  this.updateInputVector(d);
-  this.updateOutputVector(d);
-  this.updateTargets(d);
+  if (type === "drag") {
+    this.updateInputVector(d);
+    this.updateOutputVector(d);
+    if (this.tutorial.show == false) {
+      this.updateTargets(d, "detection");
+    }
+  }
+  else if (type === "dbclick") {
+    this.updateTargets(d, "collision");
+  }
+
+
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
@@ -697,11 +773,11 @@ Sauron.prototype.updateProgress = function() {
 
       bar.style("width", currScore + "%");
       bar.attr("aria-valuenow", currScore);
-}
+};
 
 // The Sauron's army grows larger
 // Slightly not optimal
-// If matrix is invertible 
+// If matrix is invertible
 // Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
   var isValidCoordinate = false,
@@ -729,7 +805,47 @@ Sauron.prototype.generateTarget = function(matrix) {
       newTarget.drawTarget();
     }
   }
-}
+};
+
+Sauron.prototype.drawBlips = function(d) {
+  d3.select("#input-svg").append("circle")
+                          .attr({
+                            cx: d.x,
+                            cy: d.y,
+                            r: 20,
+                          })
+                          .style({"fill": "url(#tarblip)"});
+};
+
+Sauron.prototype.tutorialControl = function(num, time) {
+  if (this.tutorial.show == false && num == this.tutorial.num) {
+    if (num == 1) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
+    };
+    if (num == 2) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
+    };
+    if (num == 3) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
+    };
+    if (num == 4) {
+      this.tutorial.num++;
+      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
+    };
+    setTimeout(function() {
+        $('#tutorial').popover('show');
+        this.tutorial.show = true;
+      }, time);
+    // Auto-dismiss, Want to do as a separate part, watching Sauron.tutorial.show
+    // setTimeout(function() {
+    //     $('#tutorial').popover('hide');
+    //     this.tutorial.show = false;
+    //   }, 6000);
+   }
+};
 
 Sauron.prototype.generateRandomLineofDeath = function() {
   var validPoints = util.getValidPreImagePairs(),
@@ -760,6 +876,7 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
+
 },{"../actors/target.js":1,"../utilities/math.js":12}],12:[function(require,module,exports){
 module.exports = {
 
