@@ -23,6 +23,21 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	isOnScreen: function(matrix, point) {
+		var pre = this.screenToMath(point.x, point.y);
+		var par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
+    pre = this.mathToScreen(prex,prey);
+
+     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
+     	return true;
+     } 
+     else {
+     	return false;
+     }
+	},
+
 	getValidPreImagePairs: function(matrix) {
 		
 		var validPoints = [],
@@ -56,7 +71,7 @@ module.exports = {
 		// validPoints.push(origin);
 		i = 1;
 
-		while ( validPoints.length < 16 ) {
+		while ( validPoints.length < 10 ) {
 
 			validPoints.push({
 				x: firstPoint.x + i * d * unitVector.x,

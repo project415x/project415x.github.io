@@ -17,7 +17,7 @@ function Target(settings) {
 	this.width = settings.width || 40;
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
-	this.id = settings.id || "derp";
+	this.id = settings.id || "ringWraith_0";
 	this.type = settings.type || "output";
 }
 
@@ -662,6 +662,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   // timer: null
+  this.armies = [];
   this.tutorial =  {num: 1, show: false};
 }
 
@@ -704,25 +705,40 @@ Sauron.prototype.updateOutputVector = function(d) {
   });
 };
 
+Sauron.prototype.getArmies = function() {
+  return d3.select("#output-svg").selectAll('rect')[0];   
+};
+
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
-  var width = Number(d3.selectAll("rect").attr("width")),
-      height = Number(d3.selectAll("rect").attr("height")),
-      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
-      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
-      i = util.applyMatrix(d.x,d.y);
-  // collison detection occurs here
-  if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    if (type === "collision") {
-      d3.selectAll("rect").remove();
-      this.updateProgress();
-      this.generateTarget([[1,3],[2,0]]);
-      this.drawBlips(d);
+  var list = this.getArmies();
+ 
+  for ( var j = 0; j < list.length ; j++ ) {
+    var wraith = d3.select("#ringWraith_"+j);
+
+    if(wraith[0]["0"] === null || wraith[0][0] === null) {
+      continue;
     }
-    else if (type === "detection") {
-      this.tutorialControl(4,1);
+    var width = Number(wraith.attr("width")),
+        height = Number(wraith.attr("height")),
+        x = Number(wraith.attr("x")) + width / 2,
+        y = Number(wraith.attr("y")) + height / 2,
+        i = util.applyMatrix(d.x,d.y);
+
+    // collison detection occurs here
+    if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+      if (type === "collision") {
+        wraith.remove()
+        this.updateProgress();
+        this.generateTarget([[1,3],[2,0]]);
+        this.drawBlips(d);
+      }
+      else if (type === "detection") {
+        this.tutorialControl(4,1);
+      }
     }
   }
+
 };
 
 // Palantir reveals new plans to Sauron
@@ -731,15 +747,13 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
-    if (this.tutorial.show == false) {
+    if (this.tutorial.show === false) {
       this.updateTargets(d, "detection");
     }
   }
   else if (type === "dbclick") {
     this.updateTargets(d, "collision");
   }
-
-
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
@@ -785,21 +799,20 @@ Sauron.prototype.generateTarget = function(matrix) {
       newX, newY;
 
   while (!isValidCoordinate) {
-    newX = util.getRandom(0,500);
-    newY = util.getRandom(0,500);
-    var pre = util.screenToMath(newX,newY);
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
-        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
-    pre = util.mathToScreen(prex,prey);
+    var point = {
+      x: util.getRandom(0, 500),
+      y: util.getRandom(0, 500)
+    };
 
-    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
+    if ( util.isOnScreen(matrix, point)) {
       isValidCoordinate = true;
       var targetSettings = {
-        x: newX,
-        y: newY,
+        x: point.x,
+        y: point.y,
         width: 40,
         height: 40,
-        color: "black"
+        color: "black",
+        id: "ringWraith_0"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -807,32 +820,21 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 };
 
-<<<<<<< HEAD
-Sauron.prototype.drawBlips = function(d) {
-  d3.select("#input-svg").append("circle")
-                          .attr({
-                            cx: d.x,
-                            cy: d.y,
-                            r: 20,
-                          })
-                          .style({"fill": "url(#tarblip)"});
-};
-
 Sauron.prototype.tutorialControl = function(num, time) {
-  if (this.tutorial.show == false && num == this.tutorial.num) {
-    if (num == 1) {
+  if (this.tutorial.show === false && num === this.tutorial.num) {
+    if (num === 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
     };
-    if (num == 2) {
+    if (num === 2) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
     };
-    if (num == 3) {
+    if (num === 3) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
     };
-    if (num == 4) {
+    if (num === 4) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
     };
@@ -848,16 +850,15 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
-=======
->>>>>>> c0f75b67007df5fc1298e9429333433842c703c8
 Sauron.prototype.generateRandomLineofDeath = function() {
-  var validPoints = util.getValidPreImagePairs(),
+  var validPoints = [{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];//util.getValidPreImagePairs(),
       i = 0;
+
+
+  for( var key in validPoints ) {
   
-  for( var key in validPoints  ) {
-    
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix)
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
     pair.x = screenCoors[0];
     pair.y = screenCoors[1];
     
@@ -874,7 +875,6 @@ Sauron.prototype.generateRandomLineofDeath = function() {
     i++;
   }
 };
-
 
 Sauron.prototype.drawBlips = function(d) {
       d3.select("#input-svg").append("circle")
@@ -915,6 +915,21 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	isOnScreen: function(matrix, point) {
+		var pre = this.screenToMath(point.x, point.y);
+		var par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
+    pre = this.mathToScreen(prex,prey);
+
+     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
+     	return true;
+     } 
+     else {
+     	return false;
+     }
+	},
+
 	getValidPreImagePairs: function(matrix) {
 		
 		var validPoints = [],
@@ -948,7 +963,7 @@ module.exports = {
 		// validPoints.push(origin);
 		i = 1;
 
-		while ( validPoints.length < 16 ) {
+		while ( validPoints.length < 10 ) {
 
 			validPoints.push({
 				x: firstPoint.x + i * d * unitVector.x,

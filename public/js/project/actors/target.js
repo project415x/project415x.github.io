@@ -16,7 +16,7 @@ function Target(settings) {
 	this.width = settings.width || 40;
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
-	this.id = settings.id || "derp";
+	this.id = settings.id || "ringWraith_0";
 	this.type = settings.type || "output";
 }
 
