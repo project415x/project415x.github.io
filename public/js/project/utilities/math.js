@@ -9,7 +9,11 @@ module.exports = {
 	},
 
 	applyMatrix: function(sX,sY,matrix) {
-	  var matrix = matrix || [[1,3],[2,0]];
+	  var matrix = matrix || [
+		  [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
+		  [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
+	  ];
+	  console.log('matrix ', matrix)
 	  var math_coord = this.screenToMath(sX,sY),
 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
 	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
