@@ -500,6 +500,7 @@ function initTutorial() {
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
 		$(window).click(function() {
+				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
 		});
@@ -583,7 +584,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   // timer: null
-  this.tutorial =  {num: 1, show: false};
+  this.tutorial =  {num: 1, show: false, timer: null};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -760,6 +761,7 @@ Sauron.prototype.tutorialControl = function(num, time) {
         $('#tutorial').popover('show');
         this.tutorial.show = true;
       }, time);
+    this.setTimer(5000);
     // Auto-dismiss, Want to do as a separate part, watching Sauron.tutorial.show
     // setTimeout(function() {
     //     $('#tutorial').popover('hide');
@@ -768,6 +770,17 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
+Sauron.prototype.clearTimer = function() {
+  clearTimeout(this.tutorial.timer);
+};
+
+
+Sauron.prototype.setTimer = function(time) {
+  this.tutorial.timer = setTimeout(function() {
+                            $('#tutorial').popover('hide');
+                            this.tutorial.show = false;
+                        }, time);
+};
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
 

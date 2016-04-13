@@ -33,6 +33,7 @@ function initTutorial() {
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
 		$(window).click(function() {
+				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
 		});
