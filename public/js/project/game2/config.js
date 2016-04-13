@@ -42,15 +42,5 @@ module.exports = {
 			x: null,
 			y: null
 		}
-	},
-
-	targetSettings : {
-		x: 355,
-		y: 50,
-		r: 20
-	},
-
-	EyeOfSauron : {
-		matrix: [[1,2],[2,1]]
 	}
 };
