@@ -37,7 +37,7 @@ Sauron.prototype.removeVector = function(type) {
 
 // Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = this.applyTransformation(d.x,d.y);
+  var i = util.applyMatrix(d.x,d.y,this.matrix);
   this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
@@ -49,13 +49,13 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 Sauron.prototype.getArmies = function() {
-  return d3.select("#output-svg").selectAll('rect')[0];   
+  return d3.select("#output-svg").selectAll('rect')[0];
 };
 
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
- 
+
   for ( var j = 0; j < list.length ; j++ ) {
     var wraith = d3.select("#ringWraith_"+j);
 
@@ -66,7 +66,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2,
-        i = util.applyMatrix(d.x,d.y);
+        i = util.applyMatrix(d.x,d.y,this.matrix);
 
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
@@ -200,12 +200,12 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 
 
   for( var key in validPoints ) {
-  
+
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
     pair.x = screenCoors[0];
     pair.y = screenCoors[1];
-    
+
     var targetSetting = {
       x: pair.x,
       y: pair.y,
