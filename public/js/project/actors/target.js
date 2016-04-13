@@ -16,9 +16,7 @@ function Target(settings) {
 	this.width = settings.width || 40;
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
-	// No need for color if we use image pattern as fill
-	// this.color = settings.color || '#FF0000';
-	// test
+	this.id = settings.id || "ringWraith_0";
 	this.type = settings.type || "output";
 }
 
@@ -32,18 +30,21 @@ Target.prototype.init = function() {
 
 
 Target.prototype.drawTarget = function() {
-	var score = 0,
+	var tar_num = Math.floor(Math.random() * 19) + 1,
+			score = 0,
 	 		real_x = this.x - this.width / 2,
 			real_y = this.y - this.height / 2;
+	
 	var rect = d3.select('#'+this.type+'-svg').append("rect")
 		.attr({
 			"x": real_x,
 			"y": real_y,
 			"width": this.width,
-			"height": this.height
+			"height": this.height,
+			"id": this.id
 		})
 
-	var tar_num = Math.floor(Math.random() * 19) + 1;
+	
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
