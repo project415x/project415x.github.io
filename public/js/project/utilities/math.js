@@ -9,11 +9,11 @@ module.exports = {
 	},
 
 	applyMatrix: function(sX,sY,matrix) {
-	  var matrix = matrix || [
-		  [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
-		  [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
-	  ];
-	  console.log('matrix ', matrix)
+	  // var matrix = matrix || [
+		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
+		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
+	  // ];
+	  // console.log('matrix ', matrix)
 	  var math_coord = this.screenToMath(sX,sY),
 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
 	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
@@ -36,14 +36,14 @@ module.exports = {
 
      if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
      	return true;
-     } 
+     }
      else {
      	return false;
      }
 	},
 
 	getValidPreImagePairs: function(matrix) {
-		
+
 		var validPoints = [],
 				i = 1,
 				d = 2,
@@ -64,14 +64,14 @@ module.exports = {
 
 		// move to left most point
 		while( Math.abs(firstPoint.x) < 10 && Math.abs(firstPoint.y) < 10 ) {
-	
+
 			firstPoint.x = firstPoint.x - i * d * unitVector.x;
 			firstPoint.y = firstPoint.y - i * d * unitVector.y;
 			i++;
-	
+
 		}
 
-			
+
 		// validPoints.push(origin);
 		i = 1;
 
@@ -82,7 +82,7 @@ module.exports = {
 				y: firstPoint.y + i * d * unitVector.y
 			});
 			i++;
-		
+
 		}
 		return validPoints;
 	}
