@@ -32,10 +32,53 @@ function initTutorial() {
 		// Initialize Popover
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
-		$(window).click(function() {
+		$(window).click(function(event) {
+				// var guide = document.getElementById('guide'),
+				// 		img = document.getElementById('tutorial');
+				console.log("1")
+				// if(Sauron.tutorial.reclick) {
+				// 	return;
+				// }
+				if(!Sauron.tutorial.show) {
+					return;
+				}
+
+				// if (guide == event.target || img == event.target) {
+				// 	if(Sauron.tutorial.show) {
+				// 		Sauron.tutorial.clicked = true;
+				// 	}
+				// 	else {
+				// 		return;
+				// 	}
+				// }
+				console.log("pass1")
 				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
+				Sauron.tutorial.clicked = true;
+				// Sauron.tutorial.reclick = false;
+				// if(!Sauron.tutorial.clicked) {
+				// 	Sauron.tutorial.clicked = true;
+				// }
+				// console.log(Sauron.tutorial, "1");
+		});
+		// Reopen tutorial
+		$('#guide').click(function(event) {
+			// var guide = document.getElementById('guide'),
+			// 		img = document.getElementById('tutorial');
+			console.log("2")
+			if(Sauron.tutorial.show)
+				return;
+			// if (guide != event.target && img != event.target) {
+			// 	return;
+			// }
+			// if(!Sauron.tutorial.show && Sauron.tutorial.clicked && Sauron.tutorial.reclick) {
+			console.log("pass2")
+				Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
+				Sauron.tutorial.clicked = false;
+				Sauron.tutorial.show = true;
+				Sauron.tutorial.reclick = true;
+			// }
 		});
 	});
 	// Load starting tutorial

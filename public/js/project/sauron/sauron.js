@@ -5,7 +5,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   // timer: null
-  this.tutorial =  {num: 1, show: false, timer: null};
+  this.tutorial =  {num: 1, show: false, clicked: false, reclick: false, timer: null};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -160,8 +160,8 @@ Sauron.prototype.drawBlips = function(d) {
                           .style({"fill": "url(#tarblip)"});
 };
 
-Sauron.prototype.tutorialControl = function(num, time) {
-  if (this.tutorial.show == false && num == this.tutorial.num) {
+Sauron.prototype.tutorialControl = function(num, time, reclick) {
+  if (!this.tutorial.show && num == this.tutorial.num) {
     if (num == 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
@@ -181,14 +181,14 @@ Sauron.prototype.tutorialControl = function(num, time) {
     setTimeout(function() {
         $('#tutorial').popover('show');
         this.tutorial.show = true;
+        this.tutorial.clicked = false;
+        this.tutorial.reclick = false;
       }, time);
-    this.setTimer(5000);
-    // Auto-dismiss, Want to do as a separate part, watching Sauron.tutorial.show
-    // setTimeout(function() {
-    //     $('#tutorial').popover('hide');
-    //     this.tutorial.show = false;
-    //   }, 6000);
-   }
+    if(!reclick) {
+      this.setTimer(5000);
+      // this.tutorial.reclick = true;
+    }
+  }
 };
 
 Sauron.prototype.clearTimer = function() {
@@ -196,10 +196,9 @@ Sauron.prototype.clearTimer = function() {
 };
 
 
-Sauron.prototype.setTimer = function(time) {
+Sauron.prototype.setTimer = function(time, sauron) {
   this.tutorial.timer = setTimeout(function() {
                             $('#tutorial').popover('hide');
-                            this.tutorial.show = false;
                         }, time);
 };
 // Sauron is mobilized via Smaug!
