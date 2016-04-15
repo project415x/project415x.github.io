@@ -42,7 +42,22 @@ module.exports = {
      }
 	},
 
-	getValidPreImagePairs: function(matrix) {
+	getValidPreImageCircle: function() {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 4) + 4;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: r * Math.cos(angle),
+				y: r * Math.sin(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
+
+	getValidPreImagePairs: function() {
 
 		var validPoints = [],
 				coefficients = [1.5, 4.5, 7.5],
