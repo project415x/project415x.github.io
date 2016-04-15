@@ -193,29 +193,40 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
-//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
-Sauron.prototype.generateRandomLineofDeath = function() {
-  
-  var validPoints = util.getValidPreImagePairs(this.matrix), 
-      i = 0;
+Sauron.prototype.generateRandomCircleofDeath = function() {
+  var validPoints = util.getValidPreImageCircle();
 
-  console.log('valid points ', validPoints)
-
-  for( var key in validPoints ) {
-    
+  for( var key in validPoints ) {    
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
     
-    var test = {
-      x: screenCoors[0],
-      y: screenCoors[1]
-    }
-
-    console.log('screenCoordinates ', test);
-
     var targetSetting = {
-      x: test.x,
-      y: test.y,
+      x: screenCoors[0],
+      y: screenCoors[1],
+      width: 40,
+      height: 40,
+      color: "black",
+      id: "ringWraith_"+i
+    };
+    var newTarget = new Target(targetSetting);
+    newTarget.drawTarget();
+    i++;
+  }
+};
+
+//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
+Sauron.prototype.generateRandomLineofDeath = function() {
+  
+  var validPoints = util.getValidPreImagePairs(), 
+      i = 0;
+
+  for( var key in validPoints ) {    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    
+    var targetSetting = {
+      x: screenCoors[0],
+      y: screenCoors[1],
       width: 40,
       height: 40,
       color: "black",

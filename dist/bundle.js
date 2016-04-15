@@ -415,7 +415,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":11,"../utilities/math.js":12}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":13,"../utilities/math.js":14}],4:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -514,7 +514,7 @@ startPlayground = function startPlayground() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":9,"../sauron/sauron.js":11}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":11,"../sauron/sauron.js":13}],6:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -595,7 +595,41 @@ function initLevel2() {
 startLevel2 = function startLevel2() {
 	initLevel2();
 }
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../game2/config.js":6,"../sauron/sauron.js":11}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../game2/config.js":6,"../sauron/sauron.js":13}],9:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"dup":6}],10:[function(require,module,exports){
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js');
+
+function initLevel3() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	Sauron.generateRandomCircleofDeath();
+}
+
+
+// think of this as the main function :)
+startLevel3 = function startLevel3() {
+	initLevel3();
+}
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":9}],11:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -652,9 +686,9 @@ module.exports = {
 		matrix: [[1,2],[2,1]]
 	}
 };
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 arguments[4][4][0].apply(exports,arguments)
-},{"dup":4}],11:[function(require,module,exports){
+},{"dup":4}],13:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js');
 
@@ -850,29 +884,40 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
-//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
-Sauron.prototype.generateRandomLineofDeath = function() {
-  
-  var validPoints = util.getValidPreImagePairs(this.matrix), 
-      i = 0;
+Sauron.prototype.generateRandomCircleofDeath = function() {
+  var validPoints = util.getValidPreImageCircle();
 
-  console.log('valid points ', validPoints)
-
-  for( var key in validPoints ) {
-    
+  for( var key in validPoints ) {    
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
     
-    var test = {
-      x: screenCoors[0],
-      y: screenCoors[1]
-    }
-
-    console.log('screenCoordinates ', test);
-
     var targetSetting = {
-      x: test.x,
-      y: test.y,
+      x: screenCoors[0],
+      y: screenCoors[1],
+      width: 40,
+      height: 40,
+      color: "black",
+      id: "ringWraith_"+i
+    };
+    var newTarget = new Target(targetSetting);
+    newTarget.drawTarget();
+    i++;
+  }
+};
+
+//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
+Sauron.prototype.generateRandomLineofDeath = function() {
+  
+  var validPoints = util.getValidPreImagePairs(), 
+      i = 0;
+
+  for( var key in validPoints ) {    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    
+    var targetSetting = {
+      x: screenCoors[0],
+      y: screenCoors[1],
       width: 40,
       height: 40,
       color: "black",
@@ -897,7 +942,7 @@ Sauron.prototype.drawBlips = function(d) {
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
 
-},{"../actors/target.js":1,"../utilities/math.js":12}],12:[function(require,module,exports){
+},{"../actors/target.js":1,"../utilities/math.js":14}],14:[function(require,module,exports){
 module.exports = {
 
 	screenToMath: function(x,y) {
@@ -942,7 +987,22 @@ module.exports = {
      }
 	},
 
-	getValidPreImagePairs: function(matrix) {
+	getValidPreImageCircle: function() {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 4) + 4;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: r * Math.cos(angle),
+				y: r * Math.sin(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
+
+	getValidPreImagePairs: function() {
 
 		var validPoints = [],
 				coefficients = [1.5, 4.5, 7.5],
@@ -964,4 +1024,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
