@@ -45,44 +45,20 @@ module.exports = {
 	getValidPreImagePairs: function(matrix) {
 
 		var validPoints = [],
-				i = 1,
-				d = 2,
+				coefficients = [1.5, 4.5, 7.5],
 		 		angle = Math.PI * Math.random(),
-				shift = Math.random() * 2,
-				unitVector = {
-					x: Math.cos(angle),
-					y: Math.sin(angle)
-				},
-				origin = {
-					x: 0,
-					y: 0
-				},
-				firstPoint = {
-					x: ((d/2) - shift) * unitVector.x,
-					y: ((d/2) - shift) * unitVector.y
-				};
+		 		tempX = Math.cos(angle),
+		 		tempY = Math.sin(angle);
 
-		// move to left most point
-		while( Math.abs(firstPoint.x) < 10 && Math.abs(firstPoint.y) < 10 ) {
-
-			firstPoint.x = firstPoint.x - i * d * unitVector.x;
-			firstPoint.y = firstPoint.y - i * d * unitVector.y;
-			i++;
-
-		}
-
-
-		// validPoints.push(origin);
-		i = 1;
-
-		while ( validPoints.length < 10 ) {
-
-			validPoints.push({
-				x: firstPoint.x + i * d * unitVector.x,
-				y: firstPoint.y + i * d * unitVector.y
-			});
-			i++;
-
+		for( var i = 0; i < coefficients.length; i++ ) {
+		 	validPoints.push({
+			 	x: (coefficients[i] * tempX),
+				y: (coefficients[i] * tempY)		
+	 		});
+		 	validPoints.push({
+		 		x: ((-1 * coefficients[i]) * tempX),
+		 		y: ((-1 * coefficients[i]) * tempY)
+		 	});
 		}
 		return validPoints;
 	}

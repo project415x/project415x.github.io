@@ -193,22 +193,29 @@ Sauron.prototype.tutorialControl = function(num, time) {
    }
 };
 
+//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
 Sauron.prototype.generateRandomLineofDeath = function() {
-  var validPoints = [{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
-  // util.getValidPreImagePairs(),
+  
+  var validPoints = util.getValidPreImagePairs(this.matrix), 
       i = 0;
 
+  console.log('valid points ', validPoints)
 
   for( var key in validPoints ) {
-
+    
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-    pair.x = screenCoors[0];
-    pair.y = screenCoors[1];
+    
+    var test = {
+      x: screenCoors[0],
+      y: screenCoors[1]
+    }
+
+    console.log('screenCoordinates ', test);
 
     var targetSetting = {
-      x: pair.x,
-      y: pair.y,
+      x: test.x,
+      y: test.y,
       width: 40,
       height: 40,
       color: "black",
