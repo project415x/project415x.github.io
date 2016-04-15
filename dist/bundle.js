@@ -500,20 +500,24 @@ function initTutorial() {
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
 		$(window).click(function(event) {
-				// var guide = document.getElementById('guide'),
+				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				console.log(event.target, "1")
-				if(event.target == img) {
+				if(!Sauron.tutorial.show) {
+					return;
+				}
+				if((event.target == img || event.target == guide) && Sauron.tutorial.reopen) {
 					return;
 				}
 				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
-				Sauron.tutorial.clicked = true;
+				Sauron.tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			console.log(event.target, "2");
+			if(Sauron.tutorial.show || !Sauron.tutorial.reopen) {
+				return;
+			}
 			Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
 		});
 	});
@@ -596,7 +600,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   // timer: null
-  this.tutorial =  {num: 1, show: false, clicked: false, reclick: false, timer: null};
+  this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -665,7 +669,7 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
-    if (this.tutorial.show == false) {
+    if (!this.tutorial.show || !this.tutorial.reopen) {
       this.updateTargets(d, "detection");
     }
   }
@@ -752,7 +756,9 @@ Sauron.prototype.drawBlips = function(d) {
 };
 
 Sauron.prototype.tutorialControl = function(num, time, reclick) {
-  if (!this.tutorial.show && num == this.tutorial.num) {
+  sauron = this;
+  if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
+    console.log("true")
     if (num == 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
@@ -771,15 +777,16 @@ Sauron.prototype.tutorialControl = function(num, time, reclick) {
     };
     setTimeout(function() {
         $('#tutorial').popover('show');
-        this.tutorial.show = true;
-        this.tutorial.clicked = false;
-        this.tutorial.reclick = false;
+        sauron.tutorial.show = true;
+        sauron.tutorial.reopen = false;
       }, time);
     if(!reclick) {
       this.setTimer(5000);
-      // this.tutorial.reclick = true;
+      sauron.tutorial.show = false;
+      sauron.tutorial.reopen = true;
     }
   }
+  console.log(sauron.tutorial.num);
 };
 
 Sauron.prototype.clearTimer = function() {
@@ -788,9 +795,9 @@ Sauron.prototype.clearTimer = function() {
 
 
 Sauron.prototype.setTimer = function(time, sauron) {
-  // this.tutorial.timer = setTimeout(function() {
-  //                           $('#tutorial').popover('hide');
-  //                       }, time);
+  this.tutorial.timer = setTimeout(function() {
+                            $('#tutorial').popover('hide');
+                        }, time);
 };
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();

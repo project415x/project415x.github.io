@@ -33,20 +33,24 @@ function initTutorial() {
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
 		$(window).click(function(event) {
-				// var guide = document.getElementById('guide'),
+				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				console.log(event.target, "1")
-				if(event.target == img) {
+				if(!Sauron.tutorial.show) {
+					return;
+				}
+				if((event.target == img || event.target == guide) && Sauron.tutorial.reopen) {
 					return;
 				}
 				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
-				Sauron.tutorial.clicked = true;
+				Sauron.tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			console.log(event.target, "2");
+			if(Sauron.tutorial.show || !Sauron.tutorial.reopen) {
+				return;
+			}
 			Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
 		});
 	});
