@@ -197,9 +197,9 @@ Sauron.prototype.clearTimer = function() {
 
 
 Sauron.prototype.setTimer = function(time, sauron) {
-  this.tutorial.timer = setTimeout(function() {
-                            $('#tutorial').popover('hide');
-                        }, time);
+  // this.tutorial.timer = setTimeout(function() {
+  //                           $('#tutorial').popover('hide');
+  //                       }, time);
 };
 // Sauron is mobilized via Smaug!
 module.exports = new Sauron();
