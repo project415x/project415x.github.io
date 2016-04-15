@@ -163,7 +163,6 @@ Sauron.prototype.drawBlips = function(d) {
 Sauron.prototype.tutorialControl = function(num, time, reclick) {
   sauron = this;
   if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    console.log("true")
     if (num == 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
@@ -191,7 +190,6 @@ Sauron.prototype.tutorialControl = function(num, time, reclick) {
       sauron.tutorial.reopen = true;
     }
   }
-  console.log(sauron.tutorial.num);
 };
 
 Sauron.prototype.clearTimer = function() {

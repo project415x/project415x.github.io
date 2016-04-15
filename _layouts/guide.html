@@ -5,27 +5,30 @@ layout: minimum
 <style>
 h3 {
   font-family: 'Press Start 2P', sans-serif;
-  font-size: 24px;
+  font-size: 23px;
   font-family: monospace, monospace;
   font-weight:300;
+  top: 0px;
+  left: 0px;
 }
 body {
   background-color: black;
-  background: url(../public/layout/staticbg.gif);
+  background: url(../public/img/guide/staticbg.gif);
   color: lime;
-  font-family:monospace,monospace;font-size:1em;
+  font-family:monospace,monospace;
+  font-size: 15px;
   letter-spacing: 1pt;
-}
-td {
-  height: 50px;
 }
 </style>
 
-<center>
-  <h3>{{ page.title }}</h3>
-</center>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-11">
+    <h3>{{ page.title }}</h3>
+  </div>
+</div>
 
-<br>
+<br><br>
 
 <div class="container">
   {{ content }}
