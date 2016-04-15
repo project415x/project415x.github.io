@@ -32,9 +32,26 @@ function initTutorial() {
 		// Initialize Popover
 		$('#tutorial').popover();
 		// Dismissable when clicking general window elements
-		$(window).click(function() {
+		$(window).click(function(event) {
+				var guide = document.getElementById('guide');
+				var img = document.getElementById('tutorial');
+				if(!Sauron.tutorial.show) {
+					return;
+				}
+				if((event.target == img || event.target == guide) && Sauron.tutorial.reopen) {
+					return;
+				}
+				Sauron.clearTimer();
 				$('#tutorial').popover('hide');
 				Sauron.tutorial.show = false;
+				Sauron.tutorial.reopen = true;
+		});
+		// Reopen tutorial
+		$('#tutorial').click(function(event) {
+			if(Sauron.tutorial.show || !Sauron.tutorial.reopen) {
+				return;
+			}
+			Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
 		});
 	});
 	// Load starting tutorial
