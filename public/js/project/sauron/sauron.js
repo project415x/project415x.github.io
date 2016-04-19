@@ -60,7 +60,6 @@ Sauron.prototype.updateTargets = function(d, type) {
     if(list[elem].id === "output-svg" ) {
       continue;
     }
-    console.log('list elem id',list[elem].id)
 
     var id = list[elem].id,
         wraith = d3.select("#"+id);
@@ -76,15 +75,16 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        this.generateTarget([[1,3],[2,0]]);
         this.drawBlips(d);
+        if( id === "random") {
+          this.generateTarget();
+        }
       }
       else if (type === "detection") {
         this.tutorialControl(4,1);
       }
     }
   }
-
 };
 
 // Palantir reveals new plans to Sauron
@@ -133,6 +133,7 @@ Sauron.prototype.updateProgress = function() {
 // Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
   var isValidCoordinate = false,
+      matrix = this.matrix,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
       newX, newY;
 
@@ -218,7 +219,7 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "circle"+i
+      id: "circle_"+i
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();
