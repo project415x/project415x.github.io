@@ -877,11 +877,9 @@ Sauron.prototype.updateTargets = function(d, type) {
     if(list[elem].id === "output-svg" ) {
       continue;
     }
-
     var id = list[elem].id,
         wraith = d3.select("#"+id);
-    
-    var width = Number(wraith.attr("width")),
+        width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2,
@@ -893,8 +891,8 @@ Sauron.prototype.updateTargets = function(d, type) {
         wraith.remove()
         this.updateProgress();
         this.drawBlips(d);
-        if( id === "random") {
-          this.generateTarget();
+        if( list.length - 1 === 0 ) {
+          this.generateNewTargets(id);
         }
       }
       else if (type === "detection") {
@@ -903,6 +901,18 @@ Sauron.prototype.updateTargets = function(d, type) {
     }
   }
 };
+
+Sauron.prototype.generateNewTargets = function(id) {
+  if (id.indexOf("random") !== -1) {
+    this.generateTarget();
+  }
+  else if (id.indexOf("line") !== -1) {
+    this.generateRandomLineofDeath();
+  } 
+  else if (id.indexOf("circle") !== -1) {
+    this.generateRandomCircleofDeath();
+  }
+}
 
 // Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(event, type) {
@@ -970,8 +980,7 @@ Sauron.prototype.generateTarget = function(matrix) {
         color: "black",
         id: "random"
       };
-      var newTarget = new Target(targetSettings);
-      newTarget.drawTarget();
+      this.drawTarget(targetSettings);
     }
   }
 };
@@ -989,7 +998,7 @@ Sauron.prototype.drawBlips = function(d) {
 Sauron.prototype.tutorialControl = function(num, time, reclick) {
   sauron = this;
   if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num == 1) {
+    if (num === 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
     };
@@ -1038,11 +1047,11 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       color: "black",
       id: "circle_"+i
     };
-    var newTarget = new Target(targetSetting);
-    newTarget.drawTarget();
+    this.drawTarget(targetSetting);
     i++;
   }
 };
+
 
 //[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
 Sauron.prototype.generateRandomLineofDeath = function() {
@@ -1062,10 +1071,14 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       color: "black",
       id: "line_"+i
     };
-    var newTarget = new Target(targetSetting);
-    newTarget.drawTarget();
+    this.drawTarget(targetSetting);
     i++;
   }
+};
+
+Sauron.prototype.drawTarget = function(settings) {
+  var newTarget = new Target(settings);
+  newTarget.drawTarget();
 };
 
 Sauron.prototype.drawBlips = function(d) {
