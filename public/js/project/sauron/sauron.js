@@ -185,7 +185,7 @@ Sauron.prototype.tutorialControl = function(num, time, reclick) {
         sauron.tutorial.reopen = false;
       }, time);
     if(!reclick) {
-      this.setTimer(5000);
+      this.setTimer(10000);
       sauron.tutorial.show = false;
       sauron.tutorial.reopen = true;
     }
