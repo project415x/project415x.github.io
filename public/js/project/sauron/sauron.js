@@ -5,13 +5,15 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   // timer: null
+  this.armies = [];
   this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
+  this.level = settings === {} ? settings.level : -1;
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
 // Returns LinearTransformationScreen(x,y) coordinates
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
-  var matrix = matrix || [[1,3],[2,0]];
+  var matrix = this.matrix;
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
   return util.mathToScreen(applied_coord[0],applied_coord[1]);
@@ -36,7 +38,7 @@ Sauron.prototype.removeVector = function(type) {
 
 // Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = this.applyTransformation(d.x,d.y);
+  var i = util.applyMatrix(d.x, d.y, this.matrix);
   this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
@@ -47,26 +49,53 @@ Sauron.prototype.updateOutputVector = function(d) {
   });
 };
 
+Sauron.prototype.getArmies = function() {
+  return d3.select("#output-svg").selectAll('rect')[0];
+};
+
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
-  var width = Number(d3.selectAll("rect").attr("width")),
-      height = Number(d3.selectAll("rect").attr("height")),
-      x = Number(d3.selectAll("rect").attr("x")) + width / 2,
-      y = Number(d3.selectAll("rect").attr("y")) + height / 2,
-      i = util.applyMatrix(d.x,d.y);
-  // collison detection occurs here
-  if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
-    if (type === "collision") {
-      d3.selectAll("rect").remove();
-      this.updateProgress();
-      this.generateTarget([[1,3],[2,0]]);
-      this.drawBlips(d);
+  var list = this.getArmies();
+  for ( elem in list ) {
+    if(list[elem].id === "output-svg" ) {
+      continue;
     }
-    else if (type === "detection") {
-      this.tutorialControl(4,1);
+    var id = list[elem].id,
+        wraith = d3.select("#"+id);
+        width = Number(wraith.attr("width")),
+        height = Number(wraith.attr("height")),
+        x = Number(wraith.attr("x")) + width / 2,
+        y = Number(wraith.attr("y")) + height / 2,
+        i = util.applyMatrix(d.x,d.y,this.matrix);
+
+    // collison detection occurs here
+    if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+      if (type === "collision") {
+        wraith.remove()
+        this.updateProgress();
+        this.drawBlips(d);
+        if( list.length - 1 === 0 ) {
+          this.generateNewTargets(id);
+        }
+      }
+      else if (type === "detection") {
+        this.tutorialControl(4,1);
+      }
     }
   }
 };
+
+Sauron.prototype.generateNewTargets = function(id) {
+  if (id.indexOf("random") !== -1) {
+    this.generateTarget();
+  }
+  else if (id.indexOf("line") !== -1) {
+    this.generateRandomLineofDeath();
+  } 
+  else if (id.indexOf("circle") !== -1) {
+    this.generateRandomCircleofDeath();
+  }
+}
 
 // Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(event, type) {
@@ -81,8 +110,6 @@ Sauron.prototype.tellSauron = function(event, type) {
   else if (type === "dbclick") {
     this.updateTargets(d, "collision");
   }
-
-
 };
 
 Sauron.prototype.convertMouseToCoord = function(event) {
@@ -90,14 +117,6 @@ Sauron.prototype.convertMouseToCoord = function(event) {
     x: event[0],
     y: event[1]
   }
-};
-
-// Strategy
-Sauron.prototype.applyTransformation = function(sX,sY,matrix) {
-  var matrix = matrix || [[1,3],[2,0]];
-  var math_coord = util.screenToMath(sX,sY),
-      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron alerts his generals of the new progress
@@ -124,28 +143,27 @@ Sauron.prototype.updateProgress = function() {
 // Divide by 0 then breaks
 Sauron.prototype.generateTarget = function(matrix) {
   var isValidCoordinate = false,
+      matrix = this.matrix,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
       newX, newY;
 
   while (!isValidCoordinate) {
-    newX = util.getRandom(0,500);
-    newY = util.getRandom(0,500);
-    var pre = util.screenToMath(newX,newY);
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
-        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
-    pre = util.mathToScreen(prex,prey);
+    var point = {
+      x: util.getRandom(0, 500),
+      y: util.getRandom(0, 500)
+    };
 
-    if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
+    if ( util.isOnScreen(matrix, point)) {
       isValidCoordinate = true;
       var targetSettings = {
-        x: newX,
-        y: newY,
+        x: point.x,
+        y: point.y,
         width: 40,
         height: 40,
-        color: "black"
+        color: "black",
+        id: "random"
       };
-      var newTarget = new Target(targetSettings);
-      newTarget.drawTarget();
+      this.drawTarget(targetSettings);
     }
   }
 };
@@ -163,19 +181,19 @@ Sauron.prototype.drawBlips = function(d) {
 Sauron.prototype.tutorialControl = function(num, time, reclick) {
   sauron = this;
   if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num == 1) {
+    if (num === 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
     };
-    if (num == 2) {
+    if (num === 2) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
     };
-    if (num == 3) {
+    if (num === 3) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
     };
-    if (num == 4) {
+    if (num === 4) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
     };
@@ -196,11 +214,71 @@ Sauron.prototype.clearTimer = function() {
   clearTimeout(this.tutorial.timer);
 };
 
+Sauron.prototype.generateRandomCircleofDeath = function() {
+
+  var validPoints = util.getValidPreImageCircle();
+
+  for( var key in validPoints ) {    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    
+    var targetSetting = {
+      x: screenCoors[0],
+      y: screenCoors[1],
+      width: 40,
+      height: 40,
+      color: "black",
+      id: "circle_"+i
+    };
+    this.drawTarget(targetSetting);
+    i++;
+  }
+};
+
+
+//[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
+Sauron.prototype.generateRandomLineofDeath = function() {
+  
+  var validPoints = util.getValidPreImagePairs(), 
+      i = 0;
+
+  for( var key in validPoints ) {    
+    var pair = validPoints[key],
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    
+    var targetSetting = {
+      x: screenCoors[0],
+      y: screenCoors[1],
+      width: 40,
+      height: 40,
+      color: "black",
+      id: "line_"+i
+    };
+    this.drawTarget(targetSetting);
+    i++;
+  }
+};
+
+Sauron.prototype.drawTarget = function(settings) {
+  var newTarget = new Target(settings);
+  newTarget.drawTarget();
+};
+
+Sauron.prototype.drawBlips = function(d) {
+      d3.select("#input-svg").append("circle")
+                    .attr({
+                      cx: d.x,
+                      cy: d.y,
+                      r: 20,
+                    })
+                    .style({"fill": "url(#tarblip)"});
+};
 
 Sauron.prototype.setTimer = function(time, sauron) {
   this.tutorial.timer = setTimeout(function() {
                             $('#tutorial').popover('hide');
                         }, time);
 };
+
 // Sauron is mobilized via Smaug!
-module.exports = new Sauron();
+module.exports = Sauron;

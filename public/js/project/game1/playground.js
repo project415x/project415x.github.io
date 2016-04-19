@@ -1,8 +1,9 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js');
-		config = require('../level/playgroundConfig');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('../level/playgroundConfig'),
+		OverWatcher = new Sauron(config.sauron);
 
 function initPlayground() {
 	// Create objects needed for game
@@ -35,33 +36,31 @@ function initTutorial() {
 		$(window).click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				if(!Sauron.tutorial.show) {
+				if(!OverWatcher.tutorial.show) {
 					return;
 				}
-				if((event.target == img || event.target == guide) && Sauron.tutorial.reopen) {
+				if((event.target == img || event.target == guide) && OverWatcher.tutorial.reopen) {
 					return;
 				}
-				Sauron.clearTimer();
+				OverWatcher.clearTimer();
 				$('#tutorial').popover('hide');
-				Sauron.tutorial.show = false;
-				Sauron.tutorial.reopen = true;
+				OverWatcher.tutorial.show = false;
+				OverWatcher.tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			if(Sauron.tutorial.show || !Sauron.tutorial.reopen) {
+			if(OverWatcher.tutorial.show || !OverWatcher.tutorial.reopen) {
 				return;
 			}
-			Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
+			OverWatcher.tutorialControl(--OverWatcher.tutorial.num,1,true);
 		});
 	});
 	// Load starting tutorial
-	Sauron.tutorialControl(1,1000);
+	OverWatcher.tutorialControl(1,1000);
 }
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
-	// var Sauron = new Sauron(config);
-	// Sauron.createArmy(1);
 	initPlayground();
 	initTutorial();
 }
