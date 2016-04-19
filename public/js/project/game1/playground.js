@@ -62,5 +62,5 @@ function initTutorial() {
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
-	// initTutorial();
+	initTutorial();
 }

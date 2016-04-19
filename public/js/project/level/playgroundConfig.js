@@ -52,6 +52,7 @@ module.exports = {
 
 	sauron : {
 		matrix: [[1,2],[2,1]],
-		level: 1
+		level: 1,
+		type: "random"
 	}
 };

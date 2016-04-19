@@ -56,17 +56,15 @@ Sauron.prototype.getArmies = function() {
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  // for ( var j = 0; j < list.length ; j++ ) {
   for ( elem in list ) {
-    if( elem === "parentNode") {
+    if(list[elem].id === "output-svg" ) {
       continue;
     }
-    var j = parseInt(elem)
-    var wraith = d3.select("#ringWraith_"+j);
+    console.log('list elem id',list[elem].id)
 
-    if(wraith[0]["0"] === null || wraith[0][0] === null) {
-      continue;
-    }
+    var id = list[elem].id,
+        wraith = d3.select("#"+id);
+    
     var width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
@@ -152,7 +150,7 @@ Sauron.prototype.generateTarget = function(matrix) {
         width: 40,
         height: 40,
         color: "black",
-        id: "ringWraith_0"
+        id: "random"
       };
       var newTarget = new Target(targetSettings);
       newTarget.drawTarget();
@@ -207,6 +205,7 @@ Sauron.prototype.clearTimer = function() {
 };
 
 Sauron.prototype.generateRandomCircleofDeath = function() {
+
   var validPoints = util.getValidPreImageCircle();
 
   for( var key in validPoints ) {    
@@ -219,7 +218,7 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "ringWraith_"+i
+      id: "circle"+i
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();
@@ -243,7 +242,7 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "ringWraith_"+i
+      id: "line_"+i
     };
     var newTarget = new Target(targetSetting);
     newTarget.drawTarget();

@@ -46,6 +46,7 @@ module.exports = {
 
 	sauron : {
 		matrix: [[1,2],[2,1]],
-		level: 2
+		level: 2,
+		type: "line"
 	}
 };

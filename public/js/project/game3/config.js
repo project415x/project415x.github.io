@@ -46,6 +46,7 @@ module.exports = {
 
 	sauron : {
 		matrix: [[1,2],[2,1]],
-		level: 3
+		level: 3,
+		type: "circle"
 	}
 };
