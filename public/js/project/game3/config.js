@@ -42,5 +42,10 @@ module.exports = {
 			x: null,
 			y: null
 		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 3
 	}
 };

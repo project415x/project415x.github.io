@@ -50,7 +50,8 @@ module.exports = {
 		r: 20
 	},
 
-	EyeOfSauron : {
-		matrix: [[1,2],[2,1]]
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 1
 	}
 };

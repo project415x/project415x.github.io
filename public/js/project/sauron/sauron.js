@@ -7,12 +7,13 @@ function Sauron(settings) {
   // timer: null
   this.armies = [];
   this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
+  this.level = settings === {} ? settings.level : -1;
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
 // Returns LinearTransformationScreen(x,y) coordinates
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
-  var matrix = matrix || [[1,3],[2,0]];
+  var matrix = this.matrix;
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
   return util.mathToScreen(applied_coord[0],applied_coord[1]);
@@ -37,7 +38,7 @@ Sauron.prototype.removeVector = function(type) {
 
 // Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var i = util.applyMatrix(d.x, d.y, this.matrix);
   this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
@@ -55,8 +56,12 @@ Sauron.prototype.getArmies = function() {
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-
-  for ( var j = 0; j < list.length ; j++ ) {
+  // for ( var j = 0; j < list.length ; j++ ) {
+  for ( elem in list ) {
+    if( elem === "parentNode") {
+      continue;
+    }
+    var j = parseInt(elem)
     var wraith = d3.select("#ringWraith_"+j);
 
     if(wraith[0]["0"] === null || wraith[0][0] === null) {
@@ -104,14 +109,6 @@ Sauron.prototype.convertMouseToCoord = function(event) {
     x: event[0],
     y: event[1]
   }
-};
-
-// Strategy
-Sauron.prototype.applyTransformation = function(sX,sY,matrix) {
-  var matrix = matrix || [[1,3],[2,0]];
-  var math_coord = util.screenToMath(sX,sY),
-      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron alerts his generals of the new progress
@@ -271,4 +268,4 @@ Sauron.prototype.setTimer = function(time, sauron) {
 };
 
 // Sauron is mobilized via Smaug!
-module.exports = new Sauron();
+module.exports = Sauron;

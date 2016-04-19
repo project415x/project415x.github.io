@@ -153,8 +153,10 @@ module.exports = Vector;
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
+    OverWatcher = new Sauron({}),
     utils = require('../utilities/math.js');
 
+// console.log(new Sauron({}));
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -180,20 +182,20 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(d3.mouse(this), "drag");
-                Sauron.tutorialControl(2,500);
+                OverWatcher.tellSauron(d3.mouse(this), "drag");
+                OverWatcher.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
                 //  next four lines until but not including '})' with
-                //  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 var newTimer = self.getTimer();
                 if (newTimer - self.timer <= 200) {
-                  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 }
                 self.timer = newTimer;
               })
               .on("drag", function() {
-                Sauron.tellSauron(d3.mouse(this), "drag");
-                Sauron.tutorialControl(3,500);
+                OverWatcher.tellSauron(d3.mouse(this), "drag");
+                OverWatcher.tutorialControl(3,500);
               });
 };
 
@@ -468,8 +470,9 @@ setTimeout(function() {
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js');
-		config = require('../level/playgroundConfig');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('../level/playgroundConfig'),
+		OverWatcher = new Sauron(config.sauron);
 
 function initPlayground() {
 	// Create objects needed for game
@@ -502,33 +505,33 @@ function initTutorial() {
 		$(window).click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				if(!Sauron.tutorial.show) {
+				if(!OverWatcher.tutorial.show) {
 					return;
 				}
-				if((event.target == img || event.target == guide) && Sauron.tutorial.reopen) {
+				if((event.target == img || event.target == guide) && OverWatcher.tutorial.reopen) {
 					return;
 				}
-				Sauron.clearTimer();
+				OverWatcher.clearTimer();
 				$('#tutorial').popover('hide');
-				Sauron.tutorial.show = false;
-				Sauron.tutorial.reopen = true;
+				OverWatcher.tutorial.show = false;
+				OverWatcher.tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			if(Sauron.tutorial.show || !Sauron.tutorial.reopen) {
+			if(OverWatcher.tutorial.show || !OverWatcher.tutorial.reopen) {
 				return;
 			}
-			Sauron.tutorialControl(--Sauron.tutorial.num,1,true);
+			OverWatcher.tutorialControl(--OverWatcher.tutorial.num,1,true);
 		});
 	});
 	// Load starting tutorial
-	Sauron.tutorialControl(1,1000);
+	OverWatcher.tutorialControl(1,1000);
 }
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
-	initTutorial();
+	// initTutorial();
 }
 
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":11,"../sauron/sauron.js":13}],6:[function(require,module,exports){
@@ -576,16 +579,67 @@ module.exports = {
 			x: null,
 			y: null
 		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 2
 	}
 };
 },{}],7:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],8:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	}
+};
+},{}],8:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
-		config = require('../game2/config.js');
+		config = require('../game2/config.js'),
+		Level2 = new Sauron(config.sauron);
 
 function initLevel2() {
 	// Create objects needed for game
@@ -604,7 +658,7 @@ function initLevel2() {
 	outputVector.init();
 
 	// generate target(s)
-	Sauron.generateRandomLineofDeath();
+	Level2.generateRandomLineofDeath();
 }
 
 
@@ -613,13 +667,64 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../game2/config.js":6,"../sauron/sauron.js":13}],9:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],10:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 3
+	}
+};
+},{}],10:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
+		Sauron = require('../sauron/sauron.js')
 		config = require('./config.js');
+		OverWatcher = new Sauron({});
 
 function initLevel3() {
 	// Create objects needed for game
@@ -638,7 +743,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	Sauron.generateRandomCircleofDeath();
+	OverWatcher.generateRandomCircleofDeath();
 }
 
 
@@ -699,8 +804,9 @@ module.exports = {
 		r: 20
 	},
 
-	EyeOfSauron : {
-		matrix: [[1,2],[2,1]]
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 1
 	}
 };
 },{}],12:[function(require,module,exports){
@@ -715,12 +821,13 @@ function Sauron(settings) {
   // timer: null
   this.armies = [];
   this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
+  this.level = settings === {} ? settings.level : -1;
 }
 
 // Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
 // Returns LinearTransformationScreen(x,y) coordinates
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
-  var matrix = matrix || [[1,3],[2,0]];
+  var matrix = this.matrix;
   var math_coord = util.screenToMath(sX,sY),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
   return util.mathToScreen(applied_coord[0],applied_coord[1]);
@@ -745,7 +852,7 @@ Sauron.prototype.removeVector = function(type) {
 
 // Sauron makes a strategic decicision and modifies a vector
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var i = util.applyMatrix(d.x, d.y, this.matrix);
   this.removeVector('output');
   d3.select('#output-svg').append('path')
     .attr({
@@ -763,8 +870,12 @@ Sauron.prototype.getArmies = function() {
 // After good news from the Palantir Sauron moves forces!
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-
-  for ( var j = 0; j < list.length ; j++ ) {
+  // for ( var j = 0; j < list.length ; j++ ) {
+  for ( elem in list ) {
+    if( elem === "parentNode") {
+      continue;
+    }
+    var j = parseInt(elem)
     var wraith = d3.select("#ringWraith_"+j);
 
     if(wraith[0]["0"] === null || wraith[0][0] === null) {
@@ -812,14 +923,6 @@ Sauron.prototype.convertMouseToCoord = function(event) {
     x: event[0],
     y: event[1]
   }
-};
-
-// Strategy
-Sauron.prototype.applyTransformation = function(sX,sY,matrix) {
-  var matrix = matrix || [[1,3],[2,0]];
-  var math_coord = util.screenToMath(sX,sY),
-      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
 };
 
 // Sauron alerts his generals of the new progress
@@ -979,7 +1082,7 @@ Sauron.prototype.setTimer = function(time, sauron) {
 };
 
 // Sauron is mobilized via Smaug!
-module.exports = new Sauron();
+module.exports = Sauron;
 
 },{"../actors/target.js":1,"../utilities/math.js":14}],14:[function(require,module,exports){
 module.exports = {
