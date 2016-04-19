@@ -23,8 +23,10 @@
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
+    OverWatcher = new Sauron({}),
     utils = require('../utilities/math.js');
 
+// console.log(new Sauron({}));
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -50,20 +52,20 @@ Canvas.prototype.vectorDrag = function() {
   self = this;
   return d3.behavior.drag()
               .on("dragstart", function (){
-                Sauron.tellSauron(d3.mouse(this), "drag");
-                Sauron.tutorialControl(2,500);
+                OverWatcher.tellSauron(d3.mouse(this), "drag");
+                OverWatcher.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
                 //  next four lines until but not including '})' with
-                //  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 var newTimer = self.getTimer();
                 if (newTimer - self.timer <= 200) {
-                  Sauron.tellSauron(d3.mouse(this), "dbclick");
+                  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 }
                 self.timer = newTimer;
               })
               .on("drag", function() {
-                Sauron.tellSauron(d3.mouse(this), "drag");
-                Sauron.tutorialControl(3,500);
+                OverWatcher.tellSauron(d3.mouse(this), "drag");
+                OverWatcher.tutorialControl(3,500);
               });
 };
 
