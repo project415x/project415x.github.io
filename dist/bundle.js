@@ -890,7 +890,10 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        this.drawBlips(d);
+        console.log('inside update target')
+        console.log('x ', x)
+        console.log('y ', y)
+        this.drawBlips(x,y);
         if( list.length - 1 === 0 ) {
           this.generateNewTargets(id);
         }
@@ -985,11 +988,12 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 };
 
-Sauron.prototype.drawBlips = function(d) {
+Sauron.prototype.drawBlips = function(x,y) {
+  var point = util.applyInverse(x, y, this.matrix);
   d3.select("#input-svg").append("circle")
                           .attr({
-                            cx: d.x,
-                            cy: d.y,
+                            cx: point.x,
+                            cy: point.y,
                             r: 20,
                           })
                           .style({"fill": "url(#tarblip)"});
@@ -1081,16 +1085,6 @@ Sauron.prototype.drawTarget = function(settings) {
   newTarget.drawTarget();
 };
 
-Sauron.prototype.drawBlips = function(d) {
-      d3.select("#input-svg").append("circle")
-                    .attr({
-                      cx: d.x,
-                      cy: d.y,
-                      r: 20,
-                    })
-                    .style({"fill": "url(#tarblip)"});
-};
-
 Sauron.prototype.setTimer = function(time, sauron) {
   this.tutorial.timer = setTimeout(function() {
                             $('#tutorial').popover('hide');
@@ -1109,6 +1103,18 @@ module.exports = {
 
 	mathToScreen: function(x,y) {
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+	},
+
+	applyInverse: function(x, y, matrix) {
+    var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
+    		pre = this.screenToMath(x, y),
+    	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
+   		 	pre = this.mathToScreen(prex,prey);
+   	return {
+   		x: pre[0],
+   		y: pre[1]
+   	}
 	},
 
 	applyMatrix: function(sX,sY,matrix) {

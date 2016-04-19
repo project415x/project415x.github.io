@@ -73,7 +73,10 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        this.drawBlips(d);
+        console.log('inside update target')
+        console.log('x ', x)
+        console.log('y ', y)
+        this.drawBlips(x,y);
         if( list.length - 1 === 0 ) {
           this.generateNewTargets(id);
         }
@@ -168,11 +171,12 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 };
 
-Sauron.prototype.drawBlips = function(d) {
+Sauron.prototype.drawBlips = function(x,y) {
+  var point = util.applyInverse(x, y, this.matrix);
   d3.select("#input-svg").append("circle")
                           .attr({
-                            cx: d.x,
-                            cy: d.y,
+                            cx: point.x,
+                            cy: point.y,
                             r: 20,
                           })
                           .style({"fill": "url(#tarblip)"});
@@ -262,16 +266,6 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 Sauron.prototype.drawTarget = function(settings) {
   var newTarget = new Target(settings);
   newTarget.drawTarget();
-};
-
-Sauron.prototype.drawBlips = function(d) {
-      d3.select("#input-svg").append("circle")
-                    .attr({
-                      cx: d.x,
-                      cy: d.y,
-                      r: 20,
-                    })
-                    .style({"fill": "url(#tarblip)"});
 };
 
 Sauron.prototype.setTimer = function(time, sauron) {
