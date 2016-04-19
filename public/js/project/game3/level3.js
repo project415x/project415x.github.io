@@ -1,8 +1,9 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
+		Sauron = require('../sauron/sauron.js')
 		config = require('./config.js');
+		OverWatcher = new Sauron({});
 
 function initLevel3() {
 	// Create objects needed for game
@@ -21,7 +22,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	Sauron.generateRandomCircleofDeath();
+	OverWatcher.generateRandomCircleofDeath();
 }
 
 

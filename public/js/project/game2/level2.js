@@ -2,7 +2,8 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
-		config = require('../game2/config.js');
+		config = require('../game2/config.js'),
+		Level2 = new Sauron(config.sauron);
 
 function initLevel2() {
 	// Create objects needed for game
@@ -21,7 +22,7 @@ function initLevel2() {
 	outputVector.init();
 
 	// generate target(s)
-	Sauron.generateRandomLineofDeath();
+	Level2.generateRandomLineofDeath();
 }
 
 
