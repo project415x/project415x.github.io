@@ -19,7 +19,7 @@ h3 {
   float: left;
   background-image: url(../public/img/input_background.gif);
   background-repeat: no-repeat;
-  /*cursor: url(../public/cursor.gif), pointer;*/
+  opacity: 1 !important;
 }
 
 #output-canvas {
@@ -29,6 +29,7 @@ h3 {
   float: right;
   background-image: url(../public/img/output_background.gif);
   background-repeat: no-repeat;
+  opacity: 1 !important;
 }
 
 #progress-container {
@@ -51,4 +52,16 @@ h3 {
   top: 15%;
   color: black;
   text-align: center;
+}
+
+#guide {
+  position: absolute;
+  top: 610px;
+  left: 95%;
+}
+
+.popover {
+  max-width: 1000px;
+  width: 400px;
+  height: 115px;
 }

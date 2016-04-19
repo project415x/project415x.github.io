@@ -5,7 +5,7 @@ layout: minimum
 
 <!-- Configurations -->
 <script type="text/javascript">
-	
+
 	var levelScore;
 	var inputEvent;
 	var gameMode;
@@ -21,13 +21,18 @@ layout: minimum
 	<div id="input-canvas"></div>
 	<div id="output-canvas"></div>
 </div>
-		
+
 <div id="progress-container" class="progress"></div>
 <div id="question">
     <button type="button" class="btn btn-primary btn-sm question" data-toggle="modal" data-target="#gameModal">
       Explain Level
     </button>
 </div>
+
+<div id="guide">
+		<img src="../public/img/scientist.gif" width="50" height="40" id="tutorial" data-toggle="popover" data-trigger="focus" data-placement="left" title="Tutorial" data-content="">
+</div>
+
     <!-- Modal -->
     <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
       <div class="modal-dialog" role="document">

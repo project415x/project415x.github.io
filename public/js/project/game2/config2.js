@@ -42,17 +42,5 @@ module.exports = {
 			x: null,
 			y: null
 		}
-	},
-
-	targetSettings : {
-		x: 355,
-		y: 50,
-		r: 20
-	},
-
-	sauron : {
-		matrix: [[1,2],[2,1]],
-		level: 1,
-		type: "random"
 	}
 };

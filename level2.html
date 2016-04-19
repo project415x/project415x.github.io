@@ -5,7 +5,7 @@ title: "Level 2: Line Up"
 
 <script type="text/javascript">
 	$(window).bind("load", function() { 
-		startPlayground();
+		startLevel2();
 	});
 
 	setTimeout(function() {
@@ -17,12 +17,12 @@ title: "Level 2: Line Up"
 			
 	window.setInterval(function(){
 		if(isBroadcasted === 0) {
-				// levelScore = document.getElementById('score').innerHTML[0,2];
-			if(parseInt(levelScore) === 5) {
+				levelScore = document.getElementById('score').innerHTML;
+			if(parseInt(levelScore) === 100) {
 				isBroadcasted = 1;
 				var r = confirm("Congratulations! Proceed to next level");
 				if (r === true) {
-				  window.location = "../level2/index.html";
+				  window.location = "../level3/index.html";
 				}
 			}
 		}
