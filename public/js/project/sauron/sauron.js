@@ -73,9 +73,6 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        console.log('inside update target')
-        console.log('x ', x)
-        console.log('y ', y)
         this.drawBlips(x,y);
         if( list.length - 1 === 0 ) {
           this.generateNewTargets(id);
@@ -88,14 +85,27 @@ Sauron.prototype.updateTargets = function(d, type) {
   }
 };
 
+Sauron.prototype.checkNumberOfBlips = function() {
+  return d3.select("#input-svg").selectAll("circle")[0].length;
+};
+
+Sauron.prototype.removeBlips = function() {
+    d3.select("#input-svg").selectAll("circle").remove();
+};
+
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
+    if(this.checkNumberOfBlips() > 5) {
+      this.removeBlips();
+    }
     this.generateTarget();
   }
   else if (id.indexOf("line") !== -1) {
+    this.removeBlips();
     this.generateRandomLineofDeath();
   } 
   else if (id.indexOf("circle") !== -1) {
+    this.removeBlips();
     this.generateRandomCircleofDeath();
   }
 }
