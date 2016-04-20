@@ -73,7 +73,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        this.drawBlips(d);
+        this.drawBlips(x,y);
         if( list.length - 1 === 0 ) {
           this.generateNewTargets(id);
         }
@@ -85,14 +85,27 @@ Sauron.prototype.updateTargets = function(d, type) {
   }
 };
 
+Sauron.prototype.checkNumberOfBlips = function() {
+  return d3.select("#input-svg").selectAll("circle")[0].length;
+};
+
+Sauron.prototype.removeBlips = function() {
+    d3.select("#input-svg").selectAll("circle").remove();
+};
+
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
+    if(this.checkNumberOfBlips() > 5) {
+      this.removeBlips();
+    }
     this.generateTarget();
   }
   else if (id.indexOf("line") !== -1) {
+    this.removeBlips();
     this.generateRandomLineofDeath();
   } 
   else if (id.indexOf("circle") !== -1) {
+    this.removeBlips();
     this.generateRandomCircleofDeath();
   }
 }
@@ -168,11 +181,12 @@ Sauron.prototype.generateTarget = function(matrix) {
   }
 };
 
-Sauron.prototype.drawBlips = function(d) {
+Sauron.prototype.drawBlips = function(x,y) {
+  var point = util.applyInverse(x, y, this.matrix);
   d3.select("#input-svg").append("circle")
                           .attr({
-                            cx: d.x,
-                            cy: d.y,
+                            cx: point.x,
+                            cy: point.y,
                             r: 20,
                           })
                           .style({"fill": "url(#tarblip)"});
@@ -203,7 +217,7 @@ Sauron.prototype.tutorialControl = function(num, time, reclick) {
         sauron.tutorial.reopen = false;
       }, time);
     if(!reclick) {
-      this.setTimer(5000);
+      this.setTimer(10000);
       sauron.tutorial.show = false;
       sauron.tutorial.reopen = true;
     }
@@ -262,16 +276,6 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 Sauron.prototype.drawTarget = function(settings) {
   var newTarget = new Target(settings);
   newTarget.drawTarget();
-};
-
-Sauron.prototype.drawBlips = function(d) {
-      d3.select("#input-svg").append("circle")
-                    .attr({
-                      cx: d.x,
-                      cy: d.y,
-                      r: 20,
-                    })
-                    .style({"fill": "url(#tarblip)"});
 };
 
 Sauron.prototype.setTimer = function(time, sauron) {
