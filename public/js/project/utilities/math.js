@@ -8,6 +8,18 @@ module.exports = {
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
 	},
 
+	applyInverse: function(x, y, matrix) {
+    var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
+    		pre = this.screenToMath(x, y),
+    	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
+   		 	pre = this.mathToScreen(prex,prey);
+   	return {
+   		x: pre[0],
+   		y: pre[1]
+   	}
+	},
+
 	applyMatrix: function(sX,sY,matrix) {
 	  // var matrix = matrix || [
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],

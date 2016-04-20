@@ -877,11 +877,9 @@ Sauron.prototype.updateTargets = function(d, type) {
     if(list[elem].id === "output-svg" ) {
       continue;
     }
-
     var id = list[elem].id,
         wraith = d3.select("#"+id);
-    
-    var width = Number(wraith.attr("width")),
+        width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2,
@@ -892,9 +890,9 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (type === "collision") {
         wraith.remove()
         this.updateProgress();
-        this.drawBlips(d);
-        if( id === "random") {
-          this.generateTarget();
+        this.drawBlips(x,y);
+        if( list.length - 1 === 0 ) {
+          this.generateNewTargets(id);
         }
       }
       else if (type === "detection") {
@@ -903,6 +901,31 @@ Sauron.prototype.updateTargets = function(d, type) {
     }
   }
 };
+
+Sauron.prototype.checkNumberOfBlips = function() {
+  return d3.select("#input-svg").selectAll("circle")[0].length;
+};
+
+Sauron.prototype.removeBlips = function() {
+    d3.select("#input-svg").selectAll("circle").remove();
+};
+
+Sauron.prototype.generateNewTargets = function(id) {
+  if (id.indexOf("random") !== -1) {
+    if(this.checkNumberOfBlips() > 5) {
+      this.removeBlips();
+    }
+    this.generateTarget();
+  }
+  else if (id.indexOf("line") !== -1) {
+    this.removeBlips();
+    this.generateRandomLineofDeath();
+  } 
+  else if (id.indexOf("circle") !== -1) {
+    this.removeBlips();
+    this.generateRandomCircleofDeath();
+  }
+}
 
 // Palantir reveals new plans to Sauron
 Sauron.prototype.tellSauron = function(event, type) {
@@ -970,17 +993,17 @@ Sauron.prototype.generateTarget = function(matrix) {
         color: "black",
         id: "random"
       };
-      var newTarget = new Target(targetSettings);
-      newTarget.drawTarget();
+      this.drawTarget(targetSettings);
     }
   }
 };
 
-Sauron.prototype.drawBlips = function(d) {
+Sauron.prototype.drawBlips = function(x,y) {
+  var point = util.applyInverse(x, y, this.matrix);
   d3.select("#input-svg").append("circle")
                           .attr({
-                            cx: d.x,
-                            cy: d.y,
+                            cx: point.x,
+                            cy: point.y,
                             r: 20,
                           })
                           .style({"fill": "url(#tarblip)"});
@@ -989,7 +1012,7 @@ Sauron.prototype.drawBlips = function(d) {
 Sauron.prototype.tutorialControl = function(num, time, reclick) {
   sauron = this;
   if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num == 1) {
+    if (num === 1) {
       this.tutorial.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
     };
@@ -1011,7 +1034,7 @@ Sauron.prototype.tutorialControl = function(num, time, reclick) {
         sauron.tutorial.reopen = false;
       }, time);
     if(!reclick) {
-      this.setTimer(5000);
+      this.setTimer(10000);
       sauron.tutorial.show = false;
       sauron.tutorial.reopen = true;
     }
@@ -1038,11 +1061,11 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       color: "black",
       id: "circle_"+i
     };
-    var newTarget = new Target(targetSetting);
-    newTarget.drawTarget();
+    this.drawTarget(targetSetting);
     i++;
   }
 };
+
 
 //[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
 Sauron.prototype.generateRandomLineofDeath = function() {
@@ -1062,20 +1085,14 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       color: "black",
       id: "line_"+i
     };
-    var newTarget = new Target(targetSetting);
-    newTarget.drawTarget();
+    this.drawTarget(targetSetting);
     i++;
   }
 };
 
-Sauron.prototype.drawBlips = function(d) {
-      d3.select("#input-svg").append("circle")
-                    .attr({
-                      cx: d.x,
-                      cy: d.y,
-                      r: 20,
-                    })
-                    .style({"fill": "url(#tarblip)"});
+Sauron.prototype.drawTarget = function(settings) {
+  var newTarget = new Target(settings);
+  newTarget.drawTarget();
 };
 
 Sauron.prototype.setTimer = function(time, sauron) {
@@ -1096,6 +1113,18 @@ module.exports = {
 
 	mathToScreen: function(x,y) {
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+	},
+
+	applyInverse: function(x, y, matrix) {
+    var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
+    		pre = this.screenToMath(x, y),
+    	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
+        prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
+   		 	pre = this.mathToScreen(prex,prey);
+   	return {
+   		x: pre[0],
+   		y: pre[1]
+   	}
 	},
 
 	applyMatrix: function(sX,sY,matrix) {
