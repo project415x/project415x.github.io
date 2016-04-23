@@ -907,12 +907,16 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function() {
-    d3.select("#input-svg").selectAll("circle").remove();
+    d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
+    setTimeout(function() {
+      d3.select("#input-svg").selectAll("circle").remove();
+    }, 2100);
+
 };
 
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
-    if(this.checkNumberOfBlips() > 5) {
+    if(this.checkNumberOfBlips() >= 5) {
       this.removeBlips();
     }
     this.generateTarget();
@@ -920,7 +924,7 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.removeBlips();
     this.generateRandomLineofDeath();
-  } 
+  }
   else if (id.indexOf("circle") !== -1) {
     this.removeBlips();
     this.generateRandomCircleofDeath();
@@ -1049,10 +1053,10 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
 
   var validPoints = util.getValidPreImageCircle();
 
-  for( var key in validPoints ) {    
+  for( var key in validPoints ) {
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-    
+
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],
@@ -1069,14 +1073,14 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
 
 //[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
 Sauron.prototype.generateRandomLineofDeath = function() {
-  
-  var validPoints = util.getValidPreImagePairs(), 
+
+  var validPoints = util.getValidPreImagePairs(),
       i = 0;
 
-  for( var key in validPoints ) {    
+  for( var key in validPoints ) {
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-    
+
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],
