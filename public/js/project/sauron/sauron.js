@@ -1,12 +1,11 @@
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js');
+    Target = require('../actors/target.js'),
+    Tutorial = require('../tutorial/tutorial.js');
 
 // Sauron is alive!
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
-  // timer: null
   this.armies = [];
-  this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
   this.level = settings === {} ? settings.level : -1;
 }
 
@@ -79,7 +78,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         }
       }
       else if (type === "detection") {
-        this.tutorialControl(4,1);
+        Tutorial.tutorialControl(4,1);
       }
     }
   }
@@ -120,7 +119,7 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
-    if (!this.tutorial.show || !this.tutorial.reopen) {
+    if (!Tutorial.show || !Tutorial.reopen) {
       this.updateTargets(d, "detection");
     }
   }
@@ -196,42 +195,6 @@ Sauron.prototype.drawBlips = function(x,y) {
                           .style({"fill": "url(#tarblip)"});
 };
 
-Sauron.prototype.tutorialControl = function(num, time, reclick) {
-  sauron = this;
-  if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num === 1) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    };
-    if (num === 2) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    };
-    if (num === 3) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    };
-    if (num === 4) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    };
-    setTimeout(function() {
-        $('#tutorial').popover('show');
-        sauron.tutorial.show = true;
-        sauron.tutorial.reopen = false;
-      }, time);
-    if(!reclick) {
-      this.setTimer(10000);
-      sauron.tutorial.show = false;
-      sauron.tutorial.reopen = true;
-    }
-  }
-};
-
-Sauron.prototype.clearTimer = function() {
-  clearTimeout(this.tutorial.timer);
-};
-
 Sauron.prototype.generateRandomCircleofDeath = function() {
 
   var validPoints = util.getValidPreImageCircle();
@@ -280,12 +243,6 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 Sauron.prototype.drawTarget = function(settings) {
   var newTarget = new Target(settings);
   newTarget.drawTarget();
-};
-
-Sauron.prototype.setTimer = function(time, sauron) {
-  this.tutorial.timer = setTimeout(function() {
-                            $('#tutorial').popover('hide');
-                        }, time);
 };
 
 // Sauron is mobilized via Smaug!

@@ -154,6 +154,7 @@ module.exports = Vector;
  */
 var Sauron = require('../sauron/sauron.js'),
     OverWatcher = new Sauron({}),
+    Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
 // console.log(new Sauron({}));
@@ -183,7 +184,7 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                OverWatcher.tutorialControl(2,500);
+                Tutorial.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
                 //  next four lines until but not including '})' with
                 //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -195,7 +196,7 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                OverWatcher.tutorialControl(3,500);
+                Tutorial.tutorialControl(3,500);
               });
 };
 
@@ -417,7 +418,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":13,"../utilities/math.js":14}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],4:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -471,6 +472,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('../level/playgroundConfig'),
 		OverWatcher = new Sauron(config.sauron);
 
@@ -492,49 +494,45 @@ function initPlayground() {
 	outputVector.init();
 
 	// generate target(s)
-	outputTarget.init()
-}
+	outputTarget.init();
 
-// Requires JQuery
-function initTutorial() {
-	// Initialize
-	$(window).ready(function(){
-		// Initialize Popover
-		$('#tutorial').popover();
+	// Requires JQuery
+	$(window).ready(function() {
+		// Initialize Tutorial
+		Tutorial.init()
 		// Dismissable when clicking general window elements
 		$(window).click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				if(!OverWatcher.tutorial.show) {
+				if(!Tutorial.show) {
 					return;
 				}
-				if((event.target == img || event.target == guide) && OverWatcher.tutorial.reopen) {
+				if((event.target == img || event.target == guide) && Tutorial.reopen) {
 					return;
 				}
-				OverWatcher.clearTimer();
+				Tutorial.clearTimer();
 				$('#tutorial').popover('hide');
-				OverWatcher.tutorial.show = false;
-				OverWatcher.tutorial.reopen = true;
+				Tutorial.show = false;
+				Tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			if(OverWatcher.tutorial.show || !OverWatcher.tutorial.reopen) {
+			if(Tutorial.show || !Tutorial.reopen) {
 				return;
 			}
-			OverWatcher.tutorialControl(--OverWatcher.tutorial.num,1,true);
+			Tutorial.tutorialControl(--Tutorial.num,1,true);
 		});
+		// Load starting tutorial
+		Tutorial.tutorialControl(1,1000);
 	});
-	// Load starting tutorial
-	OverWatcher.tutorialControl(1,1000);
 }
 
 // think of this as the main function :)
 startPlayground = function startPlayground() {
 	initPlayground();
-	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":11,"../sauron/sauron.js":13}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":11,"../sauron/sauron.js":13,"../tutorial/tutorial.js":14}],6:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -816,14 +814,13 @@ module.exports = {
 arguments[4][4][0].apply(exports,arguments)
 },{"dup":4}],13:[function(require,module,exports){
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js');
+    Target = require('../actors/target.js'),
+    Tutorial = require('../tutorial/tutorial.js');
 
 // Sauron is alive!
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
-  // timer: null
   this.armies = [];
-  this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
   this.level = settings === {} ? settings.level : -1;
 }
 
@@ -896,7 +893,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         }
       }
       else if (type === "detection") {
-        this.tutorialControl(4,1);
+        Tutorial.tutorialControl(4,1);
       }
     }
   }
@@ -937,7 +934,7 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
-    if (!this.tutorial.show || !this.tutorial.reopen) {
+    if (!Tutorial.show || !Tutorial.reopen) {
       this.updateTargets(d, "detection");
     }
   }
@@ -1013,42 +1010,6 @@ Sauron.prototype.drawBlips = function(x,y) {
                           .style({"fill": "url(#tarblip)"});
 };
 
-Sauron.prototype.tutorialControl = function(num, time, reclick) {
-  sauron = this;
-  if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num === 1) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    };
-    if (num === 2) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    };
-    if (num === 3) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    };
-    if (num === 4) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    };
-    setTimeout(function() {
-        $('#tutorial').popover('show');
-        sauron.tutorial.show = true;
-        sauron.tutorial.reopen = false;
-      }, time);
-    if(!reclick) {
-      this.setTimer(10000);
-      sauron.tutorial.show = false;
-      sauron.tutorial.reopen = true;
-    }
-  }
-};
-
-Sauron.prototype.clearTimer = function() {
-  clearTimeout(this.tutorial.timer);
-};
-
 Sauron.prototype.generateRandomCircleofDeath = function() {
 
   var validPoints = util.getValidPreImageCircle();
@@ -1099,16 +1060,70 @@ Sauron.prototype.drawTarget = function(settings) {
   newTarget.drawTarget();
 };
 
-Sauron.prototype.setTimer = function(time, sauron) {
-  this.tutorial.timer = setTimeout(function() {
-                            $('#tutorial').popover('hide');
-                        }, time);
-};
-
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../utilities/math.js":14}],14:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],14:[function(require,module,exports){
+function Tutorial(settings) {
+  this.num =  1;
+  this.show = false;
+  this.reopen =  false;
+  this.timer = null;
+}
+
+Tutorial.prototype.init = function() {
+  // Initialize Popover
+  $('#tutorial').popover();
+};
+
+Tutorial.prototype.tutorialControl = function(num, time, reclick) {
+  tutor = this;
+  if ((!this.show || !this.reopen) && num == this.num) {
+    if (num === 1) {
+      this.num++;
+      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
+    };
+    if (num === 2) {
+      this.num++;
+      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
+    };
+    if (num === 3) {
+      this.num++;
+      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
+    };
+    if (num === 4) {
+      this.num++;
+      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
+    };
+    setTimeout(function() {
+        $('#tutorial').popover('show');
+        console.log(tutor);
+        tutor.show = true;
+        tutor.reopen = false;
+        console.log(tutor);
+      }, time);
+      console.log(this.show);
+    if(!reclick) {
+      this.setTimer(10000);
+      tutor.show = false;
+      tutor.reopen = true;
+    }
+  }
+};
+
+Tutorial.prototype.clearTimer = function() {
+  clearTimeout(this.timer);
+};
+
+Tutorial.prototype.setTimer = function(time) {
+  this.timer = setTimeout(function() {
+    $('#tutorial').popover('hide');
+  }, time);
+};
+
+module.exports = new Tutorial();
+
+},{}],15:[function(require,module,exports){
 module.exports = {
 
 	screenToMath: function(x,y) {
@@ -1202,4 +1217,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
