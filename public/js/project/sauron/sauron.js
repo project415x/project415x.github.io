@@ -1,5 +1,6 @@
 var util = require('../utilities/math.js'),
-    Target = require('../actors/target.js');
+    Target = require('../actors/target.js'),
+    Tutorial = require('../tutorial/tutorial.js');
 
 // Sauron is alive!
 /*
@@ -8,16 +9,14 @@ var util = require('../utilities/math.js'),
 */
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
-  // timer: null
   this.armies = [];
-  this.tutorial =  {num: 1, show: false, reopen: null, timer: null};
   this.level = settings === {} ? settings.level : -1;
 }
 
-/* 
+/*
   Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
   Returns LinearTransformationScreen(x,y) coordinates
-*/ 
+*/
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = this.matrix;
   var math_coord = util.screenToMath(sX,sY),
@@ -45,7 +44,7 @@ Sauron.prototype.updateInputVector = function(d) {
   Sauron takes no pitty on a vector and destroys it.
   @param {string} type of vector
   @returns void
-*/  
+*/
 Sauron.prototype.removeVector = function(type) {
   d3.select('#'+type+'-vector').remove();
 };
@@ -106,7 +105,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         }
       }
       else if (type === "detection") {
-        this.tutorialControl(4,1);
+        Tutorial.tutorialControl(4,1);
       }
     }
   }
@@ -115,14 +114,18 @@ Sauron.prototype.updateTargets = function(d, type) {
 /*
 
   @param {} none
-  @returns {} int 
+  @returns {} int
 */
 Sauron.prototype.checkNumberOfBlips = function() {
   return d3.select("#input-svg").selectAll("circle")[0].length;
 };
 
 Sauron.prototype.removeBlips = function() {
-    d3.select("#input-svg").selectAll("circle").remove();
+    d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
+    setTimeout(function() {
+      d3.select("#input-svg").selectAll("circle").remove();
+    }, 2100);
+
 };
 
 /*
@@ -132,7 +135,7 @@ Sauron.prototype.removeBlips = function() {
 */
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
-    if(this.checkNumberOfBlips() > 5) {
+    if(this.checkNumberOfBlips() >= 5) {
       this.removeBlips();
     }
     this.generateTarget();
@@ -140,7 +143,7 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.removeBlips();
     this.generateRandomLineofDeath();
-  } 
+  }
   else if (id.indexOf("circle") !== -1) {
     this.removeBlips();
     this.generateRandomCircleofDeath();
@@ -159,7 +162,7 @@ Sauron.prototype.tellSauron = function(event, type) {
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
-    if (!this.tutorial.show || !this.tutorial.reopen) {
+    if (!Tutorial.show || !Tutorial.reopen) {
       this.updateTargets(d, "detection");
     }
   }
@@ -182,7 +185,7 @@ Sauron.prototype.convertMouseToCoord = function(event) {
 
 /*
   Sauron alerts his generals of the new progress
-  Updates score when target is clicked on 
+  Updates score when target is clicked on
   @param {}
   @return {}
 */
@@ -241,7 +244,7 @@ Sauron.prototype.generateTarget = function() {
 /*
   Draws blips that are dropped onto input svg
   @param {int} x
-  @param {int} y 
+  @param {int} y
   @returns void
 */
 Sauron.prototype.drawBlips = function(x,y) {
@@ -254,54 +257,6 @@ Sauron.prototype.drawBlips = function(x,y) {
                           })
                           .style({"fill": "url(#tarblip)"});
 };
-
-/*
-  Mind that controls tutorials
-  @param {int} num
-  @param {int} time
-  @param {?} event
-*/
-Sauron.prototype.tutorialControl = function(num, time, reclick) {
-  sauron = this;
-  if ((!this.tutorial.show || !this.tutorial.reopen) && num == this.tutorial.num) {
-    if (num === 1) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    };
-    if (num === 2) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    };
-    if (num === 3) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    };
-    if (num === 4) {
-      this.tutorial.num++;
-      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    };
-    setTimeout(function() {
-        $('#tutorial').popover('show');
-        sauron.tutorial.show = true;
-        sauron.tutorial.reopen = false;
-      }, time);
-    if(!reclick) {
-      this.setTimer(10000);
-      sauron.tutorial.show = false;
-      sauron.tutorial.reopen = true;
-    }
-  }
-};
-
-/*
-  Resets tutorial timer
-  @param {}
-  @return {}
-*/
-Sauron.prototype.clearTimer = function() {
-  clearTimeout(this.tutorial.timer);
-};
-
 /*
   Draws random circle of targets onto output svg
   @params {}
@@ -312,10 +267,10 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
   var validPoints = util.getValidPreImageCircle(),
       i = 0;
 
-  for( var key in validPoints ) {    
+  for( var key in validPoints ) {
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-    
+
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],
@@ -337,11 +292,11 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
   @return {} void
 */
 Sauron.prototype.generateRandomLineofDeath = function() {
-  
-  var validPoints = util.getValidPreImagePairs(), 
+
+  var validPoints = util.getValidPreImagePairs(),
       i = 0;
 
-  for( var key in validPoints ) {    
+  for( var key in validPoints ) {
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
 
@@ -366,18 +321,6 @@ Sauron.prototype.generateRandomLineofDeath = function() {
 Sauron.prototype.drawTarget = function(settings) {
   var newTarget = new Target(settings);
   newTarget.drawTarget();
-};
-
-/*
-  Ask Z what this does
-  @param {int} time
-  @param {sauron} sauron
-  @returns void
-*/
-Sauron.prototype.setTimer = function(time, sauron) {
-  this.tutorial.timer = setTimeout(function() {
-                            $('#tutorial').popover('hide');
-                        }, time);
 };
 
 // Sauron is mobilized via Smaug!
