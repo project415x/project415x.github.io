@@ -418,343 +418,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],4:[function(require,module,exports){
-/**
-* Level Tracking
-* @description: Mechanism for tracking levels in gameplay
-*/
-
-// Track the levels
-var levelTracking = 1;
-function loadPage(id, levelMove, guide){
-  var currentLevel = levelTracking + parseInt(levelMove);
-
-  if(currentLevel < 1) {
-    document.getElementById("lowerBoundLevel").disabled = "disabled";
-    document.getElementById("upperBoundLevel").disabled = "";
-    document.getElementById("lowerBoundGuide").disabled = "disabled";
-    document.getElementById("upperBoundGuide").disabled = "";
-    levelTracking = 1;
-  } else if ( currentLevel > 3 ) {
-    document.getElementById("lowerBoundLevel").disabled = "";
-    document.getElementById("upperBoundLevel").disabled = "disabled";
-    document.getElementById("lowerBoundGuide").disabled = "";
-    document.getElementById("upperBoundGuide").disabled = "disabled";
-    levelTracking = 3;
-  } else {
-    document.getElementById("lowerBoundLevel").disabled = "";
-    document.getElementById("upperBoundLevel").disabled = "";
-    document.getElementById("lowerBoundGuide").disabled = "";
-    document.getElementById("upperBoundGuide").disabled = "";
-    levelTracking = currentLevel;
-  }
-
-  var dataText = "../level" + levelTracking
-  var idText = "level" + levelTracking;
-  if(guide == 0) {
-    dataText = dataText + "/index.html";
-    idText = idText + "Game";
-  } else if(guide == 1) {
-    dataText = dataText + "guide/index.html";
-    idText = idText + "Guide";
-  }
-
-  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
-}
-
-// Show info button after a certain amount of time
-setTimeout(function() {
-  $('.infoLeft').fadeIn();
-}, 5000);
-
-},{}],5:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		Tutorial = require('../tutorial/tutorial.js'),
-		config = require('../level/playgroundConfig'),
-		OverWatcher = new Sauron(config.sauron);
-
-function initPlayground() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings),
-			outputTarget = new Target(config.targetSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-
-	// generate target(s)
-	outputTarget.init();
-}
-
-function initTutorial() {
-	// Requires JQuery
-	$(window).ready(function() {
-		// Initialize Tutorial
-		Tutorial.init()
-		// Dismissable when clicking general window elements
-		$(window).click(function(event) {
-				var guide = document.getElementById('guide');
-				var img = document.getElementById('tutorial');
-				if(!Tutorial.show) {
-					return;
-				}
-				if((event.target == img || event.target == guide) && Tutorial.reopen) {
-					return;
-				}
-				Tutorial.clearTimer();
-				$('#tutorial').popover('hide');
-				Tutorial.show = false;
-				Tutorial.reopen = true;
-		});
-		// Reopen tutorial
-		$('#tutorial').click(function(event) {
-			if(Tutorial.show || !Tutorial.reopen) {
-				return;
-			}
-			Tutorial.tutorialControl(--Tutorial.num,1,true);
-		});
-		// Load starting tutorial
-		Tutorial.tutorialControl(1,1000);
-	});
-}
-
-// think of this as the main function :)
-startPlayground = function startPlayground() {
-	initPlayground();
-	initTutorial();
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../level/playgroundConfig":11,"../sauron/sauron.js":13,"../tutorial/tutorial.js":14}],6:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	sauron : {
-		matrix: [[1,2],[2,1]],
-		level: 2,
-		type: "line"
-	}
-};
-},{}],7:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	}
-};
-},{}],8:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		config = require('../game2/config.js'),
-		Level2 = new Sauron(config.sauron);
-
-function initLevel2() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-
-	// generate target(s)
-	Level2.generateRandomLineofDeath();
-}
-
-
-// think of this as the main function :)
-startLevel2 = function startLevel2() {
-	initLevel2();
-}
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../game2/config.js":6,"../sauron/sauron.js":13}],9:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	sauron : {
-		matrix: [[1,2],[2,1]],
-		level: 3,
-		type: "circle"
-	}
-};
-},{}],10:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
-		OverWatcher = new Sauron({});
-
-function initLevel3() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-
-	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath();
-}
-
-
-// think of this as the main function :)
-startLevel3 = function startLevel3() {
-	initLevel3();
-}
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":9}],11:[function(require,module,exports){
+},{"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":16}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -813,9 +477,406 @@ module.exports = {
 		type: "random"
 	}
 };
-},{}],12:[function(require,module,exports){
-arguments[4][4][0].apply(exports,arguments)
-},{"dup":4}],13:[function(require,module,exports){
+
+},{}],5:[function(require,module,exports){
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js'),
+		Tutorial = require('../tutorial/tutorial.js'),
+		config = require('./config.js'),
+		OverWatcher = new Sauron(config.sauron);
+
+function initLevel1() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings),
+			outputTarget = new Target(config.targetSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	outputTarget.init();
+}
+
+function initTutorial() {
+	// Requires JQuery
+	$(window).ready(function() {
+		// Initialize Tutorial
+		Tutorial.init()
+		// Dismissable when clicking general window elements
+		$(window).click(function(event) {
+				var guide = document.getElementById('guide');
+				var img = document.getElementById('tutorial');
+				if(!Tutorial.show) {
+					return;
+				}
+				if((event.target == img || event.target == guide) && Tutorial.reopen) {
+					return;
+				}
+				Tutorial.clearTimer();
+				$('#tutorial').popover('hide');
+				Tutorial.show = false;
+				Tutorial.reopen = true;
+		});
+		// Reopen tutorial
+		$('#tutorial').click(function(event) {
+			if(Tutorial.show || !Tutorial.reopen) {
+				return;
+			}
+			Tutorial.tutorialControl(--Tutorial.num,1,true);
+		});
+		// Load starting tutorial
+		Tutorial.tutorialControl(1,1000);
+	});
+}
+
+// think of this as the main function :)
+startLevel1 = function startLevel1() {
+	initLevel1();
+	initTutorial();
+}
+
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"./config.js":4}],6:[function(require,module,exports){
+/**
+* Level Tracking
+* @description: Mechanism for tracking levels in gameplay
+*/
+
+// Track the levels
+var levelTracking = 1;
+function loadPage(id, levelMove, guide){
+  var currentLevel = levelTracking + parseInt(levelMove);
+
+  if(currentLevel < 1) {
+    document.getElementById("lowerBoundLevel").disabled = "disabled";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "disabled";
+    document.getElementById("upperBoundGuide").disabled = "";
+    levelTracking = 1;
+  } else if ( currentLevel > 3 ) {
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "disabled";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "disabled";
+    levelTracking = 3;
+  } else {
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "";
+    levelTracking = currentLevel;
+  }
+
+  var dataText = "../level" + levelTracking
+  var idText = "level" + levelTracking;
+  if(guide == 0) {
+    dataText = dataText + "/index.html";
+    idText = idText + "Game";
+  } else if(guide == 1) {
+    dataText = dataText + "guide/index.html";
+    idText = idText + "Guide";
+  }
+
+  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
+}
+
+// Show info button after a certain amount of time
+setTimeout(function() {
+  $('.infoLeft').fadeIn();
+}, 5000);
+
+},{}],7:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 2,
+		type: "line"
+	}
+};
+},{}],8:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	}
+};
+},{}],9:[function(require,module,exports){
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js'),
+		Level2 = new Sauron(config.sauron);
+
+function initLevel2() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	Level2.generateRandomLineofDeath();
+}
+
+
+// think of this as the main function :)
+startLevel2 = function startLevel2() {
+	initLevel2();
+}
+
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":7}],10:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 3,
+		type: "circle"
+	}
+};
+},{}],11:[function(require,module,exports){
+var Canvas = require('../canvas/canvas.js'),
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js')
+		config = require('./config.js');
+		OverWatcher = new Sauron({});
+
+function initLevel3() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	OverWatcher.generateRandomCircleofDeath();
+}
+
+
+// think of this as the main function :)
+startLevel3 = function startLevel3() {
+	initLevel3();
+}
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":10}],12:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	targetSettings : {
+		x: 355,
+		y: 50,
+		r: 20
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 1,
+		type: "random"
+	}
+};
+},{}],13:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"dup":6}],14:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -1144,7 +1205,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],14:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":15,"../utilities/math.js":16}],15:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1186,12 +1247,9 @@ Tutorial.prototype.tutorialControl = function(num, time, reclick) {
     };
     setTimeout(function() {
         $('#tutorial').popover('show');
-        console.log(tutor);
         tutor.show = true;
         tutor.reopen = false;
-        console.log(tutor);
       }, time);
-      console.log(this.show);
     if(!reclick) {
       this.setTimer(10000);
       tutor.show = false;
@@ -1221,7 +1279,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports = {
 
 	screenToMath: function(x,y) {
@@ -1315,4 +1373,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
