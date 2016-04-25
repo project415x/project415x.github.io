@@ -2,10 +2,11 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
-		config = require('../level/playgroundConfig'),
+		Tutorial = require('../tutorial/tutorial.js'),
+		config = require('./config.js'),
 		OverWatcher = new Sauron(config.sauron);
 
-function initPlayground() {
+function initLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings),
 			inputVector = new Vector(config.inputVectorSettings),
@@ -23,44 +24,43 @@ function initPlayground() {
 	outputVector.init();
 
 	// generate target(s)
-	outputTarget.init()
+	outputTarget.init();
 }
 
-// Requires JQuery
 function initTutorial() {
-	// Initialize
-	$(window).ready(function(){
-		// Initialize Popover
-		$('#tutorial').popover();
+	// Requires JQuery
+	$(window).ready(function() {
+		// Initialize Tutorial
+		Tutorial.init()
 		// Dismissable when clicking general window elements
 		$(window).click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
-				if(!OverWatcher.tutorial.show) {
+				if(!Tutorial.show) {
 					return;
 				}
-				if((event.target == img || event.target == guide) && OverWatcher.tutorial.reopen) {
+				if((event.target == img || event.target == guide) && Tutorial.reopen) {
 					return;
 				}
-				OverWatcher.clearTimer();
+				Tutorial.clearTimer();
 				$('#tutorial').popover('hide');
-				OverWatcher.tutorial.show = false;
-				OverWatcher.tutorial.reopen = true;
+				Tutorial.show = false;
+				Tutorial.reopen = true;
 		});
 		// Reopen tutorial
 		$('#tutorial').click(function(event) {
-			if(OverWatcher.tutorial.show || !OverWatcher.tutorial.reopen) {
+			if(Tutorial.show || !Tutorial.reopen) {
 				return;
 			}
-			OverWatcher.tutorialControl(--OverWatcher.tutorial.num,1,true);
+			Tutorial.tutorialControl(--Tutorial.num,1,true);
 		});
+		// Load starting tutorial
+		Tutorial.tutorialControl(1,1000);
 	});
-	// Load starting tutorial
-	OverWatcher.tutorialControl(1,1000);
 }
 
 // think of this as the main function :)
-startPlayground = function startPlayground() {
-	initPlayground();
+startLevel1 = function startLevel1() {
+	initLevel1();
 	initTutorial();
 }

@@ -2,7 +2,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
-		config = require('../game2/config.js'),
+		config = require('./config.js'),
 		Level2 = new Sauron(config.sauron);
 
 function initLevel2() {
