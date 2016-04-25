@@ -3,10 +3,10 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
-		config = require('../level/playgroundConfig'),
+		config = require('./config.js'),
 		OverWatcher = new Sauron(config.sauron);
 
-function initPlayground() {
+function initLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings),
 			inputVector = new Vector(config.inputVectorSettings),
@@ -60,7 +60,7 @@ function initTutorial() {
 }
 
 // think of this as the main function :)
-startPlayground = function startPlayground() {
-	initPlayground();
+startLevel1 = function startLevel1() {
+	initLevel1();
 	initTutorial();
 }
