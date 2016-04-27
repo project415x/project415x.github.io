@@ -60,7 +60,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "#92989F",
-      "stroke-width":"5",
+      "stroke-width":"7",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });

@@ -5,67 +5,18 @@ layout: minimum
 
 <!-- Configurations -->
 <script type="text/javascript">
-
-	var levelScore;
-	var inputEvent;
-	var gameMode;
-
-	// Set gameMode to 0 if it isn't defined (I think) -Cary
-	gameMode = gameMode ? gameMode : 0;
-
+	var levelScore, inputEvent, gameMode = gameMode ? gameMode : 0;
 </script>
-	<center>
-		<h3> {{page.title}}</h3>
-	</center>
-<div class="game">
-	<div id="input-canvas"></div>
-	<div id="output-canvas"></div>
-</div>
-
-<div id="progress-container" class="progress"></div>
-<div id="question">
-    <button type="button" class="btn btn-primary btn-sm question" data-toggle="modal" data-target="#gameModal">
-      Explain Level
-    </button>
-</div>
-
-<div id="guide">
-		<img src="../public/img/scientist.gif" width="50" height="40" id="tutorial" data-toggle="popover" data-trigger="focus" data-placement="left" title="Tutorial" data-content="">
-</div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel"><b>How to Play</b></h4>
-          </div>
-          <div class="modal-body">
-            <br>
-
-            1. Click the canvas on the left
-            <img class="thumbnail" src="../public/img/thumb0.png" />
-
-            <br>
-
-            2. Move it around, and you see a target on the right canvas with an output vector moving accordingly
-            <img class="thumbnail" src="../public/img/thumb1.png" />
-
-            <br>
-
-            3. As you move along, the color of the target will change
-            <img class="thumbnail" src="../public/img/thumb2.png" />
-
-            <br>
-
-            4. When you hit the target, you will earn points and another target will be created
-            <img class="thumbnail" src="../public/img/thumb3.png" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-{{ content }}
+<div class="level">
+  <div class="page-header">
+  	<center>
+  		<h3> {{page.title}}</h3>
+  	</center>
+  </div>
+  <div class="game">
+  	<div id="input-canvas"></div>
+  	<div id="output-canvas"></div>
+  </div>
+  {{ content }}
+  <div id="progress-container" class="progress"></div>
+</div> <!-- /class -->
