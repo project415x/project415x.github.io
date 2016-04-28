@@ -1,6 +1,22 @@
 /**
  * General
  */
+ #start .nav a {
+  color: #88FD68 !important;
+ }
+ /* Following Lines Remove Special Effects From BootStrap */
+ .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  background: none;
+ }
+ .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover {
+  border: none;
+ }
+ .nav-tabs>li>a:hover {
+  border: none;
+  background: none;
+ }
+
+
 .project {
   height: 100%;
   h1,
@@ -9,6 +25,8 @@
   h4 {
     font-family: "Josefin Slab", serif;
     font-weight: bold;
+    color: #88FD68;
+    text-align: center;
   }
   h1 {
 

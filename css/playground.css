@@ -4,6 +4,10 @@ ul {
 }
 h3 {
   font-family: 'Press Start 2P', sans-serif;
+  color: #88FD68;
+  text-align: center;
+  font-size: inherit;
+  margin: inherit;
 }
 
 .question {
@@ -12,7 +16,27 @@ h3 {
   position: absolute;
 }
 
+#lowerBoundLevel, #upperBoundLevel {
+  background-color: rgba(0,0,0,0);
+  border: none;
+}
+
+#lowerBoundGuide, #upperBoundGuide {
+  /* Insert Styles Here */
+}
+
+#navigation {
+  background-color: rgba(0,0,0,0);
+  height: 30px;
+  width: 270px;
+  position: absolute;
+  top: 605px;
+  left: 80%;
+}
+
+
 #input-canvas {
+  margin-top: 40px;
   margin-left: 10px;
   height: 500px;
   width: 500px;
@@ -22,28 +46,40 @@ h3 {
   opacity: 1 !important;
 }
 
+.progress-bar .progress-bar-striped .active {
+  background-image: url(../public/img/bar.gif) !important;
+}
+
 #output-canvas {
+  margin-top: 40px;
   margin-right: 10px;
   height: 500px;
   width: 500px;
   float: right;
   background-image: url(../public/img/output_background.gif);
   background-repeat: no-repeat;
-  opacity: 1 !important;
 }
 
-#progress-container {
-  height: 30px;
-  width:270px;
+#progress-img {
   position: absolute;
-  top: 580px;
-  left: 25%;
+  top: 590px;
+  left: 1.5%;
+}
+#progress-container {
+  height: 25px;
+  width: 316px;
+  position: absolute;
+  top: 605px;
+  left: 27.5%;
   margin: -15px 0 0 -135px;
+  background-image: url(../public/img/bar.gif);
+  background-color: rgba(255,255,255,.5);
 }
 
 #progressbar {
   width: 0%;
   position: absolute;
+  /*background-image: url(../public/img/bar.gif);*/
 }
 
 #score {
@@ -56,12 +92,12 @@ h3 {
 
 #guide {
   position: absolute;
-  top: 610px;
-  left: 95%;
+  top: 0%;
+  left: 0%;
 }
 
 .popover {
-  max-width: 1000px;
-  width: 400px;
-  height: 115px;
+  max-width: 800px;
+  width: 300px;
+  height: 130px;
 }
