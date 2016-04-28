@@ -29,13 +29,14 @@
   .tab-content {
     .tab-pane,
     .container {
-      // background-color: #FFFFFF;
+
     }
 
     #home,
     #game,
     #mathguide {
       background-color: rgba(200,200,200,0);
+      zoom: 110%;
     }
   }
 
