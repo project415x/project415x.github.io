@@ -10,7 +10,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.armies = [];
-  this.level = settings === {} ? settings.level : -1;
+  this.level = settings === {} ? -1 : settings.level;
 }
 
 /*
@@ -198,7 +198,12 @@ Sauron.prototype.updateProgress = function() {
         scoreBox.text("Proceed To Next Level!");
       }
       else {
-        currScore = Number(currScore) + 5;
+        if(this.level <= 1) {
+          currScore = Number(currScore) + 100 / 20;
+        }
+        else {
+          currScore = Number(currScore) + 100 / 24;
+        }
         scoreBox.text(currScore + "% Complete");
       }
 
