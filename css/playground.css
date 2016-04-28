@@ -6,7 +6,7 @@ h3 {
   font-family: 'Press Start 2P', sans-serif;
   color: #88FD68;
   text-align: center;
-  font-size: inherit;
+  font-size: 18px;
   margin: inherit;
 }
 
@@ -50,6 +50,14 @@ h3 {
   background-image: url(../public/img/bar.gif) !important;
 }
 
+.progress-bar-success {
+  background-color: #31BA29;
+}
+
+/*.progress {
+  border-image: url();
+}*/
+
 #output-canvas {
   margin-top: 1.25%;
   margin-right: 10px;
@@ -72,7 +80,7 @@ h3 {
   top: 94.5%;
   left: 27.5%;
   margin: -15px 0 0 -135px;
-  background-image: url(../public/img/bar.gif);
+  /*background-image: url(../public/img/bar.gif);*/
   background-color: rgba(255,255,255,.5);
 }
 
@@ -98,6 +106,6 @@ h3 {
 
 .popover {
   max-width: 800px;
-  width: 300px;
+  width: 275px;
   height: 130px;
 }

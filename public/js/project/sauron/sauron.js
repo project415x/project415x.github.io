@@ -195,11 +195,11 @@ Sauron.prototype.updateProgress = function() {
       currScore = bar.attr("aria-valuenow");
       if (Number(currScore) >= 100) {
         currScore = 100;
-        // scoreBox.text("Proceed To Next Level!");
+        scoreBox.text("Proceed To Next Level!");
       }
       else {
         currScore = Number(currScore) + 5;
-        // scoreBox.text(currScore + "% Complete");
+        scoreBox.text(currScore + "% Complete");
       }
 
       bar.style("width", currScore + "%");

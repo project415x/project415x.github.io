@@ -219,7 +219,7 @@ Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
-                  "class": "progress-bar progress-bar-striped active",
+                  "class": "progress-bar progress-bar-success progress-bar-striped active",
                   "role": "progressbar",
                   "aria-valuenow": "0",
                   "aria-valuemin": "0",
@@ -228,7 +228,10 @@ Canvas.prototype.drawProgressBar = function() {
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("id", "score");
+         .attr({
+           "id": "score",
+           "class": "sr-only"
+         });
 };
 
 // Also not currently being used. Let's figure out if we need it.
