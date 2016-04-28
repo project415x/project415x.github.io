@@ -41,12 +41,13 @@ Tutorial.prototype.tutorialControl = function(num, time, reclick) {
         $('#tutorial').popover('show');
         tutor.show = true;
         tutor.reopen = false;
-        if(!reclick) {
-          tutor.setTimer(10000);
-          tutor.show = false;
-          tutor.reopen = true;
-        }
+
       }, time);
+    if(!reclick) {
+      tutor.setTimer(10000);
+      tutor.show = false;
+      tutor.reopen = true;
+    }
   }
 };
 /*
