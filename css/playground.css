@@ -5,6 +5,9 @@ ul {
 h3 {
   font-family: 'Press Start 2P', sans-serif;
   color: #88FD68;
+  text-align: center;
+  font-size: inherit;
+  margin: inherit;
 }
 
 .question {
