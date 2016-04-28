@@ -8,13 +8,13 @@ var levelTracking = 1;
 function loadPage(id, levelMove, guide){
   var currentLevel = levelTracking + parseInt(levelMove);
 
-  if(currentLevel < 1) {
+  if(currentLevel <= 1) {
     document.getElementById("lowerBoundLevel").disabled = "disabled";
     document.getElementById("upperBoundLevel").disabled = "";
     document.getElementById("lowerBoundGuide").disabled = "disabled";
     document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = 1;
-  } else if ( currentLevel > 3 ) {
+  } else if ( currentLevel >= 3) {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "disabled";
     document.getElementById("lowerBoundGuide").disabled = "";
