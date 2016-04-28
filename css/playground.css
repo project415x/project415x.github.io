@@ -16,6 +16,21 @@ h3 {
   position: absolute;
 }
 
+#lowerBoundLevel, #upperBoundLevel {
+  background-color: rgba(0,0,0,0);
+  border: none;
+}
+
+#navigation {
+  background-color: rgba(0,0,0,0);
+  height: 30px;
+  width: 270px;
+  position: absolute;
+  top: 650px;
+  left: 75%;
+}
+
+
 #input-canvas {
   margin-left: 10px;
   height: 500px;

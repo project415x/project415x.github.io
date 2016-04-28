@@ -4,6 +4,7 @@
  #start .nav a {
   color: #88FD68 !important;
  }
+ /* Following Lines Remove Special Effects From BootStrap */
  .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
   background: none;
  }
