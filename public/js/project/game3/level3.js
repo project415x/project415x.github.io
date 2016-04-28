@@ -3,7 +3,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js')
 		config = require('./config.js');
-		OverWatcher = new Sauron({});
+		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
 	// Create objects needed for game
