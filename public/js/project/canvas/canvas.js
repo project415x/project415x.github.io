@@ -228,8 +228,7 @@ Canvas.prototype.drawProgressBar = function() {
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("id", "score")
-         .text("0% Complete");
+         .attr("id", "score");
 };
 
 // Also not currently being used. Let's figure out if we need it.

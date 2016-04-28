@@ -1,5 +1,6 @@
 <div role="tabpanel" class="tab-pane fade" id="game">
   <div class="container">
+    <!-- Congrats Modal -->
     <div id="nextLevel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nextLevelLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="alert alert-success fade in">
@@ -12,10 +13,13 @@
         </div>
       </div>
     </div>
+    <!-- /Congrats Modal -->
   </div>
   <div id="frameLevel" class="frameDiv" frameborder="0" width="100%"></div>
+    <!-- Start Game Nav Buttons -->
     <div class="btn-group" id="navigation" role="group" aria-label="Game Navigation">
       <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick='loadPage("frameLevel", "-1", "0")'><img width="15" height="15" src="../public/img/left.png"></img></button>
       <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick='loadPage("frameLevel", "1", "0")'><img height="15" width="15" src="../public/img/right.png"></img></button>
     </div>
+    <!-- End Game Nav Buttons -->
 </div>

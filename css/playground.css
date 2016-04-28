@@ -21,6 +21,10 @@ h3 {
   border: none;
 }
 
+#lowerBoundGuide, #upperBoundGuide {
+  /* Insert Styles Here */
+}
+
 #navigation {
   background-color: rgba(0,0,0,0);
   height: 30px;
@@ -51,17 +55,20 @@ h3 {
 }
 
 #progress-container {
-  height: 30px;
-  width:270px;
+  height: 25px;
+  width: 316px;
   position: absolute;
   top: 580px;
-  left: 25%;
+  left: 29%;
   margin: -15px 0 0 -135px;
+  background-image: url(../public/img/bar.gif);
+  background-color: rgba(0,0,0,0);
 }
 
 #progressbar {
   width: 0%;
   position: absolute;
+  /*background-image: url(../public/img/bar.gif);*/
 }
 
 #score {
