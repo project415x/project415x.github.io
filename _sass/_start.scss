@@ -1,3 +1,9 @@
+#game_body {
+  background-color: rgba(0,0,0,0);
+}
+.nav-tabs.nav-justified>li>a {
+  border-bottom: none;
+}
 #start {
   background: url("../public/img/robotbg.gif");
   background-size: cover;
@@ -5,16 +11,11 @@
   background-position: 50% 50%;
 
   .frameDiv {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0);
     height: 670px;
     overflow: hidden;
-    // color: #000000;
+    color: #000000;
     white-space: pre-wrap;
-  }
-
-  .levelInfoRow {
-    margin-left: 50px;
-    margin-right: 50px;
   }
 
   .infoLeft {
@@ -28,20 +29,20 @@
   .tab-content {
     .tab-pane,
     .container {
-      background-color: #FFFFFF;
+      // background-color: #FFFFFF;
     }
 
     #home,
     #game,
     #mathguide {
-      background-color: rgba(200,200,200,0.1);
+      background-color: rgba(200,200,200,0);
     }
   }
 
   h2 {
     font-family: 'Press Start 2P', sans-serif;
     font-size: 36px;
-    color: #FFFFFF;
+    color: #88FD68;
 
     a {
       color: #FFFFFF;
@@ -54,7 +55,7 @@
     // font-family: 'Roboto', sans-serif;
     font-family: 'Press Start 2P', sans-serif;
     // font-weight: 600;
-    color: #000000;
+    color: #88FD68;
     font-size: 24px;
   }
 
@@ -89,7 +90,7 @@
 
       a {
         text-decoration: none;
-        color: #000000;
+        color: #88FD68;
         font-size: 14px;
       }
 

@@ -30,10 +30,10 @@ function loadPage(id, levelMove, guide){
 
   var dataText = "../level" + levelTracking
   var idText = "level" + levelTracking;
-  if(guide === 0) {
+  if(guide == 0) {
     dataText = dataText + "/index.html";
     idText = idText + "Game";
-  } else if(guide === 1) {
+  } else if(guide == 1) {
     dataText = dataText + "guide/index.html";
     idText = idText + "Guide";
   }

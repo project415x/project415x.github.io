@@ -4,6 +4,7 @@ ul {
 }
 h3 {
   font-family: 'Press Start 2P', sans-serif;
+  color: #88FD68;
 }
 
 .question {
@@ -29,7 +30,6 @@ h3 {
   float: right;
   background-image: url(../public/img/output_background.gif);
   background-repeat: no-repeat;
-  opacity: 1 !important;
 }
 
 #progress-container {
