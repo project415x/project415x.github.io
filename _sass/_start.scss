@@ -1,14 +1,20 @@
+body {
+  overflow: hidden;
+}
+
 #game_body {
   background-color: rgba(0,0,0,0);
 }
 .nav-tabs.nav-justified>li>a {
   border-bottom: none;
 }
+
 #start {
   background: url("../public/img/robotbg.gif");
   background-size: cover;
   background-attachment: fixed;
   background-position: 50% 50%;
+  height: 100vh;
 
   .frameDiv {
     background-color: rgba(0,0,0,0);
