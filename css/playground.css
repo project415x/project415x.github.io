@@ -45,6 +45,10 @@ h3 {
   opacity: 1 !important;
 }
 
+.progress-bar .progress-bar-striped .active {
+  background-image: url(../public/img/bar.gif) !important;
+}
+
 #output-canvas {
   margin-right: 10px;
   height: 500px;
@@ -62,7 +66,7 @@ h3 {
   left: 29%;
   margin: -15px 0 0 -135px;
   background-image: url(../public/img/bar.gif);
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(255,255,255,.5);
 }
 
 #progressbar {
