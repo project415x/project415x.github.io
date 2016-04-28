@@ -30,13 +30,13 @@ h3 {
   height: 30px;
   width: 270px;
   position: absolute;
-  top: 605px;
+  top: 93%;
   left: 80%;
 }
 
 
 #input-canvas {
-  margin-top: 40px;
+  margin-top: 1.25%;
   margin-left: 10px;
   height: 500px;
   width: 500px;
@@ -51,7 +51,7 @@ h3 {
 }
 
 #output-canvas {
-  margin-top: 40px;
+  margin-top: 1.25%;
   margin-right: 10px;
   height: 500px;
   width: 500px;
@@ -62,14 +62,14 @@ h3 {
 
 #progress-img {
   position: absolute;
-  top: 590px;
+  top: 92%;
   left: 1.5%;
 }
 #progress-container {
   height: 25px;
   width: 316px;
   position: absolute;
-  top: 605px;
+  top: 94.5%;
   left: 27.5%;
   margin: -15px 0 0 -135px;
   background-image: url(../public/img/bar.gif);

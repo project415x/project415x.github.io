@@ -33,7 +33,7 @@ function initTutorial() {
 		// Initialize Tutorial
 		Tutorial.init()
 		// Dismissable when clicking general window elements
-		$(window).click(function(event) {
+		$('#guide').click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
 				if(!Tutorial.show) {
