@@ -41,7 +41,8 @@ module.exports = {
 		head: {
 			x: null,
 			y: null
-		}
+		},
+		stroke: 9
 	},
 
 	targetSettings : {
