@@ -60,7 +60,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "#92989F",
-      "stroke-width":"5",
+      "stroke-width":"7",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
@@ -195,11 +195,11 @@ Sauron.prototype.updateProgress = function() {
       currScore = bar.attr("aria-valuenow");
       if (Number(currScore) >= 100) {
         currScore = 100;
-        scoreBox.text("Proceed To Next Level!");
+        // scoreBox.text("Proceed To Next Level!");
       }
       else {
         currScore = Number(currScore) + 5;
-        scoreBox.text(currScore + "% Complete");
+        // scoreBox.text(currScore + "% Complete");
       }
 
       bar.style("width", currScore + "%");

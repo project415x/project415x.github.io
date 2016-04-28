@@ -1,51 +1,7 @@
 <div role="tabpanel" class="tab-pane fade" id="mathguide">
-  <br>
-
-  <div class="row levelInfoRow">
-    <div class="col-md-6">
-      <button type="button" class="btn btn-primary btn-sm infoLeft" data-toggle="modal" data-target="#guideModal">
-        <span class="glyphicon glyphicon-question-sign"></span>
-      </button>
-
-      <!-- Modal -->
-      <div class="modal fade" id="guideModal" tabindex="-1" role="dialog" aria-labelledby="guideModal">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Guide Modal</h4>
-            </div>
-            <div class="modal-body">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi hendrerit venenatis nisl eu porttitor. Donec et placerat mi, nec laoreet felis. Proin et elit orci. Cras id venenatis nulla. Cras tincidunt ligula nec elit dictum, vel consectetur nibh tempus. Vestibulum tincidunt justo at orci lacinia, a molestie orci feugiat. Sed id lobortis mi. Morbi malesuada tristique ligula nec elementum. Mauris efficitur magna eros, sit amet mattis sapien imperdiet vitae. Cras ut diam nisi. Duis a nulla tincidunt, aliquam dolor a, sagittis quam. Phasellus porta lorem nibh, vitae maximus urna blandit scelerisque. Phasellus in pharetra justo.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <button type="button" class="btn btn-primary btn-sm infoRight" onclick='$("#gameLink").trigger("click")'>Play Level</button>
-    </div>
-  </div>
-
-  <div id="frameGuide" class="frameDiv" frameborder="0" width="100%">
-    Hello, World!
-  </div>
-
-  <br>
-
-  <center>
+  <div id="frameGuide" class="frameDiv" frameborder="0" width="100%"></div>
     <div class="btn-group" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'>
-        <span class="glyphicon glyphicon-menu-left"></span>
-      </button>
-      <button id="upperBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'>
-        <span class="glyphicon glyphicon-menu-right"></span>
-      </button>
+      <button id="lowerBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "-1", "1")'></button>
+      <button id="upperBoundGuide" type="button" class="btn btn-default" onclick='loadPage("frameGuide", "1", "1")'></button>
     </div>
-  </center>
-
-  <br>
 </div>

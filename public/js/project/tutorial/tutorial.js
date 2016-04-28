@@ -41,9 +41,10 @@ Tutorial.prototype.tutorialControl = function(num, time, reclick) {
         $('#tutorial').popover('show');
         tutor.show = true;
         tutor.reopen = false;
+
       }, time);
     if(!reclick) {
-      this.setTimer(10000);
+      tutor.setTimer(10000);
       tutor.show = false;
       tutor.reopen = true;
     }

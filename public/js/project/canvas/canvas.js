@@ -34,10 +34,10 @@ function Canvas(settings) {
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
-  this.pixelWidth = settings.pixelWidth || 500,
-  this.pixelHeight = settings.pixelHeight || 500,
-  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 250,
-  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 250,
+  this.pixelWidth = settings.pixelWidth || 400,
+  this.pixelHeight = settings.pixelHeight || 400,
+  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 200,
+  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 200,
   this.origin = {
     x: this.originX,
     y: this.originY
@@ -228,8 +228,7 @@ Canvas.prototype.drawProgressBar = function() {
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("id", "score")
-         .text("0% Complete");
+         .attr("id", "score");
 };
 
 // Also not currently being used. Let's figure out if we need it.

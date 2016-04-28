@@ -84,7 +84,7 @@ function Vector(settings) {
 	}
 	this.color = settings.color || "#92989F";
 	this.type = settings.type || "input";
-	this.stroke = settings.stroke || 150;
+	this.stroke = settings.stroke || 8;
 };
 
 /*
@@ -164,10 +164,10 @@ function Canvas(settings) {
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
-  this.pixelWidth = settings.pixelWidth || 500,
-  this.pixelHeight = settings.pixelHeight || 500,
-  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 250,
-  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 250,
+  this.pixelWidth = settings.pixelWidth || 400,
+  this.pixelHeight = settings.pixelHeight || 400,
+  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 200,
+  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 200,
   this.origin = {
     x: this.originX,
     y: this.originY
@@ -358,8 +358,7 @@ Canvas.prototype.drawProgressBar = function() {
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("id", "score")
-         .text("0% Complete");
+         .attr("id", "score");
 };
 
 // Also not currently being used. Let's figure out if we need it.
@@ -875,8 +874,55 @@ module.exports = {
 	}
 };
 },{}],13:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],14:[function(require,module,exports){
+/**
+* Level Tracking
+* @description: Mechanism for tracking levels in gameplay
+*/
+
+// Track the levels
+var levelTracking = 1;
+function loadPage(id, levelMove, guide){
+  var currentLevel = levelTracking + parseInt(levelMove);
+
+  if(currentLevel <= 1) {
+    document.getElementById("lowerBoundLevel").disabled = "disabled";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "disabled";
+    document.getElementById("upperBoundGuide").disabled = "";
+    levelTracking = 1;
+  } else if ( currentLevel >= 3) {
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "disabled";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "disabled";
+    levelTracking = 3;
+  } else {
+    document.getElementById("lowerBoundLevel").disabled = "";
+    document.getElementById("upperBoundLevel").disabled = "";
+    document.getElementById("lowerBoundGuide").disabled = "";
+    document.getElementById("upperBoundGuide").disabled = "";
+    levelTracking = currentLevel;
+  }
+
+  var dataText = "../level" + levelTracking
+  var idText = "level" + levelTracking;
+  if(guide == 0) {
+    dataText = dataText + "/index.html";
+    idText = idText + "Game";
+  } else if(guide == 1) {
+    dataText = dataText + "guide/index.html";
+    idText = idText + "Guide";
+  }
+
+  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="90%" width="100%"></object>';
+}
+
+// Show info button after a certain amount of time
+setTimeout(function() {
+  $('.infoLeft').fadeIn();
+}, 5000);
+
+},{}],14:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -939,7 +985,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "#92989F",
-      "stroke-width":"5",
+      "stroke-width":"7",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
@@ -1074,11 +1120,11 @@ Sauron.prototype.updateProgress = function() {
       currScore = bar.attr("aria-valuenow");
       if (Number(currScore) >= 100) {
         currScore = 100;
-        scoreBox.text("Proceed To Next Level!");
+        // scoreBox.text("Proceed To Next Level!");
       }
       else {
         currScore = Number(currScore) + 5;
-        scoreBox.text(currScore + "% Complete");
+        // scoreBox.text(currScore + "% Complete");
       }
 
       bar.style("width", currScore + "%");
@@ -1249,9 +1295,10 @@ Tutorial.prototype.tutorialControl = function(num, time, reclick) {
         $('#tutorial').popover('show');
         tutor.show = true;
         tutor.reopen = false;
+
       }, time);
     if(!reclick) {
-      this.setTimer(10000);
+      tutor.setTimer(10000);
       tutor.show = false;
       tutor.reopen = true;
     }

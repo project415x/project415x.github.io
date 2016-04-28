@@ -38,7 +38,7 @@ function loadPage(id, levelMove, guide){
     idText = idText + "Guide";
   }
 
-  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="100%" width="100%"></object>';
+  document.getElementById(id).innerHTML='<object id='+ idText +' type="text/html" data=' + dataText + ' height="90%" width="100%"></object>';
 }
 
 // Show info button after a certain amount of time
