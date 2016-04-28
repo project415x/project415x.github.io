@@ -1,22 +1,18 @@
 ---
 layout: minimum
 ---
-
-
 <!-- Configurations -->
 <script type="text/javascript">
 	var levelScore, inputEvent, gameMode = gameMode ? gameMode : 0;
 </script>
 <div class="level">
   <div class="page-header">
-  	<center>
-  		<h3> {{page.title}}</h3>
-  	</center>
+		<p>{{page.title}}</p>
   </div>
   <div class="game">
   	<div id="input-canvas"></div>
   	<div id="output-canvas"></div>
+    {{ content }}
   </div>
-  {{ content }}
   <div id="progress-container" class="progress"></div>
-</div> <!-- /class -->
+</div> <!-- /level -->

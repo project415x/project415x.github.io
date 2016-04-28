@@ -1,15 +1,14 @@
 #start {
-  background: #cccccc url("../public/img/robotbg.gif");
+  background: url("../public/img/robotbg.gif");
   background-size: cover;
   background-attachment: fixed;
   background-position: 50% 50%;
 
   .frameDiv {
-    background-color: #FFFFFF;
-    height: 700px;
-    /*overflow-y: scroll;*/
+    background-color: rgba(0,0,0,0.1);
+    height: 670px;
     overflow: hidden;
-    color: #000000;
+    // color: #000000;
     white-space: pre-wrap;
   }
 
@@ -35,7 +34,7 @@
     #home,
     #game,
     #mathguide {
-      background-color: #FFFFFF;
+      background-color: rgba(200,200,200,0.1);
     }
   }
 
@@ -49,15 +48,6 @@
       text-decoration: none;
     }
 
-    &:hover,
-    &:focus {
-      opacity: 0.75;
-
-    }
-
-    &:active {
-      opacity: 0.95;
-    }
   }
 
   h3 {
