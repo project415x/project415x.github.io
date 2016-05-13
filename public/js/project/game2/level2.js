@@ -4,7 +4,6 @@ var Canvas = require('../canvas/canvas.js'),
 		Sauron = require('../sauron/sauron.js'),
 		config = require('./config.js'),
 		Level2 = new Sauron(config.sauron);
-		console.log(Level2.level)
 
 function initLevel2() {
 	// Create objects needed for game

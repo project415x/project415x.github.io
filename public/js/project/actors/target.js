@@ -9,7 +9,6 @@
   };
 *
 */
-
 function Target(settings) {
 	this.x = settings.x || 300;
 	this.y = settings.y || 300;
@@ -19,16 +18,27 @@ function Target(settings) {
 	this.id = settings.id || "random";
 	this.type = settings.type || "output";
 }
-
-Target.prototype.updateColor = function(dist, n) {
+/**
+ * [updateColor Not currently in use. In ]
+ * @param  {[type]} dist [dist]
+ * @return {[none]}      
+ */
+Target.prototype.updateColor = function(dist) {
 		this.color = dist;
 };
 
+/**
+ * [init draws the first target on the canvas]
+ * @return {[none]} 
+ */
 Target.prototype.init = function() {
 		this.drawTarget();
 };
 
-
+/**
+ * [drawTarget draws target onto canvas ]
+ * @return {[none]} []
+ */
 Target.prototype.drawTarget = function() {
 	var tar_num = Math.floor(Math.random() * 19) + 1,
 			score = 0,
@@ -43,8 +53,6 @@ Target.prototype.drawTarget = function() {
 			"height": this.height,
 			"id": this.id
 		})
-
-	
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
