@@ -77,6 +77,20 @@ module.exports = {
 		}
 		return validPoints;
 	},
+	getValidPreImageOval: function() {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 3) + 1;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: r * Math.cos(angle) + 2 * r * Math.sin(angle),
+				y: r * Math.sin(angle) + 2 * r * Math.cos(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
 
 	/**
 	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
@@ -93,7 +107,7 @@ module.exports = {
 		for( var i = 0; i < coefficients.length; i++ ) {
 		 	validPoints.push({
 			 	x: (coefficients[i] * tempX),
-				y: (coefficients[i] * tempY)		
+				y: (coefficients[i] * tempY)
 	 		});
 		 	validPoints.push({
 		 		x: ((-1 * coefficients[i]) * tempX),
