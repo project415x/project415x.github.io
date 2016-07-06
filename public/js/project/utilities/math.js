@@ -68,15 +68,15 @@ module.exports = {
 		}
 		return validPoints;
 	},
-	getValidPreImageOval: function() {
+	getValidPreImageOval: function(matrix) {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
 				r = (Math.random() * 3) + 1;
 
 		for( var i = 0; i < 8; i++ ) {
 			validPoints.push({
-				x: r * Math.cos(angle) + 2 * r * Math.sin(angle),
-				y: r * Math.sin(angle) + 2 * r * Math.cos(angle)
+				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
+				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)
 			});
 			angle += (Math.PI / 4);
 		}
