@@ -68,6 +68,20 @@ module.exports = {
 		}
 		return validPoints;
 	},
+	getValidPreImageOval: function(matrix) {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 3) + 1;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
+				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
 
 	getValidPreImagePairs: function() {
 
@@ -80,7 +94,7 @@ module.exports = {
 		for( var i = 0; i < coefficients.length; i++ ) {
 		 	validPoints.push({
 			 	x: (coefficients[i] * tempX),
-				y: (coefficients[i] * tempY)		
+				y: (coefficients[i] * tempY)
 	 		});
 		 	validPoints.push({
 		 		x: ((-1 * coefficients[i]) * tempX),
