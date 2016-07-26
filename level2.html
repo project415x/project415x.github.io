@@ -1,10 +1,10 @@
 ---
 layout: level
-title: "Level 2: Line Up"
+title: "Level 2: Going Around"
 ---
 
 <script type="text/javascript">
-	$(window).bind("load", function() { 
+	$(window).bind("load", function() {
 		startLevel2();
 	});
 
@@ -14,7 +14,7 @@ title: "Level 2: Line Up"
 
 	var isBroadcasted = 0,
 			levelScore = 0;
-			
+
 	window.setInterval(function(){
 		if(isBroadcasted === 0) {
 				levelScore = document.getElementById('score').innerHTML;

@@ -1,8 +1,8 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js'),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
@@ -11,6 +11,7 @@ function initLevel3() {
 			inputVector = new Vector(config.inputVectorSettings),
 			outputVector = new Vector(config.outputVectorSettings),
 			outputCanvas = new Canvas(config.outputCanvasSettings);
+			//outputTarget = new Target(config.targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -22,7 +23,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath();
+	OverWatcher.generateTarget();
 }
 
 
