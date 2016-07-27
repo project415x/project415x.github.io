@@ -28,7 +28,7 @@ function initLevel1() {
 }
 
 function initTutorial() {
-	// Requires JQuery
+	// Requires JQuery included on each page
 	$(window).ready(function() {
 		// Initialize Tutorial
 		Tutorial.init()

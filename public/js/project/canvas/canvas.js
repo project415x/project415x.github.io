@@ -27,7 +27,6 @@ var Sauron = require('../sauron/sauron.js'),
     Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
-// console.log(new Sauron({}));
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,

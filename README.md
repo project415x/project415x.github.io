@@ -77,6 +77,8 @@ Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 
 
 ### Students
 - [Joseph Milla](https://josephmilla.com/)
+- [Cameron Dart](https://github.com/skamdart)
+- [Z](https://github.com/zwang180)
 
 ## Issues
 Issues can be anything from suggestions, improvements, bugs, and other thingamajigs.
@@ -88,6 +90,10 @@ Help in developing and maintaining this project would be much appreciated. Pleas
 
 ## Versioning
 For transparency into our release cycle and in striving to maintain backward compatibility, Project415x is maintained under the [Semantic Versioning Guidelines](http://semver.org/). Sometimes we screw up, but we'll adhere to those rules whenever possible.
+
+## Build
+Jekyll - Static file regeneration is provided
+Gulp - gulpfile found at root. run `gulp watch` to compile changes in js. gulp watches `public/js/project/**/*.js` for changes
 
 ## License
 Code released under the [MIT License](LICENSE).
