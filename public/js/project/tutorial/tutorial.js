@@ -8,6 +8,10 @@ function Tutorial(settings) {
   this.timer = null;
 }
 
+/**
+ * [init using jQuery opens modal]
+ * @return {[none]}
+ */
 Tutorial.prototype.init = function() {
   // Initialize Popover
   $('#tutorial').popover();
