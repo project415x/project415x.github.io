@@ -1,8 +1,8 @@
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js'),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel2() {
