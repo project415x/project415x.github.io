@@ -251,7 +251,8 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "40",
                  "height": "40",
-                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
+                 "xlink:href": "../public/img/items/glow/target" + i + ".gif",
+                 "preserveAspectRatio": "none"
                });
     }
     var arm = this.getTar("arm");
@@ -925,6 +926,14 @@ Sauron.prototype.updateTargets = function(d, type) {
         y = Number(wraith.attr("y")) + height / 2,
         i = util.applyMatrix(d.x,d.y,this.matrix);
 
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2)) {
+      console.log(Number(wraith.style("opacity")));
+      if (wraith.style("opacity")==1){
+        wraith.transition().style("opacity",0.5).duration(250).each("end", function(){wraith.transition().style("opacity",1).duration(250);});  
+      }
+      //wraith.transition().style("opacity",0.5).duration(100).each("end", function(){wraith.transition().style("opacity",1).duration(100);});  
+      
+    }
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
@@ -1286,6 +1295,10 @@ module.exports = {
 
 	isClose: function(oX, oY, tX, tY, xb, yb) {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
+	},
+
+	isInRange: function(oX, oY, tX, tY, xb, yb) {
+  	return (Math.abs(tX - oX) <= 2 * xb ) && (Math.abs(tY - oY) <= 2 * yb);
 	},
 
 	/**

@@ -94,6 +94,14 @@ Sauron.prototype.updateTargets = function(d, type) {
         y = Number(wraith.attr("y")) + height / 2,
         i = util.applyMatrix(d.x,d.y,this.matrix);
 
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2)) {
+      console.log(Number(wraith.style("opacity")));
+      if (wraith.style("opacity")==1){
+        wraith.transition().style("opacity",0.5).duration(250).each("end", function(){wraith.transition().style("opacity",1).duration(250);});  
+      }
+      //wraith.transition().style("opacity",0.5).duration(100).each("end", function(){wraith.transition().style("opacity",1).duration(100);});  
+      
+    }
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
