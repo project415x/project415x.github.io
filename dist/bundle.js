@@ -10,7 +10,6 @@
   };
 *
 */
-
 function Target(settings) {
 	this.x = settings.x || 300;
 	this.y = settings.y || 300;
@@ -20,16 +19,27 @@ function Target(settings) {
 	this.id = settings.id || "random";
 	this.type = settings.type || "output";
 }
-
-Target.prototype.updateColor = function(dist, n) {
+/**
+ * [updateColor Not currently in use. In ]
+ * @param  {[type]} dist [dist]
+ * @return {[none]}      
+ */
+Target.prototype.updateColor = function(dist) {
 		this.color = dist;
 };
 
+/**
+ * [init draws the first target on the canvas]
+ * @return {[none]} 
+ */
 Target.prototype.init = function() {
 		this.drawTarget();
 };
 
-
+/**
+ * [drawTarget draws target onto canvas ]
+ * @return {[none]} []
+ */
 Target.prototype.drawTarget = function() {
 	var tar_num = Math.floor(Math.random() * 19) + 1,
 			score = 0,
@@ -44,8 +54,6 @@ Target.prototype.drawTarget = function() {
 			"height": this.height,
 			"id": this.id
 		})
-
-	
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
@@ -68,10 +76,6 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates.
-// These should be math coordinates.
-// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates,
-// *for that canvas*.
 function Vector(settings) {
 	this.head = {
 		x: settings.head.x || 250,
@@ -157,7 +161,6 @@ var Sauron = require('../sauron/sauron.js'),
     Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
-// console.log(new Sauron({}));
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -349,7 +352,7 @@ Canvas.prototype.drawProgressBar = function() {
   var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
-                  "class": "progress-bar progress-bar-striped active",
+                  "class": "progress-bar progress-bar-success progress-bar-striped active",
                   "role": "progressbar",
                   "aria-valuenow": "0",
                   "aria-valuemin": "0",
@@ -358,7 +361,10 @@ Canvas.prototype.drawProgressBar = function() {
                   "id" : "progressbar"
                 });
       container.append('span')
-         .attr("id", "score");
+         .attr({
+           "id": "score",
+           "class": "sr-only"
+         });
 };
 
 // Also not currently being used. Let's figure out if we need it.
@@ -417,7 +423,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":16}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -461,7 +467,8 @@ module.exports = {
 		head: {
 			x: null,
 			y: null
-		}
+		},
+		stroke: 9
 	},
 
 	targetSettings : {
@@ -508,12 +515,12 @@ function initLevel1() {
 }
 
 function initTutorial() {
-	// Requires JQuery
+	// Requires JQuery included on each page
 	$(window).ready(function() {
 		// Initialize Tutorial
 		Tutorial.init()
 		// Dismissable when clicking general window elements
-		$(window).click(function(event) {
+		$('#guide').click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
 				if(!Tutorial.show) {
@@ -545,7 +552,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -556,13 +563,13 @@ var levelTracking = 1;
 function loadPage(id, levelMove, guide){
   var currentLevel = levelTracking + parseInt(levelMove);
 
-  if(currentLevel < 1) {
+  if(currentLevel <= 1) {
     document.getElementById("lowerBoundLevel").disabled = "disabled";
     document.getElementById("upperBoundLevel").disabled = "";
     document.getElementById("lowerBoundGuide").disabled = "disabled";
     document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = 1;
-  } else if ( currentLevel > 3 ) {
+  } else if ( currentLevel >= 3 ) {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "disabled";
     document.getElementById("lowerBoundGuide").disabled = "";
@@ -626,7 +633,8 @@ module.exports = {
 		head: {
 			x: null,
 			y: null
-		}
+		},
+		stroke: 9
 	},
 
 	outputVectorSettings : {
@@ -647,54 +655,8 @@ module.exports = {
 		type: "line"
 	}
 };
+
 },{}],8:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	}
-};
-},{}],9:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
@@ -728,7 +690,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":7}],10:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -760,7 +722,8 @@ module.exports = {
 		head: {
 			x: null,
 			y: null
-		}
+		},
+		stroke: 9
 	},
 
 	outputVectorSettings : {
@@ -781,13 +744,14 @@ module.exports = {
 		type: "circle"
 	}
 };
-},{}],11:[function(require,module,exports){
+
+},{}],10:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js')
 		config = require('./config.js');
-		OverWatcher = new Sauron({});
+		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
 	// Create objects needed for game
@@ -814,66 +778,8 @@ function initLevel3() {
 startLevel3 = function startLevel3() {
 	initLevel3();
 }
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":10}],12:[function(require,module,exports){
-module.exports = {
 
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	targetSettings : {
-		x: 355,
-		y: 50,
-		r: 20
-	},
-
-	sauron : {
-		matrix: [[1,2],[2,1]],
-		level: 1,
-		type: "random"
-	}
-};
-},{}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -922,7 +828,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -935,7 +841,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.armies = [];
-  this.level = settings === {} ? settings.level : -1;
+  this.level = settings === {} ? -1 : settings.level;
 }
 
 /*
@@ -985,7 +891,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   d3.select('#output-svg').append('path')
     .attr({
       "stroke": "#92989F",
-      "stroke-width":"7",
+      "stroke-width":"9",
       "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
       "id": 'output-vector'
   });
@@ -1120,11 +1026,16 @@ Sauron.prototype.updateProgress = function() {
       currScore = bar.attr("aria-valuenow");
       if (Number(currScore) >= 100) {
         currScore = 100;
-        // scoreBox.text("Proceed To Next Level!");
+        scoreBox.text("Proceed To Next Level!");
       }
       else {
-        currScore = Number(currScore) + 5;
-        // scoreBox.text(currScore + "% Complete");
+        if(this.level <= 1) {
+          currScore = Number(currScore) + 100 / 20;
+        }
+        else {
+          currScore = Number(currScore) + 100 / 24;
+        }
+        scoreBox.text(currScore + "% Complete");
       }
 
       bar.style("width", currScore + "%");
@@ -1251,7 +1162,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":15,"../utilities/math.js":16}],15:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1262,6 +1173,10 @@ function Tutorial(settings) {
   this.timer = null;
 }
 
+/**
+ * [init using jQuery opens modal]
+ * @return {[none]}
+ */
 Tutorial.prototype.init = function() {
   // Initialize Popover
   $('#tutorial').popover();
@@ -1326,9 +1241,14 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],16:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = {
-
+	/**
+	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
+	 * @param  {[type]} x [x value in screen coors]
+	 * @param  {[type]} y [description]
+	 * @return {[type]}   [description]
+	 */
 	screenToMath: function(x,y) {
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
@@ -1368,21 +1288,25 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	/**
+	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
+	 * @param  {[type]}  matrix [2D array ]
+	 * @param  {[type]}  point  [JS object {x: a, y: b}]
+	 * @return {Boolean}        [description]
+	 */
 	isOnScreen: function(matrix, point) {
-		var pre = this.screenToMath(point.x, point.y);
-		var par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+		var pre = this.screenToMath(point.x, point.y),
+				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+    		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = this.mathToScreen(prex,prey);
-
-     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-     	return true;
-     }
-     else {
-     	return false;
-     }
+    return (pre[0] >= 0) && (pre[0] <= 500) && (pre[1] >= 0) && (pre[1] <= 500);
 	},
 
+	/**
+	 * [getValidPreImageCircle generates list of (x,y) pairs that are valid in pre-image and image of a circle]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImageCircle: function() {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
@@ -1398,6 +1322,10 @@ module.exports = {
 		return validPoints;
 	},
 
+	/**
+	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImagePairs: function() {
 
 		var validPoints = [],
@@ -1420,4 +1348,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
