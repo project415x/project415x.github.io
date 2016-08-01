@@ -1,5 +1,10 @@
 module.exports = {
-
+	/**
+	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
+	 * @param  {[type]} x [x value in screen coors]
+	 * @param  {[type]} y [description]
+	 * @return {[type]}   [description]
+	 */
 	screenToMath: function(x,y) {
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
@@ -39,21 +44,25 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	/**
+	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
+	 * @param  {[type]}  matrix [2D array ]
+	 * @param  {[type]}  point  [JS object {x: a, y: b}]
+	 * @return {Boolean}        [description]
+	 */
 	isOnScreen: function(matrix, point) {
-		var pre = this.screenToMath(point.x, point.y);
-		var par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+		var pre = this.screenToMath(point.x, point.y),
+				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+    		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = this.mathToScreen(prex,prey);
-
-     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-     	return true;
-     }
-     else {
-     	return false;
-     }
+    return (pre[0] >= 0) && (pre[0] <= 500) && (pre[1] >= 0) && (pre[1] <= 500);
 	},
 
+	/**
+	 * [getValidPreImageCircle generates list of (x,y) pairs that are valid in pre-image and image of a circle]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImageCircle: function() {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
@@ -83,6 +92,10 @@ module.exports = {
 		return validPoints;
 	},
 
+	/**
+	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImagePairs: function() {
 
 		var validPoints = [],

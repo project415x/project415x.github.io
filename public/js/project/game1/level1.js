@@ -7,7 +7,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
-	// Requires JQuery
+	// Requires JQuery included on each page
 	$(window).ready(function() {
 		// Initialize Tutorial
 		Tutorial.init()
