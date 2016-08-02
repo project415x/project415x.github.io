@@ -57,13 +57,34 @@ Sauron.prototype.removeVector = function(type) {
 Sauron.prototype.updateOutputVector = function(d) {
   var i = util.applyMatrix(d.x, d.y, this.matrix);
   this.removeVector('output');
-  d3.select('#output-svg').append('path')
+  var height = Math.sqrt((250 - i[0])*(250 - i[0]) + (250 - i[1])*(250 - i[1]));
+  var angle = -1*Math.atan((i[0]-250.0)/(i[1]-250.0)) * 180.0 / Math.PI;
+  if(i[1] > 250){
+      angle += 180;
+  }
+  var width = 20;
+  var ratio = "none";
+  if(height < 300) {
+      ratio = "xMinYMin slice";
+  }
+  d3.select('#output-svg').append('image')
     .attr({
-      "stroke": "#92989F",
-      "stroke-width":"9",
-      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-      "id": 'output-vector'
+        "x": i[0],
+        "y": i[1],
+        "width": ""+ width +"px",
+        "height": "" + height +"px",
+        "preserveAspectRatio" : ratio,
+        "xlink:href": "../public/img/robotarm.gif",
+        "id": 'output-vector',
+        "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
   });
+  // d3.select('#output-svg').append('path')
+  //   .attr({
+  //      "stroke": "#92989F",
+  //      "stroke-width":"9",
+  //      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+  //      "id": 'output-vector'
+  // });
 };
 
 /*

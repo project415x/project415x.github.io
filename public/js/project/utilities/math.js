@@ -52,7 +52,7 @@ module.exports = {
 	 */
 	isOnScreen: function(matrix, point) {
 		var pre = this.screenToMath(point.x, point.y),
-				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0].
+				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
     		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = this.mathToScreen(prex,prey);
@@ -93,7 +93,7 @@ module.exports = {
 		for( var i = 0; i < coefficients.length; i++ ) {
 		 	validPoints.push({
 			 	x: (coefficients[i] * tempX),
-				y: (coefficients[i] * tempY)		
+				y: (coefficients[i] * tempY)
 	 		});
 		 	validPoints.push({
 		 		x: ((-1 * coefficients[i]) * tempX),
