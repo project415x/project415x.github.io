@@ -915,9 +915,8 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  console.log("listlen"+list.length);
   for ( elem in list ) {
-    if(list[elem].id === "output-svg" ) {
+    if(list[elem].id === "output-svg" || list[elem].id === "shade" ) {
       continue;
     }
     var id = list[elem].id,
@@ -928,7 +927,6 @@ Sauron.prototype.updateTargets = function(d, type) {
         y = Number(wraith.attr("y")) + height / 2,
         i = util.applyMatrix(d.x,d.y,this.matrix);
     if (wraith.style("opacity")==0.4){
-      console.log("Opaque..."+id+wraith.style("opacity") );
       continue;
     }
     if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2)) {
