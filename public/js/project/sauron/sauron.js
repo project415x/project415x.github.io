@@ -81,6 +81,13 @@ Sauron.prototype.getArmies = function() {
   @param {string} type
   @returns {}
 */
+Sauron.prototype.blink = function(id){
+  wraith = d3.select("#"+id);
+  (function repeat(){
+    wraith = wraith.transition().style("opacity", 0.5).duration(250).transition().style("opacity", 0.9).duration(250).each("end", repeat);
+  })(); 
+}
+
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
   for ( elem in list ) {
@@ -101,11 +108,14 @@ Sauron.prototype.updateTargets = function(d, type) {
       //console.log(Number(wraith.style("opacity")));
       if (wraith.style("opacity")==1){
         //console.log(id);
-        currentWraith = wraith;
-        wraith.transition().style("opacity",0.5).duration(250).each("end", function(){d3.select(this).transition().style("opacity",1).duration(250);});  
+        this.blink(id);
+        //wraith.transition().style("opacity",0.5).duration(250).each("end", function(){d3.select(this).transition().style("opacity",1).duration(250);});  
       }
       //wraith.transition().style("opacity",0.5).duration(100).each("end", function(){wraith.transition().style("opacity",1).duration(100);});  
       
+    }
+    else {
+      wraith.transition().style("opacity", 1);
     }
     // collison detection occurs here
     console.log(list.length - this.deathToll);
@@ -125,8 +135,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
   }
-};
-
+};       
 /*
 
   @param {} none
@@ -152,6 +161,7 @@ Sauron.prototype.removeBlips = function() {
         wraith.transition().style("opacity",0).duration(2000).each("end", function(){this.remove();});
   }
 };
+
 
 /*
   Depending on level, logic to draw new targets
