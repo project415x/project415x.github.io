@@ -82,8 +82,15 @@ Sauron.prototype.getArmies = function() {
   @returns {}
 */
 Sauron.prototype.blink = function(id){
-  wraith = d3.select("#"+id);
+  var wraith = d3.select("#"+id),
+  width = Number(wraith.attr("width")),
+  height = Number(wraith.attr("height")),
+  x = Number(wraith.attr("x")) + width / 2,
+  y = Number(wraith.attr("y")) + height / 2;
   (function repeat(){
+    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
+      return;
+    }
     wraith = wraith.transition().style("opacity", 0.5).duration(250).transition().style("opacity", 0.9).duration(250).each("end", repeat);
   })(); 
 }
@@ -95,13 +102,14 @@ Sauron.prototype.updateTargets = function(d, type) {
       continue;
     }
     var id = list[elem].id,
-        wraith = d3.select("#"+id);
+        wraith = d3.select("#"+id),
         width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2,
         i = util.applyMatrix(d.x,d.y,this.matrix);
-    if (wraith.style("opacity")==0.4){
+    if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
+      console.log("skipping clicked");
       continue;
     }
     if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2)) {
@@ -114,19 +122,22 @@ Sauron.prototype.updateTargets = function(d, type) {
       //wraith.transition().style("opacity",0.5).duration(100).each("end", function(){wraith.transition().style("opacity",1).duration(100);});  
       
     }
-    else {
+    else{
       wraith.transition().style("opacity", 1);
     }
     // collison detection occurs here
-    console.log(list.length - this.deathToll);
+    //console.log(list.length - d3.selectAll(".clicked").size());
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
+        wraith.attr("class", "clicked");
         wraith.transition().style("opacity", 0.4).duration(250);
+        //console.log(wraith.attr("class"));
         this.deathToll++;
         //wraith.remove()
         this.updateProgress();
         this.drawBlips(x,y);
-        if( list.length - this.deathToll === 0 ) {
+        if( list.length - d3.selectAll(".clicked").size() === 0 ) {
+          //wraith.transition().style("opacity", 0.4);
           this.generateNewTargets(id);
         }
       }
@@ -151,15 +162,23 @@ Sauron.prototype.removeBlips = function() {
     setTimeout(function() {
       d3.select("#input-svg").selectAll("circle").remove();
     }, 2100);
-    var list = this.getArmies();
-  for ( elem in list ) {
+    
+    //changing class name to prevent unwanted behaviour
+    d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
+    setTimeout(function() {
+      d3.selectAll(".dead").remove();
+    }, 2100);
+  /*for ( elem in list ) {
     if(list[elem].id === "output-svg" ) {
       continue;
     }
     var id = list[elem].id,
         wraith = d3.select("#"+id);
         wraith.transition().style("opacity",0).duration(2000).each("end", function(){this.remove();});
-  }
+        setTimeout(function() {
+          d3.select("#"+id).remove();
+        }, 2100);
+  }*/
 };
 
 
