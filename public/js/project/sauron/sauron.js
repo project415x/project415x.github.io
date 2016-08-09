@@ -87,16 +87,31 @@ Sauron.prototype.blink = function(id){
   height = Number(wraith.attr("height")),
   x = Number(wraith.attr("x")) + width / 2,
   y = Number(wraith.attr("y")) + height / 2;
+  
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  
   (function repeat(){
     if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
       return;
     }
-    wraith = wraith.transition().style("opacity", 0.5).duration(250).transition().style("opacity", 0.9).duration(250).each("end", repeat);
+
+    function rotTween() {
+      var i = d3.interpolate(0, 360);
+        return function(t) {
+          return "rotate(" + i(t) + ","+x+","+y+")";
+      };
+    }
+    
+    wraith = wraith.transition().attrTween("transform", rotTween).duration(1000)
+                  .transition().style("opacity", 0.5).duration(250)
+                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
   })(); 
 }
 
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
+  var i = util.applyMatrix(d.x,d.y,this.matrix);
   for ( elem in list ) {
     if(list[elem].id === "output-svg" ) {
       continue;
@@ -106,40 +121,42 @@ Sauron.prototype.updateTargets = function(d, type) {
         width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
-        y = Number(wraith.attr("y")) + height / 2,
-        i = util.applyMatrix(d.x,d.y,this.matrix);
+        y = Number(wraith.attr("y")) + height / 2;
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
-      console.log("skipping clicked");
       continue;
     }
-    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2)) {
-      //console.log(Number(wraith.style("opacity")));
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
       if (wraith.style("opacity")==1){
-        //console.log(id);
         this.blink(id);
-        //wraith.transition().style("opacity",0.5).duration(250).each("end", function(){d3.select(this).transition().style("opacity",1).duration(250);});  
       }
-      //wraith.transition().style("opacity",0.5).duration(100).each("end", function(){wraith.transition().style("opacity",1).duration(100);});  
       
     }
     else{
-      wraith.transition().style("opacity", 1);
+      wraith.transition().style("opacity", 1).attrTween("transform", function(){
+        return function(){
+          return "rotate(0,"+x+","+y+")";
+        };
+      });
     }
     // collison detection occurs here
-    //console.log(list.length - d3.selectAll(".clicked").size());
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
+
         wraith.attr("class", "clicked");
-        wraith.transition().style("opacity", 0.4).duration(250);
-        //console.log(wraith.attr("class"));
+        wraith.transition().style("opacity", 0.4).attrTween("transform", function(){
+          return function(){
+            return "rotate(0,"+x+","+y+")";
+          };
+        }).duration(250);
         this.deathToll++;
-        //wraith.remove()
+
         this.updateProgress();
         this.drawBlips(x,y);
+
         if( list.length - d3.selectAll(".clicked").size() === 0 ) {
-          //wraith.transition().style("opacity", 0.4);
           this.generateNewTargets(id);
         }
+
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
@@ -168,17 +185,6 @@ Sauron.prototype.removeBlips = function() {
     setTimeout(function() {
       d3.selectAll(".dead").remove();
     }, 2100);
-  /*for ( elem in list ) {
-    if(list[elem].id === "output-svg" ) {
-      continue;
-    }
-    var id = list[elem].id,
-        wraith = d3.select("#"+id);
-        wraith.transition().style("opacity",0).duration(2000).each("end", function(){this.remove();});
-        setTimeout(function() {
-          d3.select("#"+id).remove();
-        }, 2100);
-  }*/
 };
 
 

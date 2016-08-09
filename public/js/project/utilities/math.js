@@ -44,8 +44,8 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
-	isInRange: function(oX, oY, tX, tY, xb, yb) {
-  	return (Math.abs(tX - oX) <= 2 * xb ) && (Math.abs(tY - oY) <= 2 * yb);
+	isInRange: function(oX, oY, tX, tY, xb, yb, range) {
+  	return (Math.abs(tX - oX) <= range * xb ) && (Math.abs(tY - oY) <= range * yb);
 	},
 
 	/**
