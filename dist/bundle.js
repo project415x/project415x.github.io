@@ -251,8 +251,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "40",
                  "height": "40",
-                 "xlink:href": "../public/img/items/glow/target" + i + ".gif",
-                 "preserveAspectRatio": "none"
+                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
                });
     }
     var arm = this.getTar("arm");
