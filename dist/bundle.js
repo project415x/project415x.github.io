@@ -955,7 +955,6 @@ Sauron.prototype.updateTargets = function(d, type) {
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2;
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
-      console.log("skipping clicked");
       continue;
     }
     if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
