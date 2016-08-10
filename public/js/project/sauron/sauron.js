@@ -290,7 +290,7 @@ Sauron.prototype.drawBlips = function(x,y) {
 */
 Sauron.prototype.generateRandomCircleofDeath = function() {
 
-  var validPoints = util.getValidPreImageCircle(),
+  var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
 
   for( var key in validPoints ) {
