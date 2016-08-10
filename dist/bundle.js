@@ -492,28 +492,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel1() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings),
-			outputTarget = new Target(config.targetSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-
-	// generate target(s)
-	outputTarget.init();
-}
+		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
 	// Requires JQuery included on each page
@@ -546,6 +525,26 @@ function initTutorial() {
 		Tutorial.tutorialControl(1,1000);
 	});
 }
+function initLevel1() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	Level1.generateRandomLineofDeath();
+}
+
 
 // think of this as the main function :)
 startLevel1 = function startLevel1() {
@@ -663,7 +662,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
 		config = require('./config.js'),
-		Level2 = new Sauron(config.sauron);
+		OverWatcher = new Sauron(config.sauron);
 
 function initLevel2() {
 	// Create objects needed for game
@@ -682,7 +681,7 @@ function initLevel2() {
 	outputVector.init();
 
 	// generate target(s)
-	Level2.generateRandomLineofDeath();
+	OverWatcher.generateRandomCircleofDeath();
 }
 
 
@@ -750,8 +749,8 @@ module.exports = {
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js'),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
@@ -760,6 +759,7 @@ function initLevel3() {
 			inputVector = new Vector(config.inputVectorSettings),
 			outputVector = new Vector(config.outputVectorSettings),
 			outputCanvas = new Canvas(config.outputCanvasSettings);
+			//outputTarget = new Target(config.targetSettings);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
@@ -771,7 +771,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath();
+	OverWatcher.generateTarget();
 }
 
 
@@ -1162,7 +1162,7 @@ Sauron.prototype.drawBlips = function(x,y) {
 */
 Sauron.prototype.generateRandomCircleofDeath = function() {
 
-  var validPoints = util.getValidPreImageCircle(),
+  var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
 
   for( var key in validPoints ) {
@@ -1387,6 +1387,20 @@ module.exports = {
 		}
 		return validPoints;
 	},
+	getValidPreImageOval: function(matrix) {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 3) + 1;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
+				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
 
 	/**
 	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
@@ -1403,7 +1417,7 @@ module.exports = {
 		for( var i = 0; i < coefficients.length; i++ ) {
 		 	validPoints.push({
 			 	x: (coefficients[i] * tempX),
-				y: (coefficients[i] * tempY)		
+				y: (coefficients[i] * tempY)
 	 		});
 		 	validPoints.push({
 		 		x: ((-1 * coefficients[i]) * tempX),
