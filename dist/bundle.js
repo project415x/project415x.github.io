@@ -842,6 +842,7 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.deathToll = 0;
 }
 
 /*
@@ -911,37 +912,89 @@ Sauron.prototype.getArmies = function() {
   @param {string} type
   @returns {}
 */
+Sauron.prototype.blink = function(id){
+  var wraith = d3.select("#"+id),
+  width = Number(wraith.attr("width")),
+  height = Number(wraith.attr("height")),
+  x = Number(wraith.attr("x")) + width / 2,
+  y = Number(wraith.attr("y")) + height / 2;
+  
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  
+  (function repeat(){
+    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
+      return;
+    }
+
+    function rotTween() {
+      var i = d3.interpolate(0, 360);
+        return function(t) {
+          return "rotate(" + i(t) + ","+x+","+y+")";
+      };
+    }
+    
+    wraith = wraith.transition().attrTween("transform", rotTween).duration(1000)
+                  .transition().style("opacity", 0.5).duration(250)
+                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
+  })(); 
+}
+
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
+  var i = util.applyMatrix(d.x,d.y,this.matrix);
   for ( elem in list ) {
     if(list[elem].id === "output-svg" ) {
       continue;
     }
     var id = list[elem].id,
-        wraith = d3.select("#"+id);
+        wraith = d3.select("#"+id),
         width = Number(wraith.attr("width")),
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
-        y = Number(wraith.attr("y")) + height / 2,
-        i = util.applyMatrix(d.x,d.y,this.matrix);
-
+        y = Number(wraith.attr("y")) + height / 2;
+    if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
+      continue;
+    }
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
+      if (wraith.style("opacity")==1){
+        this.blink(id);
+      }
+      
+    }
+    else{
+      wraith.transition().style("opacity", 1).attrTween("transform", function(){
+        return function(){
+          return "rotate(0,"+x+","+y+")";
+        };
+      });
+    }
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
-        wraith.remove()
+
+        wraith.attr("class", "clicked");
+        wraith.transition().style("opacity", 0.4).attrTween("transform", function(){
+          return function(){
+            return "rotate(0,"+x+","+y+")";
+          };
+        }).duration(250);
+        this.deathToll++;
+
         this.updateProgress();
         this.drawBlips(x,y);
-        if( list.length - 1 === 0 ) {
+
+        if( list.length - d3.selectAll(".clicked").size() === 0 ) {
           this.generateNewTargets(id);
         }
+
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
     }
   }
-};
-
+};       
 /*
 
   @param {} none
@@ -952,12 +1005,19 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function() {
+    this.deathToll = 0; 
     d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
       d3.select("#input-svg").selectAll("circle").remove();
     }, 2100);
-
+    
+    //changing class name to prevent unwanted behaviour
+    d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
+    setTimeout(function() {
+      d3.selectAll(".dead").remove();
+    }, 2100);
 };
+
 
 /*
   Depending on level, logic to draw new targets
@@ -966,7 +1026,8 @@ Sauron.prototype.removeBlips = function() {
 */
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
-    if(this.checkNumberOfBlips() >= 5) {
+   if(this.checkNumberOfBlips() >= 5) {
+      this.deathToll = 0;
       this.removeBlips();
     }
     this.generateTarget();
@@ -1071,7 +1132,7 @@ Sauron.prototype.generateTarget = function() {
         width: 40,
         height: 40,
         color: "black",
-        id: "random"
+        id: "random_"+this.deathToll
       };
       this.drawTarget(targetSettings);
     }
@@ -1286,6 +1347,10 @@ module.exports = {
 
 	isClose: function(oX, oY, tX, tY, xb, yb) {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
+	},
+
+	isInRange: function(oX, oY, tX, tY, xb, yb, range) {
+  	return (Math.abs(tX - oX) <= range * xb ) && (Math.abs(tY - oY) <= range * yb);
 	},
 
 	/**
