@@ -44,6 +44,10 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	isInRange: function(oX, oY, tX, tY, xb, yb, range) {
+  	return (Math.abs(tX - oX) <= range * xb ) && (Math.abs(tY - oY) <= range * yb);
+	},
+
 	/**
 	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
 	 * @param  {[type]}  matrix [2D array ]
