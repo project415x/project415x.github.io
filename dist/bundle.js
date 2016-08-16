@@ -900,7 +900,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   }
   d3.select('#output-svg').append('image')
     .attr({
-        "x": i[0],
+        "x": (i[0] - width/2),
         "y": i[1],
         "width": ""+ width +"px",
         "height": "" + height +"px",
