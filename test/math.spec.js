@@ -70,7 +70,6 @@ describe('Test Suite for Math Utility Functions', function() {
 	// same as above. goofy that we have to convert ARRAY -> JS Obj
 	it('should generate valid preimage circle points', function(done) {
 		var points = math.getValidPreImageCircle();
-
 		for (var point in points) {
 			var screen = math.mathToScreen(point.x, point.y);
 			var test = {
@@ -86,7 +85,6 @@ describe('Test Suite for Math Utility Functions', function() {
 
 	it('should generate valid preimage oval points', function(done) {
 		var points = math.getValidPreImageOval(matrix);
-
 		for (var point in points) {
 			var screen = math.mathToScreen(point.x, point.y);
 			var test = {
@@ -102,7 +100,6 @@ describe('Test Suite for Math Utility Functions', function() {
 
 	it('should generate valid preimage pairs', function(done) {
 		var points = math.getValidPreImagePairs();
-
 		for (var point in points) {
 			var screen = math.mathToScreen(point.x, point.y);
 			var test = {
