@@ -4,7 +4,7 @@
   "description": "Learning tools for linear algebra",
   "main": "index.html",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/math.spec.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
