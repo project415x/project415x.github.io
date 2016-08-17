@@ -1,5 +1,10 @@
 var math = require('../public/js/project/utilities/math.js'),
-		expect = require('chai').expect;
+		expect = require('chai').expect,
+		screenCoords = [50, 50],
+		mathCoords = [-8, 8],
+		matrix = [[2, 3], [1, 2]],
+		transformedCoords = [450, 50],
+		inverseCoords = [-750, -350];
 
 describe('Test Suite for Math Utility Functions', function() {
 
@@ -34,42 +39,80 @@ describe('Test Suite for Math Utility Functions', function() {
 	});
 
 	it('should correctly translate math to screen coordinates', function(done) {
-		var mathToScreen = math.mathToScreen(-8, 8);
-		expect(mathToScreen[0]).to.equal(50);
-		expect(mathToScreen[1]).to.equal(50);
+		var mathToScreen = math.mathToScreen(mathCoords[0], mathCoords[1]);
+		expect(mathToScreen[0]).to.equal(screenCoords[0]);
+		expect(mathToScreen[1]).to.equal(screenCoords[1]);
 		done();
 	});
 
 	it('should correctly translate screen to math coordinates', function(done) {
-		var screenToMath = math.screenToMath(50, 50);
-		expect(screenToMath[0]).to.equal(-8);
-		expect(screenToMath[1]).to.equal(8);
+		var screenToMath = math.screenToMath(screenCoords[0], screenCoords[1]);
+		expect(screenToMath[0]).to.equal(mathCoords[0]);
+		expect(screenToMath[1]).to.equal(mathCoords[1]);
 		done();
 	});
 
-	it('should correctly apply a linear transformation', function(done) {
-
-		expect(value).to.exist();
+	it('should correctly apply a linear transformation to screen coordinates', function(done) {
+		var transformed = math.applyMatrix(screenCoords[0], screenCoords[1], matrix);
+		expect(transformed[0]).to.equal(transformedCoords[0]);
+		expect(transformed[1]).to.equal(transformedCoords[1]);
 		done();
 	});
 
+	// should follow same conventions as other similar functions
 	it('should correctly calculate an inverse for a given matrix', function(done) {
-		expect(value).to.exist();
+		var inverse = math.applyInverse(screenCoords[0], screenCoords[1], matrix);
+		expect(inverse.x).to.equal(inverseCoords[0]);
+		expect(inverse.y).to.equal(inverseCoords[1]);
 		done();
 	});
 
+	// same as above. goofy that we have to convert ARRAY -> JS Obj
 	it('should generate valid preimage circle points', function(done) {
-		expect(value).to.exist();
+		var points = math.getValidPreImageCircle();
+
+		for (var point in points) {
+			var screen = math.mathToScreen(point.x, point.y);
+			var test = {
+				x: screen[0],
+				y: screen[1]
+			}
+			if (!math.isOnScreen(matrix, test)) {
+				expect(err).to.not.exist;
+			}
+		}
 		done();
 	});
 
 	it('should generate valid preimage oval points', function(done) {
-		expect(value).to.exist();
+		var points = math.getValidPreImageOval(matrix);
+
+		for (var point in points) {
+			var screen = math.mathToScreen(point.x, point.y);
+			var test = {
+				x: screen[0],
+				y: screen[1]
+			}
+			if (!math.isOnScreen(matrix, test)) {
+				expect(err).to.not.exist;
+			}
+		}
 		done();
 	});
 
 	it('should generate valid preimage pairs', function(done) {
-		expect(value).to.exist();
+		var points = math.getValidPreImagePairs();
+
+		for (var point in points) {
+			var screen = math.mathToScreen(point.x, point.y);
+			var test = {
+				x: screen[0],
+				y: screen[1]
+			}
+			if (!math.isOnScreen(matrix, test)) {
+				expect(err).to.not.exist;
+			}
+		}
 		done();
 	});
 

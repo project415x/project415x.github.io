@@ -8,14 +8,12 @@ module.exports = {
 	screenToMath: function(x, y) {
 		x = x || 1;
 		y = y || 1;
-
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
 
 	mathToScreen: function(x, y) {
 		x = x || 1;
 		y = y || 1;
-
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
 	},
 
@@ -27,7 +25,7 @@ module.exports = {
     		pre = this.screenToMath(x, y),
     	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
-   		 	pre = this.mathToScreen(prex,prey);
+   		 	pre = this.mathToScreen(prex, prey);
    	return {
    		x: pre[0],
    		y: pre[1]
@@ -39,11 +37,10 @@ module.exports = {
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
 		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
 	  // ];
-	  // console.log('matrix ', matrix)
-	  var math_coord = this.screenToMath(sX,sY),
-	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], 
-	      								matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
+	  var mathCoord = this.screenToMath(sX,sY),
+	      appliedCoord = [matrix[0][0] * mathCoord[0] + matrix[0][1] * mathCoord[1], 
+	      								matrix[1][0] * mathCoord[0] + matrix[1][1] * mathCoord[1]];
+	  return this.mathToScreen(appliedCoord[0], appliedCoord[1]);
 	},
 
 	getRandom: function(min, max) {
