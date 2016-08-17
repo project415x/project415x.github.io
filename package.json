@@ -28,6 +28,8 @@
     "watchify": "^3.7.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
     "pump": "^1.0.1",
     "vinyl-buffer": "^1.0.0"
   }

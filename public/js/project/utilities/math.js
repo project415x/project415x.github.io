@@ -5,15 +5,24 @@ module.exports = {
 	 * @param  {[type]} y [description]
 	 * @return {[type]}   [description]
 	 */
-	screenToMath: function(x,y) {
+	screenToMath: function(x, y) {
+		x = x || 1;
+		y = y || 1;
+
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
 
-	mathToScreen: function(x,y) {
+	mathToScreen: function(x, y) {
+		x = x || 1;
+		y = y || 1;
+
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
 	},
 
 	applyInverse: function(x, y, matrix) {
+		x = x || 1;
+		y = y || 1;
+
     var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
     		pre = this.screenToMath(x, y),
     	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
@@ -25,18 +34,19 @@ module.exports = {
    	}
 	},
 
-	applyMatrix: function(sX,sY,matrix) {
+	applyMatrix: function(sX, sY, matrix) {
 	  // var matrix = matrix || [
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
 		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
 	  // ];
 	  // console.log('matrix ', matrix)
 	  var math_coord = this.screenToMath(sX,sY),
-	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
+	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], 
+	      								matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
 	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
 	},
 
-	getRandom: function(min,max) {
+	getRandom: function(min, max) {
 	  return Math.random() * (max - min) + min;
 	},
 
@@ -72,7 +82,7 @@ module.exports = {
 				angle = Math.random() * Math.PI,
 				r = (Math.random() * 4) + 4;
 
-		for( var i = 0; i < 8; i++ ) {
+		for (var i = 0; i < 8; i++) {
 			validPoints.push({
 				x: r * Math.cos(angle),
 				y: r * Math.sin(angle)
@@ -81,12 +91,13 @@ module.exports = {
 		}
 		return validPoints;
 	},
+
 	getValidPreImageOval: function(matrix) {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
 				r = (Math.random() * 3) + 1;
 
-		for( var i = 0; i < 8; i++ ) {
+		for (var i = 0; i < 8; i++) {
 			validPoints.push({
 				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
 				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)
