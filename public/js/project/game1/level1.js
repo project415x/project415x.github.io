@@ -4,7 +4,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
-		Level1 = new Sauron(config.sauron);
+		OverWatcher = new Sauron(config.sauron);
 
 function initTutorial() {
 	// Requires JQuery included on each page
@@ -54,7 +54,7 @@ function initLevel1() {
 	outputVector.init();
 
 	// generate target(s)
-	Level1.generateRandomLineofDeath();
+	OverWatcher.generateRandomLineofDeath(true);
 }
 
 

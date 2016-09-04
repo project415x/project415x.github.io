@@ -1,3 +1,4 @@
+require('../utilities/animations.js');
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -12,6 +13,7 @@ function Sauron(settings) {
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
   this.deathToll = 0;
+  this.pos ={x:0, y:0};
 }
 
 /*
@@ -81,34 +83,6 @@ Sauron.prototype.getArmies = function() {
   @param {string} type
   @returns {}
 */
-Sauron.prototype.blink = function(id){
-  var wraith = d3.select("#"+id),
-  width = Number(wraith.attr("width")),
-  height = Number(wraith.attr("height")),
-  x = Number(wraith.attr("x")) + width / 2,
-  y = Number(wraith.attr("y")) + height / 2;
-  
-  //prevents this function from being called again 
-  wraith.style("opacity", 0.9);
-  
-  (function repeat(){
-    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
-      return;
-    }
-
-    function rotTween() {
-      var i = d3.interpolate(0, 360);
-        return function(t) {
-          return "rotate(" + i(t) + ","+x+","+y+")";
-      };
-    }
-    
-    wraith = wraith.transition().attrTween("transform", rotTween).duration(1000)
-                  .transition().style("opacity", 0.5).duration(250)
-                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
-  })(); 
-}
-
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
   var i = util.applyMatrix(d.x,d.y,this.matrix);
@@ -127,7 +101,8 @@ Sauron.prototype.updateTargets = function(d, type) {
     }
     if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
       if (wraith.style("opacity")==1){
-        this.blink(id);
+        wraith.spinAndBlink();
+        //this.blink(id);
       }
       
     }
@@ -173,18 +148,28 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.select("#input-svg").selectAll("circle")[0].length;
 };
 
-Sauron.prototype.removeBlips = function() {
+Sauron.prototype.removeBlips = function(generator) {
     this.deathToll = 0; 
-    d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
-    setTimeout(function() {
-      d3.select("#input-svg").selectAll("circle").remove();
-    }, 2100);
+    //d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
+    //setTimeout(function() {
+    //  d3.select("#input-svg").selectAll("circle").remove();
+    //}, 2100);
     
     //changing class name to prevent unwanted behaviour
-    d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
+    d3.selectAll(".clicked, .blips").attr("class", "dead").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
       d3.selectAll(".dead").remove();
     }, 2100);
+
+
+    d3.selectAll(".new").transition().style("opacity",1).duration(2200);
+    setTimeout(function() {
+      d3.selectAll(".new").style("opacity", 1);
+    }, 2300);
+    //d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
+    //setTimeout(function() {
+    //  d3.selectAll(".dead").remove();
+    //}, 2100);
 };
 
 
@@ -202,11 +187,11 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateTarget();
   }
   else if (id.indexOf("line") !== -1) {
-    this.removeBlips();
+    this.removeBlips("line");
     this.generateRandomLineofDeath();
   }
   else if (id.indexOf("circle") !== -1) {
-    this.removeBlips();
+    this.removeBlips("circle");
     this.generateRandomCircleofDeath();
   }
 }
@@ -219,7 +204,8 @@ Sauron.prototype.generateNewTargets = function(id) {
   @return {}
 */
 Sauron.prototype.tellSauron = function(event, type) {
-  var d = this.convertMouseToCoord(event);
+  this.convertMouseToCoord(event);
+  var d = this.pos;
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
@@ -238,10 +224,12 @@ Sauron.prototype.tellSauron = function(event, type) {
   @returns {obj(int,int)}
 */
 Sauron.prototype.convertMouseToCoord = function(event) {
-  return {
-    x: event[0],
-    y: event[1]
-  }
+  this.pos.x = event[0];
+  this.pos.y = event[1];
+  //return {
+  //  x: event[0],
+  //  y: event[1]
+  //}
 };
 
 /*
@@ -281,7 +269,8 @@ Sauron.prototype.updateProgress = function() {
   If matrix is invertible
   Divide by 0 then breaks
 */
-Sauron.prototype.generateTarget = function() {
+Sauron.prototype.generateTarget = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var isValidCoordinate = false,
       matrix = this.matrix,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
@@ -301,7 +290,9 @@ Sauron.prototype.generateTarget = function() {
         width: 40,
         height: 40,
         color: "black",
-        id: "random_"+this.deathToll
+        id: "random_"+this.deathToll,
+        class:"new",
+        opacity:""+initialOpacity
       };
       this.drawTarget(targetSettings);
     }
@@ -321,6 +312,7 @@ Sauron.prototype.drawBlips = function(x,y) {
                             cy: point.y,
                             r: 20,
                           })
+                          .attr("class", "blips")
                           .style({"fill": "url(#tarblip)"});
 };
 /*
@@ -328,7 +320,8 @@ Sauron.prototype.drawBlips = function(x,y) {
   @params {}
   @returns {}
 */
-Sauron.prototype.generateRandomCircleofDeath = function() {
+Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
 
   var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
@@ -343,7 +336,9 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "circle_"+i
+      id: "circle_"+i,
+      class: "new",
+      opacity: ""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
@@ -354,10 +349,11 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
 //[{x:0,y:0},{x:5*(Math.sqrt(2)/2),y:5*(Math.sqrt(2)/2)},{x:5*Math.sqrt(2),y:5*Math.sqrt(2)},{x:-1*(5*Math.sqrt(2)/2),y:-1*(5*Math.sqrt(2)/2)},{x:-1*(5*Math.sqrt(2)),y:-1*(5*Math.sqrt(2))}];
 /*
   Draws random line of targets onto output svg
-  @param {}
+  @param {bool} initial [Determines whether or not opacity should be 0]
   @return {} void
 */
-Sauron.prototype.generateRandomLineofDeath = function() {
+Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
 
   var validPoints = util.getValidPreImagePairs(),
       i = 0;
@@ -372,7 +368,9 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "line_"+i
+      id: "line_"+i,
+      class: "new",
+      opacity: ""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
