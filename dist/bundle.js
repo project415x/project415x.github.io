@@ -839,7 +839,6 @@ require('../utilities/animations.js');
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
-
 // Sauron is alive!
 /*
   Default constuctor
@@ -936,30 +935,22 @@ Sauron.prototype.updateTargets = function(d, type) {
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
       continue;
     }
-    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
       if (wraith.style("opacity")==1){
-        wraith.spinAndBlink();
-        //this.blink(id);
+        var self = this;
+        wraith.spinAndBlink(self);
       }
       
     }
     else{
-      wraith.transition().style("opacity", 1).attrTween("transform", function(){
-        return function(){
-          return "rotate(0,"+x+","+y+")";
-        };
-      });
+      wraith.transition().style("opacity", 1).setRotation(0);
     }
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
 
         wraith.attr("class", "clicked");
-        wraith.transition().style("opacity", 0.4).attrTween("transform", function(){
-          return function(){
-            return "rotate(0,"+x+","+y+")";
-          };
-        }).duration(250);
+        wraith.transition().style("opacity", 0.4).setRotation(0).duration(250);
         this.deathToll++;
 
         this.updateProgress();
@@ -987,11 +978,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
 
 Sauron.prototype.removeBlips = function(generator) {
     this.deathToll = 0; 
-    //d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
-    //setTimeout(function() {
-    //  d3.select("#input-svg").selectAll("circle").remove();
-    //}, 2100);
-    
+
     //changing class name to prevent unwanted behaviour
     d3.selectAll(".clicked, .blips").attr("class", "dead").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
@@ -1003,10 +990,6 @@ Sauron.prototype.removeBlips = function(generator) {
     setTimeout(function() {
       d3.selectAll(".new").style("opacity", 1);
     }, 2300);
-    //d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
-    //setTimeout(function() {
-    //  d3.selectAll(".dead").remove();
-    //}, 2100);
 };
 
 
@@ -1057,16 +1040,13 @@ Sauron.prototype.tellSauron = function(event, type) {
 
 /*
   Converts d3 event to x,y screen coordinates
+  Stores results in this.pos
   @param {d3 event} event
-  @returns {obj(int,int)}
+  @returns {}
 */
 Sauron.prototype.convertMouseToCoord = function(event) {
   this.pos.x = event[0];
   this.pos.y = event[1];
-  //return {
-  //  x: event[0],
-  //  y: event[1]
-  //}
 };
 
 /*
@@ -1307,7 +1287,9 @@ Tutorial.prototype.setTimer = function(time) {
 module.exports = new Tutorial();
 
 },{}],14:[function(require,module,exports){
-d3.selection.prototype.spinAndBlink = function(){
+var util = require("../utilities/math.js");
+
+d3.selection.prototype.spinAndBlink = function(self){
   var wraith = this;
   //prevents this function from being called again 
   wraith.style("opacity", 0.9);
@@ -1330,14 +1312,48 @@ d3.selection.prototype.spinAndBlink = function(){
           return "rotate(" + i(t) + ","+x+","+y+")";
       };
     }
+
+    function getDuration(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2,
+          matrixPos = util.applyMatrix(self.pos.x,self.pos.y,self.matrix),
+          duration = 2000;
+      if(util.isInRange(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2, 2)){
+        duration /= 2; 
+      }
+      if(util.isClose(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2)){
+        duration /= 2; 
+      }
+      return duration;
+    }
     
-    wraith = wraith.transition().attrTween("transform", rotTween).duration(1000)
+    wraith = wraith.transition().attrTween("transform", rotTween).duration(getDuration)
                   .transition().style("opacity", 0.5).duration(250)
                   .transition().style("opacity", 0.9).duration(250).each("end", repeat);
   })();
   return this;
+};
+
+
+
+d3.transition.prototype.setRotation = function(angle){
+  this.attrTween("transform", function(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2;
+      return function(){
+        return "rotate("+angle+","+x+","+y+")";
+      };
+  });
+  return this;  
 }
-},{}],15:[function(require,module,exports){
+
+},{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]

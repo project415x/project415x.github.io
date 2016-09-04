@@ -2,7 +2,6 @@ require('../utilities/animations.js');
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
-
 // Sauron is alive!
 /*
   Default constuctor
@@ -99,30 +98,22 @@ Sauron.prototype.updateTargets = function(d, type) {
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
       continue;
     }
-    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 2)) {
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
       if (wraith.style("opacity")==1){
-        wraith.spinAndBlink();
-        //this.blink(id);
+        var self = this;
+        wraith.spinAndBlink(self);
       }
       
     }
     else{
-      wraith.transition().style("opacity", 1).attrTween("transform", function(){
-        return function(){
-          return "rotate(0,"+x+","+y+")";
-        };
-      });
+      wraith.transition().style("opacity", 1).setRotation(0);
     }
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
 
         wraith.attr("class", "clicked");
-        wraith.transition().style("opacity", 0.4).attrTween("transform", function(){
-          return function(){
-            return "rotate(0,"+x+","+y+")";
-          };
-        }).duration(250);
+        wraith.transition().style("opacity", 0.4).setRotation(0).duration(250);
         this.deathToll++;
 
         this.updateProgress();
@@ -150,11 +141,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
 
 Sauron.prototype.removeBlips = function(generator) {
     this.deathToll = 0; 
-    //d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
-    //setTimeout(function() {
-    //  d3.select("#input-svg").selectAll("circle").remove();
-    //}, 2100);
-    
+
     //changing class name to prevent unwanted behaviour
     d3.selectAll(".clicked, .blips").attr("class", "dead").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
@@ -166,10 +153,6 @@ Sauron.prototype.removeBlips = function(generator) {
     setTimeout(function() {
       d3.selectAll(".new").style("opacity", 1);
     }, 2300);
-    //d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
-    //setTimeout(function() {
-    //  d3.selectAll(".dead").remove();
-    //}, 2100);
 };
 
 
@@ -220,16 +203,13 @@ Sauron.prototype.tellSauron = function(event, type) {
 
 /*
   Converts d3 event to x,y screen coordinates
+  Stores results in this.pos
   @param {d3 event} event
-  @returns {obj(int,int)}
+  @returns {}
 */
 Sauron.prototype.convertMouseToCoord = function(event) {
   this.pos.x = event[0];
   this.pos.y = event[1];
-  //return {
-  //  x: event[0],
-  //  y: event[1]
-  //}
 };
 
 /*
