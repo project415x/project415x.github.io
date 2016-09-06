@@ -5,3 +5,4 @@ _site
 *.psd
 *.dat
 *.temp
+npm-debug.log
