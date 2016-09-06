@@ -44,6 +44,10 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	isInRange: function(oX, oY, tX, tY, xb, yb, range) {
+  	return (Math.abs(tX - oX) <= range * xb ) && (Math.abs(tY - oY) <= range * yb);
+	},
+
 	/**
 	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
 	 * @param  {[type]}  matrix [2D array ]
@@ -52,7 +56,7 @@ module.exports = {
 	 */
 	isOnScreen: function(matrix, point) {
 		var pre = this.screenToMath(point.x, point.y),
-				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0].
+				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
     		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = this.mathToScreen(prex,prey);
@@ -77,6 +81,20 @@ module.exports = {
 		}
 		return validPoints;
 	},
+	getValidPreImageOval: function(matrix) {
+		var validPoints = [],
+				angle = Math.random() * Math.PI,
+				r = (Math.random() * 3) + 1;
+
+		for( var i = 0; i < 8; i++ ) {
+			validPoints.push({
+				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
+				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)
+			});
+			angle += (Math.PI / 4);
+		}
+		return validPoints;
+	},
 
 	/**
 	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
@@ -93,7 +111,7 @@ module.exports = {
 		for( var i = 0; i < coefficients.length; i++ ) {
 		 	validPoints.push({
 			 	x: (coefficients[i] * tempX),
-				y: (coefficients[i] * tempY)		
+				y: (coefficients[i] * tempY)
 	 		});
 		 	validPoints.push({
 		 		x: ((-1 * coefficients[i]) * tempX),
