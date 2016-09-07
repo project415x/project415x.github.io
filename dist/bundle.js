@@ -966,7 +966,8 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
   }
-};       
+};  
+
 /*
 
   @param {} none
@@ -977,19 +978,9 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function(generator) {
-    this.deathToll = 0; 
-
-    //changing class name to prevent unwanted behaviour
-    d3.selectAll(".clicked, .blips").attr("class", "dead").transition().style("opacity",0).duration(2000);
-    setTimeout(function() {
-      d3.selectAll(".dead").remove();
-    }, 2100);
-
-
-    d3.selectAll(".new").transition().style("opacity",1).duration(2200);
-    setTimeout(function() {
-      d3.selectAll(".new").style("opacity", 1);
-    }, 2300);
+  this.deathToll = 0; 
+  d3.selectAll(".clicked, .blips").slowDeath(2000);
+  d3.selectAll(".new").isBorn(2000);
 };
 
 
@@ -1003,8 +994,12 @@ Sauron.prototype.generateNewTargets = function(id) {
    if(this.checkNumberOfBlips() >= 5) {
       this.deathToll = 0;
       this.removeBlips();
+      this.generateTarget();
     }
-    this.generateTarget();
+    else
+      this.generateTarget(true);
+
+    
   }
   else if (id.indexOf("line") !== -1) {
     this.removeBlips("line");
@@ -1095,8 +1090,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      x: util.getRandom(0, 500),
-      y: util.getRandom(0, 500)
+      //40 px away from either end since, 40px=height/width of target
+      x: util.getRandom(40, 460),
+      y: util.getRandom(40, 460)
     };
 
     if ( util.isOnScreen(matrix, point)) {
@@ -1289,6 +1285,11 @@ module.exports = new Tutorial();
 },{}],14:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
+/*
+  makes a target spin and blink
+  @param {instanceof Sauron}
+  @return d3.selection
+*/
 d3.selection.prototype.spinAndBlink = function(self){
   var wraith = this;
   //prevents this function from being called again 
@@ -1337,8 +1338,79 @@ d3.selection.prototype.spinAndBlink = function(self){
   return this;
 };
 
+/*
+  makes a target blink 
+  @param {instanceof Sauron} self
+  @param {bool} proximity
+  @param (int) duration
+  @return d3.selection
+*/
+d3.selection.prototype.blink = function(self, proximity, duration){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
+      return;
+    }
 
+    function getDuration(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2,
+          matrixPos = util.applyMatrix(self.pos.x,self.pos.y,self.matrix),
+          newDuration = duration;
+      if(util.isInRange(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2, 2)){
+        newDuration /= 2; 
+      }
+      if(util.isClose(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2)){
+        newDuration /= 2; 
+      }
+      return newDuration;
+    }
+    
+    wraith = wraith.transition().style("opacity", 0.5).duration(proximity?getDuration:duration)
+                  .transition().style("opacity", 0.9).duration(proximity?getDuration:duration).each("end", repeat);
+  })();
+  return this;
+};
 
+/*
+  Removes all targets within duration+100 ms.
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.slowDeath = function(duration){
+  //changes class name to prevent unwanted behaviour
+  this.attr("class", "dead").transition().style("opacity",0).duration(duration);
+  setTimeout(function() {
+    d3.selectAll(".dead").remove();
+    }, duration+100);
+  return this;
+}
+
+/*
+  Removes all tatrgets within duration+100 ms.
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.isBorn = function(duration){
+  this.transition().style("opacity",1).duration(duration);
+    setTimeout(function() {
+      d3.selectAll(".new").style("opacity", 1);
+    }, duration+100);
+  return this;
+}
+
+/*
+  transition to set rotation to angle
+  @param {int}
+  @return d3.transition
+*/
 d3.transition.prototype.setRotation = function(angle){
   this.attrTween("transform", function(){
       var wraith = d3.select(this),

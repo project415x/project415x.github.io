@@ -129,7 +129,8 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
   }
-};       
+};  
+
 /*
 
   @param {} none
@@ -140,19 +141,9 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function(generator) {
-    this.deathToll = 0; 
-
-    //changing class name to prevent unwanted behaviour
-    d3.selectAll(".clicked, .blips").attr("class", "dead").transition().style("opacity",0).duration(2000);
-    setTimeout(function() {
-      d3.selectAll(".dead").remove();
-    }, 2100);
-
-
-    d3.selectAll(".new").transition().style("opacity",1).duration(2200);
-    setTimeout(function() {
-      d3.selectAll(".new").style("opacity", 1);
-    }, 2300);
+  this.deathToll = 0; 
+  d3.selectAll(".clicked, .blips").slowDeath(2000);
+  d3.selectAll(".new").isBorn(2000);
 };
 
 
@@ -166,8 +157,10 @@ Sauron.prototype.generateNewTargets = function(id) {
    if(this.checkNumberOfBlips() >= 5) {
       this.deathToll = 0;
       this.removeBlips();
+      this.generateTarget();
     }
-    this.generateTarget();
+    else
+      this.generateTarget(true);
   }
   else if (id.indexOf("line") !== -1) {
     this.removeBlips("line");
@@ -258,8 +251,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      x: util.getRandom(0, 500),
-      y: util.getRandom(0, 500)
+      //40 px away from either end since, 40px=height/width of target
+      x: util.getRandom(40, 460),
+      y: util.getRandom(40, 460)
     };
 
     if ( util.isOnScreen(matrix, point)) {
