@@ -251,9 +251,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      //40 px away from either end since, 40px=height/width of target
-      x: util.getRandom(40, 460),
-      y: util.getRandom(40, 460)
+      //40 px away from either lower end since, 40px=height/width of target
+      x: util.getRandom(0, 460),
+      y: util.getRandom(0, 460)
     };
 
     if ( util.isOnScreen(matrix, point)) {
