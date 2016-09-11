@@ -429,7 +429,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -557,7 +557,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"../tutorial/tutorial.js":15,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -695,7 +695,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -785,7 +785,98 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":9}],11:[function(require,module,exports){
+module.exports = {
+
+	inputCanvasSettings : {
+		type: "input",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	outputCanvasSettings : {
+		type: "output",
+		minX: -10,
+		minY: -10,
+		maxX: 10,
+		maxY: 10,
+		pixelWidth: 500,
+		pixelHeight: 500
+	},
+
+	inputVectorSettings : {
+		type: "input",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		},
+		stroke: 9
+	},
+
+	outputVectorSettings : {
+		type: "output",
+		tail: {
+			x: null,
+			y: null
+		},
+		head: {
+			x: null,
+			y: null
+		}
+	},
+
+	sauron : {
+		matrix: [[1,2],[2,1]],
+		level: 4,
+		type: "circle"
+	}
+};
+
+},{}],12:[function(require,module,exports){
+var Canvas = require('../canvas/canvas.js'),h
+		Vector = require('../actors/vector.js'),
+		Target = require('../actors/target.js'),
+		Sauron = require('../sauron/sauron.js'),
+		config = require('./config.js'),
+		OverWatcher = new Sauron(config.sauron);
+
+function initLevel4() {
+	console.log("4");
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+			//outputTarget = new Target(config.targetSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	OverWatcher.generateTarget(true);
+}
+
+
+// think of this as the main function :)
+startLevel4 = function startLevel3() {
+	initLevel4();
+}
+
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":14,"./config.js":11}],13:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -802,12 +893,12 @@ function loadPage(id, levelMove, guide){
     document.getElementById("lowerBoundGuide").disabled = "disabled";
     document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = 1;
-  } else if ( currentLevel >= 3) {
+  } else if ( currentLevel >= 4) {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "disabled";
     document.getElementById("lowerBoundGuide").disabled = "";
     document.getElementById("upperBoundGuide").disabled = "disabled";
-    levelTracking = 3;
+    levelTracking = 4;
   } else {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "";
@@ -834,7 +925,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('../utilities/animations.js');
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
@@ -998,8 +1089,6 @@ Sauron.prototype.generateNewTargets = function(id) {
     }
     else
       this.generateTarget(true);
-
-    
   }
   else if (id.indexOf("line") !== -1) {
     this.removeBlips("line");
@@ -1090,9 +1179,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      //40 px away from either end since, 40px=height/width of target
-      x: util.getRandom(40, 460),
-      y: util.getRandom(40, 460)
+      //40 px away from either lower end since, 40px=height/width of target
+      x: util.getRandom(0, 460),
+      y: util.getRandom(0, 460)
     };
 
     if ( util.isOnScreen(matrix, point)) {
@@ -1203,7 +1292,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/animations.js":14,"../utilities/math.js":15}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":15,"../utilities/animations.js":16,"../utilities/math.js":17}],15:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1282,7 +1371,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1407,6 +1496,17 @@ d3.selection.prototype.isBorn = function(duration){
 }
 
 /*
+  Cancels all transitions and does nothing for
+  duration milliseconds
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.wait = function(duration){
+  this.transition().duration(duration);
+  return this;
+}
+
+/*
   transition to set rotation to angle
   @param {int}
   @return d3.transition
@@ -1425,7 +1525,7 @@ d3.transition.prototype.setRotation = function(angle){
   return this;  
 }
 
-},{"../utilities/math.js":15}],15:[function(require,module,exports){
+},{"../utilities/math.js":17}],17:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
@@ -1561,4 +1661,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);

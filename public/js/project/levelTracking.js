@@ -14,12 +14,12 @@ function loadPage(id, levelMove, guide){
     document.getElementById("lowerBoundGuide").disabled = "disabled";
     document.getElementById("upperBoundGuide").disabled = "";
     levelTracking = 1;
-  } else if ( currentLevel >= 3) {
+  } else if ( currentLevel >= 4) {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "disabled";
     document.getElementById("lowerBoundGuide").disabled = "";
     document.getElementById("upperBoundGuide").disabled = "disabled";
-    levelTracking = 3;
+    levelTracking = 4;
   } else {
     document.getElementById("lowerBoundLevel").disabled = "";
     document.getElementById("upperBoundLevel").disabled = "";

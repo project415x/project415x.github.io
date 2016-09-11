@@ -122,6 +122,17 @@ d3.selection.prototype.isBorn = function(duration){
 }
 
 /*
+  Cancels all transitions and does nothing for
+  duration milliseconds
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.wait = function(duration){
+  this.transition().duration(duration);
+  return this;
+}
+
+/*
   transition to set rotation to angle
   @param {int}
   @return d3.transition
