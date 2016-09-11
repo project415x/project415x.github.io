@@ -51,6 +51,17 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	/**
+	 * [isInRange is similar to isClose, but instead checks that the points are within a larger range]
+	 * @param  {[type]}  oX  [x value of input point]
+	 * @param  {[type]}  oY  [y value of input point]
+	 * @param  {[type]}  tX  [x value of target point]
+	 * @param  {[type]}  tY  [y value of target point]
+	 * @param  {[type]}  xb  [threshold for x value difference]
+	 * @param  {[type]}  yb  [threshold for y value difference]
+	 * @param  {[type]}  range [range to multiply xb and yb by]
+	 * @return {Boolean}        [description]
+	 */
 	isInRange: function(oX, oY, tX, tY, xb, yb, range) {
   	return (Math.abs(tX - oX) <= range * xb ) && (Math.abs(tY - oY) <= range * yb);
 	},

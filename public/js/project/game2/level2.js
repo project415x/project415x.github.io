@@ -22,7 +22,7 @@ function initLevel2() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath();
+	OverWatcher.generateRandomCircleofDeath(true);
 }
 
 

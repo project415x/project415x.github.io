@@ -23,7 +23,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateTarget();
+	OverWatcher.generateTarget(true);
 }
 
 
