@@ -162,9 +162,9 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "id": "tararm",
                 "x": "0",
                 "y": "0",
-                "height": "100px",
+                "height": "200px",
                 "width": "30px"
-              });
+              })
   }
   if (this.type === "input") {
     defs.append('pattern')

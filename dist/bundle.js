@@ -296,9 +296,9 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "id": "tararm",
                 "x": "0",
                 "y": "0",
-                "height": "100px",
+                "height": "200px",
                 "width": "30px"
-              });
+              })
   }
   if (this.type === "input") {
     defs.append('pattern')
@@ -899,17 +899,31 @@ Sauron.prototype.updateOutputVector = function(d) {
   if(height < 300) {
       ratio = "xMinYMin slice";
   }
-  d3.select('#output-svg').append('image')
-    .attr({
-        "x": (i[0] - width/2),
-        "y": i[1],
-        "width": ""+ width +"px",
-        "height": "" + height +"px",
-        "preserveAspectRatio" : ratio,
-        "xlink:href": "../public/img/robotarm.gif",
-        "id": 'output-vector',
-        "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
-  });
+  if(d3.select('#output-vector').size() ===0){
+      var arm = d3.select('#output-svg').append('image')
+        .attr({
+            "x": (i[0] - width/2),
+            "y": i[1],
+            "width": ""+ width +"px",
+            "height": "" + height +"px",
+            "preserveAspectRatio" : ratio,
+            "id": 'output-vector',
+            "xlink:href": "../public/img/robotarm.gif",
+            "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
+      });
+      //arm.style({"fill": "red"});
+  }else{
+      d3.select('#output-vector')
+        .attr({
+            "x": (i[0] - width/2),
+            "y": i[1],
+            "width": ""+ width +"px",
+            "height": "" + 100 +"px",
+            "preserveAspectRatio" : ratio,
+            "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
+      });
+  }
+  //arm.style({"fill": "red"});
   // d3.select('#output-svg').append('path')
   //   .attr({
   //      "stroke": "#92989F",
@@ -939,10 +953,10 @@ Sauron.prototype.blink = function(id){
   height = Number(wraith.attr("height")),
   x = Number(wraith.attr("x")) + width / 2,
   y = Number(wraith.attr("y")) + height / 2;
-  
-  //prevents this function from being called again 
+
+  //prevents this function from being called again
   wraith.style("opacity", 0.9);
-  
+
   (function repeat(){
     if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
       return;
@@ -954,11 +968,11 @@ Sauron.prototype.blink = function(id){
           return "rotate(" + i(t) + ","+x+","+y+")";
       };
     }
-    
+
     wraith = wraith.transition().attrTween("transform", rotTween).duration(1000)
                   .transition().style("opacity", 0.5).duration(250)
                   .transition().style("opacity", 0.9).duration(250).each("end", repeat);
-  })(); 
+  })();
 }
 
 Sauron.prototype.updateTargets = function(d, type) {
@@ -967,6 +981,9 @@ Sauron.prototype.updateTargets = function(d, type) {
   for ( elem in list ) {
     if(list[elem].id === "output-svg" ) {
       continue;
+    }
+    if(list[elem].id === "output-vector"){
+        continue;
     }
     var id = list[elem].id,
         wraith = d3.select("#"+id),
@@ -981,7 +998,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (wraith.style("opacity")==1){
         this.blink(id);
       }
-      
+
     }
     else{
       wraith.transition().style("opacity", 1).attrTween("transform", function(){
@@ -1015,7 +1032,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
   }
-};       
+};
 /*
 
   @param {} none
@@ -1026,12 +1043,12 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function() {
-    this.deathToll = 0; 
+    this.deathToll = 0;
     d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
       d3.select("#input-svg").selectAll("circle").remove();
     }, 2100);
-    
+
     //changing class name to prevent unwanted behaviour
     d3.selectAll(".clicked").attr("class", "dead").transition().style("opacity",0).duration(2000);
     setTimeout(function() {
