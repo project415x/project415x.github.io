@@ -90,25 +90,11 @@ Sauron.prototype.updateTargets = function(d, type) {
         height = Number(wraith.attr("height")),
         x = Number(wraith.attr("x")) + width / 2,
         y = Number(wraith.attr("y")) + height / 2;
-    console.log("HERE"+wraith.style("opacity")+" "+i);
-    console.log(x+" "+y);
 
     if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
-      console.log("I'm in");
       if(wraith.style("opacity")==1){
-        console.log("asdf");
         wraith.style("opacity", 0.9);
-        (function bounce(){
-          var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
-          d3.select("#movingTarget").wait(500).transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
-            var currX = Number(d3.select(this).attr("x"));
-            var currY = Number(d3.select(this).attr("y"));
-            var dx = (Number(currX)-newX)*(Number(currX)-newX);
-            var dy = (Number(currY)-newY)*(Number(currY)-newY);
-            var d = Math.sqrt(dx+dy)*5000/460;
-            return d;
-          }).each("end", bounce);
-        })();
+        wraith.randomlines(5000/460);
       }
       else{
         if(wraith.style("opacity")!=0.9){
@@ -118,7 +104,6 @@ Sauron.prototype.updateTargets = function(d, type) {
     }
     else{
       if(wraith.style("opacity")!=1){
-        console.log("opacity"+wraith.style("opacity"));
         console.log("REKT");
         if(wraith.style("opacity")!=0.5)
           wraith.style("opacity", 0.5);

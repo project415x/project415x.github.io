@@ -95,6 +95,26 @@ d3.selection.prototype.blink = function(self, proximity, duration){
 };
 
 /*
+  Moves a target in random directions
+  @param {float}
+  @return d3.selection
+*/
+d3.selection.prototype.randomlines = function(scaleFactor){
+  var wraith = this;
+  (function bounce(){
+    var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
+    wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
+      var currX = Number(d3.select(this).attr("x"));
+      var currY = Number(d3.select(this).attr("y"));
+      var dx = (Number(currX)-newX)*(Number(currX)-newX);
+      var dy = (Number(currY)-newY)*(Number(currY)-newY);
+      var d = Math.sqrt(dx+dy)*scaleFactor;
+      return d;
+    }).each("end", bounce);
+  })();
+};
+
+/*
   Removes all targets within duration+100 ms.
   @param {int}
   @return d3.selection
