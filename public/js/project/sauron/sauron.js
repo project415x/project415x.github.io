@@ -83,6 +83,49 @@ Sauron.prototype.getArmies = function() {
   @returns {}
 */
 Sauron.prototype.updateTargets = function(d, type) {
+  if(d3.select("#movingTarget").size()!=0){
+    var i = util.applyMatrix(d.x,d.y,this.matrix);
+    var wraith = d3.select("#movingTarget"),
+        width = Number(wraith.attr("width")),
+        height = Number(wraith.attr("height")),
+        x = Number(wraith.attr("x")) + width / 2,
+        y = Number(wraith.attr("y")) + height / 2;
+    console.log("HERE"+wraith.style("opacity")+" "+i);
+    console.log(x+" "+y);
+
+    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
+      console.log("I'm in");
+      if(wraith.style("opacity")==1){
+        console.log("asdf");
+        wraith.style("opacity", 0.9);
+        (function bounce(){
+          var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
+          d3.select("#movingTarget").wait(500).transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
+            var currX = Number(d3.select(this).attr("x"));
+            var currY = Number(d3.select(this).attr("y"));
+            var dx = (Number(currX)-newX)*(Number(currX)-newX);
+            var dy = (Number(currY)-newY)*(Number(currY)-newY);
+            var d = Math.sqrt(dx+dy)*5000/460;
+            return d;
+          }).each("end", bounce);
+        })();
+      }
+      else{
+        if(wraith.style("opacity")!=0.9){
+          wraith.style("opacity",0.9);
+        }
+      }
+    }
+    else{
+      if(wraith.style("opacity")!=1){
+        console.log("opacity"+wraith.style("opacity"));
+        console.log("REKT");
+        if(wraith.style("opacity")!=0.5)
+          wraith.style("opacity", 0.5);
+      }
+    }
+    return;
+  }
   var list = this.getArmies();
   var i = util.applyMatrix(d.x,d.y,this.matrix);
   for ( elem in list ) {
@@ -102,8 +145,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       if (wraith.style("opacity")==1){
         var self = this;
         wraith.spinAndBlink(self);
-      }
-      
+     }       
     }
     else{
       wraith.transition().style("opacity", 1).setRotation(0);
@@ -234,6 +276,23 @@ Sauron.prototype.updateProgress = function() {
 };
 
 /*
+  Draws blips that are dropped onto input svg
+  @param {int} x
+  @param {int} y
+  @returns void
+*/
+Sauron.prototype.drawBlips = function(x,y) {
+  var point = util.applyInverse(x, y, this.matrix);
+  d3.select("#input-svg").append("circle")
+                          .attr({
+                            cx: point.x,
+                            cy: point.y,
+                            r: 20,
+                          })
+                          .attr("class", "blips")
+                          .style({"fill": "url(#tarblip)"});
+};
+/*
   Draws random target on output svg
   @param {}
   @return {}
@@ -271,23 +330,6 @@ Sauron.prototype.generateTarget = function(firstRun) {
       this.drawTarget(targetSettings);
     }
   }
-};
-/*
-  Draws blips that are dropped onto input svg
-  @param {int} x
-  @param {int} y
-  @returns void
-*/
-Sauron.prototype.drawBlips = function(x,y) {
-  var point = util.applyInverse(x, y, this.matrix);
-  d3.select("#input-svg").append("circle")
-                          .attr({
-                            cx: point.x,
-                            cy: point.y,
-                            r: 20,
-                          })
-                          .attr("class", "blips")
-                          .style({"fill": "url(#tarblip)"});
 };
 /*
   Draws random circle of targets onto output svg
@@ -351,8 +393,57 @@ Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
   }
 };
 
+/*
+  Draws random target on output svg
+  @param {}
+  @return {}
+  The Sauron's army grows larger
+  Slightly not optimal
+  If matrix is invertible
+  Divide by 0 then breaks
+*/
+Sauron.prototype.generateTargetPath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
+  var isValidCoordinate = false,
+      matrix = this.matrix,
+      par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+      newX, newY;
+
+  while (!isValidCoordinate) {
+    var point = {
+      //40 px away from either lower end since, 40px=height/width of target
+      x: util.getRandom(0, 460),
+      y: util.getRandom(0, 460)
+    };
+
+    if ( util.isOnScreen(matrix, point)) {
+      isValidCoordinate = true;
+      var targetSettings = {
+        x: point.x,
+        y: point.y,
+        width: 40,
+        height: 40,
+        color: "black",
+        id: "movingTarget",
+        class:"new",
+        opacity:""+initialOpacity
+      };
+      this.drawTarget(targetSettings);
+    }
+  }
+
+    var point = {
+      //40 px away from either lower end since, 40px=height/width of target
+      x: util.getRandom(0, 460),
+      y: util.getRandom(0, 460)
+    };
+
+    
+
+};
+
 /**
-  Wrapper for Target class.
+.each("end", repeat)  Wrapper for Target class.
   @param {obj} settings
   @returns void
 */

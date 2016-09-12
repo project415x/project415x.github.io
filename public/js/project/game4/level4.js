@@ -24,7 +24,7 @@ function initLevel4() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateTarget(true);
+	OverWatcher.generateTargetPath(true);
 }
 
 
