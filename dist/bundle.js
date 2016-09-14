@@ -935,20 +935,11 @@ Sauron.prototype.updateTargets = function(d, type) {
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
       continue;
     }
-    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
-      if (wraith.style("opacity")==1){
-        var self = this;
-        wraith.spinAndBlink(self);
-      }
-      
-    }
-    else{
-      wraith.transition().style("opacity", 1).setRotation(0);
-    }
+
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
-
+        wraith.transition();
         wraith.attr("class", "clicked");
         wraith.transition().style("opacity", 0.4).setRotation(0).duration(250);
         this.deathToll++;
@@ -964,6 +955,15 @@ Sauron.prototype.updateTargets = function(d, type) {
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
+    }
+    else if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
+      if (wraith.style("opacity")==1){
+        var self = this;
+        wraith.spin(self);
+     }       
+    }
+    else{
+      wraith.transition().style("opacity", 1).setRotation(0);
     }
   }
 };  
@@ -998,8 +998,6 @@ Sauron.prototype.generateNewTargets = function(id) {
     }
     else
       this.generateTarget(true);
-
-    
   }
   else if (id.indexOf("line") !== -1) {
     this.removeBlips("line");
@@ -1090,9 +1088,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      //40 px away from either end since, 40px=height/width of target
-      x: util.getRandom(40, 460),
-      y: util.getRandom(40, 460)
+      //40 px away from either lower end since, 40px=height/width of target
+      x: util.getRandom(0, 460),
+      y: util.getRandom(0, 460)
     };
 
     if ( util.isOnScreen(matrix, point)) {
@@ -1290,7 +1288,7 @@ var util = require("../utilities/math.js");
   @param {instanceof Sauron}
   @return d3.selection
 */
-d3.selection.prototype.spinAndBlink = function(self){
+d3.selection.prototype.spin = function(self){
   var wraith = this;
   //prevents this function from being called again 
   wraith.style("opacity", 0.9);
@@ -1331,9 +1329,10 @@ d3.selection.prototype.spinAndBlink = function(self){
       return duration;
     }
     
-    wraith = wraith.transition().attrTween("transform", rotTween).duration(getDuration)
-                  .transition().style("opacity", 0.5).duration(250)
-                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
+    wraith = wraith.transition().attrTween("transform", rotTween)
+                  .duration(getDuration)
+                  .wait(500)
+                  .each("end", repeat);
   })();
   return this;
 };
@@ -1380,6 +1379,26 @@ d3.selection.prototype.blink = function(self, proximity, duration){
 };
 
 /*
+  Moves a target in random directions
+  @param {float}
+  @return d3.selection
+*/
+d3.selection.prototype.randomlines = function(scaleFactor){
+  var wraith = this;
+  (function bounce(){
+    var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
+    wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
+      var currX = Number(d3.select(this).attr("x"));
+      var currY = Number(d3.select(this).attr("y"));
+      var dx = (Number(currX)-newX)*(Number(currX)-newX);
+      var dy = (Number(currY)-newY)*(Number(currY)-newY);
+      var d = Math.sqrt(dx+dy)*scaleFactor;
+      return d;
+    }).each("end", bounce);
+  })();
+};
+
+/*
   Removes all targets within duration+100 ms.
   @param {int}
   @return d3.selection
@@ -1403,6 +1422,21 @@ d3.selection.prototype.isBorn = function(duration){
     setTimeout(function() {
       d3.selectAll(".new").style("opacity", 1);
     }, duration+100);
+  return this;
+}
+
+/*
+  Cancels all transitions and does nothing for
+  duration milliseconds
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.wait = function(duration){
+  this.transition().duration(duration);
+  return this;
+}
+d3.transition.prototype.wait = function(duration){
+  this.transition().duration(duration);
   return this;
 }
 
@@ -1433,38 +1467,45 @@ module.exports = {
 	 * @param  {[type]} y [description]
 	 * @return {[type]}   [description]
 	 */
-	screenToMath: function(x,y) {
+	screenToMath: function(x, y) {
+		x = x || 1;
+		y = y || 1;
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
 
-	mathToScreen: function(x,y) {
+	mathToScreen: function(x, y) {
+		x = x || 1;
+		y = y || 1;
 	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
 	},
 
 	applyInverse: function(x, y, matrix) {
+		x = x || 1;
+		y = y || 1;
+
     var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
     		pre = this.screenToMath(x, y),
     	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
-   		 	pre = this.mathToScreen(prex,prey);
+   		 	pre = this.mathToScreen(prex, prey);
    	return {
    		x: pre[0],
    		y: pre[1]
    	}
 	},
 
-	applyMatrix: function(sX,sY,matrix) {
+	applyMatrix: function(sX, sY, matrix) {
 	  // var matrix = matrix || [
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
 		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
 	  // ];
-	  // console.log('matrix ', matrix)
-	  var math_coord = this.screenToMath(sX,sY),
-	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
+	  var mathCoord = this.screenToMath(sX,sY),
+	      appliedCoord = [matrix[0][0] * mathCoord[0] + matrix[0][1] * mathCoord[1], 
+	      								matrix[1][0] * mathCoord[0] + matrix[1][1] * mathCoord[1]];
+	  return this.mathToScreen(appliedCoord[0], appliedCoord[1]);
 	},
 
-	getRandom: function(min,max) {
+	getRandom: function(min, max) {
 	  return Math.random() * (max - min) + min;
 	},
 
@@ -1511,7 +1552,7 @@ module.exports = {
 				angle = Math.random() * Math.PI,
 				r = (Math.random() * 4) + 4;
 
-		for( var i = 0; i < 8; i++ ) {
+		for (var i = 0; i < 8; i++) {
 			validPoints.push({
 				x: r * Math.cos(angle),
 				y: r * Math.sin(angle)
@@ -1520,12 +1561,13 @@ module.exports = {
 		}
 		return validPoints;
 	},
+
 	getValidPreImageOval: function(matrix) {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
 				r = (Math.random() * 3) + 1;
 
-		for( var i = 0; i < 8; i++ ) {
+		for (var i = 0; i < 8; i++) {
 			validPoints.push({
 				x: matrix[0][0] * r * Math.cos(angle) + matrix[0][1] * r * Math.sin(angle),
 				y: matrix[1][0] * r * Math.cos(angle) + matrix[1][1] * r * Math.sin(angle)

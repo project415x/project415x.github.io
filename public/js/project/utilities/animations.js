@@ -5,7 +5,7 @@ var util = require("../utilities/math.js");
   @param {instanceof Sauron}
   @return d3.selection
 */
-d3.selection.prototype.spinAndBlink = function(self){
+d3.selection.prototype.spin = function(self){
   var wraith = this;
   //prevents this function from being called again 
   wraith.style("opacity", 0.9);
@@ -46,9 +46,10 @@ d3.selection.prototype.spinAndBlink = function(self){
       return duration;
     }
     
-    wraith = wraith.transition().attrTween("transform", rotTween).duration(getDuration)
-                  .transition().style("opacity", 0.5).duration(250)
-                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
+    wraith = wraith.transition().attrTween("transform", rotTween)
+                  .duration(getDuration)
+                  .wait(500)
+                  .each("end", repeat);
   })();
   return this;
 };
@@ -95,6 +96,26 @@ d3.selection.prototype.blink = function(self, proximity, duration){
 };
 
 /*
+  Moves a target in random directions
+  @param {float}
+  @return d3.selection
+*/
+d3.selection.prototype.randomlines = function(scaleFactor){
+  var wraith = this;
+  (function bounce(){
+    var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
+    wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
+      var currX = Number(d3.select(this).attr("x"));
+      var currY = Number(d3.select(this).attr("y"));
+      var dx = (Number(currX)-newX)*(Number(currX)-newX);
+      var dy = (Number(currY)-newY)*(Number(currY)-newY);
+      var d = Math.sqrt(dx+dy)*scaleFactor;
+      return d;
+    }).each("end", bounce);
+  })();
+};
+
+/*
   Removes all targets within duration+100 ms.
   @param {int}
   @return d3.selection
@@ -118,6 +139,21 @@ d3.selection.prototype.isBorn = function(duration){
     setTimeout(function() {
       d3.selectAll(".new").style("opacity", 1);
     }, duration+100);
+  return this;
+}
+
+/*
+  Cancels all transitions and does nothing for
+  duration milliseconds
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.wait = function(duration){
+  this.transition().duration(duration);
+  return this;
+}
+d3.transition.prototype.wait = function(duration){
+  this.transition().duration(duration);
   return this;
 }
 

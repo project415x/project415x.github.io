@@ -98,20 +98,11 @@ Sauron.prototype.updateTargets = function(d, type) {
     if (wraith.attr("class") === "clicked" || wraith.attr("class") === "dead"){
       continue;
     }
-    if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
-      if (wraith.style("opacity")==1){
-        var self = this;
-        wraith.spinAndBlink(self);
-      }
-      
-    }
-    else{
-      wraith.transition().style("opacity", 1).setRotation(0);
-    }
+
     // collison detection occurs here
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
-
+        wraith.transition();
         wraith.attr("class", "clicked");
         wraith.transition().style("opacity", 0.4).setRotation(0).duration(250);
         this.deathToll++;
@@ -127,6 +118,15 @@ Sauron.prototype.updateTargets = function(d, type) {
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
+    }
+    else if (util.isInRange(i[0], i[1], x, y, width / 2, height / 2, 4)) {
+      if (wraith.style("opacity")==1){
+        var self = this;
+        wraith.spin(self);
+     }       
+    }
+    else{
+      wraith.transition().style("opacity", 1).setRotation(0);
     }
   }
 };  
