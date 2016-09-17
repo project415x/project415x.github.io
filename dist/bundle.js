@@ -10,7 +10,6 @@
   };
 *
 */
-
 function Target(settings) {
 	this.x = settings.x || 300;
 	this.y = settings.y || 300;
@@ -20,16 +19,27 @@ function Target(settings) {
 	this.id = settings.id || "random";
 	this.type = settings.type || "output";
 }
-
-Target.prototype.updateColor = function(dist, n) {
+/**
+ * [updateColor Not currently in use. In ]
+ * @param  {[type]} dist [dist]
+ * @return {[none]}      
+ */
+Target.prototype.updateColor = function(dist) {
 		this.color = dist;
 };
 
+/**
+ * [init draws the first target on the canvas]
+ * @return {[none]} 
+ */
 Target.prototype.init = function() {
 		this.drawTarget();
 };
 
-
+/**
+ * [drawTarget draws target onto canvas ]
+ * @return {[none]} []
+ */
 Target.prototype.drawTarget = function() {
 	var tar_num = Math.floor(Math.random() * 19) + 1,
 			score = 0,
@@ -44,8 +54,6 @@ Target.prototype.drawTarget = function() {
 			"height": this.height,
 			"id": this.id
 		})
-
-	
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
 };
 
@@ -68,10 +76,6 @@ Sample settings object
 		}
 	}
 */
-// Really the vector shouldn't know about its screen coordinates.
-// These should be math coordinates.
-// When we draw this vector to the canvas, the canvas should tell the vector how its math coordinates translate into screen coordinates,
-// *for that canvas*.
 function Vector(settings) {
 	this.head = {
 		x: settings.head.x || 250,
@@ -157,7 +161,6 @@ var Sauron = require('../sauron/sauron.js'),
     Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
-// console.log(new Sauron({}));
 function Canvas(settings) {
   //input error handling
   this.minX = settings.minX || -10,
@@ -420,7 +423,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -491,7 +494,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
-	// Requires JQuery
+	// Requires JQuery included on each page
 	$(window).ready(function() {
 		// Initialize Tutorial
 		Tutorial.init()
@@ -548,7 +551,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -656,16 +659,9 @@ module.exports = {
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-<<<<<<< HEAD
 		Sauron = require('../sauron/sauron.js'),
 		config = require('./config.js'),
-		Level2 = new Sauron(config.sauron);
-		console.log(Level2.level)
-=======
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
 		OverWatcher = new Sauron(config.sauron);
->>>>>>> 7af91f0... levels switched around
 
 function initLevel2() {
 	// Create objects needed for game
@@ -693,7 +689,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -752,13 +748,8 @@ module.exports = {
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
-<<<<<<< HEAD
-		Sauron = require('../sauron/sauron.js')
-		config = require('./config.js');
-=======
 		Sauron = require('../sauron/sauron.js'),
 		config = require('./config.js'),
->>>>>>> 7af91f0... levels switched around
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
@@ -788,66 +779,7 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":9}],11:[function(require,module,exports){
-module.exports = {
-
-	inputCanvasSettings : {
-		type: "input",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	outputCanvasSettings : {
-		type: "output",
-		minX: -10,
-		minY: -10,
-		maxX: 10,
-		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
-	},
-
-	inputVectorSettings : {
-		type: "input",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	outputVectorSettings : {
-		type: "output",
-		tail: {
-			x: null,
-			y: null
-		},
-		head: {
-			x: null,
-			y: null
-		}
-	},
-
-	targetSettings : {
-		x: 355,
-		y: 50,
-		r: 20
-	},
-
-	sauron : {
-		matrix: [[1,2],[2,1]],
-		level: 1,
-		type: "random"
-	}
-};
-},{}],12:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -896,7 +828,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -1230,7 +1162,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":15}],14:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1241,6 +1173,10 @@ function Tutorial(settings) {
   this.timer = null;
 }
 
+/**
+ * [init using jQuery opens modal]
+ * @return {[none]}
+ */
 Tutorial.prototype.init = function() {
   // Initialize Popover
   $('#tutorial').popover();
@@ -1305,9 +1241,14 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = {
-
+	/**
+	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
+	 * @param  {[type]} x [x value in screen coors]
+	 * @param  {[type]} y [description]
+	 * @return {[type]}   [description]
+	 */
 	screenToMath: function(x,y) {
 	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
 	},
@@ -1347,21 +1288,25 @@ module.exports = {
   	return (Math.abs(tX - oX) <= xb ) && (Math.abs(tY - oY) <= yb);
 	},
 
+	/**
+	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
+	 * @param  {[type]}  matrix [2D array ]
+	 * @param  {[type]}  point  [JS object {x: a, y: b}]
+	 * @return {Boolean}        [description]
+	 */
 	isOnScreen: function(matrix, point) {
-		var pre = this.screenToMath(point.x, point.y);
-		var par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    var prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
+		var pre = this.screenToMath(point.x, point.y),
+				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
+    		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
     pre = this.mathToScreen(prex,prey);
-
-     if (pre[0] >= 0 && pre[0] <= 500 && pre[1] >= 0 && pre[1] <= 500) {
-     	return true;
-     }
-     else {
-     	return false;
-     }
+    return (pre[0] >= 0) && (pre[0] <= 500) && (pre[1] >= 0) && (pre[1] <= 500);
 	},
 
+	/**
+	 * [getValidPreImageCircle generates list of (x,y) pairs that are valid in pre-image and image of a circle]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImageCircle: function() {
 		var validPoints = [],
 				angle = Math.random() * Math.PI,
@@ -1391,6 +1336,10 @@ module.exports = {
 		return validPoints;
 	},
 
+	/**
+	 * [getValidPreImagePairs generates list of pairs (x,y) that are in a line]
+	 * @return {[int, int]} [list of JS objects with properties x, y]
+	 */
 	getValidPreImagePairs: function() {
 
 		var validPoints = [],
@@ -1413,4 +1362,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
