@@ -25,31 +25,41 @@ body {
 
 </style>
 
-<center><br><br>
-<div id="slide">
-<a name="1"></a>
-<a href="#2" border="0"><img src="title/title1.gif">
-<br><br><i>Finally, after all these years of work... my robot is complete!</a>
+<script type="text/javascript">
+  var images = ["title/title1.gif", "title/title2.gif", "title/title3.gif", "title/title4.gif"];
+  var text = ["Finally, after all these years of work... my robot is complete!", "...HUH?!", "Something's wrong--my controls aren't working!", "I need your help to fix my robot!!!"];
+  var index = 1;
+  function UpdateCutscene(){
+    index++;
+    console.log(index);
+    if(index>4){
+      return;
+    }
+    if(index == 4){
+      document.getElementById("link").onClick=parent.closePopup;
+      document.getElementById("cutscene_image"+3).onClick = parent.closePopup;   
+      parent.closePopup();
+      return;
+    }
+    for(var i = 0; i<4; i++){
+      if(i!=index)
+        document.getElementById("cutscene_image"+i).hidden = true;
+      else
+        document.getElementById("cutscene_image"+i).hidden = false;
+    }
+    document.getElementById("cutscene_text").innerHTML = text[index];
+    console.log(text[index]);
+  }
+</script>
+
+<center>
+<a border="0" id="link">
+<img id="cutscene_image0" src="title/title1.gif" onClick = "UpdateCutscene()" >
+<img id="cutscene_image1" src="title/title2.gif" onClick = "UpdateCutscene()" hidden>
+<img id="cutscene_image2" src="title/title3.gif" onClick = "UpdateCutscene()" hidden>
+<img id="cutscene_image3" src="title/title4.gif" onClick = "UpdateCutscene()" hidden>
+<br><br><i id="cutscene_text">Finally, after all these years of work... my robot is complete!</a>
 <br><br><br>
-<br><br><br>
-<br><br><br>
-<a name="2"></a>
-<a href="#3" border="0"><img src="title/title2.gif">
-<br><br><i>...HUH?!</i></a>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<a name="3"></a>
-<a href="#4" border="0"><img src="title/title3.gif">
-<br><br><i>Something's wrong--my controls aren't working!</i></a>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<a name="4"></a>
-<a onClick="parent.closePopup()" border="0"><img src="title/title4.gif">
-<br><br><i>I need your help to fix my robot!!!</i></a>
-<br><br><br>
-</div>
 </center><p>
 <a href="#1" border="0"><img src="title/replay.gif" align="left">
 </a>
