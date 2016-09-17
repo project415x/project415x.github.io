@@ -4,28 +4,7 @@ var Canvas = require('../canvas/canvas.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel1() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings),
-			outputTarget = new Target(config.targetSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-
-	// generate target(s)
-	outputTarget.init();
-}
+		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
 	// Requires JQuery included on each page
@@ -58,6 +37,26 @@ function initTutorial() {
 		Tutorial.tutorialControl(1,1000);
 	});
 }
+function initLevel1() {
+	// Create objects needed for game
+	var inputCanvas = new Canvas(config.inputCanvasSettings),
+			inputVector = new Vector(config.inputVectorSettings),
+			outputVector = new Vector(config.outputVectorSettings),
+			outputCanvas = new Canvas(config.outputCanvasSettings);
+
+	// draw grid(s)
+	inputCanvas.drawCanvas();
+	outputCanvas.drawCanvas();
+	outputCanvas.drawProgressBar();
+
+	// draw vector(s)
+	inputVector.init();
+	outputVector.init();
+
+	// generate target(s)
+	Level1.generateRandomLineofDeath();
+}
+
 
 // think of this as the main function :)
 startLevel1 = function startLevel1() {
