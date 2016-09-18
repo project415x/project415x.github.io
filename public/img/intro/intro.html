@@ -37,6 +37,13 @@ body {
     if(index == 4){
       document.getElementById("link").onClick=parent.closePopup;
       document.getElementById("cutscene_image"+3).onClick = parent.closePopup;
+      index = 1;
+      for(var i = 0; i<4; i++){
+        if(i!=index)
+          document.getElementById("cutscene_image"+i).hidden = true;
+        else
+          document.getElementById("cutscene_image"+i).hidden = false;
+      }  
       parent.closePopup();
       return;
     }
@@ -56,7 +63,7 @@ body {
 <img id="cutscene_image1" src="title/title2.gif" onClick = "UpdateCutscene()" hidden>
 <img id="cutscene_image2" src="title/title3.gif" onClick = "UpdateCutscene()" hidden>
 <img id="cutscene_image3" src="title/title4.gif" onClick = "UpdateCutscene()" hidden>
-<br><br><i id="cutscene_text">Finally, after all these years of work... my robot is complete!</a>
+<br><br><i id="cutscene_text" onClick = "UpdateCutscene()">Finally, after all these years of work... my robot is complete!</a>
 <br><br><br>
 </center><p>
 <a href="#1" border="0"><img src="title/replay.gif" align="left">
