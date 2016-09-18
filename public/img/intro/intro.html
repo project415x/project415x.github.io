@@ -31,13 +31,12 @@ body {
   var index = 1;
   function UpdateCutscene(){
     index++;
-    console.log(index);
     if(index>4){
       return;
     }
     if(index == 4){
       document.getElementById("link").onClick=parent.closePopup;
-      document.getElementById("cutscene_image"+3).onClick = parent.closePopup;   
+      document.getElementById("cutscene_image"+3).onClick = parent.closePopup;
       parent.closePopup();
       return;
     }
@@ -48,7 +47,6 @@ body {
         document.getElementById("cutscene_image"+i).hidden = false;
     }
     document.getElementById("cutscene_text").innerHTML = text[index];
-    console.log(text[index]);
   }
 </script>
 
