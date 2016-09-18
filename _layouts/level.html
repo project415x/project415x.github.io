@@ -5,7 +5,10 @@ layout: minimum
 <script type="text/javascript">
 	var levelScore, inputEvent, gameMode = gameMode ? gameMode : 0;
 </script>
-<div class="level">
+<div id="cutscene" hidden>
+    <iframe id = "cutscene_frame" >No cut scene</iframe>
+</div>
+<div class="level" id="level">
   <div class="level-header">
     <div id="guide">
       <img src="../public/img/scientist.gif" width="40" height="40" id="tutorial" data-toggle="popover" data-trigger="focus" data-placement="right" title="Tutorial" data-content="">
@@ -16,6 +19,9 @@ layout: minimum
   	<div id="input-canvas"></div>
   	<div id="output-canvas"></div>
     {{ content }}
+  </div>
+  <div class="scene_button" id = "popup" hidden>
+	  <button id = "popup_button" style="background-color: black;">View Cutscene</button>
   </div>
 	<div id="progress-img">
 		<img src="../public/img/progress.png">

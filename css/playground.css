@@ -73,6 +73,13 @@ h3 {
   top: 92%;
   left: 1.5%;
 }
+.scene_button {
+  position: absolute;
+  top: 92%;
+  left: 45%;
+  font-family: 'Press Start 2P', sans-serif;
+  color: #88FD68;
+}
 #progress-container {
   height: 25px;
   width: 316px;
