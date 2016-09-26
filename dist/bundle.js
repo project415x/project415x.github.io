@@ -888,13 +888,48 @@ Sauron.prototype.removeVector = function(type) {
 Sauron.prototype.updateOutputVector = function(d) {
   var i = util.applyMatrix(d.x, d.y, this.matrix);
   this.removeVector('output');
-  d3.select('#output-svg').append('path')
-    .attr({
-      "stroke": "#92989F",
-      "stroke-width":"9",
-      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-      "id": 'output-vector'
-  });
+  var height = Math.sqrt((250 - i[0])*(250 - i[0]) + (250 - i[1])*(250 - i[1]));
+  var angle = -1*Math.atan((i[0]-250.0)/(i[1]-250.0)) * 180.0 / Math.PI;
+  if(i[1] > 250){
+      angle += 180;
+  }
+  var width = 20;
+  var ratio = "none";
+  if(height < 300) {
+      ratio = "xMinYMin slice";
+  }
+  if(d3.select('#output-vector').size() ===0){
+      var arm = d3.select('#output-svg').append('image')
+        .attr({
+            "x": (i[0] - width/2),
+            "y": i[1],
+            "width": ""+ width +"px",
+            "height": "" + height +"px",
+            "preserveAspectRatio" : ratio,
+            "id": 'output-vector',
+            "xlink:href": "../public/img/robotarm.gif",
+            "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
+      });
+      //arm.style({"fill": "red"});
+  }else{
+      d3.select('#output-vector')
+        .attr({
+            "x": (i[0] - width/2),
+            "y": i[1],
+            "width": ""+ width +"px",
+            "height": "" + 100 +"px",
+            "preserveAspectRatio" : ratio,
+            "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
+      });
+  }
+  //arm.style({"fill": "red"});
+  // d3.select('#output-svg').append('path')
+  //   .attr({
+  //      "stroke": "#92989F",
+  //      "stroke-width":"9",
+  //      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
+  //      "id": 'output-vector'
+  // });
 };
 
 /*
