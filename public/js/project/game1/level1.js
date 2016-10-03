@@ -34,7 +34,7 @@ function initTutorial() {
 			Tutorial.tutorialControl(--Tutorial.num,1,true);
 		});
 		// Load starting tutorial
-		Tutorial.tutorialControl(1,1000);
+		Tutorial.tutorialControl(1,5000);
 	});
 }
 function initLevel1() {
