@@ -28,9 +28,12 @@ body {
 <script type="text/javascript">
   var images = ["title/title1.gif", "title/title2.gif", "title/title3.gif", "title/title4.gif"];
   var text = ["Finally, after all these years of work... my robot is complete!", "...HUH?!", "Something's wrong--my controls aren't working!", "I need your help to fix my robot!!!"];
-  var index = 1;
-  function UpdateCutscene(){
-    index++;
+  var index = 0;
+  function UpdateCutscene(idx){
+    if(idx==0)
+      index = 0;
+    else
+     index++;
     if(index>4){
       return;
     }
@@ -57,17 +60,19 @@ body {
   }
 </script>
 
+<body>
 <center>
-<a border="0" id="link">
-<img id="cutscene_image0" src="title/title1.gif" onClick = "UpdateCutscene()" >
-<img id="cutscene_image1" src="title/title2.gif" onClick = "UpdateCutscene()" hidden>
-<img id="cutscene_image2" src="title/title3.gif" onClick = "UpdateCutscene()" hidden>
-<img id="cutscene_image3" src="title/title4.gif" onClick = "UpdateCutscene()" hidden>
-<br><br><i id="cutscene_text" onClick = "UpdateCutscene()">Finally, after all these years of work... my robot is complete!</a>
+<a border="0" id="link" onClick = "UpdateCutscene(1)">
+<img width="800px" height = "400px" id="cutscene_image0" src="title/title1.gif"  >
+<img width="800px" height = "400px" id="cutscene_image1" src="title/title2.gif"  hidden>
+<img width="800px" height = "400px" id="cutscene_image2" src="title/title3.gif"  hidden>
+<img width="800px" height = "400px" id="cutscene_image3" src="title/title4.gif"  hidden>
+<br><br><i id="cutscene_text">Finally, after all these years of work... my robot is complete!</i><br>
+<i>(Click here to continue)</i></a>
 <br><br><br>
 </center><p>
-<a href="#1" border="0"><img src="title/replay.gif" align="left">
+<a border="0" onclick="UpdateCutscene(0)"><img src="title/replay.gif" align="left">
 </a>
 <a onClick="parent.closePopup()" border="0"><img src="title/skip.gif" align="right">
-</a></p>&nbsp;
-&nbsp;
+</a></p>
+</body>
