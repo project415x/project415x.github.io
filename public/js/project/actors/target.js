@@ -16,6 +16,8 @@ function Target(settings) {
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
 	this.id = settings.id || "random";
+	this.opacity = settings.opacity || "1";
+	this.class = settings.class || "";
 	this.type = settings.type || "output";
 }
 /**
@@ -51,9 +53,13 @@ Target.prototype.drawTarget = function() {
 			"y": real_y,
 			"width": this.width,
 			"height": this.height,
-			"id": this.id
+			"id": this.id,
+			"class": this.class
 		})
+		.style("opacity", this.opacity);
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
+	var bar = d3.select('#progressbar');
+    var currScore = bar.attr("aria-valuenow");
 };
 
 

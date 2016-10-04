@@ -132,7 +132,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         wraith.remove()
         self.updateProgress();
         self.drawBlips(x,y);
-        if( list.length - 1 === 0 ) {
+        if( self.getArmies().size() === 0 ) {
           self.generateNewTargets(id);
         }
 
@@ -277,7 +277,8 @@ Sauron.prototype.generateTarget = function() {
         width: 40,
         height: 40,
         color: "black",
-        id: "random"
+        id: "random",
+        class: "new"
       };
       this.drawTarget(targetSettings);
     }
@@ -319,7 +320,8 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "circle_"+i
+      id: "circle_"+i,
+      class: "new"
     };
     this.drawTarget(targetSetting);
     i++;
@@ -348,7 +350,8 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "line_"+i
+      id: "line_"+i,
+      class: "new"
     };
     this.drawTarget(targetSetting);
     i++;
