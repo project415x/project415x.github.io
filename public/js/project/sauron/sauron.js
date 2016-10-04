@@ -11,6 +11,7 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.deathToll = 0;
 }
 
 /*
@@ -102,11 +103,11 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 /*
-  Sauron gets all of the targes in the output svg
-  @returns {array} of dom nodes
+  Sauron gets all of the targets in the output svg
+  @returns {d3.selection} of targets
 */
 Sauron.prototype.getArmies = function() {
-  return d3.select("#output-svg").selectAll('rect')[0];
+  return d3.select("#output-svg").selectAll('.new');
 };
 
 /*
@@ -117,33 +118,34 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  for ( elem in list ) {
-    if(list[elem].id === "output-svg" ) {
-      continue;
-    }
-    var id = list[elem].id,
-        wraith = d3.select("#"+id);
-        width = Number(wraith.attr("width")),
-        height = Number(wraith.attr("height")),
-        x = Number(wraith.attr("x")) + width / 2,
-        y = Number(wraith.attr("y")) + height / 2,
-        i = util.applyMatrix(d.x,d.y,this.matrix);
-
-    // collison detection occurs here
+  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var self = this;
+  list.each(function(){
+    var wraith = d3.select(this),
+      id = wraith.attr("id"),
+      width = Number(wraith.attr("width")),
+      height = Number(wraith.attr("height")),
+      x = Number(wraith.attr("x")) + width / 2,
+      y = Number(wraith.attr("y")) + height / 2;
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
         wraith.remove()
-        this.updateProgress();
-        this.drawBlips(x,y);
+        self.updateProgress();
+        self.drawBlips(x,y);
         if( list.length - 1 === 0 ) {
-          this.generateNewTargets(id);
+          self.generateNewTargets(id);
         }
+
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
     }
-  }
+    else{
+      wraith.transition().style("opacity", 1);
+    }
+  });
+
 };
 
 /*
