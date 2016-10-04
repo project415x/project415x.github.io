@@ -5,7 +5,7 @@ title: "Level 2: Going Around"
 
 <script type="text/javascript">
 	// found in client script (game2/level2.js)
-	$(window).bind("load", function() { 
+	$(window).bind("load", function() {
 		startLevel2();
 	});
 
@@ -23,7 +23,7 @@ title: "Level 2: Going Around"
 				isBroadcasted = 1;
 				var r = confirm("Congratulations! Proceed to next level");
 				if (r === true) {
-				  window.location = "../level3/index.html";
+				  window.parent.document.getElementById("upperBoundLevel").click();
 				}
 			}
 		}

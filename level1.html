@@ -10,7 +10,7 @@ title: "Level 1: Line Up"
 		document.getElementById("level").hidden = false;
 		document.getElementById("cutscene").hidden = true;
 		window.parent.document.getElementById("navigation").hidden = false;
-		
+
 	}
 
 	function openPopup(){
@@ -50,7 +50,7 @@ title: "Level 1: Line Up"
 					isBroadcasted = 1;
 					var r = confirm("Congratulations! Proceed to next level");
 					if (r === true) {
-					  window.location = "../level2/index.html";
+					  window.parent.document.getElementById("upperBoundLevel").click();
 					}
 				}
 			}
