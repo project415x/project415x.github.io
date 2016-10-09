@@ -120,6 +120,9 @@ Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
   var i = util.applyMatrix(d.x,d.y,this.matrix);
   var self = this;
+  if (list.style("opacity")<1){
+    return;
+  }
   list.each(function(){
     var wraith = d3.select(this),
       id = wraith.attr("id"),
@@ -129,9 +132,14 @@ Sauron.prototype.updateTargets = function(d, type) {
       y = Number(wraith.attr("y")) + height / 2;
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
-        wraith.remove()
+                wraith.transition();
+        wraith.attr("class", "clicked");
+        wraith.transition().style("opacity", 0.4).duration(250);
+        self.deathToll++;
+
         self.updateProgress();
         self.drawBlips(x,y);
+
         if( self.getArmies().size() === 0 ) {
           self.generateNewTargets(id);
         }
@@ -154,15 +162,13 @@ Sauron.prototype.updateTargets = function(d, type) {
   @returns {} int
 */
 Sauron.prototype.checkNumberOfBlips = function() {
-  return d3.select("#input-svg").selectAll("circle")[0].length;
+  return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function() {
-    d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
-    setTimeout(function() {
-      d3.select("#input-svg").selectAll("circle").remove();
-    }, 2100);
-
+Sauron.prototype.removeBlips = function(generator) {
+  this.deathToll = 0; 
+  d3.selectAll(".clicked, .blips").slowDeath(2000);
+  d3.selectAll(".new").isBorn(2000);
 };
 
 /*
@@ -257,7 +263,8 @@ Sauron.prototype.updateProgress = function() {
   If matrix is invertible
   Divide by 0 then breaks
 */
-Sauron.prototype.generateTarget = function() {
+Sauron.prototype.generateTarget = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var isValidCoordinate = false,
       matrix = this.matrix,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
@@ -277,8 +284,9 @@ Sauron.prototype.generateTarget = function() {
         width: 40,
         height: 40,
         color: "black",
-        id: "random",
-        class: "new"
+        id: "random_"+this.deathToll,
+        class: "new",
+        opacity:""+initialOpacity
       };
       this.drawTarget(targetSettings);
     }
@@ -298,6 +306,7 @@ Sauron.prototype.drawBlips = function(x,y) {
                             cy: point.y,
                             r: 20,
                           })
+                          .attr("class", "blips")
                           .style({"fill": "url(#tarblip)"});
 };
 /*
@@ -305,8 +314,8 @@ Sauron.prototype.drawBlips = function(x,y) {
   @params {}
   @returns {}
 */
-Sauron.prototype.generateRandomCircleofDeath = function() {
-
+Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
 
@@ -321,7 +330,8 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       height: 40,
       color: "black",
       id: "circle_"+i,
-      class: "new"
+      class: "new",
+      opacity:""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
@@ -335,8 +345,8 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
   @param {}
   @return {} void
 */
-Sauron.prototype.generateRandomLineofDeath = function() {
-
+Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImagePairs(),
       i = 0;
 
@@ -351,7 +361,8 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       height: 40,
       color: "black",
       id: "line_"+i,
-      class: "new"
+      class: "new",
+      opacity:""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
