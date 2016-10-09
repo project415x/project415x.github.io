@@ -54,7 +54,7 @@ function initLevel1() {
 	outputVector.init();
 
 	// generate target(s)
-	Level1.generateRandomLineofDeath();
+	Level1.generateRandomLineofDeath(true);
 }
 
 

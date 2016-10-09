@@ -17,6 +17,8 @@ function Target(settings) {
 	this.height = settings.height || 40;
 	this.ttl = settings.ttl;
 	this.id = settings.id || "random";
+	this.opacity = settings.opacity || "1";
+	this.class = settings.class || "";
 	this.type = settings.type || "output";
 }
 /**
@@ -52,9 +54,13 @@ Target.prototype.drawTarget = function() {
 			"y": real_y,
 			"width": this.width,
 			"height": this.height,
-			"id": this.id
+			"id": this.id,
+			"class": this.class
 		})
+		.style("opacity", this.opacity);
 	rect.style({"fill": "url(#tar" + tar_num + ")"});
+	var bar = d3.select('#progressbar');
+    var currScore = bar.attr("aria-valuenow");
 };
 
 
@@ -423,7 +429,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -541,7 +547,7 @@ function initLevel1() {
 	outputVector.init();
 
 	// generate target(s)
-	Level1.generateRandomLineofDeath();
+	Level1.generateRandomLineofDeath(true);
 }
 
 
@@ -680,7 +686,7 @@ function initLevel2() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath();
+	OverWatcher.generateRandomCircleofDeath(true);
 }
 
 
@@ -770,7 +776,7 @@ function initLevel3() {
 	outputVector.init();
 
 	// generate target(s)
-	OverWatcher.generateTarget();
+	OverWatcher.generateTarget(true);
 }
 
 
@@ -842,6 +848,7 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.deathToll = 0;
 }
 
 /*
@@ -933,11 +940,11 @@ Sauron.prototype.updateOutputVector = function(d) {
 };
 
 /*
-  Sauron gets all of the targes in the output svg
-  @returns {array} of dom nodes
+  Sauron gets all of the targets in the output svg
+  @returns {d3.selection} of targets
 */
 Sauron.prototype.getArmies = function() {
-  return d3.select("#output-svg").selectAll('rect')[0];
+  return d3.select("#output-svg").selectAll('.new');
 };
 
 /*
@@ -948,33 +955,42 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  for ( elem in list ) {
-    if(list[elem].id === "output-svg" ) {
-      continue;
-    }
-    var id = list[elem].id,
-        wraith = d3.select("#"+id);
-        width = Number(wraith.attr("width")),
-        height = Number(wraith.attr("height")),
-        x = Number(wraith.attr("x")) + width / 2,
-        y = Number(wraith.attr("y")) + height / 2,
-        i = util.applyMatrix(d.x,d.y,this.matrix);
-
-    // collison detection occurs here
+  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var self = this;
+  if (list.style("opacity")<1){
+    return;
+  }
+  list.each(function(){
+    var wraith = d3.select(this),
+      id = wraith.attr("id"),
+      width = Number(wraith.attr("width")),
+      height = Number(wraith.attr("height")),
+      x = Number(wraith.attr("x")) + width / 2,
+      y = Number(wraith.attr("y")) + height / 2;
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if (type === "collision") {
-        wraith.remove()
-        this.updateProgress();
-        this.drawBlips(x,y);
-        if( list.length - 1 === 0 ) {
-          this.generateNewTargets(id);
+                wraith.transition();
+        wraith.attr("class", "clicked");
+        wraith.transition().style("opacity", 0.4).duration(250);
+        self.deathToll++;
+
+        self.updateProgress();
+        self.drawBlips(x,y);
+
+        if( self.getArmies().size() === 0 ) {
+          self.generateNewTargets(id);
         }
+
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
     }
-  }
+    else{
+      wraith.transition().style("opacity", 1);
+    }
+  });
+
 };
 
 /*
@@ -983,15 +999,13 @@ Sauron.prototype.updateTargets = function(d, type) {
   @returns {} int
 */
 Sauron.prototype.checkNumberOfBlips = function() {
-  return d3.select("#input-svg").selectAll("circle")[0].length;
+  return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function() {
-    d3.select("#input-svg").selectAll("circle").transition().style("opacity",0).duration(2000);
-    setTimeout(function() {
-      d3.select("#input-svg").selectAll("circle").remove();
-    }, 2100);
-
+Sauron.prototype.removeBlips = function(generator) {
+  this.deathToll = 0; 
+  d3.selectAll(".clicked, .blips").slowDeath(2000);
+  d3.selectAll(".new").isBorn(2000);
 };
 
 /*
@@ -1086,7 +1100,8 @@ Sauron.prototype.updateProgress = function() {
   If matrix is invertible
   Divide by 0 then breaks
 */
-Sauron.prototype.generateTarget = function() {
+Sauron.prototype.generateTarget = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var isValidCoordinate = false,
       matrix = this.matrix,
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
@@ -1106,7 +1121,9 @@ Sauron.prototype.generateTarget = function() {
         width: 40,
         height: 40,
         color: "black",
-        id: "random"
+        id: "random_"+this.deathToll,
+        class: "new",
+        opacity:""+initialOpacity
       };
       this.drawTarget(targetSettings);
     }
@@ -1126,6 +1143,7 @@ Sauron.prototype.drawBlips = function(x,y) {
                             cy: point.y,
                             r: 20,
                           })
+                          .attr("class", "blips")
                           .style({"fill": "url(#tarblip)"});
 };
 /*
@@ -1133,8 +1151,8 @@ Sauron.prototype.drawBlips = function(x,y) {
   @params {}
   @returns {}
 */
-Sauron.prototype.generateRandomCircleofDeath = function() {
-
+Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
 
@@ -1148,7 +1166,9 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "circle_"+i
+      id: "circle_"+i,
+      class: "new",
+      opacity:""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
@@ -1162,8 +1182,8 @@ Sauron.prototype.generateRandomCircleofDeath = function() {
   @param {}
   @return {} void
 */
-Sauron.prototype.generateRandomLineofDeath = function() {
-
+Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
+  var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImagePairs(),
       i = 0;
 
@@ -1177,7 +1197,9 @@ Sauron.prototype.generateRandomLineofDeath = function() {
       width: 40,
       height: 40,
       color: "black",
-      id: "line_"+i
+      id: "line_"+i,
+      class: "new",
+      opacity:""+initialOpacity
     };
     this.drawTarget(targetSetting);
     i++;
@@ -1197,7 +1219,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":14}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1277,6 +1299,180 @@ Tutorial.prototype.setTimer = function(time) {
 module.exports = new Tutorial();
 
 },{}],14:[function(require,module,exports){
+var util = require("../utilities/math.js");
+
+/*
+  makes a target spin and blink
+  @param {instanceof Sauron}
+  @return d3.selection
+*/
+d3.selection.prototype.spinAndBlink = function(self){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
+      return;
+    }
+
+    function rotTween() {
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2;
+          //console.log(width, height);
+      var i = d3.interpolate(0, 360);
+        return function(t) {
+          return "rotate(" + i(t) + ","+x+","+y+")";
+      };
+    }
+
+    function getDuration(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2,
+          matrixPos = util.applyMatrix(self.pos.x,self.pos.y,self.matrix),
+          duration = 2000;
+      if(util.isInRange(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2, 2)){
+        duration /= 2; 
+      }
+      if(util.isClose(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2)){
+        duration /= 2; 
+      }
+      return duration;
+    }
+    
+    wraith = wraith.transition().attrTween("transform", rotTween).duration(getDuration)
+                  .transition().style("opacity", 0.5).duration(250)
+                  .transition().style("opacity", 0.9).duration(250).each("end", repeat);
+  })();
+  return this;
+};
+
+/*
+  makes a target blink 
+  @param {instanceof Sauron} self
+  @param {bool} proximity
+  @param (int) duration
+  @return d3.selection
+*/
+d3.selection.prototype.blink = function(self, proximity, duration){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    if (wraith.attr("class") === "clicked" ||  wraith.attr("class") === "dead"){
+      return;
+    }
+
+    function getDuration(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2,
+          matrixPos = util.applyMatrix(self.pos.x,self.pos.y,self.matrix),
+          newDuration = duration;
+      if(util.isInRange(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2, 2)){
+        newDuration /= 2; 
+      }
+      if(util.isClose(matrixPos[0], matrixPos[1], x, y, width / 2, height / 2)){
+        newDuration /= 2; 
+      }
+      return newDuration;
+    }
+    
+    wraith = wraith.transition().style("opacity", 0.5).duration(proximity?getDuration:duration)
+                  .transition().style("opacity", 0.9).duration(proximity?getDuration:duration).each("end", repeat);
+  })();
+  return this;
+};
+
+/*
+  Moves a target in random directions
+  @param {float}
+  @return d3.selection
+*/
+d3.selection.prototype.randomlines = function(scaleFactor){
+  var wraith = this;
+  (function bounce(){
+    var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
+    wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
+      var currX = Number(d3.select(this).attr("x"));
+      var currY = Number(d3.select(this).attr("y"));
+      var dx = (Number(currX)-newX)*(Number(currX)-newX);
+      var dy = (Number(currY)-newY)*(Number(currY)-newY);
+      var d = Math.sqrt(dx+dy)*scaleFactor;
+      return d;
+    }).each("end", bounce);
+  })();
+};
+
+/*
+  Removes all targets within duration+100 ms.
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.slowDeath = function(duration){
+  //changes class name to prevent unwanted behaviour
+  this.attr("class", "dead").transition().style("opacity",0).duration(duration);
+  setTimeout(function() {
+    d3.selectAll(".dead").remove();
+    }, duration+100);
+  return this;
+}
+
+/*
+  Removes all tatrgets within duration+100 ms.
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.isBorn = function(duration){
+  this.transition().style("opacity",1).duration(duration);
+    setTimeout(function() {
+      d3.selectAll(".new").style("opacity", 1);
+    }, duration+100);
+  return this;
+}
+
+/*
+  Cancels all transitions and does nothing for
+  duration milliseconds
+  @param {int}
+  @return d3.selection
+*/
+d3.selection.prototype.wait = function(duration){
+  this.transition().duration(duration);
+  return this;
+}
+
+/*
+  transition to set rotation to angle
+  @param {int}
+  @return d3.transition
+*/
+d3.transition.prototype.setRotation = function(angle){
+  this.attrTween("transform", function(){
+      var wraith = d3.select(this),
+          width =  wraith.attr("width"),
+          height = wraith.attr("height"),
+          x = Number(wraith.attr("x")) + width / 2,
+          y = Number(wraith.attr("y")) + height / 2;
+      return function(){
+        return "rotate("+angle+","+x+","+y+")";
+      };
+  });
+  return this;  
+}
+
+},{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
@@ -1397,4 +1593,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
