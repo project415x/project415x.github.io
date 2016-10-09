@@ -1015,10 +1015,12 @@ Sauron.prototype.removeBlips = function(generator) {
 */
 Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
+    var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.removeBlips();
+      flag = true;
     }
-    this.generateTarget();
+    this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
     this.removeBlips();
