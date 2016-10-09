@@ -8,10 +8,25 @@ var util = require('../utilities/math.js'),
   Sample settings object in game1, game2, game3
 */
 function Sauron(settings) {
-  this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.matrix = [[1,0],[0,1]];
+  this.setMatrix();
 }
+Sauron.prototype.setMatrix = function() {
+    var rand = util.getRandom(1, 3);
+    var m = [[rand,0], [0,rand]];
+
+    var theta = util.getRandom(Math.PI/2, 3*Math.PI/2);
+
+    var rot = [[Math.cos(theta), -Math.sin(theta)],[Math.sin(theta), Math.cos(theta)]];
+
+    this.matrix = [[(rot[0][0]*m[0][0] + rot[0][1]*m[1][0]),
+                        (rot[0][0]*m[0][1] + rot[0][1]*m[1][1])],
+                        [(rot[1][0]*m[0][0] + rot[1][1]*m[1][0]),
+                        (rot[1][0]*m[0][1] + rot[1][1]*m[1][1])]
+                    ];
+};
 
 /*
   Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -183,8 +198,8 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.removeBlips();
     this.generateRandomCircleofDeath();
   }
-}
-
+  this.setMatrix();
+};
 /*
   Palantir reveals new plans to Sauron
   What do to when an event is registered on the input canvas
