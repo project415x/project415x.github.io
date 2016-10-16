@@ -439,7 +439,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -567,7 +567,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -705,7 +705,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -795,9 +795,7 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":9}],11:[function(require,module,exports){
-
-},{}],12:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -846,7 +844,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -983,8 +981,8 @@ Sauron.prototype.updateTargets = function(d, type) {
         d3.select(wraith.node().parentNode).attr("class", "clicked");
         
         wraith.setClicked();
-        wraith.sprite().transition().attr("y", wraith.attr("y"));
         wraith.sprite().transition().style("opacity", 0.4).duration(250);
+        wraith.sprite().attr("y", wraith.attr("y"));
 
         self.deathToll++;
 
@@ -1000,7 +998,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
     else{
-      wraith.sprite().transition().style("opacity", 1).attr("x", wraith.attr("x"));
+      wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
     }
   });
 };
@@ -1017,7 +1015,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
 Sauron.prototype.removeBlips = function(generator) {
   this.deathToll = 0; 
   //d3.selectAll(".clicked").remove();
-  d3.selectAll(".clicked-spirte").transition().style("opacity", 1).duration(100);
+  d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   setTimeout(function(){
     d3.selectAll(".clicked").remove()
@@ -1238,7 +1236,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],14:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1317,7 +1315,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1422,7 +1420,10 @@ d3.selection.prototype.jump = function(distance, duration){
   
   (function repeat(){
     //console.log(wraith.attr("id")[0]);
-    if (wraith.attr("class") === "clicked-sprite" ||  wraith.attr("class") === "dead"){
+    //var wraith = this;
+    var className = wraith.node().className.baseVal;
+    console.log(className === "clicked-sprite");
+    if (className === "clicked-sprite" ||  className === "dead"){
       return;
     }
     
@@ -1473,10 +1474,10 @@ d3.selection.prototype.slowDeath = function(duration){
   @return d3.selection
 */
 d3.selection.prototype.isBorn = function(duration){
-  this.transition().style("opacity",1).duration(duration);
+  d3.select(this).transition().style("opacity",1).duration(duration);
     setTimeout(function() {
       console.log("timeout");
-      this.style("opacity", 1);
+      d3.select(this).style("opacity", 1);
     }, duration+100);
   return this;
 }
@@ -1518,7 +1519,7 @@ d3.selection.prototype.setClicked = function(){
 
   var sprite = d3.select("#"+baseid+"-sprite");
 
-  sprite.attr("class", "clicked-spirte");
+  sprite.attr("class", "clicked-sprite");
   wraith.attr("class", "clicked-target");
 }
 
@@ -1539,7 +1540,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":16}],16:[function(require,module,exports){
+},{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
@@ -1660,4 +1661,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);

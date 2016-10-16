@@ -134,8 +134,8 @@ Sauron.prototype.updateTargets = function(d, type) {
         d3.select(wraith.node().parentNode).attr("class", "clicked");
         
         wraith.setClicked();
-        wraith.sprite().transition().attr("y", wraith.attr("y"));
         wraith.sprite().transition().style("opacity", 0.4).duration(250);
+        wraith.sprite().attr("y", wraith.attr("y"));
 
         self.deathToll++;
 
@@ -168,7 +168,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
 Sauron.prototype.removeBlips = function(generator) {
   this.deathToll = 0; 
   //d3.selectAll(".clicked").remove();
-  d3.selectAll(".clicked-spirte").transition().style("opacity", 1).duration(100);
+  d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   setTimeout(function(){
     d3.selectAll(".clicked").remove()

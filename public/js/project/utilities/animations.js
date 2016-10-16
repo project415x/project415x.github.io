@@ -102,7 +102,10 @@ d3.selection.prototype.jump = function(distance, duration){
   
   (function repeat(){
     //console.log(wraith.attr("id")[0]);
-    if (wraith.attr("class") === "clicked-sprite" ||  wraith.attr("class") === "dead"){
+    //var wraith = this;
+    var className = wraith.node().className.baseVal;
+    console.log(className === "clicked-sprite");
+    if (className === "clicked-sprite" ||  className === "dead"){
       return;
     }
     
@@ -156,7 +159,7 @@ d3.selection.prototype.isBorn = function(duration){
   this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
       console.log("timeout");
-      this.style("opacity", 1);
+      d3.select(this).style("opacity", 1);
     }, duration+100);
   return this;
 }
@@ -198,7 +201,7 @@ d3.selection.prototype.setClicked = function(){
 
   var sprite = d3.select("#"+baseid+"-sprite");
 
-  sprite.attr("class", "clicked-spirte");
+  sprite.attr("class", "clicked-sprite");
   wraith.attr("class", "clicked-target");
 }
 
