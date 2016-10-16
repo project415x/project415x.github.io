@@ -46,20 +46,30 @@ Target.prototype.drawTarget = function() {
 			score = 0,
 	 		real_x = this.x - this.width / 2,
 			real_y = this.y - this.height / 2;
-	
-	var rect = d3.select('#'+this.type+'-svg').append("rect")
+	var newGroup = d3.select('#'+this.type+'-svg').append("g");
+	newGroup.attr("class", this.class);
+	newGroup.style("opacity", this.opacity);
+	var rect = newGroup.append("rect")
 		.attr({
 			"x": real_x,
 			"y": real_y,
 			"width": this.width,
 			"height": this.height,
-			"id": this.id,
-			"class": this.class
+			"id": this.id+"-target",
+			"class": this.class+"-target"
 		})
-		.style("opacity", this.opacity);
-	rect.style({"fill": "url(#tar" + tar_num + ")"});
-	var bar = d3.select('#progressbar');
-    var currScore = bar.attr("aria-valuenow");
+		.style("opacity", 0);
+	var sprite = newGroup.append("rect")
+		.attr({
+			"x": real_x,
+			"y": real_y,
+			"width": this.width,
+			"height": this.height,
+			"id": this.id+"-sprite",
+			"class": this.class+"-sprite"
+		});
+	sprite.style({"fill": "url(#tar" + tar_num + ")"});
+
 };
 
 

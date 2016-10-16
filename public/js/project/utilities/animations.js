@@ -94,13 +94,32 @@ d3.selection.prototype.blink = function(self, proximity, duration){
   return this;
 };
 
+d3.selection.prototype.jump = function(distance, duration){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  var initY = wraith.attr("y");
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    if (wraith.attr("class") === "clicked-sprite" ||  wraith.attr("class") === "dead"){
+      return;
+    }
+    
+    wraith = wraith.transition().attr("y", Number(initY)+distance).duration(duration)
+                  .transition().attr("y", Number(initY)-distance).duration(duration) 
+                  .each("end", repeat);
+  })();
+  return this;
+};
+
 /*
   Moves a target in random directions
   @param {float}
   @return d3.selection
 */
 d3.selection.prototype.randomlines = function(scaleFactor){
-  var wraith = this;
+  var wraith = this; 
   (function bounce(){
     var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
     wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
@@ -136,7 +155,8 @@ d3.selection.prototype.slowDeath = function(duration){
 d3.selection.prototype.isBorn = function(duration){
   this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
-      d3.selectAll(".new").style("opacity", 1);
+      console.log("timeout");
+      this.style("opacity", 1);
     }, duration+100);
   return this;
 }
@@ -169,4 +189,33 @@ d3.transition.prototype.setRotation = function(angle){
       };
   });
   return this;  
+}
+
+d3.selection.prototype.setClicked = function(){
+  var wraith = this,
+  id = wraith.attr("id"),
+  baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+
+  sprite.attr("class", "clicked-spirte");
+  wraith.attr("class", "clicked-target");
+}
+
+d3.selection.prototype.sprite = function(){
+
+  var wraith = this;
+  var id = wraith.attr("id");
+  //console.log(id);
+  var baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+  //console.log(baseid);
+  return sprite;
+}
+
+
+d3.selection.prototype.animateSprite = function(){
+  var wraith = this;
+  return wraith.sprite().transition();
 }

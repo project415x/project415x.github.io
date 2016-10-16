@@ -47,20 +47,30 @@ Target.prototype.drawTarget = function() {
 			score = 0,
 	 		real_x = this.x - this.width / 2,
 			real_y = this.y - this.height / 2;
-	
-	var rect = d3.select('#'+this.type+'-svg').append("rect")
+	var newGroup = d3.select('#'+this.type+'-svg').append("g");
+	newGroup.attr("class", this.class);
+	newGroup.style("opacity", this.opacity);
+	var rect = newGroup.append("rect")
 		.attr({
 			"x": real_x,
 			"y": real_y,
 			"width": this.width,
 			"height": this.height,
-			"id": this.id,
-			"class": this.class
+			"id": this.id+"-target",
+			"class": this.class+"-target"
 		})
-		.style("opacity", this.opacity);
-	rect.style({"fill": "url(#tar" + tar_num + ")"});
-	var bar = d3.select('#progressbar');
-    var currScore = bar.attr("aria-valuenow");
+		.style("opacity", 0);
+	var sprite = newGroup.append("rect")
+		.attr({
+			"x": real_x,
+			"y": real_y,
+			"width": this.width,
+			"height": this.height,
+			"id": this.id+"-sprite",
+			"class": this.class+"-sprite"
+		});
+	sprite.style({"fill": "url(#tar" + tar_num + ")"});
+
 };
 
 
@@ -429,7 +439,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -557,7 +567,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -695,7 +705,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -785,7 +795,9 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"./config.js":9}],11:[function(require,module,exports){
+
+},{}],12:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -834,7 +846,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js');
@@ -929,14 +941,6 @@ Sauron.prototype.updateOutputVector = function(d) {
             "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
       });
   }
-  //arm.style({"fill": "red"});
-  // d3.select('#output-svg').append('path')
-  //   .attr({
-  //      "stroke": "#92989F",
-  //      "stroke-width":"9",
-  //      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-  //      "id": 'output-vector'
-  // });
 };
 
 /*
@@ -944,7 +948,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   @returns {d3.selection} of targets
 */
 Sauron.prototype.getArmies = function() {
-  return d3.select("#output-svg").selectAll('.new');
+  return d3.select("#output-svg").selectAll('.new-target');
 };
 
 /*
@@ -957,9 +961,10 @@ Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
   var i = util.applyMatrix(d.x,d.y,this.matrix);
   var self = this;
-  if (list.style("opacity")<1){
-    return;
-  }
+  //if (list.style("opacity")<1){
+  //  console.log("Done");
+  //  return;
+  //}
   list.each(function(){
     var wraith = d3.select(this),
       id = wraith.attr("id"),
@@ -967,11 +972,20 @@ Sauron.prototype.updateTargets = function(d, type) {
       height = Number(wraith.attr("height")),
       x = Number(wraith.attr("x")) + width / 2,
       y = Number(wraith.attr("y")) + height / 2;
+    //console.log(id);
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+      if(wraith.sprite().style("opacity")>0.9)
+        wraith.sprite().jump(10, 250);          
       if (type === "collision") {
-                wraith.transition();
-        wraith.attr("class", "clicked");
-        wraith.transition().style("opacity", 0.4).duration(250);
+
+        wraith.sprite().transition();
+
+        d3.select(wraith.node().parentNode).attr("class", "clicked");
+        
+        wraith.setClicked();
+        wraith.sprite().transition().attr("y", wraith.attr("y"));
+        wraith.sprite().transition().style("opacity", 0.4).duration(250);
+
         self.deathToll++;
 
         self.updateProgress();
@@ -980,17 +994,15 @@ Sauron.prototype.updateTargets = function(d, type) {
         if( self.getArmies().size() === 0 ) {
           self.generateNewTargets(id);
         }
-
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
     }
     else{
-      wraith.transition().style("opacity", 1);
+      wraith.sprite().transition().style("opacity", 1).attr("x", wraith.attr("x"));
     }
   });
-
 };
 
 /*
@@ -1004,8 +1016,13 @@ Sauron.prototype.checkNumberOfBlips = function() {
 
 Sauron.prototype.removeBlips = function(generator) {
   this.deathToll = 0; 
+  //d3.selectAll(".clicked").remove();
+  d3.selectAll(".clicked-spirte").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
-  d3.selectAll(".new").isBorn(2000);
+  setTimeout(function(){
+    d3.selectAll(".clicked").remove()
+    d3.selectAll(".new").isBorn(500);
+  }, 2001);
 };
 
 /*
@@ -1221,7 +1238,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],14:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1300,7 +1317,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1397,13 +1414,32 @@ d3.selection.prototype.blink = function(self, proximity, duration){
   return this;
 };
 
+d3.selection.prototype.jump = function(distance, duration){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  var initY = wraith.attr("y");
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    if (wraith.attr("class") === "clicked-sprite" ||  wraith.attr("class") === "dead"){
+      return;
+    }
+    
+    wraith = wraith.transition().attr("y", Number(initY)+distance).duration(duration)
+                  .transition().attr("y", Number(initY)-distance).duration(duration) 
+                  .each("end", repeat);
+  })();
+  return this;
+};
+
 /*
   Moves a target in random directions
   @param {float}
   @return d3.selection
 */
 d3.selection.prototype.randomlines = function(scaleFactor){
-  var wraith = this;
+  var wraith = this; 
   (function bounce(){
     var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
     wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
@@ -1439,7 +1475,8 @@ d3.selection.prototype.slowDeath = function(duration){
 d3.selection.prototype.isBorn = function(duration){
   this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
-      d3.selectAll(".new").style("opacity", 1);
+      console.log("timeout");
+      this.style("opacity", 1);
     }, duration+100);
   return this;
 }
@@ -1474,7 +1511,35 @@ d3.transition.prototype.setRotation = function(angle){
   return this;  
 }
 
-},{"../utilities/math.js":15}],15:[function(require,module,exports){
+d3.selection.prototype.setClicked = function(){
+  var wraith = this,
+  id = wraith.attr("id"),
+  baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+
+  sprite.attr("class", "clicked-spirte");
+  wraith.attr("class", "clicked-target");
+}
+
+d3.selection.prototype.sprite = function(){
+
+  var wraith = this;
+  var id = wraith.attr("id");
+  //console.log(id);
+  var baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+  //console.log(baseid);
+  return sprite;
+}
+
+
+d3.selection.prototype.animateSprite = function(){
+  var wraith = this;
+  return wraith.sprite().transition();
+}
+},{"../utilities/math.js":16}],16:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
@@ -1595,4 +1660,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
