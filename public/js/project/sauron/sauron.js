@@ -151,7 +151,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       }
     }
     else{
-      wraith.sprite().transition().style("opacity", 1).attr("x", wraith.attr("x"));
+      wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
     }
   });
 };
