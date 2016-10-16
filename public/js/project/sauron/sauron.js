@@ -134,8 +134,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         d3.select(wraith.node().parentNode).attr("class", "clicked");
         
         wraith.setClicked();
-        wraith.sprite().transition().style("opacity", 0.4).duration(250);
-        wraith.sprite().attr("y", wraith.attr("y"));
+        wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
         self.deathToll++;
 
@@ -191,12 +190,12 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
-    this.removeBlips();
     this.generateRandomLineofDeath();
+    this.removeBlips();
   }
   else if (id.indexOf("circle") !== -1) {
-    this.removeBlips();
     this.generateRandomCircleofDeath();
+    this.removeBlips();
   }
 }
 

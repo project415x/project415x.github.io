@@ -104,7 +104,7 @@ d3.selection.prototype.jump = function(distance, duration){
     //console.log(wraith.attr("id")[0]);
     //var wraith = this;
     var className = wraith.node().className.baseVal;
-    console.log(className === "clicked-sprite");
+    //console.log(className === "clicked-sprite");
     if (className === "clicked-sprite" ||  className === "dead"){
       return;
     }
@@ -158,7 +158,7 @@ d3.selection.prototype.slowDeath = function(duration){
 d3.selection.prototype.isBorn = function(duration){
   this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
-      console.log("timeout");
+      //console.log("timeout");
       d3.select(this).style("opacity", 1);
     }, duration+100);
   return this;

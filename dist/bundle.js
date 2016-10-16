@@ -981,8 +981,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         d3.select(wraith.node().parentNode).attr("class", "clicked");
         
         wraith.setClicked();
-        wraith.sprite().transition().style("opacity", 0.4).duration(250);
-        wraith.sprite().attr("y", wraith.attr("y"));
+        wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
         self.deathToll++;
 
@@ -1038,12 +1037,12 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
-    this.removeBlips();
     this.generateRandomLineofDeath();
+    this.removeBlips();
   }
   else if (id.indexOf("circle") !== -1) {
-    this.removeBlips();
     this.generateRandomCircleofDeath();
+    this.removeBlips();
   }
 }
 
@@ -1474,7 +1473,7 @@ d3.selection.prototype.slowDeath = function(duration){
   @return d3.selection
 */
 d3.selection.prototype.isBorn = function(duration){
-  d3.select(this).transition().style("opacity",1).duration(duration);
+  this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
       console.log("timeout");
       d3.select(this).style("opacity", 1);
