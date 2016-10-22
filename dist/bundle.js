@@ -860,6 +860,15 @@ function Sauron(settings) {
   this.matrix = [[1,0],[0,1]];
   this.setMatrix();
   this.deathToll = 0;
+  if(window.innerHeight<770 || window.innerWidth<770){
+    if (typeof InstallTrigger !== 'undefined'){
+      $('body').css('MozTransform','scale(90%)');
+      console.log("FF master race");
+    } //firefox
+    else{
+      document.body.style.zoom = "90%";
+    }
+  }
 }
 Sauron.prototype.setMatrix = function() {
     var rand = util.getRandom(1, 3);
