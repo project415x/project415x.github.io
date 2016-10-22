@@ -47,20 +47,30 @@ Target.prototype.drawTarget = function() {
 			score = 0,
 	 		real_x = this.x - this.width / 2,
 			real_y = this.y - this.height / 2;
-	
-	var rect = d3.select('#'+this.type+'-svg').append("rect")
+	var newGroup = d3.select('#'+this.type+'-svg').append("g");
+	newGroup.attr("class", this.class);
+	newGroup.style("opacity", this.opacity);
+	var rect = newGroup.append("rect")
 		.attr({
 			"x": real_x,
 			"y": real_y,
 			"width": this.width,
 			"height": this.height,
-			"id": this.id,
-			"class": this.class
+			"id": this.id+"-target",
+			"class": this.class+"-target"
 		})
-		.style("opacity", this.opacity);
-	rect.style({"fill": "url(#tar" + tar_num + ")"});
-	var bar = d3.select('#progressbar');
-    var currScore = bar.attr("aria-valuenow");
+		.style("opacity", 0);
+	var sprite = newGroup.append("rect")
+		.attr({
+			"x": real_x,
+			"y": real_y,
+			"width": this.width,
+			"height": this.height,
+			"id": this.id+"-sprite",
+			"class": this.class+"-sprite"
+		});
+	sprite.style({"fill": "url(#tar" + tar_num + ")"});
+
 };
 
 
@@ -929,14 +939,6 @@ Sauron.prototype.updateOutputVector = function(d) {
             "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
       });
   }
-  //arm.style({"fill": "red"});
-  // d3.select('#output-svg').append('path')
-  //   .attr({
-  //      "stroke": "#92989F",
-  //      "stroke-width":"9",
-  //      "d": "M 250 250 L"+i[0]+" "+i[1]+"z",
-  //      "id": 'output-vector'
-  // });
 };
 
 /*
@@ -944,7 +946,7 @@ Sauron.prototype.updateOutputVector = function(d) {
   @returns {d3.selection} of targets
 */
 Sauron.prototype.getArmies = function() {
-  return d3.select("#output-svg").selectAll('.new');
+  return d3.select("#output-svg").selectAll('.new-target');
 };
 
 /*
@@ -957,9 +959,10 @@ Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
   var i = util.applyMatrix(d.x,d.y,this.matrix);
   var self = this;
-  if (list.style("opacity")<1){
-    return;
-  }
+  //if (list.style("opacity")<1){
+  //  console.log("Done");
+  //  return;
+  //}
   list.each(function(){
     var wraith = d3.select(this),
       id = wraith.attr("id"),
@@ -967,11 +970,19 @@ Sauron.prototype.updateTargets = function(d, type) {
       height = Number(wraith.attr("height")),
       x = Number(wraith.attr("x")) + width / 2,
       y = Number(wraith.attr("y")) + height / 2;
+    //console.log(id);
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
+      if(wraith.sprite().style("opacity")>0.9)
+        wraith.sprite().jump(10, 250);          
       if (type === "collision") {
-                wraith.transition();
-        wraith.attr("class", "clicked");
-        wraith.transition().style("opacity", 0.4).duration(250);
+
+        wraith.sprite().transition();
+
+        d3.select(wraith.node().parentNode).attr("class", "clicked");
+        
+        wraith.setClicked();
+        wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
+
         self.deathToll++;
 
         self.updateProgress();
@@ -980,17 +991,15 @@ Sauron.prototype.updateTargets = function(d, type) {
         if( self.getArmies().size() === 0 ) {
           self.generateNewTargets(id);
         }
-
       }
       else if (type === "detection") {
         Tutorial.tutorialControl(4,1);
       }
     }
     else{
-      wraith.transition().style("opacity", 1);
+      wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
     }
   });
-
 };
 
 /*
@@ -1004,8 +1013,13 @@ Sauron.prototype.checkNumberOfBlips = function() {
 
 Sauron.prototype.removeBlips = function(generator) {
   this.deathToll = 0; 
+  //d3.selectAll(".clicked").remove();
+  d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
-  d3.selectAll(".new").isBorn(2000);
+  setTimeout(function(){
+    d3.selectAll(".clicked").remove()
+    d3.selectAll(".new").isBorn(500);
+  }, 2001);
 };
 
 /*
@@ -1023,12 +1037,12 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
-    this.removeBlips();
     this.generateRandomLineofDeath();
+    this.removeBlips();
   }
   else if (id.indexOf("circle") !== -1) {
-    this.removeBlips();
     this.generateRandomCircleofDeath();
+    this.removeBlips();
   }
 }
 
@@ -1397,13 +1411,35 @@ d3.selection.prototype.blink = function(self, proximity, duration){
   return this;
 };
 
+d3.selection.prototype.jump = function(distance, duration){
+  var wraith = this;
+  //prevents this function from being called again 
+  wraith.style("opacity", 0.9);
+  var initY = wraith.attr("y");
+  
+  (function repeat(){
+    //console.log(wraith.attr("id")[0]);
+    //var wraith = this;
+    var className = wraith.node().className.baseVal;
+    console.log(className === "clicked-sprite");
+    if (className === "clicked-sprite" ||  className === "dead"){
+      return;
+    }
+    
+    wraith = wraith.transition().attr("y", Number(initY)+distance).duration(duration)
+                  .transition().attr("y", Number(initY)-distance).duration(duration) 
+                  .each("end", repeat);
+  })();
+  return this;
+};
+
 /*
   Moves a target in random directions
   @param {float}
   @return d3.selection
 */
 d3.selection.prototype.randomlines = function(scaleFactor){
-  var wraith = this;
+  var wraith = this; 
   (function bounce(){
     var newX = util.getRandom(0, 460), newY = util.getRandom(0, 460);
     wraith = wraith.transition().attr("x", newX).attr("y", newY).ease("linear").duration(function(){
@@ -1439,7 +1475,8 @@ d3.selection.prototype.slowDeath = function(duration){
 d3.selection.prototype.isBorn = function(duration){
   this.transition().style("opacity",1).duration(duration);
     setTimeout(function() {
-      d3.selectAll(".new").style("opacity", 1);
+      console.log("timeout");
+      d3.select(this).style("opacity", 1);
     }, duration+100);
   return this;
 }
@@ -1474,6 +1511,34 @@ d3.transition.prototype.setRotation = function(angle){
   return this;  
 }
 
+d3.selection.prototype.setClicked = function(){
+  var wraith = this,
+  id = wraith.attr("id"),
+  baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+
+  sprite.attr("class", "clicked-sprite");
+  wraith.attr("class", "clicked-target");
+}
+
+d3.selection.prototype.sprite = function(){
+
+  var wraith = this;
+  var id = wraith.attr("id");
+  //console.log(id);
+  var baseid = id.split("-")[0];
+
+  var sprite = d3.select("#"+baseid+"-sprite");
+  //console.log(baseid);
+  return sprite;
+}
+
+
+d3.selection.prototype.animateSprite = function(){
+  var wraith = this;
+  return wraith.sprite().transition();
+}
 },{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
