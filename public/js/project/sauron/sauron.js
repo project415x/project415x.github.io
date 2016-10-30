@@ -358,7 +358,7 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
   for( var key in validPoints ) {
     var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix, width);
+        screenCoors = util.mathToScreen(pair.x, pair.y, width);
 
     var targetSetting = {
       x: screenCoors[0],

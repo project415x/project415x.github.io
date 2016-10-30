@@ -554,16 +554,12 @@ function initLevel1() {
 	inputCanvas.drawCanvas();
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
-	// setInterval(function(){
-    //      inputCanvas.drawCanvas();
-	// 	 outputCanvas.drawCanvas();
-    // }, 1000);
 	// $(window).resize(function() {
 	//   //resize just happened, pixels changed
 	//   	 inputCanvas = new Canvas(config.inputCanvasSettings);
 	// 	 outputCanvas = new Canvas(config.outputCanvasSettings);
 	//      inputCanvas.drawCanvas();
- //  		 outputCanvas.drawCanvas();
+    //  	outputCanvas.drawCanvas();
 	// 	 inputVector.init();
 	//  	 outputVector.init();
 	// });
@@ -640,8 +636,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	outputCanvasSettings : {
@@ -650,8 +646,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	inputVectorSettings : {
@@ -729,8 +725,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	outputCanvasSettings : {
@@ -739,8 +735,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	inputVectorSettings : {
@@ -1220,7 +1216,7 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
   for( var key in validPoints ) {
     var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix, width);
+        screenCoors = util.mathToScreen(pair.x, pair.y, width);
 
     var targetSetting = {
       x: screenCoors[0],
