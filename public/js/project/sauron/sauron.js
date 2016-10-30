@@ -1,6 +1,7 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -13,15 +14,8 @@ function Sauron(settings) {
   this.matrix = [[1,0],[0,1]];
   this.setMatrix();
   this.deathToll = 0;
-  //if(window.innerHeight<770 || window.innerWidth<770){
-  //  if (typeof InstallTrigger !== 'undefined'){
-  //    $('body').css('MozTransform','scale(90%)');
-  //    console.log("FF master race");
-  //  } //firefox
-  //  else{
-  //    document.body.style.zoom = "90%";
-  //  }
-  //}
+  this.graphics = new Smaug();
+  //this.graphics.drawRobot();
 }
 Sauron.prototype.setMatrix = function() {
     var rand = util.getRandom(1, 3);
@@ -209,6 +203,7 @@ Sauron.prototype.generateNewTargets = function(id) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.removeBlips();
+      this.graphics.changeRobot(0, true, 2000, 3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -216,10 +211,12 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.generateRandomLineofDeath();
     this.removeBlips();
+    this.graphics.changeRobot(0, true, 2000, 1);
   }
   else if (id.indexOf("circle") !== -1) {
     this.generateRandomCircleofDeath();
     this.removeBlips();
+    this.graphics.changeRobot(0, true, 2000, 2);
   }
   this.setMatrix();
 };

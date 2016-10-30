@@ -279,7 +279,7 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
-    for(i = 1; i < 5; i++){
+    for(i = 0; i < 5; i++){
       var robo = this.getTar("robo"+i);
       robo.append('image')
                .attr({
@@ -326,7 +326,7 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
-    for(i = 1; i < 5; i++) {
+    for(i = 0; i < 5; i++) {
       defs.append('pattern')
                 .attr({
                   "id": "tarrobo"+i,
@@ -879,7 +879,8 @@ setTimeout(function() {
 },{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -892,15 +893,8 @@ function Sauron(settings) {
   this.matrix = [[1,0],[0,1]];
   this.setMatrix();
   this.deathToll = 0;
-  //if(window.innerHeight<770 || window.innerWidth<770){
-  //  if (typeof InstallTrigger !== 'undefined'){
-  //    $('body').css('MozTransform','scale(90%)');
-  //    console.log("FF master race");
-  //  } //firefox
-  //  else{
-  //    document.body.style.zoom = "90%";
-  //  }
-  //}
+  this.graphics = new Smaug();
+  //this.graphics.drawRobot();
 }
 Sauron.prototype.setMatrix = function() {
     var rand = util.getRandom(1, 3);
@@ -1088,6 +1082,7 @@ Sauron.prototype.generateNewTargets = function(id) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.removeBlips();
+      this.graphics.changeRobot(0, true, 2000, 3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -1095,10 +1090,12 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.generateRandomLineofDeath();
     this.removeBlips();
+    this.graphics.changeRobot(0, true, 2000, 1);
   }
   else if (id.indexOf("circle") !== -1) {
     this.generateRandomCircleofDeath();
     this.removeBlips();
+    this.graphics.changeRobot(0, true, 2000, 2);
   }
   this.setMatrix();
 };
@@ -1291,18 +1288,46 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
 
 
 
-Smaug.prototype.changeRobot = function(mode){
-	this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
+	level++;
+	//delete this:
+	level = 4;
+	this.checkRobot();
+	//d3.select("#")
+
+	//this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+	if(temp){
+		console.log("here");
+		this.robot.transition().style("opacity",
+			function() {
+				if ( this.id == "robot"+mode ){
+					return 1;
+				}
+				return 0;
+			}
+		).transition().duration(timeout).style("opacity",
+			function() {
+				if ( this.id == "robot"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		);
+		setTimeout(function(){
+			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+		}, timeout);
+	}
 };
 
 Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
+	this.checkRobot();
 	moveFunc = moveFunc || function(x, y, obj){
 		obj.attr({
 			x: x,
@@ -1326,21 +1351,37 @@ Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
 
 };
 
+Smaug.prototype.checkRobot = function () {
+	if(d3.selectAll(".robot").size() != 0){
+		this.robot = d3.selectAll(".robot");
+		console.log("robot exists!");
+		return;
+	}
+}
+
 Smaug.prototype.drawRobot = function(level){
+	//console.log(d3.select("#robot").size());
 	level = level || 1;
 	level++; //start at robo2
+	//delete this:
+	level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	this.robot = d3.select("#output-svg").append("rect").attr({
-			"x": width/2 - 69,
-			"y": height/2 - 94/2,
-			"width": "69px",
-			"height": "94px",
-			"id": "robot",
-			"class": "robot-sprite"
-	})
-	.style({"fill": "url(#tarrobo"+level+")"});
-
+	for(var i = 0; i<5; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 69,
+				"y": height/2 - 94/2,
+				"width": "69px",
+				"height": "94px",
+				"id": "robot"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarrobo"+i+")",
+			"opacity": 0
+		});
+	}
+	d3.select("#robot"+level).style("opacity", 1);
 	console.log("Drew the robot!");
 				//.style({"fill": "url(#robo4)"});
 };

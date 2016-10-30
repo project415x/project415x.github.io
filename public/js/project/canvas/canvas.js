@@ -129,7 +129,7 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
-    for(i = 1; i < 5; i++){
+    for(i = 0; i < 5; i++){
       var robo = this.getTar("robo"+i);
       robo.append('image')
                .attr({
@@ -176,7 +176,7 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
-    for(i = 1; i < 5; i++) {
+    for(i = 0; i < 5; i++) {
       defs.append('pattern')
                 .attr({
                   "id": "tarrobo"+i,

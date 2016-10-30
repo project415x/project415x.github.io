@@ -4,11 +4,39 @@ function Smaug(){
 
 
 
-Smaug.prototype.changeRobot = function(mode){
-	this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
+	level++;
+	//delete this:
+	level = 4;
+	this.checkRobot();
+	//d3.select("#")
+
+	//this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+	if(temp){
+		console.log("here");
+		this.robot.transition().style("opacity",
+			function() {
+				if ( this.id == "robot"+mode ){
+					return 1;
+				}
+				return 0;
+			}
+		).transition().duration(timeout).style("opacity",
+			function() {
+				if ( this.id == "robot"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		);
+		setTimeout(function(){
+			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+		}, timeout);
+	}
 };
 
 Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
+	this.checkRobot();
 	moveFunc = moveFunc || function(x, y, obj){
 		obj.attr({
 			x: x,
@@ -32,21 +60,37 @@ Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
 
 };
 
+Smaug.prototype.checkRobot = function () {
+	if(d3.selectAll(".robot").size() != 0){
+		this.robot = d3.selectAll(".robot");
+		console.log("robot exists!");
+		return;
+	}
+}
+
 Smaug.prototype.drawRobot = function(level){
+	//console.log(d3.select("#robot").size());
 	level = level || 1;
 	level++; //start at robo2
+	//delete this:
+	level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	this.robot = d3.select("#output-svg").append("rect").attr({
-			"x": width/2 - 69,
-			"y": height/2 - 94/2,
-			"width": "69px",
-			"height": "94px",
-			"id": "robot",
-			"class": "robot-sprite"
-	})
-	.style({"fill": "url(#tarrobo"+level+")"});
-
+	for(var i = 0; i<5; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 69,
+				"y": height/2 - 94/2,
+				"width": "69px",
+				"height": "94px",
+				"id": "robot"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarrobo"+i+")",
+			"opacity": 0
+		});
+	}
+	d3.select("#robot"+level).style("opacity", 1);
 	console.log("Drew the robot!");
 				//.style({"fill": "url(#robo4)"});
 };
