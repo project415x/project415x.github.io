@@ -16,10 +16,10 @@ function Sauron(settings) {
   if(window.innerHeight<770 || window.innerWidth<770){
     if (typeof InstallTrigger !== 'undefined'){
       $('body').css('MozTransform','scale(90%)');
-      console.log("FF master race");
+      //console.log("FF master race");
     } //firefox
     else{
-      document.body.style.zoom = "90%";
+      //document.body.style.zoom = "90%";
     }
   }
 }
@@ -44,9 +44,10 @@ Sauron.prototype.setMatrix = function() {
 */
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = this.matrix;
-  var math_coord = util.screenToMath(sX,sY),
+  var width = document.getElementById("input-svg").width.baseVal.value;
+  var math_coord = util.screenToMath(sX,sY,width),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
+  return util.mathToScreen(applied_coord[0],applied_coord[1], width);
 };
 
 /*
@@ -56,11 +57,13 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
 */
 Sauron.prototype.updateInputVector = function(d) {
   this.removeVector('input');
+  //console.log(document.getElementById("input-svg"));
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "#31BA29",
       "stroke-width":"8",
-      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "d": "M " +width_svg/2 +" "+width_svg/2 +" L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
   });
 };
@@ -80,11 +83,12 @@ Sauron.prototype.removeVector = function(type) {
   @return void
 */
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = util.applyMatrix(d.x, d.y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg);
   this.removeVector('output');
-  var height = Math.sqrt((250 - i[0])*(250 - i[0]) + (250 - i[1])*(250 - i[1]));
-  var angle = -1*Math.atan((i[0]-250.0)/(i[1]-250.0)) * 180.0 / Math.PI;
-  if(i[1] > 250){
+  var height = Math.sqrt(((width_svg/2) - i[0])*((width_svg/2) - i[0]) + ((width_svg/2) - i[1])*((width_svg/2) - i[1]));
+  var angle = -1*Math.atan((i[0]-(width_svg/2.0))/(i[1]-(width_svg/2.0))) * 180.0 / Math.PI;
+  if(i[1] > (width_svg/2)){
       angle += 180;
   }
   var width = 20;
@@ -134,7 +138,8 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x,d.y,this.matrix, width_svg);
   var self = this;
   //if (list.style("opacity")<1){
   //  console.log("Done");
@@ -305,8 +310,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
       x: util.getRandom(0, 500),
       y: util.getRandom(0, 500)
     };
-
-    if ( util.isOnScreen(matrix, point)) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    if ( util.isOnScreen(matrix, point, width)) {
       isValidCoordinate = true;
       var targetSettings = {
         x: point.x,
@@ -329,7 +334,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
   @returns void
 */
 Sauron.prototype.drawBlips = function(x,y) {
-  var point = util.applyInverse(x, y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var point = util.applyInverse(x, y, this.matrix, width_svg);
   d3.select("#input-svg").append("circle")
                           .attr({
                             cx: point.x,
@@ -350,8 +356,9 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix, width);
 
     var targetSetting = {
       x: screenCoors[0],
@@ -381,9 +388,12 @@ Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    //console.log(width);
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-
+        screenCoors = util.mathToScreen(pair.x, pair.y, width);
+    //console.log(validPoints[key]);
+    //console.log(screenCoors);
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],

@@ -48,7 +48,19 @@ function initLevel1() {
 	inputCanvas.drawCanvas();
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
-
+	// setInterval(function(){
+    //      inputCanvas.drawCanvas();
+	// 	 outputCanvas.drawCanvas();
+    // }, 1000);
+	// $(window).resize(function() {
+	//   //resize just happened, pixels changed
+	//   	 inputCanvas = new Canvas(config.inputCanvasSettings);
+	// 	 outputCanvas = new Canvas(config.outputCanvasSettings);
+	//      inputCanvas.drawCanvas();
+ //  		 outputCanvas.drawCanvas();
+	// 	 inputVector.init();
+	//  	 outputVector.init();
+	// });
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();

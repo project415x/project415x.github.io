@@ -29,20 +29,23 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
+  var w = window.innerWidth/2.65;
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
-  this.pixelWidth = settings.pixelWidth || 400,
-  this.pixelHeight = settings.pixelHeight || 400,
-  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 200,
-  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 200,
+  this.pixelWidth = w,
+  this.pixelHeight = w,
+  this.originX = w/2,
+  this.originY = w/2,
   this.origin = {
     x: this.originX,
     y: this.originY
   },
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
+  console.log(w);
+
 }
 
 // Return modified d3 drag listener
