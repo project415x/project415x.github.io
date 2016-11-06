@@ -44,12 +44,12 @@ h3 {
   opacity: 1 !important;
 }
 #input-canvas{
-    margin-left: 10px;
+    margin-left: 2.5%;
     background-image: url(../public/img/input_background.gif);
     float: left;
 }
 #output-canvas {
-  margin-right: 10px;
+  margin-right: 2.5%;
   float: right;
   background-image: url(../public/img/output_background.gif);
 }

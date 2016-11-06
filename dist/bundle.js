@@ -179,7 +179,7 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
-  var w = window.innerWidth/2.65;
+  var w = window.innerWidth/2.60;
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
