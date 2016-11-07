@@ -279,8 +279,17 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
-    for(i = 0; i < 5; i++){
-      var robo = this.getTar("robo"+i);
+    var robo = this.getTar("robo"+0);
+    robo.append('image')
+             .attr({
+               "x": "0",
+               "y": "0",
+               "width": "92px",
+               "height": "109px",
+               "xlink:href": "../public/img/robo/robo"+0+".gif"
+             });
+    for(i = 1; i < 5; i++){
+      robo = this.getTar("robo"+i);
       robo.append('image')
                .attr({
                  "x": "0",
@@ -326,7 +335,15 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
-    for(i = 0; i < 5; i++) {
+    defs.append('pattern')
+                .attr({
+                  "id": "tarrobo"+0,
+                  "x": "0",
+                  "y": "0",
+                  "height": "109px",
+                  "width": "92px"
+                });
+    for(i = 1; i < 5; i++) {
       defs.append('pattern')
                 .attr({
                   "id": "tarrobo"+i,
@@ -1367,7 +1384,19 @@ Smaug.prototype.drawRobot = function(level){
 	level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	for(var i = 0; i<5; i++){
+	d3.select("#output-svg").append("rect").attr({
+			"x": width/2 - 80,
+			"y": height/2 - 109/2 - 4,
+			"width": "92px",
+			"height": "109px",
+			"id": "robot"+0,
+			"class": "robot"
+	})
+	.style({
+		"fill": "url(#tarrobo"+0+")",
+		"opacity": 0
+	});
+	for(var i = 1; i<5; i++){
 		d3.select("#output-svg").append("rect").attr({
 				"x": width/2 - 69,
 				"y": height/2 - 94/2,

@@ -76,7 +76,19 @@ Smaug.prototype.drawRobot = function(level){
 	level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	for(var i = 0; i<5; i++){
+	d3.select("#output-svg").append("rect").attr({
+			"x": width/2 - 80,
+			"y": height/2 - 109/2 - 4,
+			"width": "92px",
+			"height": "109px",
+			"id": "robot"+0,
+			"class": "robot"
+	})
+	.style({
+		"fill": "url(#tarrobo"+0+")",
+		"opacity": 0
+	});
+	for(var i = 1; i<5; i++){
 		d3.select("#output-svg").append("rect").attr({
 				"x": width/2 - 69,
 				"y": height/2 - 94/2,
