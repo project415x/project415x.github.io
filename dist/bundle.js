@@ -857,14 +857,27 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
-  this.matrix = [[1,0],[0,1]];
-  this.setMatrix();
+  this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+<<<<<<< HEAD
   this.enable = true;
+=======
+  if(window.innerHeight<770 || window.innerWidth<770){
+    if (typeof InstallTrigger !== 'undefined'){
+      $('body').css('MozTransform','scale(90%)');
+      console.log("FF master race");
+    } //firefox
+    else{
+      //document.body.style.zoom = "90%";
+    }
+  }
+  //this.first = 1;
+>>>>>>> baa1dd68f0375fbac920c0b434a739926a46c955
 }
 Sauron.prototype.setMatrix = function() {
-    var rand = util.getRandom(1, 3);
-    var m = [[rand,0], [0,rand]];
+    var randx = util.getRandom(.5, 1.5);
+    var randy = util.getRandom(1, 2);
+    var m = [[randx,0], [0,randy]];
 
     var theta = util.getRandom(Math.PI/2, 3*Math.PI/2);
 
@@ -1047,6 +1060,7 @@ Sauron.prototype.removeBlips = function(generator) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
+  this.setMatrix();
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
@@ -1063,7 +1077,7 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateRandomCircleofDeath();
     this.removeBlips();
   }
-  this.setMatrix();
+  //this.regenerate = 0;
 };
 /*
   Palantir reveals new plans to Sauron
@@ -1198,7 +1212,7 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
 
   for( var key in validPoints ) {
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+        screenCoors = util.mathToScreen(pair.x, pair.y);
 
     var targetSetting = {
       x: screenCoors[0],
