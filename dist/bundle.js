@@ -860,15 +860,7 @@ function Sauron(settings) {
   this.matrix = [[1,0],[0,1]];
   this.setMatrix();
   this.deathToll = 0;
-  if(window.innerHeight<770 || window.innerWidth<770){
-    if (typeof InstallTrigger !== 'undefined'){
-      $('body').css('MozTransform','scale(90%)');
-      console.log("FF master race");
-    } //firefox
-    else{
-      document.body.style.zoom = "90%";
-    }
-  }
+  this.enable = true;
 }
 Sauron.prototype.setMatrix = function() {
     var rand = util.getRandom(1, 3);
@@ -1036,13 +1028,16 @@ Sauron.prototype.checkNumberOfBlips = function() {
 };
 
 Sauron.prototype.removeBlips = function(generator) {
-  this.deathToll = 0;
-  //d3.selectAll(".clicked").remove();
+  var self = this;
+  this.deathToll = 0; 
+  d3.selectAll(".clicked-target").remove();
   d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
+  this.enable = false;
   setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
+    self.enable = true;
   }, 2001);
 };
 
@@ -1079,6 +1074,11 @@ Sauron.prototype.generateNewTargets = function(id) {
 */
 Sauron.prototype.tellSauron = function(event, type) {
   var d = this.convertMouseToCoord(event);
+  if(!this.enable){
+    this.updateInputVector(d);
+    this.updateOutputVector(d);
+    return;
+  }
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
