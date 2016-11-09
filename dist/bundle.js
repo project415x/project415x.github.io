@@ -859,21 +859,13 @@ function Sauron(settings) {
   this.level = settings === {} ? -1 : settings.level;
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
-<<<<<<< HEAD
   this.enable = true;
-=======
-  if(window.innerHeight<770 || window.innerWidth<770){
-    if (typeof InstallTrigger !== 'undefined'){
-      $('body').css('MozTransform','scale(90%)');
-      console.log("FF master race");
-    } //firefox
-    else{
-      //document.body.style.zoom = "90%";
-    }
-  }
-  //this.first = 1;
->>>>>>> baa1dd68f0375fbac920c0b434a739926a46c955
 }
+
+/*
+  Sauron creates a new matrix
+  @return int[2][2]
+*/
 Sauron.prototype.setMatrix = function() {
     var randx = util.getRandom(.5, 1.5);
     var randy = util.getRandom(1, 2);
