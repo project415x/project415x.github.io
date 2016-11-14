@@ -190,8 +190,8 @@ Canvas.prototype.appendPatternToDefs = function() {
                   "id": "tarrobo"+0,
                   "x": "0",
                   "y": "0",
-                  "height": "109px",
-                  "width": "92px"
+                  "height": "1",
+                  "width": "1"
                 });
     for(i = 1; i < 5; i++) {
       defs.append('pattern')
@@ -199,8 +199,8 @@ Canvas.prototype.appendPatternToDefs = function() {
                   "id": "tarrobo"+i,
                   "x": "0",
                   "y": "0",
-                  "height": "94px",
-                  "width": "69px"
+                  "height": "1",
+                  "width": "1"
                 });
     }
   }

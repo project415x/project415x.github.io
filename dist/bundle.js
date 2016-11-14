@@ -349,8 +349,8 @@ Canvas.prototype.appendPatternToDefs = function() {
                   "id": "tarrobo"+i,
                   "x": "0",
                   "y": "0",
-                  "height": "94px",
-                  "width": "69px"
+                  "height": "1",
+                  "width": "1"
                 });
     }
   }
@@ -600,7 +600,7 @@ function initLevel1() {
 	outputVector.init();
 
 	// generate target(s)
-	Level1.generateRandomLineofDeath(true);
+	//Level1.generateRandomLineofDeath(true);
 }
 
 
@@ -1392,33 +1392,33 @@ Smaug.prototype.drawRobot = function(level){
 	level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	d3.select("#output-svg").append("rect").attr({
-			"x": width/2 - 80,
-			"y": height/2 - 109/2 - 4,
-			"width": "92px",
-			"height": "109px",
-			"id": "robot"+0,
-			"class": "robot"
-	})
-	.style({
-		"fill": "url(#tarrobo"+0+")",
-		"opacity": 0
-	});
-	for(var i = 1; i<5; i++){
+	//d3.select("#output-svg").append("rect").attr({
+	//		"x": width/2 - 80,
+	//		"y": height/2 - 109/2 - 4,
+	//		"width": "92px",
+	//		"height": "109px",
+	//		"id": "robot"+0,
+	//		"class": "robot"
+	//})
+	//.style({
+	//	"fill": "url(#tarrobo"+0+")",
+	//	"opacity": 0
+	//});
+	//for(var i = 1; i<5; i++){
 		d3.select("#output-svg").append("rect").attr({
 				"x": width/2 - 69,
 				"y": height/2 - 94/2,
 				"width": "69px",
 				"height": "94px",
-				"id": "robot"+i,
+				"id": "robot"+4,
 				"class": "robot"
 		})
 		.style({
-			"fill": "url(#tarrobo"+i+")",
-			"opacity": 0
+			"fill": "url(#tarrobo"+4+")",
+			"opacity": 1
 		});
-	}
-	d3.select("#robot"+level).style("opacity", 1);
+	//}
+	//d3.select("#robot"+level).style("opacity", 1);
 	console.log("Drew the robot!");
 				//.style({"fill": "url(#robo4)"});
 };

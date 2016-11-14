@@ -94,12 +94,12 @@ Smaug.prototype.drawRobot = function(level){
 				"y": height/2 - 94/2,
 				"width": "69px",
 				"height": "94px",
-				"id": "robot"+i,
+				"id": "robot"+4,
 				"class": "robot"
 		})
 		.style({
-			"fill": "url(#tarrobo"+i+")",
-			"opacity": 0
+			"fill": "url(#tarrobo"+4+")",
+			"opacity": 1
 		});
 	}
 	d3.select("#robot"+level).style("opacity", 1);
