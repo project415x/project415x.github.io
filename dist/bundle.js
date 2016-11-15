@@ -279,17 +279,19 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
-    var robo = this.getTar("robo"+0);
-    robo.append('image')
-             .attr({
-               "x": "0",
-               "y": "0",
-               "width": "92px",
-               "height": "109px",
-               "xlink:href": "../public/img/robo/robo"+0+".gif"
-             });
+    for(i = 2; i<=4; i++){
+      var robo = this.getTar("roboglitch"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "92px",
+                 "height": "109px",
+                 "xlink:href": "../public/img/robo/roboglitch"+i+".gif"
+               });
+    }
     for(i = 1; i < 5; i++){
-      robo = this.getTar("robo"+i);
+      var robo = this.getTar("robo"+i);
       robo.append('image')
                .attr({
                  "x": "0",
@@ -335,14 +337,16 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
-    defs.append('pattern')
-                .attr({
-                  "id": "tarrobo"+0,
-                  "x": "0",
-                  "y": "0",
-                  "height": "109px",
-                  "width": "92px"
-                });
+    for(i = 2; i<=4; i++){
+      defs.append('pattern')
+                  .attr({
+                    "id": "tarroboglitch"+i,
+                    "x": "0",
+                    "y": "0",
+                    "height": "1",
+                    "width": "1"
+                  });
+    }
     for(i = 1; i < 5; i++) {
       defs.append('pattern')
                 .attr({
@@ -600,7 +604,7 @@ function initLevel1() {
 	outputVector.init();
 
 	// generate target(s)
-	//Level1.generateRandomLineofDeath(true);
+	Level1.generateRandomLineofDeath(true);
 }
 
 
@@ -1323,16 +1327,16 @@ function Smaug(){
 Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
 	level++;
 	//delete this:
-	level = 4;
+	//level = 4;
 	this.checkRobot();
 	//d3.select("#")
 
 	//this.robot.style({"fill": "url(#tarrobo"+mode+")"});
 	if(temp){
-		console.log("here");
+		//console.log("here");
 		this.robot.transition().style("opacity",
 			function() {
-				if ( this.id == "robot"+mode ){
+				if ( this.id == "robotglitch"+level ){
 					return 1;
 				}
 				return 0;
@@ -1389,36 +1393,38 @@ Smaug.prototype.drawRobot = function(level){
 	level = level || 1;
 	level++; //start at robo2
 	//delete this:
-	level = 4;
+	//level = 4;
 	var width = Number(d3.select("#output-svg").attr("width")),
 		height = Number(d3.select("#output-svg").attr("height"));
-	//d3.select("#output-svg").append("rect").attr({
-	//		"x": width/2 - 80,
-	//		"y": height/2 - 109/2 - 4,
-	//		"width": "92px",
-	//		"height": "109px",
-	//		"id": "robot"+0,
-	//		"class": "robot"
-	//})
-	//.style({
-	//	"fill": "url(#tarrobo"+0+")",
-	//	"opacity": 0
-	//});
-	//for(var i = 1; i<5; i++){
+	for(var i = 2; i<=4; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 80,
+				"y": height/2 - 109/2 - 4,
+				"width": "92px",
+				"height": "109px",
+				"id": "robotglitch"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarroboglitch"+i+")",
+			"opacity": 0
+		});
+	}
+	for(var i = 1; i<5; i++){
 		d3.select("#output-svg").append("rect").attr({
 				"x": width/2 - 69,
 				"y": height/2 - 94/2,
 				"width": "69px",
 				"height": "94px",
-				"id": "robot"+4,
+				"id": "robot"+i,
 				"class": "robot"
 		})
 		.style({
-			"fill": "url(#tarrobo"+4+")",
-			"opacity": 1
+			"fill": "url(#tarrobo"+i+")",
+			"opacity": 0
 		});
-	//}
-	//d3.select("#robot"+level).style("opacity", 1);
+	}
+	d3.select("#robot"+level).style("opacity", 1);
 	console.log("Drew the robot!");
 				//.style({"fill": "url(#robo4)"});
 };
