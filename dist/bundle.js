@@ -1107,10 +1107,10 @@ Sauron.prototype.removeBlips = function(generator) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
-  this.setMatrix();
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
+      this.setMatrix();
       this.removeBlips();
       this.graphics.changeRobot(0, true, 2000, 3);
       flag = true;
@@ -1118,11 +1118,13 @@ Sauron.prototype.generateNewTargets = function(id) {
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
+    this.setMatrix();
     this.generateRandomLineofDeath();
     this.removeBlips();
     this.graphics.changeRobot(0, true, 2000, 1);
   }
   else if (id.indexOf("circle") !== -1) {
+    this.setMatrix();
     this.generateRandomCircleofDeath();
     this.removeBlips();
     this.graphics.changeRobot(0, true, 2000, 2);
