@@ -1,6 +1,7 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -10,13 +11,20 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
-  this.matrix = [[1,0],[0,1]];
-  this.setMatrix();
+  this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+  this.graphics = new Smaug();
+  this.enable = true;
 }
+
+/*
+  Sauron creates a new matrix
+  @return int[2][2]
+*/
 Sauron.prototype.setMatrix = function() {
-    var rand = util.getRandom(1, 3);
-    var m = [[rand,0], [0,rand]];
+    var randx = util.getRandom(.75, 1.5);
+    var randy = util.getRandom(2, 3);
+    var m = [[randx,0], [0,randy]];
 
     var theta = util.getRandom(Math.PI/2, 3*Math.PI/2);
 
@@ -184,15 +192,21 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
+  var self = this;
   this.deathToll = 0;
-  //d3.selectAll(".clicked").remove();
+  d3.selectAll(".clicked-target").remove();
   d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
+  this.enable = false;
+  setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
   setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
-  }, 2001);
+    self.enable = true;
+  }, 4001);
 };
 
 /*
@@ -204,20 +218,22 @@ Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
-      this.removeBlips();
+      this.setMatrix();
+      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
+    this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
+    this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
+    this.removeBlips(2);
   }
-  this.setMatrix();
 };
 /*
   Palantir reveals new plans to Sauron
@@ -228,6 +244,11 @@ Sauron.prototype.generateNewTargets = function(id) {
 */
 Sauron.prototype.tellSauron = function(event, type) {
   var d = this.convertMouseToCoord(event);
+  if(!this.enable){
+    this.updateInputVector(d);
+    this.updateOutputVector(d);
+    return;
+  }
   if (type === "drag") {
     this.updateInputVector(d);
     this.updateOutputVector(d);
@@ -349,7 +370,8 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
   for( var key in validPoints ) {
     var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, width);
+    screenCoors = util.mathToScreen(pair.x, pair.y, width);
+
 
     var targetSetting = {
       x: screenCoors[0],
