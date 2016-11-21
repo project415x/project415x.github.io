@@ -179,7 +179,10 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
-  var w = window.innerWidth/2.60;
+
+  // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
+
+  var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
@@ -194,7 +197,6 @@ function Canvas(settings) {
   },
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
-  console.log(w);
 
 }
 
@@ -871,15 +873,6 @@ function Sauron(settings) {
   this.matrix = [[1,0],[0,1]];
   this.setMatrix();
   this.deathToll = 0;
-  if(window.innerHeight<770 || window.innerWidth<770){
-    if (typeof InstallTrigger !== 'undefined'){
-      $('body').css('MozTransform','scale(90%)');
-      //console.log("FF master race");
-    } //firefox
-    else{
-      //document.body.style.zoom = "90%";
-    }
-  }
 }
 Sauron.prototype.setMatrix = function() {
     var rand = util.getRandom(1, 3);

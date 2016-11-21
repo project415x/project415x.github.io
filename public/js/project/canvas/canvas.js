@@ -29,7 +29,10 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
-  var w = window.innerWidth/2.60;
+
+  // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
+
+  var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
@@ -44,7 +47,6 @@ function Canvas(settings) {
   },
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
-  console.log(w);
 
 }
 
