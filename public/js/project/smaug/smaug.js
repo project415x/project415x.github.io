@@ -21,17 +21,20 @@ Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
 				}
 				return 0;
 			}
-		).transition().duration(timeout).style("opacity",
+		).transition().duration(timeout).transition().style("opacity",
 			function() {
 				if ( this.id == "robot"+level ){
 					return 1;
 				}
 				return 0;
 			}
-		);
+		).duration(0);
 		setTimeout(function(){
 			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
 		}, timeout);
+	}
+	else{
+		d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
 	}
 };
 

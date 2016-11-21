@@ -1087,7 +1087,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
   var self = this;
   this.deathToll = 0; 
   d3.selectAll(".clicked-target").remove();
@@ -1095,10 +1095,13 @@ Sauron.prototype.removeBlips = function(generator) {
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
+  setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
     self.enable = true;
-  }, 2001);
+  }, 4001);
 };
 
 /*
@@ -1111,8 +1114,8 @@ Sauron.prototype.generateNewTargets = function(id) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
-      this.removeBlips();
-      this.graphics.changeRobot(0, true, 2000, 3);
+      this.removeBlips(3);
+      
       flag = true;
     }
     this.generateTarget(!flag);
@@ -1120,16 +1123,13 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
-    this.graphics.changeRobot(0, true, 2000, 1);
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
     this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
-    this.graphics.changeRobot(0, true, 2000, 2);
+    this.removeBlips(2);
   }
-  //this.regenerate = 0;
 };
 /*
   Palantir reveals new plans to Sauron
@@ -1349,17 +1349,20 @@ Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
 				}
 				return 0;
 			}
-		).transition().duration(timeout).style("opacity",
+		).transition().duration(timeout).transition().style("opacity",
 			function() {
 				if ( this.id == "robot"+level ){
 					return 1;
 				}
 				return 0;
 			}
-		);
+		).duration(0);
 		setTimeout(function(){
 			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
 		}, timeout);
+	}
+	else{
+		d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
 	}
 };
 
