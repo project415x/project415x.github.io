@@ -2,7 +2,9 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel2() {
@@ -20,6 +22,7 @@ function initLevel2() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+	graphics.drawRobot(2);
 
 	// generate target(s)
 	OverWatcher.generateRandomCircleofDeath(true);

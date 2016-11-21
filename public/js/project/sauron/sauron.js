@@ -1,6 +1,7 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -12,6 +13,7 @@ function Sauron(settings) {
   this.level = settings === {} ? -1 : settings.level;
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+  this.graphics = new Smaug();
   this.enable = true;
 }
 
@@ -185,7 +187,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
   var self = this;
   this.deathToll = 0; 
   d3.selectAll(".clicked-target").remove();
@@ -193,10 +195,13 @@ Sauron.prototype.removeBlips = function(generator) {
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
+  setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
     self.enable = true;
-  }, 2001);
+  }, 4001);
 };
 
 /*
@@ -209,7 +214,7 @@ Sauron.prototype.generateNewTargets = function(id) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
-      this.removeBlips();
+      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -217,12 +222,12 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
     this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
+    this.removeBlips(2);
   }
 };
 /*

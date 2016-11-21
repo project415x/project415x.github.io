@@ -279,6 +279,28 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
+    for(i = 2; i<=4; i++){
+      var robo = this.getTar("roboglitch"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "92px",
+                 "height": "109px",
+                 "xlink:href": "../public/img/robo/roboglitch"+i+".gif"
+               });
+    }
+    for(i = 1; i < 5; i++){
+      var robo = this.getTar("robo"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "69px",
+                 "height": "94px",
+                 "xlink:href": "../public/img/robo/robo"+i+".gif"
+               });
+    }
   }
   if (this.type === "input") {
     var blip = this.getTar("blip");
@@ -315,6 +337,26 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
+    for(i = 2; i<=4; i++){
+      defs.append('pattern')
+                  .attr({
+                    "id": "tarroboglitch"+i,
+                    "x": "0",
+                    "y": "0",
+                    "height": "1",
+                    "width": "1"
+                  });
+    }
+    for(i = 1; i < 5; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tarrobo"+i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "1",
+                  "width": "1"
+                });
+    }
   }
   if (this.type === "input") {
     defs.append('pattern')
@@ -439,7 +481,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -505,8 +547,10 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
@@ -552,6 +596,9 @@ function initLevel1() {
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
 
+	graphics.drawRobot(1);
+
+
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
@@ -567,7 +614,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -676,7 +723,9 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel2() {
@@ -694,6 +743,7 @@ function initLevel2() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+	graphics.drawRobot(2);
 
 	// generate target(s)
 	OverWatcher.generateRandomCircleofDeath(true);
@@ -705,7 +755,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -765,7 +815,9 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
@@ -784,6 +836,7 @@ function initLevel3() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+	graphics.drawRobot(3);
 
 	// generate target(s)
 	OverWatcher.generateTarget(true);
@@ -795,7 +848,7 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -847,7 +900,8 @@ setTimeout(function() {
 },{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -859,6 +913,7 @@ function Sauron(settings) {
   this.level = settings === {} ? -1 : settings.level;
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+  this.graphics = new Smaug();
   this.enable = true;
 }
 
@@ -1032,7 +1087,7 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
   var self = this;
   this.deathToll = 0; 
   d3.selectAll(".clicked-target").remove();
@@ -1040,10 +1095,13 @@ Sauron.prototype.removeBlips = function(generator) {
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
+  setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
     self.enable = true;
-  }, 2001);
+  }, 4001);
 };
 
 /*
@@ -1056,7 +1114,7 @@ Sauron.prototype.generateNewTargets = function(id) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
-      this.removeBlips();
+      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -1064,12 +1122,12 @@ Sauron.prototype.generateNewTargets = function(id) {
   else if (id.indexOf("line") !== -1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
     this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
+    this.removeBlips(2);
   }
 };
 /*
@@ -1266,7 +1324,127 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+function Smaug(){
+	this.robot = null;
+}
+
+
+
+Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
+	level++;
+	//delete this:
+	//level = 4;
+	this.checkRobot();
+	//d3.select("#")
+
+	//this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+	if(temp){
+		//console.log("here");
+		this.robot.transition().style("opacity",
+			function() {
+				if ( this.id == "robotglitch"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		).transition().duration(timeout).transition().style("opacity",
+			function() {
+				if ( this.id == "robot"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		).duration(0);
+		setTimeout(function(){
+			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+		}, timeout);
+	}
+	else{
+		d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+	}
+};
+
+Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
+	this.checkRobot();
+	moveFunc = moveFunc || function(x, y, obj){
+		obj.attr({
+			x: x,
+			y: y
+		});
+	};
+
+	var targetX = null;
+		targetY = null;
+	
+	if(absolute){
+		targetX = deltaX;
+		targetY = deltaY;
+	}
+	else{
+		targetX = deltaX + Number(this.robot.attr("x"));
+		targetY = deltaY + Number(this.robot.attr("y"));
+	}
+
+	moveFunc(targetX, targetY, this.robot);
+
+};
+
+Smaug.prototype.checkRobot = function () {
+	if(d3.selectAll(".robot").size() != 0){
+		this.robot = d3.selectAll(".robot");
+		console.log("robot exists!");
+		return;
+	}
+}
+
+Smaug.prototype.drawRobot = function(level){
+	//console.log(d3.select("#robot").size());
+	level = level || 1;
+	level++; //start at robo2
+	//delete this:
+	//level = 4;
+	var width = Number(d3.select("#output-svg").attr("width")),
+		height = Number(d3.select("#output-svg").attr("height"));
+	for(var i = 2; i<=4; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 80,
+				"y": height/2 - 109/2 - 4,
+				"width": "92px",
+				"height": "109px",
+				"id": "robotglitch"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarroboglitch"+i+")",
+			"opacity": 0
+		});
+	}
+	for(var i = 1; i<5; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 69,
+				"y": height/2 - 94/2,
+				"width": "69px",
+				"height": "94px",
+				"id": "robot"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarrobo"+i+")",
+			"opacity": 0
+		});
+	}
+	d3.select("#robot"+level).style("opacity", 1);
+	console.log("Drew the robot!");
+				//.style({"fill": "url(#robo4)"});
+};
+
+Smaug.prototype.changeBackground = function(mode){
+
+}
+
+module.exports = Smaug;
+},{}],14:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1345,7 +1523,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1570,7 +1748,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":15}],15:[function(require,module,exports){
+},{"../utilities/math.js":16}],16:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
@@ -1691,4 +1869,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
