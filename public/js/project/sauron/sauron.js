@@ -1,6 +1,7 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -8,12 +9,33 @@ var util = require('../utilities/math.js'),
   Sample settings object in game1, game2, game3
 */
 function Sauron(settings) {
-  this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+  this.graphics = new Smaug();
   this.enable = true;
 }
+
+/*
+  Sauron creates a new matrix
+  @return int[2][2]
+*/
+Sauron.prototype.setMatrix = function() {
+    var randx = util.getRandom(.75, 1.5);
+    var randy = util.getRandom(2, 3);
+    var m = [[randx,0], [0,randy]];
+
+    var theta = util.getRandom(Math.PI/2, 3*Math.PI/2);
+
+    var rot = [[Math.cos(theta), -Math.sin(theta)],[Math.sin(theta), Math.cos(theta)]];
+
+    this.matrix = [[(rot[0][0]*m[0][0] + rot[0][1]*m[1][0]),
+                        (rot[0][0]*m[0][1] + rot[0][1]*m[1][1])],
+                        [(rot[1][0]*m[0][0] + rot[1][1]*m[1][0]),
+                        (rot[1][0]*m[0][1] + rot[1][1]*m[1][1])]
+                    ];
+};
 
 /*
   Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -21,9 +43,10 @@ function Sauron(settings) {
 */
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = this.matrix;
-  var math_coord = util.screenToMath(sX,sY),
+  var width = document.getElementById("input-svg").width.baseVal.value;
+  var math_coord = util.screenToMath(sX,sY,width),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
+  return util.mathToScreen(applied_coord[0],applied_coord[1], width);
 };
 
 /*
@@ -33,11 +56,13 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
 */
 Sauron.prototype.updateInputVector = function(d) {
   this.removeVector('input');
+  //console.log(document.getElementById("input-svg"));
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "#31BA29",
       "stroke-width":"8",
-      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "d": "M " +width_svg/2 +" "+width_svg/2 +" L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
   });
 };
@@ -57,11 +82,12 @@ Sauron.prototype.removeVector = function(type) {
   @return void
 */
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = util.applyMatrix(d.x, d.y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg);
   this.removeVector('output');
-  var height = Math.sqrt((250 - i[0])*(250 - i[0]) + (250 - i[1])*(250 - i[1]));
-  var angle = -1*Math.atan((i[0]-250.0)/(i[1]-250.0)) * 180.0 / Math.PI;
-  if(i[1] > 250){
+  var height = Math.sqrt(((width_svg/2) - i[0])*((width_svg/2) - i[0]) + ((width_svg/2) - i[1])*((width_svg/2) - i[1]));
+  var angle = -1*Math.atan((i[0]-(width_svg/2.0))/(i[1]-(width_svg/2.0))) * 180.0 / Math.PI;
+  if(i[1] > (width_svg/2)){
       angle += 180;
   }
   var width = 20;
@@ -111,7 +137,8 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x,d.y,this.matrix, width_svg);
   var self = this;
   //if (list.style("opacity")<1){
   //  console.log("Done");
@@ -127,13 +154,13 @@ Sauron.prototype.updateTargets = function(d, type) {
     //console.log(id);
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if(wraith.sprite().style("opacity")>0.9)
-        wraith.sprite().jump(10, 250);          
+        wraith.sprite().jump(10, 250);
       if (type === "collision") {
 
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
-        
+
         wraith.setClicked();
         wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
@@ -165,18 +192,21 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
   var self = this;
-  this.deathToll = 0; 
+  this.deathToll = 0;
   d3.selectAll(".clicked-target").remove();
   d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
+  setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
     self.enable = true;
-  }, 2001);
+  }, 4001);
 };
 
 /*
@@ -188,21 +218,23 @@ Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
-      this.removeBlips();
+      this.setMatrix();
+      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
+    this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
+    this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
+    this.removeBlips(2);
   }
-}
-
+};
 /*
   Palantir reveals new plans to Sauron
   What do to when an event is registered on the input canvas
@@ -290,8 +322,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
       x: util.getRandom(0, 500),
       y: util.getRandom(0, 500)
     };
-
-    if ( util.isOnScreen(matrix, point)) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    if ( util.isOnScreen(matrix, point, width)) {
       isValidCoordinate = true;
       var targetSettings = {
         x: point.x,
@@ -314,7 +346,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
   @returns void
 */
 Sauron.prototype.drawBlips = function(x,y) {
-  var point = util.applyInverse(x, y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var point = util.applyInverse(x, y, this.matrix, width_svg);
   d3.select("#input-svg").append("circle")
                           .attr({
                             cx: point.x,
@@ -335,8 +368,10 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    screenCoors = util.mathToScreen(pair.x, pair.y, width);
+
 
     var targetSetting = {
       x: screenCoors[0],
@@ -366,9 +401,12 @@ Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    //console.log(width);
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-
+        screenCoors = util.mathToScreen(pair.x, pair.y, width);
+    //console.log(validPoints[key]);
+    //console.log(screenCoors);
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],

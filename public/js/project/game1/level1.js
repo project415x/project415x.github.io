@@ -2,8 +2,10 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
@@ -48,6 +50,8 @@ function initLevel1() {
 	inputCanvas.drawCanvas();
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
+	graphics.drawRobot(1);
+
 
 	// draw vector(s)
 	inputVector.init();

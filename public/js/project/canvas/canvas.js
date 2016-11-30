@@ -29,20 +29,25 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
+
+  // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
+
+  var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
-  this.pixelWidth = settings.pixelWidth || 400,
-  this.pixelHeight = settings.pixelHeight || 400,
-  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 200,
-  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 200,
+  this.pixelWidth = w,
+  this.pixelHeight = w,
+  this.originX = w/2,
+  this.originY = w/2,
   this.origin = {
     x: this.originX,
     y: this.originY
   },
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
+
 }
 
 // Return modified d3 drag listener
@@ -129,6 +134,28 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
+    for(i = 2; i<=4; i++){
+      var robo = this.getTar("roboglitch"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "92px",
+                 "height": "109px",
+                 "xlink:href": "../public/img/robo/roboglitch"+i+".gif"
+               });
+    }
+    for(i = 1; i < 5; i++){
+      var robo = this.getTar("robo"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "69px",
+                 "height": "94px",
+                 "xlink:href": "../public/img/robo/robo"+i+".gif"
+               });
+    }
   }
   if (this.type === "input") {
     var blip = this.getTar("blip");
@@ -165,6 +192,26 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
+    for(i = 2; i<=4; i++){
+      defs.append('pattern')
+                  .attr({
+                    "id": "tarroboglitch"+i,
+                    "x": "0",
+                    "y": "0",
+                    "height": "1",
+                    "width": "1"
+                  });
+    }
+    for(i = 1; i < 5; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tarrobo"+i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "1",
+                  "width": "1"
+                });
+    }
   }
   if (this.type === "input") {
     defs.append('pattern')

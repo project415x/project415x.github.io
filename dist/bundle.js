@@ -179,20 +179,25 @@ var Sauron = require('../sauron/sauron.js'),
 
 function Canvas(settings) {
   //input error handling
+
+  // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
+
+  var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
   this.maxX = settings.maxX || 10,
   this.maxY = settings.maxY || 10,
-  this.pixelWidth = settings.pixelWidth || 400,
-  this.pixelHeight = settings.pixelHeight || 400,
-  this.originX = ( this.pixelWidth * (-this.minX)/(this.maxX - this.minX)) || 200,
-  this.originY = ( this.pixelHeight * (-this.minY)/(this.maxY - this.minY)) || 200,
+  this.pixelWidth = w,
+  this.pixelHeight = w,
+  this.originX = w/2,
+  this.originY = w/2,
   this.origin = {
     x: this.originX,
     y: this.originY
   },
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
+
 }
 
 // Return modified d3 drag listener
@@ -279,6 +284,28 @@ Canvas.prototype.appendImageToPattern = function() {
                "height": "100px",
                "xlink:href": "../public/img/robotarm.gif"
              });
+    for(i = 2; i<=4; i++){
+      var robo = this.getTar("roboglitch"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "92px",
+                 "height": "109px",
+                 "xlink:href": "../public/img/robo/roboglitch"+i+".gif"
+               });
+    }
+    for(i = 1; i < 5; i++){
+      var robo = this.getTar("robo"+i);
+      robo.append('image')
+               .attr({
+                 "x": "0",
+                 "y": "0",
+                 "width": "69px",
+                 "height": "94px",
+                 "xlink:href": "../public/img/robo/robo"+i+".gif"
+               });
+    }
   }
   if (this.type === "input") {
     var blip = this.getTar("blip");
@@ -315,6 +342,26 @@ Canvas.prototype.appendPatternToDefs = function() {
                 "height": "100px",
                 "width": "30px"
               });
+    for(i = 2; i<=4; i++){
+      defs.append('pattern')
+                  .attr({
+                    "id": "tarroboglitch"+i,
+                    "x": "0",
+                    "y": "0",
+                    "height": "1",
+                    "width": "1"
+                  });
+    }
+    for(i = 1; i < 5; i++) {
+      defs.append('pattern')
+                .attr({
+                  "id": "tarrobo"+i,
+                  "x": "0",
+                  "y": "0",
+                  "height": "1",
+                  "width": "1"
+                });
+    }
   }
   if (this.type === "input") {
     defs.append('pattern')
@@ -439,7 +486,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -448,8 +495,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	outputCanvasSettings : {
@@ -458,8 +505,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	inputVectorSettings : {
@@ -505,8 +552,10 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
 function initTutorial() {
@@ -551,6 +600,8 @@ function initLevel1() {
 	inputCanvas.drawCanvas();
 	outputCanvas.drawCanvas();
 	outputCanvas.drawProgressBar();
+	graphics.drawRobot(1);
+
 
 	// draw vector(s)
 	inputVector.init();
@@ -567,7 +618,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -625,8 +676,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	outputCanvasSettings : {
@@ -635,8 +686,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	inputVectorSettings : {
@@ -676,7 +727,9 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel2() {
@@ -694,6 +747,7 @@ function initLevel2() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+	graphics.drawRobot(2);
 
 	// generate target(s)
 	OverWatcher.generateRandomCircleofDeath(true);
@@ -705,7 +759,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -714,8 +768,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	outputCanvasSettings : {
@@ -724,8 +778,8 @@ module.exports = {
 		minY: -10,
 		maxX: 10,
 		maxY: 10,
-		pixelWidth: 500,
-		pixelHeight: 500
+		//pixelWidth: 500,
+		//pixelHeight: 500
 	},
 
 	inputVectorSettings : {
@@ -765,7 +819,9 @@ var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
+		Smaug = require('../smaug/smaug.js'),
 		config = require('./config.js'),
+		graphics = new Smaug(),
 		OverWatcher = new Sauron(config.sauron);
 
 function initLevel3() {
@@ -784,6 +840,7 @@ function initLevel3() {
 	// draw vector(s)
 	inputVector.init();
 	outputVector.init();
+	graphics.drawRobot(3);
 
 	// generate target(s)
 	OverWatcher.generateTarget(true);
@@ -795,7 +852,7 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -847,7 +904,8 @@ setTimeout(function() {
 },{}],12:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js');
+    Tutorial = require('../tutorial/tutorial.js'),
+    Smaug = require('../smaug/smaug.js');
 
 // Sauron is alive!
 /*
@@ -855,12 +913,33 @@ var util = require('../utilities/math.js'),
   Sample settings object in game1, game2, game3
 */
 function Sauron(settings) {
-  this.matrix = [[1,2],[2,1]];
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
+  this.graphics = new Smaug();
   this.enable = true;
 }
+
+/*
+  Sauron creates a new matrix
+  @return int[2][2]
+*/
+Sauron.prototype.setMatrix = function() {
+    var randx = util.getRandom(.75, 1.5);
+    var randy = util.getRandom(2, 3);
+    var m = [[randx,0], [0,randy]];
+
+    var theta = util.getRandom(Math.PI/2, 3*Math.PI/2);
+
+    var rot = [[Math.cos(theta), -Math.sin(theta)],[Math.sin(theta), Math.cos(theta)]];
+
+    this.matrix = [[(rot[0][0]*m[0][0] + rot[0][1]*m[1][0]),
+                        (rot[0][0]*m[0][1] + rot[0][1]*m[1][1])],
+                        [(rot[1][0]*m[0][0] + rot[1][1]*m[1][0]),
+                        (rot[1][0]*m[0][1] + rot[1][1]*m[1][1])]
+                    ];
+};
 
 /*
   Given a matrix and a pair (x,y) of screen coordinates, convert to math coord and applies LT
@@ -868,9 +947,10 @@ function Sauron(settings) {
 */
 Sauron.prototype.applyTransformation = function(sX,sY,matrix){
   var matrix = this.matrix;
-  var math_coord = util.screenToMath(sX,sY),
+  var width = document.getElementById("input-svg").width.baseVal.value;
+  var math_coord = util.screenToMath(sX,sY,width),
       applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-  return util.mathToScreen(applied_coord[0],applied_coord[1]);
+  return util.mathToScreen(applied_coord[0],applied_coord[1], width);
 };
 
 /*
@@ -880,11 +960,13 @@ Sauron.prototype.applyTransformation = function(sX,sY,matrix){
 */
 Sauron.prototype.updateInputVector = function(d) {
   this.removeVector('input');
+  //console.log(document.getElementById("input-svg"));
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
   d3.select('#input-svg').append('path')
     .attr({
       "stroke": "#31BA29",
       "stroke-width":"8",
-      "d": "M 250 250 L"+d.x+" "+d.y+"z",
+      "d": "M " +width_svg/2 +" "+width_svg/2 +" L"+d.x+" "+d.y+"z",
       "id": 'input-vector'
   });
 };
@@ -904,11 +986,12 @@ Sauron.prototype.removeVector = function(type) {
   @return void
 */
 Sauron.prototype.updateOutputVector = function(d) {
-  var i = util.applyMatrix(d.x, d.y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg);
   this.removeVector('output');
-  var height = Math.sqrt((250 - i[0])*(250 - i[0]) + (250 - i[1])*(250 - i[1]));
-  var angle = -1*Math.atan((i[0]-250.0)/(i[1]-250.0)) * 180.0 / Math.PI;
-  if(i[1] > 250){
+  var height = Math.sqrt(((width_svg/2) - i[0])*((width_svg/2) - i[0]) + ((width_svg/2) - i[1])*((width_svg/2) - i[1]));
+  var angle = -1*Math.atan((i[0]-(width_svg/2.0))/(i[1]-(width_svg/2.0))) * 180.0 / Math.PI;
+  if(i[1] > (width_svg/2)){
       angle += 180;
   }
   var width = 20;
@@ -958,7 +1041,8 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  var i = util.applyMatrix(d.x,d.y,this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x,d.y,this.matrix, width_svg);
   var self = this;
   //if (list.style("opacity")<1){
   //  console.log("Done");
@@ -974,13 +1058,13 @@ Sauron.prototype.updateTargets = function(d, type) {
     //console.log(id);
     if (util.isClose(i[0], i[1], x, y, width / 2, height / 2)) {
       if(wraith.sprite().style("opacity")>0.9)
-        wraith.sprite().jump(10, 250);          
+        wraith.sprite().jump(10, 250);
       if (type === "collision") {
 
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
-        
+
         wraith.setClicked();
         wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
@@ -1012,18 +1096,21 @@ Sauron.prototype.checkNumberOfBlips = function() {
   return d3.selectAll(".blips").size();
 };
 
-Sauron.prototype.removeBlips = function(generator) {
+Sauron.prototype.removeBlips = function(level) {
   var self = this;
-  this.deathToll = 0; 
+  this.deathToll = 0;
   d3.selectAll(".clicked-target").remove();
   d3.selectAll(".clicked-sprite").transition().style("opacity", 1).duration(100);
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.graphics.changeRobot(0, true, 2000, level);
+  }, 2001);
+  setTimeout(function(){
     d3.selectAll(".clicked").remove()
     d3.selectAll(".new").isBorn(500);
     self.enable = true;
-  }, 2001);
+  }, 4001);
 };
 
 /*
@@ -1035,21 +1122,23 @@ Sauron.prototype.generateNewTargets = function(id) {
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
-      this.removeBlips();
+      this.setMatrix();
+      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
   }
   else if (id.indexOf("line") !== -1) {
+    this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips();
+    this.removeBlips(1);
   }
   else if (id.indexOf("circle") !== -1) {
+    this.setMatrix();
     this.generateRandomCircleofDeath();
-    this.removeBlips();
+    this.removeBlips(2);
   }
-}
-
+};
 /*
   Palantir reveals new plans to Sauron
   What do to when an event is registered on the input canvas
@@ -1137,8 +1226,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
       x: util.getRandom(0, 500),
       y: util.getRandom(0, 500)
     };
-
-    if ( util.isOnScreen(matrix, point)) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    if ( util.isOnScreen(matrix, point, width)) {
       isValidCoordinate = true;
       var targetSettings = {
         x: point.x,
@@ -1161,7 +1250,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
   @returns void
 */
 Sauron.prototype.drawBlips = function(x,y) {
-  var point = util.applyInverse(x, y, this.matrix);
+  var width_svg = document.getElementById("input-svg").width.baseVal.value;
+  var point = util.applyInverse(x, y, this.matrix, width_svg);
   d3.select("#input-svg").append("circle")
                           .attr({
                             cx: point.x,
@@ -1182,8 +1272,10 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
+    screenCoors = util.mathToScreen(pair.x, pair.y, width);
+
 
     var targetSetting = {
       x: screenCoors[0],
@@ -1213,9 +1305,12 @@ Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
+    var width = document.getElementById("input-svg").width.baseVal.value;
+    //console.log(width);
     var pair = validPoints[key],
-        screenCoors = util.mathToScreen(pair.x, pair.y, this.matrix);
-
+        screenCoors = util.mathToScreen(pair.x, pair.y, width);
+    //console.log(validPoints[key]);
+    //console.log(screenCoors);
     var targetSetting = {
       x: screenCoors[0],
       y: screenCoors[1],
@@ -1244,7 +1339,127 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+function Smaug(){
+	this.robot = null;
+}
+
+
+
+Smaug.prototype.changeRobot = function(mode, temp, timeout, level){
+	level++;
+	//delete this:
+	//level = 4;
+	this.checkRobot();
+	//d3.select("#")
+
+	//this.robot.style({"fill": "url(#tarrobo"+mode+")"});
+	if(temp){
+		//console.log("here");
+		this.robot.transition().style("opacity",
+			function() {
+				if ( this.id == "robotglitch"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		).transition().duration(timeout).transition().style("opacity",
+			function() {
+				if ( this.id == "robot"+level ){
+					return 1;
+				}
+				return 0;
+			}
+		).duration(0);
+		setTimeout(function(){
+			d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+		}, timeout);
+	}
+	else{
+		d3.select("#robot").style({"fill": "url(#tarrobo"+level+")"});
+	}
+};
+
+Smaug.prototype.moveRobot = function(deltaX, deltaY, absolute, moveFunc){
+	this.checkRobot();
+	moveFunc = moveFunc || function(x, y, obj){
+		obj.attr({
+			x: x,
+			y: y
+		});
+	};
+
+	var targetX = null;
+		targetY = null;
+	
+	if(absolute){
+		targetX = deltaX;
+		targetY = deltaY;
+	}
+	else{
+		targetX = deltaX + Number(this.robot.attr("x"));
+		targetY = deltaY + Number(this.robot.attr("y"));
+	}
+
+	moveFunc(targetX, targetY, this.robot);
+
+};
+
+Smaug.prototype.checkRobot = function () {
+	if(d3.selectAll(".robot").size() != 0){
+		this.robot = d3.selectAll(".robot");
+		console.log("robot exists!");
+		return;
+	}
+}
+
+Smaug.prototype.drawRobot = function(level){
+	//console.log(d3.select("#robot").size());
+	level = level || 1;
+	level++; //start at robo2
+	//delete this:
+	//level = 4;
+	var width = Number(d3.select("#output-svg").attr("width")),
+		height = Number(d3.select("#output-svg").attr("height"));
+	for(var i = 2; i<=4; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 80,
+				"y": height/2 - 109/2 - 4,
+				"width": "92px",
+				"height": "109px",
+				"id": "robotglitch"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarroboglitch"+i+")",
+			"opacity": 0
+		});
+	}
+	for(var i = 1; i<5; i++){
+		d3.select("#output-svg").append("rect").attr({
+				"x": width/2 - 69,
+				"y": height/2 - 94/2,
+				"width": "69px",
+				"height": "94px",
+				"id": "robot"+i,
+				"class": "robot"
+		})
+		.style({
+			"fill": "url(#tarrobo"+i+")",
+			"opacity": 0
+		});
+	}
+	d3.select("#robot"+level).style("opacity", 1);
+	console.log("Drew the robot!");
+				//.style({"fill": "url(#robo4)"});
+};
+
+Smaug.prototype.changeBackground = function(mode){
+
+}
+
+module.exports = Smaug;
+},{}],14:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1323,7 +1538,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1548,43 +1763,44 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":15}],15:[function(require,module,exports){
+},{"../utilities/math.js":16}],16:[function(require,module,exports){
 module.exports = {
 	/**
-	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (500,500)]
+	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
 	 * @param  {[type]} x [x value in screen coors]
-	 * @param  {[type]} y [description]
+	 * @param  {[type]} y [y value in screen coors]
+	 * @param  {[type]} width [width and height of sceen]
 	 * @return {[type]}   [description]
 	 */
-	screenToMath: function(x,y) {
-	  return [(x - 250) * 10 / 250, - (y - 250) * 10 / 250];
+	screenToMath: function(x,y, width) {
+	  return [(x - width/2) * 10 / (width/2), - (y - (width/2)) * 10 / (width/2)];
 	},
 
-	mathToScreen: function(x,y) {
-	  return [x * 250 / 10 + 250, - y * 250 / 10 + 250];
+	mathToScreen: function(x,y, width) {
+	  return [x * (width/2) / 10 + (width/2), - y * (width/2) / 10 + (width/2)];
 	},
 
-	applyInverse: function(x, y, matrix) {
+	applyInverse: function(x, y, matrix, width) {
     var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
-    		pre = this.screenToMath(x, y),
+    		pre = this.screenToMath(x, y, width),
     	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
-   		 	pre = this.mathToScreen(prex,prey);
+   		 	pre = this.mathToScreen(prex,prey, width);
    	return {
    		x: pre[0],
    		y: pre[1]
    	}
 	},
 
-	applyMatrix: function(sX,sY,matrix) {
+	applyMatrix: function(sX,sY,matrix, width) {
 	  // var matrix = matrix || [
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
 		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
 	  // ];
 	  // console.log('matrix ', matrix)
-	  var math_coord = this.screenToMath(sX,sY),
+	  var math_coord = this.screenToMath(sX,sY, width),
 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return this.mathToScreen(applied_coord[0],applied_coord[1]);
+	  return this.mathToScreen(applied_coord[0],applied_coord[1], width);
 	},
 
 	getRandom: function(min,max) {
@@ -1599,15 +1815,16 @@ module.exports = {
 	 * [isOnScreen validates that a point with a linear transformation applied to it will be visible]
 	 * @param  {[type]}  matrix [2D array ]
 	 * @param  {[type]}  point  [JS object {x: a, y: b}]
+	 * @param  {[type]}  width  [width/height of screens]
 	 * @return {Boolean}        [description]
 	 */
-	isOnScreen: function(matrix, point) {
-		var pre = this.screenToMath(point.x, point.y),
+	isOnScreen: function(matrix, point, width) {
+		var pre = this.screenToMath(point.x, point.y, width),
 				par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
     		prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / par,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / par;
-    pre = this.mathToScreen(prex,prey);
-    return (pre[0] >= 0) && (pre[0] <= 500) && (pre[1] >= 0) && (pre[1] <= 500);
+    pre = this.mathToScreen(prex,prey, width);
+    return (pre[0] >= 0) && (pre[0] <= width) && (pre[1] >= 0) && (pre[1] <= width);
 	},
 
 	/**
@@ -1669,4 +1886,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);

@@ -16,13 +16,13 @@ title: "Level 1: Line Up"
 	function openPopup(){
 		document.getElementById("cutscene").hidden = false;
 		document.getElementById("level").hidden = true;
-
 		document.getElementById("cutscene").style.zIndex = "9999!important";
 		document.getElementById("cutscene").width = window.innerWidth;
 		document.getElementById("cutscene").height = window.innerHeight;
 		document.getElementById("cutscene_frame").src = "../public/img/intro/intro.html";
 		document.getElementById("cutscene_frame").width = window.innerWidth;
-		document.getElementById("cutscene_frame").height = window.innerHeight;
+		document.getElementById("cutscene_frame").height = window.outerHeight/1.5;
+
 
 		window.parent.document.getElementById("navigation").hidden = true;
 	}
@@ -33,6 +33,9 @@ title: "Level 1: Line Up"
 			openPopup();
 			sessionStorage.first = 'true';
 		}
+		// setInterval(function(){
+		// 	console.log(window.outerHeight);
+		// }, 1000);
 		startLevel1();
 		// level switcher
 		setTimeout(function() {
