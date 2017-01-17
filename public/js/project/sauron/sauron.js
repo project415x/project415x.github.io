@@ -224,7 +224,7 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
-  this.audio.reloadItems.play()
+  this.audio.reloadItems.play();
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {

@@ -25,7 +25,8 @@
     "gulp-util": "^3.0.7",
     "stripify": "^4.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "tone": "0.9.0"
   },
   "devDependencies": {
     "pump": "^1.0.1",
