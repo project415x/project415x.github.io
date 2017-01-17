@@ -1,7 +1,8 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
-    Smaug = require('../smaug/smaug.js');
+    Smaug = require('../smaug/smaug.js'),
+    Balrog = require('../balrog/balrog.js');
 
 // Sauron is alive!
 /*
@@ -14,6 +15,11 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
+  this.audio = new Balrog();
+  //while(this.audio.loading){
+  //  //block untill audio loaded
+  //}
+
   this.enable = true;
 }
 
@@ -157,6 +163,8 @@ Sauron.prototype.updateTargets = function(d, type) {
         wraith.sprite().jump(10, 250);
       if (type === "collision") {
 
+        self.audio.pickup.play();
+
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
@@ -200,6 +208,7 @@ Sauron.prototype.removeBlips = function(level) {
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.audio.matChange.play();
     self.graphics.changeRobot(0, true, 2000, level);
   }, 2001);
   setTimeout(function(){
@@ -215,6 +224,7 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
+  this.audio.reloadItems.play()
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {

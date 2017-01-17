@@ -148,6 +148,48 @@ Vector.prototype.generatePath = function() {
 module.exports = Vector;
 
 },{}],3:[function(require,module,exports){
+var audioPath = "../public/audio/";
+
+function Balrog(){
+	//console.log("initializing audio");
+	this.loading = 3;
+	this.reloadItems = new Audio(audioPath+'reloaditems.wav');
+	this.reloadItems.addEventListener("canplaythrough", function () {
+		//console.log("loaded: "+'reloaditems.wav');
+		self.loaded--;
+	});
+	this.matChange = new Audio(audioPath+'matrixchange.wav');
+	this.matChange.addEventListener("canplaythrough", function () {
+		//console.log("loaded: "+'matrixchange.wav');
+		self.loaded--;
+	});
+	this.pickup = new Audio(audioPath+'pickup2.wav');
+	this.pickup.addEventListener("canplaythrough", function () {
+		//console.log("loaded: "+'pickup2.wav');
+		self.loaded--;
+	});
+
+	//this.synth = new Tone.MonoSynth().toMaster();
+};
+
+//assuming markovMat is 7x7 
+Balrog.prototype.generateFromMatrix = function(markovMat, smooth) {
+	//todo generate music from markov matrix
+
+	//setTimeout(function(){
+	//}, 500)
+	//synth.triggerAttack(oldfreq);
+	//synth.frequency.rampTo(freq, 0.05);		
+	//synth.setNote(freq);
+	//synth.volume.rampTo(vol, 0.07);
+};
+
+Balrog.prototype.stopSynth = function(){
+	//this.synth.triggerRelease();
+};
+
+module.exports = Balrog;
+},{}],4:[function(require,module,exports){
 /**
 * CLASS CONSTRUCTOR
 * @PARAM settings
@@ -486,7 +528,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],5:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -547,7 +589,7 @@ module.exports = {
 	}
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
@@ -618,7 +660,7 @@ startLevel1 = function startLevel1() {
 	initTutorial();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":4,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"./config.js":5}],7:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -667,7 +709,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -722,7 +764,7 @@ module.exports = {
 	}
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
@@ -759,7 +801,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":4,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":8}],10:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -814,7 +856,7 @@ module.exports = {
 	}
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var Canvas = require('../canvas/canvas.js'),
 		Vector = require('../actors/vector.js'),
 		Target = require('../actors/target.js'),
@@ -852,7 +894,7 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":4,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":10}],12:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -901,11 +943,12 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
-    Smaug = require('../smaug/smaug.js');
+    Smaug = require('../smaug/smaug.js'),
+    Balrog = require('../balrog/balrog.js');
 
 // Sauron is alive!
 /*
@@ -918,6 +961,11 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
+  this.audio = new Balrog();
+  //while(this.audio.loading){
+  //  //block untill audio loaded
+  //}
+
   this.enable = true;
 }
 
@@ -1061,6 +1109,8 @@ Sauron.prototype.updateTargets = function(d, type) {
         wraith.sprite().jump(10, 250);
       if (type === "collision") {
 
+        self.audio.pickup.play();
+
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
@@ -1104,6 +1154,7 @@ Sauron.prototype.removeBlips = function(level) {
   d3.selectAll(".clicked, .blips").slowDeath(2000);
   this.enable = false;
   setTimeout(function(){
+    self.audio.matChange.play();
     self.graphics.changeRobot(0, true, 2000, level);
   }, 2001);
   setTimeout(function(){
@@ -1119,6 +1170,7 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
+  this.audio.reloadItems.play()
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
@@ -1339,7 +1391,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../balrog/balrog.js":3,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],14:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
@@ -1459,7 +1511,7 @@ Smaug.prototype.changeBackground = function(mode){
 }
 
 module.exports = Smaug;
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1538,7 +1590,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1763,7 +1815,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":16}],16:[function(require,module,exports){
+},{"../utilities/math.js":17}],17:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
@@ -1886,4 +1938,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
