@@ -22368,17 +22368,9 @@ var audioPath = "../public/audio/";
 
 function Balrog(){
 	//console.log("initializing audio");
-	//todo find out the right way to do this:
 	var self = this;
 
-	//this.synth = null;
-
-	//var s = document.createElement( 'script' );
-  	//s.setAttribute( 'src', "https://tonejs.github.io/build/Tone.min.js" );
-  	//s.onload = function(){
-		this.synth = new Tone.MonoSynth().toMaster();
-		//console.log("defined synth");
-  	//};
+	this.synth = new Tone.MonoSynth().toMaster();
 
 	this.loading = 3;
 	this.reloadItems = new Audio(audioPath+'reloaditems.wav');
@@ -22402,19 +22394,11 @@ function Balrog(){
 //assuming markovMat is 7x7 
 Balrog.prototype.generateFromMatrix = function(markovMat, smooth) {
 	var self = this;
-	var playSynth = function() {
-		if(self.synth){
-			self.synth.triggerAttack(300);
-			setTimeout(function(){
-				self.synth.triggerRelease();
-			}, 1000)
-		}
-		else{
-			console.log("waiting for synth");
-			setTimeout(playSynth, 500);
-		}
-	};
-	setTimeout(playSynth, 0);
+	
+	this.synth.triggerAttack(300);
+	setTimeout(function(){
+		self.synth.triggerRelease();
+	}, 1000)
 	
 	//todo generate music from markov matrix
 
@@ -22425,7 +22409,8 @@ Balrog.prototype.generateFromMatrix = function(markovMat, smooth) {
 };
 
 Balrog.prototype.stopSynth = function(){
-	//this.synth.triggerRelease();
+	this.synth.triggerRelease();
+	this.generate = false;
 };
 
 module.exports = Balrog;
@@ -23410,8 +23395,7 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id) {
-  //this.audio.reloadItems.play();
-  this.audio.generateFromMatrix();
+  this.audio.reloadItems.play();
   if (id.indexOf("random") !== -1) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
