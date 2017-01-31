@@ -173,9 +173,9 @@ Sauron.prototype.updateTargets = function(d, type) {
           self.generateNewTargets(id);
         }
       }
-      else if (type === "detection") {
-        Tutorial.tutorialControl(4,1);
-      }
+      //else if (type === "detection") {
+      //  Tutorial.tutorialControl(4,1);
+      //}
     }
     else{
       wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));

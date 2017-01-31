@@ -22,36 +22,45 @@ Tutorial.prototype.init = function() {
   @param {int} time
   @param {boolean} if it is reopened
 */
-Tutorial.prototype.tutorialControl = function(num, time, reclick) {
-  tutor = this;
-  if ((!this.show || !this.reopen) && num == this.num) {
-    if (num === 1) {
-      this.num++;
+Tutorial.prototype.tutorialControl = function(time) {
+  var tutor = this;
+  console.log("called tutorialControl "+tutor.num);
+  if (!this.show || !this.reopen) {
+    if (tutor.num === 1) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    };
-    if (num === 2) {
-      this.num++;
+    } else if (tutor.num === 2) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    };
-    if (num === 3) {
-      this.num++;
+    } else if (tutor.num === 3) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    };
-    if (num === 4) {
-      this.num++;
+    } else if (tutor.num === 4) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    };
-    setTimeout(function() {
-        $('#tutorial').popover('show');
-        tutor.show = true;
-        tutor.reopen = false;
-
-      }, time);
-    if(!reclick) {
-      tutor.setTimer(10000);
+    } else {
       tutor.show = false;
-      tutor.reopen = true;
+      return;
     }
+
+    //setTimeout(function() {
+    $('#tutorial').popover('show');
+    tutor.show = true;
+    tutor.reopen = false;
+    console.log("asdf");
+
+    //  }, 0);
+    setTimeout(function() {
+
+      console.log("timer done "+tutor.num);
+      tutor.tutorialControl(time, false);
+    }, time);
+
+    //if(!reclick) {
+    //  tutor.setTimer(10000);
+    //  tutor.show = false;
+    //  tutor.reopen = true;
+    //}
   }
 };
 /*

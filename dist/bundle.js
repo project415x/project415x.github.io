@@ -208,7 +208,7 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                Tutorial.tutorialControl(2,500);
+                //Tutorial.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
                 //  next four lines until but not including '})' with
                 //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -220,7 +220,7 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                Tutorial.tutorialControl(3,500);
+                //Tutorial.tutorialControl(3,500);
               });
 };
 
@@ -564,7 +564,7 @@ function initTutorial() {
 		// Initialize Tutorial
 		Tutorial.init()
 		// Dismissable when clicking general window elements
-		$('#guide').click(function(event) {
+		/*$('#guide').click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
 				if(!Tutorial.show) {
@@ -573,20 +573,20 @@ function initTutorial() {
 				if((event.target == img || event.target == guide) && Tutorial.reopen) {
 					return;
 				}
-				Tutorial.clearTimer();
+				//Tutorial.clearTimer();
 				$('#tutorial').popover('hide');
 				Tutorial.show = false;
 				Tutorial.reopen = true;
-		});
+		});*/
 		// Reopen tutorial
-		$('#tutorial').click(function(event) {
-			if(Tutorial.show || !Tutorial.reopen) {
-				return;
-			}
-			Tutorial.tutorialControl(--Tutorial.num,1,true);
-		});
+		//$('#tutorial').click(function(event) {
+		//	if(Tutorial.show || !Tutorial.reopen) {
+		//		return;
+		//	}
+		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
+		//});
 		// Load starting tutorial
-		Tutorial.tutorialControl(1,5000);
+		
 	});
 }
 function initLevel1() {
@@ -616,6 +616,12 @@ function initLevel1() {
 startLevel1 = function startLevel1() {
 	initLevel1();
 	initTutorial();
+}
+
+startTut = function startTut() {
+	setTimeout(function(){
+			Tutorial.tutorialControl(5000);
+		}, 0);
 }
 
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
@@ -1077,9 +1083,9 @@ Sauron.prototype.updateTargets = function(d, type) {
           self.generateNewTargets(id);
         }
       }
-      else if (type === "detection") {
-        Tutorial.tutorialControl(4,1);
-      }
+      //else if (type === "detection") {
+      //  Tutorial.tutorialControl(4,1);
+      //}
     }
     else{
       wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
@@ -1484,36 +1490,45 @@ Tutorial.prototype.init = function() {
   @param {int} time
   @param {boolean} if it is reopened
 */
-Tutorial.prototype.tutorialControl = function(num, time, reclick) {
-  tutor = this;
-  if ((!this.show || !this.reopen) && num == this.num) {
-    if (num === 1) {
-      this.num++;
+Tutorial.prototype.tutorialControl = function(time) {
+  var tutor = this;
+  console.log("called tutorialControl "+tutor.num);
+  if (!this.show || !this.reopen) {
+    if (tutor.num === 1) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    };
-    if (num === 2) {
-      this.num++;
+    } else if (tutor.num === 2) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    };
-    if (num === 3) {
-      this.num++;
+    } else if (tutor.num === 3) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    };
-    if (num === 4) {
-      this.num++;
+    } else if (tutor.num === 4) {
+      tutor.num++;
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    };
-    setTimeout(function() {
-        $('#tutorial').popover('show');
-        tutor.show = true;
-        tutor.reopen = false;
-
-      }, time);
-    if(!reclick) {
-      tutor.setTimer(10000);
+    } else {
       tutor.show = false;
-      tutor.reopen = true;
+      return;
     }
+
+    //setTimeout(function() {
+    $('#tutorial').popover('show');
+    tutor.show = true;
+    tutor.reopen = false;
+    console.log("asdf");
+
+    //  }, 0);
+    setTimeout(function() {
+
+      console.log("timer done "+tutor.num);
+      tutor.tutorialControl(time, false);
+    }, time);
+
+    //if(!reclick) {
+    //  tutor.setTimer(10000);
+    //  tutor.show = false;
+    //  tutor.reopen = true;
+    //}
   }
 };
 /*

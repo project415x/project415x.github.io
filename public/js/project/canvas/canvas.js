@@ -58,7 +58,7 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                Tutorial.tutorialControl(2,500);
+                //Tutorial.tutorialControl(2,500);
                 // If you want the single click instead of double, replace the
                 //  next four lines until but not including '})' with
                 //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -70,7 +70,7 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                Tutorial.tutorialControl(3,500);
+                //Tutorial.tutorialControl(3,500);
               });
 };
 

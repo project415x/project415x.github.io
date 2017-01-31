@@ -14,7 +14,7 @@ function initTutorial() {
 		// Initialize Tutorial
 		Tutorial.init()
 		// Dismissable when clicking general window elements
-		$('#guide').click(function(event) {
+		/*$('#guide').click(function(event) {
 				var guide = document.getElementById('guide');
 				var img = document.getElementById('tutorial');
 				if(!Tutorial.show) {
@@ -23,20 +23,20 @@ function initTutorial() {
 				if((event.target == img || event.target == guide) && Tutorial.reopen) {
 					return;
 				}
-				Tutorial.clearTimer();
+				//Tutorial.clearTimer();
 				$('#tutorial').popover('hide');
 				Tutorial.show = false;
 				Tutorial.reopen = true;
-		});
+		});*/
 		// Reopen tutorial
-		$('#tutorial').click(function(event) {
-			if(Tutorial.show || !Tutorial.reopen) {
-				return;
-			}
-			Tutorial.tutorialControl(--Tutorial.num,1,true);
-		});
+		//$('#tutorial').click(function(event) {
+		//	if(Tutorial.show || !Tutorial.reopen) {
+		//		return;
+		//	}
+		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
+		//});
 		// Load starting tutorial
-		Tutorial.tutorialControl(1,5000);
+		
 	});
 }
 function initLevel1() {
@@ -66,4 +66,10 @@ function initLevel1() {
 startLevel1 = function startLevel1() {
 	initLevel1();
 	initTutorial();
+}
+
+startTut = function startTut() {
+	setTimeout(function(){
+			Tutorial.tutorialControl(5000);
+		}, 0);
 }
