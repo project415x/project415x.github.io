@@ -40,6 +40,7 @@ Tutorial.prototype.tutorialControl = function(time) {
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
     } else {
       tutor.show = false;
+      $('#tutorial').popover('hide');
       return;
     }
 
