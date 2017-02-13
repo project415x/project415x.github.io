@@ -28,6 +28,7 @@ var Sauron = require('../sauron/sauron.js'),
     utils = require('../utilities/math.js');
 
 function Canvas(settings) {
+  console.log("hello canvas");
   //input error handling
 
   // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
