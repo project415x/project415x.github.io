@@ -117,5 +117,11 @@ module.exports = {
 		 	});
 		}
 		return validPoints;
+	},
+
+	isOnRadar: function(x, y, matrix, width){
+		var point = this.applyInverse(x, y, matrix, width);
+		return point.x > 0 && point.x < width && point.y > 0 && point.y < width;
+
 	}
 };

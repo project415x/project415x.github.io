@@ -319,11 +319,11 @@ Sauron.prototype.generateTarget = function(firstRun) {
 
   while (!isValidCoordinate) {
     var point = {
-      x: util.getRandom(0, 500),
-      y: util.getRandom(0, 500)
+      x: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10),
+      y: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10)
     };
     var width = document.getElementById("input-svg").width.baseVal.value;
-    if ( util.isOnScreen(matrix, point, width)) {
+    if ( util.isOnRadar(point.x, point.y, matrix, width)) {
       isValidCoordinate = true;
       var targetSettings = {
         x: point.x,
