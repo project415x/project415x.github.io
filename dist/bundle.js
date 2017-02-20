@@ -1505,10 +1505,13 @@ Tutorial.prototype.tutorialControl = function(time) {
       d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
     } else if (tutor.num === 4) {
       tutor.num++;
+      time -= 1000;
+      time = 0 > time ? 0:time;
       d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
     } else {
       tutor.show = false;
       $('#tutorial').popover('hide');
+      console.log("closing, goodbye.");
       return;
     }
 
