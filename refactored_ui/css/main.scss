@@ -1,0 +1,53 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+/**
+ * TODO:
+ * - Add a general styling class for sections
+ * - Separate ids and the classes
+ */
+
+@charset "utf-8";
+
+// Basic configurations
+$base-font-family: 'Roboto', sans-serif;
+$base-font-size: 16px;
+$small-font-size: $base-font-size * 0.875;
+$base-line-height: 1.5;
+$spacing-unit: 30px;
+$text-color: #111;
+$background-color: #fdfdfd;
+$brand-color: #2a7ae2;
+$grey-color: #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark: darken($grey-color, 25%);
+
+// Width of the content area
+$content-width: 800px;
+$on-palm: 600px;
+$on-laptop: 800px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+// Media query mixin
+@mixin media-query($device) {
+  @media screen and (max-width: $device) {
+    @content;
+  }
+}
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+  'base',
+  'normalize',
+  'typebase',
+  'syntax-highlighting',
+  'layout',
+  'fonts',
+  'project',
+  '404',
+  'home',
+  'start',
+  'foot';

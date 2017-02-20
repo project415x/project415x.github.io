@@ -1,0 +1,202 @@
+{% load static %}
+<head>
+  <link href='http://gmpg.org/xfn/11' rel='profile'>
+
+  <link rel='canonical' href='http://p415x.xyz/start/ | replace:"index.html", ""' />
+  <link rel='alternate' type='application/rss+xml' title='Project 415x' href='http://p415x.xyz/feed.xml' />
+
+  <!-- METADATA -->
+  <meta name='description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='keywords' content='Project, 415x, Mathematics, Linear, Algebgra, UIUC, Illinois, Engineering, STEM'>
+
+  <!-- OPEN GRAPH -->
+  <meta property='og:site_name' content='Project 415x' />
+  <meta property='og:title' content='Project 415x' />
+  <meta property='og:description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+  <meta property='og:image' content='http://p415x.xyz/public/img/project415x.png' />
+  <meta property='og:image:width' content='1200'/>
+  <meta property='og:image:height' content='630'/>
+  <meta property='og:url' content='http://p415x.xyz/start/' />
+  <meta property='og:type' content='website' />
+
+  <!-- TWITTER CARD -->
+  <meta name='twitter:title' content='Project 415x' />
+  <meta name='twitter:card' content='summary' />
+  <meta name='twitter:image' content='http://p415x.xyz/public/img/project415x.png' />
+  <meta name='twitter:url' content='http://p415x.xyz/start/' />
+  <meta name='twitter:description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+
+  <title>
+     Start &middot; Project 415x 
+  </title>
+
+  <!-- ICONS -->
+  <link rel='image_src' href="{% static 'public/logo.png' %}"/>
+  <link rel='shortcut icon' href="{% static 'public/logo.png' %}"/>
+  <link rel='apple-touch-icon-precomposed' href="{% static 'public/logo.png' %}"/>
+
+  <!-- CSS -->
+  <link rel='stylesheet' href="{% static '_site/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+  <link rel='stylesheet' href="{% static '_site/css/main.css' %}">
+  <link rel='stylesheet' href="{% static '_site/css/playground.css' %}">
+  <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+
+</head>
+
+<body>
+    <div id="start">
+  <div class="container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+      <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+      <li role="presentation"><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+      <li role="presentation"><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
+      <li role="presentation"><a href="https://docs.google.com/forms/d/1OB4mqAjueM9eXgh-DyZ77W7QvgmH74O36NBNx-_dm4w/viewform?usp=send_form" target="_blank" aria-controls="feedback">Feedback</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane" id="info">
+  <div class="container">
+    <h3>Project 415x</h3>
+    <p style="color:white;">Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
+    <h3>About</h3>
+    <p style="color:white;">
+      Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
+    </p>
+  </div>
+</div>
+
+<div role="tabpanel" class="tab-pane fade" id="game">
+  <div class="container">
+    <!-- Congrats Modal -->
+    <div id="nextLevel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nextLevelLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="alert alert-success fade in">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <strong>
+              <span class="glyphicon glyphicon-ok"></span>
+              Congratulations!
+            </strong>
+            Proceed to the next level
+        </div>
+      </div>
+    </div>
+    <!-- /Congrats Modal -->
+  </div>
+  <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
+
+   <!-- Refactor stuff starts here: -->
+  <div id="cutscene" hidden>
+    <iframe id = "cutscene_frame" style="resize: both;">No cut scene</iframe>
+</div>
+     <div class="game">
+    <div id="input-canvas"></div>
+    <div id="output-canvas"></div>
+    <script type="text/javascript">
+  // found in client script (game1/level1.js)
+
+  function closePopup(){
+    //document.getElementById("level").hidden = false;
+    document.getElementById("cutscene").hidden = true;
+    window.parent.document.getElementById("navigation").hidden = false;
+    startTut();
+  }
+
+  function openPopup(){
+    document.getElementById("cutscene").hidden = false;
+    //document.getElementById("level").hidden = true;
+    document.getElementById("cutscene").style.zIndex = "9999!important";
+    document.getElementById("cutscene").width = window.innerWidth;
+    document.getElementById("cutscene").height = window.innerHeight;
+    document.getElementById("cutscene_frame").src = "{% static 'public/img/intro/intro.html' %}";
+    document.getElementById("cutscene_frame").width = window.innerWidth;
+    document.getElementById("cutscene_frame").height = windpublicow.outerHeight/1.5;
+
+
+    window.parent.document.getElementById("navigation").hidden = true;
+  }
+
+
+  $(window).bind("load", function() {
+    if(!sessionStorage.getItem('first')){
+      openPopup();
+      sessionStorage.first = 'true';
+    }
+    // setInterval(function(){
+    //  console.log(window.outerHeight);
+    // }, 1000);
+    console.log("starting lvl1");
+    startLevel1();
+    // level switcher
+    setTimeout(function() {
+      gameMode = 0;
+    }, 1000);
+
+    var isBroadcasted = 0,
+        levelScore = 0;
+
+    /*window.setInterval(function() {
+      if(isBroadcasted === 0) {
+          levelScore = document.getElementById('score').innerHTML;
+          isBroadcasted = 0;
+        if(parseInt(levelScore) === 100) {
+          isBroadcasted = 1;
+          var r = confirm("Congratulations! Proceed to next level");
+          if (r === true) {
+            window.parent.document.getElementById("upperBoundLevel").click();
+          }
+        }
+      }
+    }, 1000);*/
+    document.getElementById("popup").hidden = false;
+    document.getElementById("popup_button").onclick = function(){ openPopup(); } ;
+  });
+
+
+
+</script>
+
+  </div>
+  <div class="scene_button" id = "popup" hidden>
+    <button id = "popup_button" style="background-color: black;">View Cutscene</button>
+  </div>
+
+
+  <!-- and ends here -->
+
+
+  </div>
+    <!-- Start Game Nav Buttons -->
+    <div class="btn-group" id="navigation" role="group" aria-label="Game Navigation">
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'public/img/right.png' %}"></img></button>
+    </div>
+    <!-- End Game Nav Buttons -->
+</div>
+<!--script>
+    window.onbeforeunload = function(e) {
+        sessionStorage.clear();
+    };
+</script-->
+
+<div role="tabpanel" class="tab-pane fade" id="mathguide">
+  <div id="frameGuide" class="frameDiv" frameborder="0" width="100%"></div>
+    <div class="btn-group" role="group" aria-label="Game Navigation">
+      <button id="lowerBoundGuide" type="button" class="btn btn-default"></button>
+      <button id="upperBoundGuide" type="button" class="btn btn-default"></button>
+    </div>
+</div>
+
+    </div>
+  </div>
+</div>
+<script src="{% static 'bower_components/d3/d3.min.js' %}""></script>
+<script src="{% static 'dist/compressed/bundle.min.js' %}""></script>
+<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}""></script>
+<script src="{% static 'bower_components/typed.js/dist/typed.min.js' %}""></script>
+<script src="{% static 'public/js/button.js' %}""></script>
+<script src="{% static 'public/js/type.js' %}""></script>
