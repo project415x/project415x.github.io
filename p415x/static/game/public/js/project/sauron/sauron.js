@@ -104,7 +104,7 @@ Sauron.prototype.updateOutputVector = function(d) {
             "height": "" + height +"px",
             "preserveAspectRatio" : ratio,
             "id": 'output-vector',
-            "xlink:href": "../public/img/robotarm.gif",
+            "xlink:href": "/static/game/public/img/robotarm.gif",
             "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
       });
       //arm.style({"fill": "red"});

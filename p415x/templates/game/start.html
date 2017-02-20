@@ -53,29 +53,29 @@
   <div id="output-canvas"></div>
   <script type="text/javascript">
     // found in client script (game1/level1.js)
-  
+
     function closePopup(){
       //document.getElementById("level").hidden = false;
       document.getElementById("cutscene").hidden = true;
       window.parent.document.getElementById("navigation").hidden = false;
       startTut();
     }
-  
+
     function openPopup(){
       document.getElementById("cutscene").hidden = false;
       //document.getElementById("level").hidden = true;
       document.getElementById("cutscene").style.zIndex = "9999!important";
       document.getElementById("cutscene").width = window.innerWidth;
       document.getElementById("cutscene").height = window.innerHeight;
-      document.getElementById("cutscene_frame").src = "{% static 'public/img/intro/intro.html' %}";
+      document.getElementById("cutscene_frame").src = "public/img/intro/intro.html";
       document.getElementById("cutscene_frame").width = window.innerWidth;
       document.getElementById("cutscene_frame").height = window.outerHeight/1.5;
-  
-  
+
+
       window.parent.document.getElementById("navigation").hidden = true;
     }
-  
-  
+
+
     $(window).bind("load", function() {
       if(!sessionStorage.getItem('first')){
         openPopup();
@@ -90,10 +90,10 @@
       setTimeout(function() {
         gameMode = 0;
       }, 1000);
-  
+
       var isBroadcasted = 0,
           levelScore = 0;
-  
+
       /*window.setInterval(function() {
         if(isBroadcasted === 0) {
             levelScore = document.getElementById('score').innerHTML;

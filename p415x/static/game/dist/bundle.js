@@ -262,7 +262,7 @@ Canvas.prototype.appendSvg = function(type) {
 };
 
 // Adds image on top of Circle (Target).
-// To randomize targets write function to randomly grab a .gif from ../public/img/*
+// To randomize targets write function to randomly grab a .gif from ../img/*
 Canvas.prototype.appendImageToPattern = function() {
   if (this.type === "output") {
     for(i = 1; i < 20; i++) {
@@ -273,7 +273,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "40",
                  "height": "40",
-                 "xlink:href": "../public/img/items/glow/target" + i + ".gif"
+                 "xlink:href": "/static/game/public/img/items/glow/target" + i + ".gif"
                });
     }
     var arm = this.getTar("arm");
@@ -283,7 +283,7 @@ Canvas.prototype.appendImageToPattern = function() {
                "y": "0",
                "width": "30px",
                "height": "100px",
-               "xlink:href": "../public/img/robotarm.gif"
+               "xlink:href": "/static/game/public/img/robotarm.gif"
              });
     for(i = 2; i<=4; i++){
       var robo = this.getTar("roboglitch"+i);
@@ -293,7 +293,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "92px",
                  "height": "109px",
-                 "xlink:href": "../public/img/robo/roboglitch"+i+".gif"
+                 "xlink:href": "/static/game/public/img/robo/roboglitch"+i+".gif"
                });
     }
     for(i = 1; i < 5; i++){
@@ -304,7 +304,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "69px",
                  "height": "94px",
-                 "xlink:href": "../public/img/robo/robo"+i+".gif"
+                 "xlink:href": "/static/game/public/img/robo/robo"+i+".gif"
                });
     }
   }
@@ -316,7 +316,7 @@ Canvas.prototype.appendImageToPattern = function() {
                 "y": "0",
                 "width": "40",
                 "height": "40",
-                "xlink:href": "../public/img/blip.gif"
+                "xlink:href": "/static/game/public/img/blip.gif"
               });
   }
 };
@@ -1015,7 +1015,7 @@ Sauron.prototype.updateOutputVector = function(d) {
             "height": "" + height +"px",
             "preserveAspectRatio" : ratio,
             "id": 'output-vector',
-            "xlink:href": "../public/img/robotarm.gif",
+            "xlink:href": "/static/game/public/img/robotarm.gif",
             "transform" : 'rotate('+angle +',' + i[0] + ',' + i[1] + ')'
       });
       //arm.style({"fill": "red"});

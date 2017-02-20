@@ -123,7 +123,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "40",
                  "height": "40",
-                 "xlink:href": "../img/items/glow/target" + i + ".gif"
+                 "xlink:href": "/static/game/public/img/items/glow/target" + i + ".gif"
                });
     }
     var arm = this.getTar("arm");
@@ -133,7 +133,7 @@ Canvas.prototype.appendImageToPattern = function() {
                "y": "0",
                "width": "30px",
                "height": "100px",
-               "xlink:href": "../img/robotarm.gif"
+               "xlink:href": "/static/game/public/img/robotarm.gif"
              });
     for(i = 2; i<=4; i++){
       var robo = this.getTar("roboglitch"+i);
@@ -143,7 +143,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "92px",
                  "height": "109px",
-                 "xlink:href": "../img/robo/roboglitch"+i+".gif"
+                 "xlink:href": "/static/game/public/img/robo/roboglitch"+i+".gif"
                });
     }
     for(i = 1; i < 5; i++){
@@ -154,7 +154,7 @@ Canvas.prototype.appendImageToPattern = function() {
                  "y": "0",
                  "width": "69px",
                  "height": "94px",
-                 "xlink:href": "../img/robo/robo"+i+".gif"
+                 "xlink:href": "/static/game/public/img/robo/robo"+i+".gif"
                });
     }
   }
@@ -166,7 +166,7 @@ Canvas.prototype.appendImageToPattern = function() {
                 "y": "0",
                 "width": "40",
                 "height": "40",
-                "xlink:href": "../img/blip.gif"
+                "xlink:href": "/static/game/public/img/blip.gif"
               });
   }
 };
