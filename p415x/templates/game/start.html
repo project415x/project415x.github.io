@@ -1,4 +1,5 @@
-{% extends common.html %}
+{% extends base %}
+{% load static %}
 
 {% block body %}
 <div id="start">
@@ -68,7 +69,7 @@
       document.getElementById("cutscene").height = window.innerHeight;
       document.getElementById("cutscene_frame").src = "{% static 'public/img/intro/intro.html' %}";
       document.getElementById("cutscene_frame").width = window.innerWidth;
-      document.getElementById("cutscene_frame").height = windpublicow.outerHeight/1.5;
+      document.getElementById("cutscene_frame").height = window.outerHeight/1.5;
   
   
       window.parent.document.getElementById("navigation").hidden = true;

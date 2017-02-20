@@ -34,15 +34,15 @@
   </title>
 
   <!-- ICONS -->
-  <link rel='image_src' href="{% static 'public/logo.png' %}"/>
-  <link rel='shortcut icon' href="{% static 'public/logo.png' %}"/>
-  <link rel='apple-touch-icon-precomposed' href="{% static 'public/logo.png' %}"/>
+  <link rel='image_src' href="{% static 'game/public/logo.png' %}"/>
+  <link rel='shortcut icon' href="{% static 'game/public/logo.png' %}"/>
+  <link rel='apple-touch-icon-precomposed' href="{% static 'game/public/logo.png' %}"/>
 
   <!-- CSS -->
-  <link rel='stylesheet' href="{% static '_site/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
-  <link rel='stylesheet' href="{% static '_site/css/main.css' %}">
-  <link rel='stylesheet' href="{% static '_site/css/playground.css' %}">
-  <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+  <!--link rel='stylesheet' href="{% static 'game/css/main.css' %}"-->
+  <!--link rel='stylesheet' href="{% static 'game/css/playground.css' %}"-->
+  <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
 
 </head>
 
@@ -51,8 +51,8 @@
     </div>
     <!-- Start Game Nav Buttons -->
     <div class="btn-group" id="navigation" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'public/img/left.png' %}"></img></button>
-      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'public/img/right.png' %}"></img></button>
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
     </div>
     <!-- End Game Nav Buttons -->
 </div>
@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<script src="{% static 'bower_components/d3/d3.min.js' %}""></script>
-<script src="{% static 'dist/compressed/bundle.min.js' %}""></script>
-<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}""></script>
+<script src="{% static 'game/bower_components/d3/d3.min.js' %}""></script>
+<script src="{% static 'game/dist/compressed/bundle.min.js' %}""></script>
+<script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}""></script>
 </body>
