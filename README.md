@@ -19,13 +19,15 @@ $ npm install
 $ bower install
 
 // Install Jekyll
-$ gem install jekyll
+$ sudo apt-get install python-pip
+$ pip install django
 
-// Navigate to project directory
+//navigate to the right dir
 $ cd project415x.github.io
+$ cd p415x
 
-// Start Jekyll server
-$ jekyll serve
+// Start django server
+$ python manage.py runserver
 ```
 
 ### What's Included
