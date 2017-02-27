@@ -926,6 +926,46 @@ function Sauron(settings) {
   this.deathToll = 0;
   this.graphics = new Smaug();
   this.enable = true;
+  this.messenger = document.getElementById("mailbox");
+  this.btnsOn = 0;
+  var self = this;
+  setInterval(function(){
+      console.log("this.btnsOn "+self.btnsOn);
+    }, 2000);
+  this.messenger.addEventListener('levelup', function () {
+    if(!self.btnsOn){
+      console.log("recieved a message!+ "+self.btnsOn);
+      self.btnsOn = 1;
+      setTimeout(function(){
+        self.btnsOn = 0;
+        console.log("self.btns set!")
+      }, 1000);
+      level_changed = 0;
+      level+= 0.25;
+      self.generateNewTargets("", true);
+    }
+    else{
+      console.log("failed!");
+    }
+  }, false);
+  this.messenger.addEventListener('leveldown', function () {
+    if(!self.btnsOn){
+      self.btnsOn = 1;
+      setTimeout(function(){
+        self.btnsOn = 0;
+        console.log("self.btns set!")
+      }, 1000);    
+      console.log("recieved a message!-");
+      level_changed = 0;
+      level-= 0.25;
+      if(level<1)
+        level = 1;
+      self.generateNewTargets("", true);
+    }
+    else{
+      console.log("failed!");
+    }
+  }, false);
 }
 
 /*
@@ -1077,7 +1117,7 @@ Sauron.prototype.updateTargets = function(d, type) {
 
         self.deathToll++;
 
-        self.updateProgress();
+        //self.updateProgress();
         self.drawBlips(x,y);
 
         if( self.getArmies().size() === 0 ) {
@@ -1125,8 +1165,21 @@ Sauron.prototype.removeBlips = function(level) {
   @param {string} id , of dom element related to target
   @returns {}
 */
-Sauron.prototype.generateNewTargets = function(id) {
-  if (id.indexOf("random") !== -1) {
+Sauron.prototype.generateNewTargets = function(id, external) {
+  if(!external){
+    if(level != 3){
+      level_changed++;
+      level_changed %= 3;
+      if (!level_changed)
+        level++;
+    }
+  }
+  else{
+    d3.selectAll(".new").remove();
+    this.removeBlips(3);
+  }
+  console.log("genhere");
+  if (level == 3) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
@@ -1135,12 +1188,12 @@ Sauron.prototype.generateNewTargets = function(id) {
     }
     this.generateTarget(!flag);
   }
-  else if (id.indexOf("line") !== -1) {
+  else if (level == 1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
     this.removeBlips(1);
   }
-  else if (id.indexOf("circle") !== -1) {
+  else if (level == 2) {
     this.setMatrix();
     this.generateRandomCircleofDeath();
     this.removeBlips(2);
@@ -1257,6 +1310,7 @@ Sauron.prototype.generateTarget = function(firstRun) {
   @returns void
 */
 Sauron.prototype.drawBlips = function(x,y) {
+  console.log("drawing blips");
   var width_svg = document.getElementById("input-svg").width.baseVal.value;
   var point = util.applyInverse(x, y, this.matrix, width_svg);
   d3.select("#input-svg").append("circle")
@@ -1267,6 +1321,7 @@ Sauron.prototype.drawBlips = function(x,y) {
                           })
                           .attr("class", "blips")
                           .style({"fill": "url(#tarblip)"});
+  console.log("done drawing blips");
 };
 /*
   Draws random circle of targets onto output svg

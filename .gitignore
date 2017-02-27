@@ -5,3 +5,6 @@ _site
 *.psd
 *.dat
 *.temp
+*.pyc
+*~
+*.swp

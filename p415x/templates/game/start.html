@@ -24,7 +24,7 @@
     </p>
   </div>
 </div>
-
+<div id="mailbox"></div>
 <div role="tabpanel" class="tab-pane fade" id="game">
   <div class="container">
     <!-- Congrats Modal -->
@@ -54,6 +54,8 @@
   <script type="text/javascript">
     // found in client script (game1/level1.js)
 
+    var level = 1;
+    var level_changed = 0;
     function closePopup(){
       //document.getElementById("level").hidden = false;
       document.getElementById("cutscene").hidden = true;
@@ -81,11 +83,12 @@
         openPopup();
         sessionStorage.first = 'true';
       }
-      // setInterval(function(){
+      // setInterval(function(){-canvas
       //  console.log(window.outerHeight);
       // }, 1000);
       console.log("starting lvl1");
       startLevel1();
+      
       // level switcher
       setTimeout(function() {
         gameMode = 0;

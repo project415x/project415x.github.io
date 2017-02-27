@@ -43,6 +43,17 @@
   <!--link rel='stylesheet' href="{% static 'game/css/main.css' %}"-->
   <!--link rel='stylesheet' href="{% static 'game/css/playground.css' %}"-->
   <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script>
+    var eventplus = new Event('levelup');
+    var eventminus = new Event('leveldown');
+    function levelChanger(increment){
+      console.log("sending message");
+      if(increment == 1)
+        document.getElementById('mailbox').dispatchEvent(eventplus);
+      else
+        document.getElementById('mailbox').dispatchEvent(eventminus);
+    }
+  </script>
 
 </head>
 
@@ -51,22 +62,17 @@
     </div>
     <!-- Start Game Nav Buttons -->
     <div class="btn-group" id="navigation" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
-      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(-1)"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(1)"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
     </div>
     <!-- End Game Nav Buttons -->
 </div>
-<!--script>
-    window.onbeforeunload = function(e) {
-        sessionStorage.clear();
-    };
-</script-->
 
 <div role="tabpanel" class="tab-pane fade" id="mathguide">
   <div id="frameGuide" class="frameDiv" frameborder="0" width="100%"></div>
     <div class="btn-group" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundGuide" type="button" class="btn btn-default"></button>
-      <button id="upperBoundGuide" type="button" class="btn btn-default"></button>
+      <button id="lowerBoundGuide" type="button" class="btn btn-default" ></button>
+      <button id="upperBoundGuide" type="button" class="btn btn-default" ></button>
     </div>
 </div>
 
@@ -75,6 +81,6 @@
 </div>
 
 <script src="{% static 'game/bower_components/d3/d3.min.js' %}""></script>
-<script src="{% static 'game/dist/compressed/bundle.min.js' %}""></script>
+<script src="{% static 'game/dist/bundle.js' %}""></script>
 <script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}""></script>
 </body>
