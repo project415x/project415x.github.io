@@ -49,8 +49,48 @@
 </div>
 
 <div class="game">
-  <div id="input-canvas"></div>
-  <div id="output-canvas"></div>
+  <!-- chat box --> 
+  <!-- <div style="background-color: red;" class="row">     -->
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side">
+        <div class="panel panel-default">
+          <div class="panel-heading top-bar">
+          <h3 class="panel-title">Chat - Clang</h3>
+            <div class="col-md-2 col-xs-2 avatar">
+              <img src="{% static 'game/public/img/scientist.gif' %}"
+                    style="width:100px;height:50px;">
+            </div>
+          </div>
+          <div class="panel-body msg_container_base">
+            <div class="row msg_container base_sent">
+              <div class="col-md-10 col-xs-10 ">
+                <div class="messages msg_sent">
+                  <p>Oh no something funky is happening!</p>
+                  <time datetime="2009-11-13T20:00">Marcy • 31 min</time>
+                </div>
+                <div class="messages msg_sent">
+                  <p>What's happening to my robot!</p>
+                  <time datetime="2009-11-13T20:00">Marcy • 2 min</time>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="input-group">
+              <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+              <span class="input-group-btn">
+              <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <!-- /chat box --> 
+  <!-- TODO: move this to CSS -->
+  <div style="display:inline-block;" id="input-canvas"></div>
+  <div style="display:inline-block;" id="output-canvas"></div>
   <script type="text/javascript">
     // found in client script (game1/level1.js)
 
@@ -97,19 +137,6 @@
       var isBroadcasted = 0,
           levelScore = 0;
 
-      /*window.setInterval(function() {
-        if(isBroadcasted === 0) {
-            levelScore = document.getElementById('score').innerHTML;
-            isBroadcasted = 0;
-          if(parseInt(levelScore) === 100) {
-            isBroadcasted = 1;
-            var r = confirm("Congratulations! Proceed to next level");
-            if (r === true) {
-              window.parent.document.getElementById("upperBoundLevel").click();
-            }
-          }
-        }
-      }, 1000);*/
       document.getElementById("popup").hidden = false;
       document.getElementById("popup_button").onclick = function(){ openPopup(); } ;
     });
