@@ -49,7 +49,7 @@
 </div>
 
 <div class="game">
-  <!-- chat box --> 
+  <!-- chat box -->
   <!-- <div style="background-color: red;" class="row">     -->
   <div class="row">
     <div class="col-sm-3 col-lg-2">
@@ -87,12 +87,13 @@
         </div>
       </nav>
     </div>
-    <!-- /chat box --> 
+    <!-- /chat box -->
   <!-- TODO: move this to CSS -->
   <div style="display:inline-block; background-image: url({% static 'game/public/img/input_background.gif' %}); background-size:100%;" id="input-canvas" style=""></div>
   <div style="display:inline-block; background-image: url({% static 'game/public/img/output_background.gif' %}); background-size:100%;" id="output-canvas"></div>
   <script type="text/javascript">
     // found in client script (game1/level1.js)
+
 
     var level = 1;
     var level_changed = 0;
@@ -128,7 +129,7 @@
       // }, 1000);
       console.log("starting lvl1");
       startLevel1();
-      
+
       // level switcher
       setTimeout(function() {
         gameMode = 0;
@@ -139,7 +140,10 @@
 
       document.getElementById("popup").hidden = false;
       document.getElementById("popup_button").onclick = function(){ openPopup(); } ;
+      document.getElementById("gameLink").click();
+      openPopup();
     });
+
   </script>
 </div>
 

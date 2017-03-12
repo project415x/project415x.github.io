@@ -1,0 +1,68 @@
+{% load static %}
+<head>
+  <link href='http://gmpg.org/xfn/11' rel='profile'>
+
+  <link rel='canonical' href='{{ site.url }}{{ page.url }} | replace:"index.html", ""' />
+
+  <!-- METADATA -->
+  <meta name='description' content='{{ site.description }}' />
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='keywords' content='{{ site.keywords }}'>
+
+  <!-- OPEN GRAPH -->
+  <meta property='og:site_name' content='{{ site.title }}' />
+  <meta property='og:title' content='{{ site.title }}' />
+  <meta property='og:description' content='{{ site.description }}' />
+  <meta property='og:image' content="{% static 'game/public/img/project415x.png' %}" />
+  <meta property='og:image:width' content='1200'/>
+  <meta property='og:image:height' content='630'/>
+  <meta property='og:url' content='{{ site.url }}{{ page.url }}' />
+  <meta property='og:type' content='website' />
+
+  <!-- TWITTER CARD -->
+  <meta name='twitter:title' content='{{ site.title }}' />
+  <meta name='twitter:card' content='summary' />
+  <meta name='twitter:image' content="{% static 'game/public/img/project415x.png' %}" />
+  <meta name='twitter:url' content='{{ site.url }}{{ page.url }}' />
+  <meta name='twitter:description' content='{{ site.description }}' />
+
+  <title>
+      Project 415x
+  </title>
+
+  <!-- ICONS -->
+  <link rel='image_src' href="{% static 'game/public/logo.png' %}" />
+  <link rel='shortcut icon' href="{% static 'game/public/logo.png' %}" />
+  <link rel='apple-touch-icon-precomposed' href="{% static 'game/public/logo.png' %}" />
+
+  <!-- CSS -->
+  <link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+
+  <!-- <link rel='stylesheet' href="{% static 'game/css/main.css' %}"> -->
+  <link rel='stylesheet' href="{% static 'game/css/playground.css' %}">
+  <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
+
+
+</head>
+
+<body>
+    <div id="home">
+      <div class="container">
+        <center>
+          <h2><a href="/"><span id="typedElement">Project 415x</span></a></h2>
+
+          <a href="/start">
+            <button type="button" class="btn orange" aria-label="Left Align">
+              Start
+            </button>
+          </a>
+        </center>
+      </div>
+    </div>
+</body>
+<script src="{% static 'game/bower_components/d3/d3.min.js' %}"></script>
+<script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'game/public/js/button.js' %}"></script>
+<script src="{% static 'game/public/js/type.js' %}"></script>
