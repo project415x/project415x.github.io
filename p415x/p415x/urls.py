@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^start/', include('game.urls')),
+    url(r'^guide/([0-9]+)', views.guide),
 ]

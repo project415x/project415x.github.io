@@ -54,6 +54,9 @@
   </script>
 
 </head>
+<script src="{% static 'game/bower_components/d3/d3.min.js' %}"></script>
+<script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'game/bower_components/showdown/dist/showdown.min.js' %}"></script>
 
 <body>
   {% block body %}{% endblock %}
@@ -78,7 +81,5 @@
   </div>
 </div>
 
-<script src="{% static 'game/bower_components/d3/d3.min.js' %}"></script>
 <script src="{% static 'game/dist/bundle.js' %}"></script>
-<script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 </body>

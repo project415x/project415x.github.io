@@ -62,9 +62,9 @@
                     style="width:100px;height:50px;">
             </div>
           </div>
-          <div class="panel-body msg_container_base">
+          <div class="panel-body msg_container_base" style="height:1000px;overflow:auto;">
             <div class="row msg_container base_sent">
-              <div class="col-md-10 col-xs-10 ">
+              <div id="chatbar" class="col-md-10 col-xs-10 ">
                 <div class="messages msg_sent">
                   <p>Oh no something funky is happening!</p>
                   <time datetime="2009-11-13T20:00">Marcy • 31 min</time>
@@ -80,7 +80,7 @@
             <div class="input-group">
               <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
               <span class="input-group-btn">
-              <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+              <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button>
               </span>
             </div>
           </div>
@@ -93,7 +93,37 @@
   <div style="display:inline-block; background-image: url({% static 'game/public/img/output_background.gif' %}); background-size:100%;" id="output-canvas"></div>
   <script type="text/javascript">
     // found in client script (game1/level1.js)
-
+    showdown.setFlavor('github');
+    var converter = new showdown.Converter();
+    function readTextFile(file)
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, false);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    $('#chatbar').append("<div class='messages_sent'>"+converter.makeHtml(allText)+"</div>")
+                    //alert(allText);
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+    function sendmsg(){
+      var chatinput = document.getElementById("btn-input");
+      var data = chatinput.value;
+      chatinput.value = "";
+      if (data==="help"){
+        readTextFile("/guide/"+level);
+      }
+      else if (data==="clear"){
+        document.getElementById('chatbar').innerHTML = "";
+      }
+    }
 
     var level = 1;
     var level_changed = 0;
