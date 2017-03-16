@@ -50,6 +50,7 @@
         document.getElementById('mailbox').dispatchEvent(eventminus);
     }
   </script>
+  <!-- todo move to css file -->
 <style type="text/css">
   .body-game-page {
       moz-background-size: cover; 
@@ -89,6 +90,29 @@
     border: none;
   }
 
+  .p415x-nav::before .p415x-nav::after {
+    height: 10%;
+  }
+
+  #input-canvas {
+    display:inline-block; 
+    background-image: url({% static 'game/public/img/input_background.gif' %}); 
+    background-size:100%;
+  }
+  #output-canvas {
+    display:inline-block; 
+    background-image: url({% static 'game/public/img/output_background.gif' %}); 
+    background-size:100%;
+  }
+
+  .p415x-btn-group {
+    display: inherit;
+  }
+
+  .p415x-chat {
+    height: 75%;
+    overflow:auto;
+  }
 </style>
 </head>
 <script src="{% static 'game/bower_components/d3/d3.min.js' %}"></script>
@@ -96,27 +120,11 @@
 <script src="{% static 'game/bower_components/showdown/dist/showdown.min.js' %}"></script>
 
 <body class="body-game-page">
-  {% block body %}{% endblock %}
-    </div>
-    <!-- Start Game Nav Buttons -->
-    <div class="btn-group" id="navigation" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(-1)"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
-      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(1)"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
-    </div>
-    <!-- End Game Nav Buttons -->
+  {% block body %}
+  {% endblock %}
 </div>
 
-<div role="tabpanel" class="tab-pane fade" id="mathguide">
-  <div id="frameGuide" class="frameDiv" frameborder="0" width="100%"></div>
-    <div class="btn-group" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundGuide" type="button" class="btn btn-default" ></button>
-      <button id="upperBoundGuide" type="button" class="btn btn-default" ></button>
-    </div>
-</div>
 
-    </div>
-  </div>
-</div>
 
 <script src="{% static 'game/dist/bundle.js' %}"></script>
 </body>

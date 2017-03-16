@@ -5,7 +5,7 @@
 <div id="start">
 <div class="container">
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs nav-justified p415x-links" role="tablist">
+  <ul class="nav nav-tabs nav-justified p415x-nav" role="tablist">
     <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
     <li role="presentation"><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
     <li role="presentation"><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
@@ -56,21 +56,15 @@
         <div class="panel panel-default">
           <div class="panel-heading top-bar">
           <h3 class="panel-title">Chat - Clang</h3>
-            <div class="col-md-1 col-xs-1 avatar">
-              <img src="{% static 'game/public/img/scientist.gif' %}"
-                    style="width:50px;height:45px;">
-            </div>
           </div>
-          <div class="panel-body msg_container_base" style="height:500px;overflow:auto;">
+          <div class="panel-body msg_container_base p415x-chat">
             <div class="row msg_container base_sent">
               <div id="chatbar" class="col-md-10 col-xs-10 ">
                 <div class="messages msg_sent">
                   <p>Oh no something funky is happening!</p>
-                  <time datetime="2009-11-13T20:00">Marcy • 31 min</time>
                 </div>
                 <div class="messages msg_sent">
-                  <p>What's happening to my robot!</p>
-                  <time datetime="2009-11-13T20:00">Marcy • 2 min</time>
+                  <p>Please help me!</p>
                 </div>
               </div>
             </div>
@@ -88,8 +82,18 @@
     </div>
     <!-- /chat box -->
   <!-- TODO: move this to CSS -->
-  <div style="display:inline-block; background-image: url({% static 'game/public/img/input_background.gif' %}); background-size:100%;" id="input-canvas"></div>
-  <div style="display:inline-block; background-image: url({% static 'game/public/img/output_background.gif' %}); background-size:100%;" id="output-canvas"></div>
+  <div id="input-canvas"></div>
+  <div style="" id="output-canvas"></div>
+    <!-- Start Game Nav Buttons -->
+    <div class="btn-group p415x-btn-group" id="navigation" role="group" aria-label="Game Navigation">
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(-1)"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(1)"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
+    </div>
+    <!-- End Game Nav Buttons -->
+
+  <div class="scene_button" id = "popup" hidden>
+    <button id = "popup_button" style="background-color: black;">View Cutscene</button>
+  </div>
   <script type="text/javascript">
     // found in client script (game1/level1.js)
     showdown.setFlavor('github');
@@ -174,9 +178,5 @@
     });
 
   </script>
-</div>
-
-<div class="scene_button" id = "popup" hidden>
-  <button id = "popup_button" style="background-color: black;">View Cutscene</button>
 </div>
 {% endblock %}
