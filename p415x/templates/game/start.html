@@ -5,7 +5,7 @@
 <div id="start">
 <div class="container">
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs nav-justified" role="tablist">
+  <ul class="nav nav-tabs nav-justified p415x-links" role="tablist">
     <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
     <li role="presentation"><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
     <li role="presentation"><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
@@ -47,10 +47,6 @@
   <div id="cutscene" hidden>
     <iframe id = "cutscene_frame" style="resize: both;">No cut scene</iframe>
 </div>
-<style type="text/css">
-  
-</style>
-
 <div class="game">
   <!-- chat box -->
   <!-- <div style="background-color: red;" class="row">     -->
@@ -60,12 +56,12 @@
         <div class="panel panel-default">
           <div class="panel-heading top-bar">
           <h3 class="panel-title">Chat - Clang</h3>
-            <div class="col-md-2 col-xs-2 avatar">
+            <div class="col-md-1 col-xs-1 avatar">
               <img src="{% static 'game/public/img/scientist.gif' %}"
-                    style="width:100px;height:50px;">
+                    style="width:50px;height:45px;">
             </div>
           </div>
-          <div class="panel-body msg_container_base" style="height:1000px;overflow:auto;">
+          <div class="panel-body msg_container_base" style="height:500px;overflow:auto;">
             <div class="row msg_container base_sent">
               <div id="chatbar" class="col-md-10 col-xs-10 ">
                 <div class="messages msg_sent">
