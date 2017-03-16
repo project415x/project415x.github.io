@@ -28,9 +28,7 @@
   <meta name='twitter:url' content='{{ site.url }}{{ page.url }}' />
   <meta name='twitter:description' content='{{ site.description }}' />
 
-  <title>
-      Project 415x
-  </title>
+  <title>Project 415x</title>
 
   <!-- ICONS -->
   <link rel='image_src' href="{% static 'game/public/logo.png' %}" />
@@ -44,10 +42,17 @@
   <link rel='stylesheet' href="{% static 'game/css/playground.css' %}">
   <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
 
-
+<style type="text/css">
+  .main-page {
+    background: url({% static 'game/public/img/splash_screen_black.jpg' %}) no-repeat center center fixed; 
+    moz-background-size: cover; 
+    -o-background-size: cover;
+    background-size: cover;
+  }
+</style>
 </head>
 
-<body>
+<body class="main-page">
     <div id="home">
       <div class="container">
         <center>
