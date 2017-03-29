@@ -18,16 +18,13 @@ function Sauron(settings) {
   this.messenger = document.getElementById("mailbox");
   this.btnsOn = 0;
   var self = this;
-  setInterval(function(){
-      console.log("this.btnsOn "+self.btnsOn);
-    }, 2000);
   this.messenger.addEventListener('levelup', function () {
     if(!self.btnsOn){
-      console.log("recieved a message!+ "+self.btnsOn);
+      //console.log("recieved a message!+ "+self.btnsOn);
       self.btnsOn = 1;
       setTimeout(function(){
         self.btnsOn = 0;
-        console.log("self.btns set!")
+        //console.log("self.btns set!")
       }, 1000);
       level_changed = 0;
       level+= 0.25;
@@ -124,6 +121,7 @@ Sauron.prototype.removeVector = function(type) {
 Sauron.prototype.updateOutputVector = function(d) {
   var width_svg = document.getElementById("input-svg").width.baseVal.value;
   var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg);
+  width_svg = document.getElementById("output-svg").width.baseVal.value;
   this.removeVector('output');
   var height = Math.sqrt(((width_svg/2) - i[0])*((width_svg/2) - i[0]) + ((width_svg/2) - i[1])*((width_svg/2) - i[1]));
   var angle = -1*Math.atan((i[0]-(width_svg/2.0))/(i[1]-(width_svg/2.0))) * 180.0 / Math.PI;
@@ -456,7 +454,7 @@ Sauron.prototype.generateRandomLineofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
-    var width = document.getElementById("input-svg").width.baseVal.value;
+    var width = document.getElementById("output-svg").width.baseVal.value;
     //console.log(width);
     var pair = validPoints[key],
         screenCoors = util.mathToScreen(pair.x, pair.y, width);

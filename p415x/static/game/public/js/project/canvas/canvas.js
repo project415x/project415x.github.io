@@ -103,12 +103,33 @@ Canvas.prototype.getTar = function(id) {
 // Appends SVG DOM element to a div.
 Canvas.prototype.appendSvg = function(type) {
   var id = type || this.type;
+  if(id=="input"){
+    var w = this.pixelWidth,
+      h = this.pixelHeight;
+    var r = Math.sqrt(2)*w/2;
+    w = 2*r;
+    h = w;
+    var canvas = this.getCanvas(id).append('svg')
+                  .attr({
+                         id: id+"-svg",
+                         width: w,
+                         height: h
+                       })
+                  canvas.append('rect').attr({
+                          width: w,
+                          height: h,
+                          fill: 'black'
+                       });
+
+  } else{
+
   var canvas = this.getCanvas(id).append('svg')
                 .attr({
                        id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
+  }
 };
 
 // Adds image on top of Circle (Target).
