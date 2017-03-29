@@ -487,7 +487,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -625,7 +625,7 @@ startTut = function startTut() {
 		}, 0);
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -766,7 +766,7 @@ startLevel2 = function startLevel2() {
 	initLevel2();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":7}],9:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -859,7 +859,51 @@ startLevel3 = function startLevel3() {
 	initLevel3();
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":9}],11:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":9}],11:[function(require,module,exports){
+function Gollum(){
+
+}
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                $('#chatbar').append("<div class='messages_sent'>"+converter.makeHtml(allText)+"</div>")
+                //alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+Gollum.prototype.sendmsg = function(event){
+  event.preventDefault();
+  showdown.setFlavor('github');
+  var converter = new showdown.Converter();
+  console.log("done");
+  var chatinput = document.getElementById("btn-input");
+  var data = chatinput.value;
+  chatinput.value = "";
+  if (data==="help"){
+    readTextFile("/guide/"+level);
+  }
+  else if (data==="clear"){
+    document.getElementById('chatbar').innerHTML = "";
+  }
+};
+
+
+
+module.exports = Gollum;
+
+},{}],12:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -908,11 +952,12 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
-    Smaug = require('../smaug/smaug.js');
+    Smaug = require('../smaug/smaug.js'),
+    Gollum = require('../gollum/gollum.js');
 
 // Sauron is alive!
 /*
@@ -925,6 +970,8 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
+  this.chat = new Gollum();
+  this.chat_form = document.getElementById("chat_form");
   this.enable = true;
   this.messenger = document.getElementById("mailbox");
   this.btnsOn = 0;
@@ -954,7 +1001,7 @@ function Sauron(settings) {
       setTimeout(function(){
         self.btnsOn = 0;
         console.log("self.btns set!")
-      }, 1000);    
+      }, 1000);
       console.log("recieved a message!-");
       level_changed = 0;
       level-= 0.25;
@@ -966,6 +1013,9 @@ function Sauron(settings) {
       console.log("failed!");
     }
   }, false);
+  this.chat_form.onsubmit = function(event){
+      self.chat.sendmsg(event);
+  };
 }
 
 /*
@@ -1401,7 +1451,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../gollum/gollum.js":11,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],14:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
@@ -1521,7 +1571,7 @@ Smaug.prototype.changeBackground = function(mode){
 }
 
 module.exports = Smaug;
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1610,7 +1660,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1835,7 +1885,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":16}],16:[function(require,module,exports){
+},{"../utilities/math.js":17}],17:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
@@ -1964,4 +2014,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);

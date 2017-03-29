@@ -1,7 +1,8 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
-    Smaug = require('../smaug/smaug.js');
+    Smaug = require('../smaug/smaug.js'),
+    Gollum = require('../gollum/gollum.js');
 
 // Sauron is alive!
 /*
@@ -14,6 +15,8 @@ function Sauron(settings) {
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
+  this.chat = new Gollum();
+  this.chat_form = document.getElementById("chat_form");
   this.enable = true;
   this.messenger = document.getElementById("mailbox");
   this.btnsOn = 0;
@@ -43,7 +46,7 @@ function Sauron(settings) {
       setTimeout(function(){
         self.btnsOn = 0;
         console.log("self.btns set!")
-      }, 1000);    
+      }, 1000);
       console.log("recieved a message!-");
       level_changed = 0;
       level-= 0.25;
@@ -55,6 +58,9 @@ function Sauron(settings) {
       console.log("failed!");
     }
   }, false);
+  this.chat_form.onsubmit = function(event){
+      self.chat.sendmsg(event);
+  };
 }
 
 /*

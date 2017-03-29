@@ -71,10 +71,13 @@
           </div>
           <div class="panel-footer">
             <div class="input-group">
-              <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
-              <span class="input-group-btn">
-              <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button>
-              </span>
+                <form id="chat_form">
+                      <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                      <span class="input-group-btn">
+                      <!-- <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button> -->
+                      </span>
+                      <input type="submit" value="Send">
+                </form>
             </div>
           </div>
         </div>
@@ -95,38 +98,6 @@
     <button id = "popup_button" style="background-color: black;">View Cutscene</button>
   </div>
   <script type="text/javascript">
-    // found in client script (game1/level1.js)
-    showdown.setFlavor('github');
-    var converter = new showdown.Converter();
-    function readTextFile(file)
-    {
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
-        rawFile.onreadystatechange = function ()
-        {
-            if(rawFile.readyState === 4)
-            {
-                if(rawFile.status === 200 || rawFile.status == 0)
-                {
-                    var allText = rawFile.responseText;
-                    $('#chatbar').append("<div class='messages_sent'>"+converter.makeHtml(allText)+"</div>")
-                    //alert(allText);
-                }
-            }
-        }
-        rawFile.send(null);
-    }
-    function sendmsg(){
-      var chatinput = document.getElementById("btn-input");
-      var data = chatinput.value;
-      chatinput.value = "";
-      if (data==="help"){
-        readTextFile("/guide/"+level);
-      }
-      else if (data==="clear"){
-        document.getElementById('chatbar').innerHTML = "";
-      }
-    }
 
     var level = 1;
     var level_changed = 0;
