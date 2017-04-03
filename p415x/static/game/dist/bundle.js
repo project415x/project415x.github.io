@@ -918,6 +918,8 @@ Gollum.prototype.sendmsg = function(event) {
 Gollum.prototype.addText = function(text){
     $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
     state++;
+    var scroller = document.getElementById("chat-panel");
+    scroller.scrollTop = scroller.scrollHeight;
 };
 
 
@@ -987,6 +989,7 @@ var util = require('../utilities/math.js'),
 function Sauron(settings) {
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.currhigh = 1;
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
@@ -995,10 +998,37 @@ function Sauron(settings) {
   this.enable = true;
   this.messenger = document.getElementById("mailbox");
   this.btnsOn = 0;
+  this.decrementLevel = document.getElementById("lowerBoundLevel");
+  this.incrementLevel = document.getElementById("upperBoundLevel");
   var self = this;
+
+  // this.decrementLevel.style.visibility = "hidden";
+  // this.incrementLevel.style.visibility = "hidden";
+
   setInterval(function(){
       console.log("this.btnsOn "+self.btnsOn);
     }, 2000);
+
+  this.decrementLevel.onclick = function(){
+    level-= 1;
+    if(level == 1){
+        self.decrementLevel.style.visibility = "hidden";
+    }
+    self.incrementLevel.style.visibility = "visible";
+    self.generateNewTargets("", true);
+  }
+  this.incrementLevel.onclick = function(){
+    level+= 1;
+    self.decrementLevel.style.visibility = "visible";
+    console.log(level);
+    console.log(self.currhigh);
+    if(level <= self.currhigh){
+        self.incrementLevel.style.visibility = "hidden";
+    }
+    self.generateNewTargets("", true);
+  }
+
+
   this.messenger.addEventListener('levelup', function () {
     if(!self.btnsOn){
       console.log("recieved a message!+ "+self.btnsOn);
@@ -1242,8 +1272,12 @@ Sauron.prototype.generateNewTargets = function(id, external) {
       level_changed++;
       level_changed %= 3;
       if (!level_changed){
-          self.chat.addText("df");
+          self.chat.addText("Congrats! You have completed Level " + level+"!");
           level++;
+          self.decrementLevel.style.visibility = "visible";
+          if(level > self.currhigh){
+              self.currhigh = level;
+          }
       }
 
     }
