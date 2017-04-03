@@ -261,12 +261,16 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id, external) {
+  var self = this;
   if(!external){
     if(level != 3){
       level_changed++;
       level_changed %= 3;
-      if (!level_changed)
-        level++;
+      if (!level_changed){
+          self.chat.addText("Congrats! You have completed Level " + level+"!");
+          level++;
+      }
+
     }
   }
   else{
