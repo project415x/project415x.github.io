@@ -56,6 +56,8 @@ Gollum.prototype.sendmsg = function(event) {
 Gollum.prototype.addText = function(text){
     $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
     state++;
+    var scroller = document.getElementById("chat-panel");
+    scroller.scrollTop = scroller.scrollHeight;
 };
 
 
