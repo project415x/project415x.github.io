@@ -987,6 +987,7 @@ var util = require('../utilities/math.js'),
   Sample settings object in game1, game2, game3
 */
 function Sauron(settings) {
+  console.log("Sauron started");
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
   this.currhigh = 1;
@@ -1002,11 +1003,11 @@ function Sauron(settings) {
   this.incrementLevel = document.getElementById("upperBoundLevel");
   var self = this;
 
-  // this.decrementLevel.style.visibility = "hidden";
-  // this.incrementLevel.style.visibility = "hidden";
+  this.decrementLevel.style.visibility = "hidden";
+  this.incrementLevel.style.visibility = "hidden";
 
   setInterval(function(){
-      console.log("this.btnsOn "+self.btnsOn);
+      //console.log("this.btnsOn "+self.btnsOn);
     }, 2000);
 
   this.decrementLevel.onclick = function(){
@@ -1020,9 +1021,7 @@ function Sauron(settings) {
   this.incrementLevel.onclick = function(){
     level+= 1;
     self.decrementLevel.style.visibility = "visible";
-    console.log(level);
-    console.log(self.currhigh);
-    if(level <= self.currhigh){
+    if(level <= currhigh){
         self.incrementLevel.style.visibility = "hidden";
     }
     self.generateNewTargets("", true);
@@ -1031,18 +1030,18 @@ function Sauron(settings) {
 
   this.messenger.addEventListener('levelup', function () {
     if(!self.btnsOn){
-      console.log("recieved a message!+ "+self.btnsOn);
+      //console.log("recieved a message!+ "+self.btnsOn);
       self.btnsOn = 1;
       setTimeout(function(){
         self.btnsOn = 0;
-        console.log("self.btns set!")
+        //console.log("self.btns set!")
       }, 1000);
       level_changed = 0;
       level+= 0.25;
       self.generateNewTargets("", true);
     }
     else{
-      console.log("failed!");
+      //console.log("failed!");
     }
   }, false);
   this.messenger.addEventListener('leveldown', function () {
@@ -1050,9 +1049,9 @@ function Sauron(settings) {
       self.btnsOn = 1;
       setTimeout(function(){
         self.btnsOn = 0;
-        console.log("self.btns set!")
+        //console.log("self.btns set!")
       }, 1000);
-      console.log("recieved a message!-");
+      //console.log("recieved a message!-");
       level_changed = 0;
       level-= 0.25;
       if(level<1)
@@ -1060,7 +1059,7 @@ function Sauron(settings) {
       self.generateNewTargets("", true);
     }
     else{
-      console.log("failed!");
+     // console.log("failed!");
     }
   }, false);
   this.chat_form.onsubmit = function(event){
@@ -1275,8 +1274,8 @@ Sauron.prototype.generateNewTargets = function(id, external) {
           self.chat.addText("Congrats! You have completed Level " + level+"!");
           level++;
           self.decrementLevel.style.visibility = "visible";
-          if(level > self.currhigh){
-              self.currhigh = level;
+          if(level > currhigh){
+              currhigh = level;
           }
       }
 
@@ -1284,6 +1283,7 @@ Sauron.prototype.generateNewTargets = function(id, external) {
   }
   else{
     d3.selectAll(".new").remove();
+    level_changed = 0;
     this.removeBlips(3);
   }
   console.log("genhere");
@@ -1440,7 +1440,6 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
   var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
-
   for( var key in validPoints ) {
     var width = document.getElementById("input-svg").width.baseVal.value;
     var pair = validPoints[key],
