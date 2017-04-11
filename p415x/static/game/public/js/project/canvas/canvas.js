@@ -107,7 +107,7 @@ Canvas.prototype.appendSvg = function(type) {
     var w = this.pixelWidth,
       h = this.pixelHeight;
     var r = Math.sqrt(2)*w/2;
-    w = 2*r;
+    w = r;
     h = w;
     var canvas = this.getCanvas(id).append('svg')
                   .attr({

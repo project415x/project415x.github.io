@@ -257,7 +257,7 @@ Canvas.prototype.appendSvg = function(type) {
     var w = this.pixelWidth,
       h = this.pixelHeight;
     var r = Math.sqrt(2)*w/2;
-    w = 2*r;
+    w = r;
     h = w;
     var canvas = this.getCanvas(id).append('svg')
                   .attr({
@@ -1051,9 +1051,10 @@ Sauron.prototype.removeVector = function(type) {
   @return void
 */
 Sauron.prototype.updateOutputVector = function(d) {
-  var width_svg = document.getElementById("input-svg").width.baseVal.value;
-  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg);
-  width_svg = document.getElementById("output-svg").width.baseVal.value;
+  var width_svg_i = document.getElementById("input-svg").width.baseVal.value;
+  var width_svg_o = document.getElementById("output-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg_i, width_svg_o);
+  var width_svg = document.getElementById("output-svg").width.baseVal.value;
   this.removeVector('output');
   var height = Math.sqrt(((width_svg/2) - i[0])*((width_svg/2) - i[0]) + ((width_svg/2) - i[1])*((width_svg/2) - i[1]));
   var angle = -1*Math.atan((i[0]-(width_svg/2.0))/(i[1]-(width_svg/2.0))) * 180.0 / Math.PI;
@@ -1107,8 +1108,10 @@ Sauron.prototype.getArmies = function() {
 */
 Sauron.prototype.updateTargets = function(d, type) {
   var list = this.getArmies();
-  var width_svg = document.getElementById("input-svg").width.baseVal.value;
-  var i = util.applyMatrix(d.x,d.y,this.matrix, width_svg);
+  var width_svg_i = document.getElementById("input-svg").width.baseVal.value;
+  var width_svg_o = document.getElementById("output-svg").width.baseVal.value;
+  var i = util.applyMatrix(d.x, d.y, this.matrix, width_svg_i, width_svg_o);
+  width_svg = document.getElementById("output-svg").width.baseVal.value;
   var self = this;
   //if (list.style("opacity")<1){
   //  console.log("Done");
@@ -1305,7 +1308,7 @@ Sauron.prototype.generateTarget = function(firstRun) {
       x: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10),
       y: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10)
     };
-    var width = document.getElementById("input-svg").width.baseVal.value;
+    var width = document.getElementById("output-svg").width.baseVal.value;
     if ( util.isOnRadar(point.x, point.y, matrix, width)) {
       isValidCoordinate = true;
       var targetSettings = {
@@ -1330,8 +1333,9 @@ Sauron.prototype.generateTarget = function(firstRun) {
 */
 Sauron.prototype.drawBlips = function(x,y) {
   console.log("drawing blips");
-  var width_svg = document.getElementById("input-svg").width.baseVal.value;
-  var point = util.applyInverse(x, y, this.matrix, width_svg);
+  var width_svg_i = document.getElementById("input-svg").width.baseVal.value;
+  var width_svg_o = document.getElementById("output-svg").width.baseVal.value;
+  var point = util.applyInverse(x, y, this.matrix, width_svg_o, width_svg_i);
   d3.select("#input-svg").append("circle")
                           .attr({
                             cx: point.x,
@@ -1353,7 +1357,7 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
       i = 0;
 
   for( var key in validPoints ) {
-    var width = document.getElementById("input-svg").width.baseVal.value;
+    var width = document.getElementById("output-svg").width.baseVal.value;
     var pair = validPoints[key],
     screenCoors = util.mathToScreen(pair.x, pair.y, width);
 
@@ -1871,27 +1875,27 @@ module.exports = {
 	  return [x * (width/2) / 10 + (width/2), - y * (width/2) / 10 + (width/2)];
 	},
 
-	applyInverse: function(x, y, matrix, width) {
+	applyInverse: function(x, y, matrix, inputWidth, outputWidth) {
     var determinant = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]),
-    		pre = this.screenToMath(x, y, width),
+    		pre = this.screenToMath(x, y, inputWidth),
     	 	prex = (matrix[1][1] * pre[0] - matrix[0][1] * pre[1]) / determinant,
         prey = (- matrix[1][0] * pre[0] + matrix[0][0] * pre[1]) / determinant,
-   		 	pre = this.mathToScreen(prex,prey, width);
+   		 	pre = this.mathToScreen(prex,prey, outputWidth);
    	return {
    		x: pre[0],
    		y: pre[1]
    	}
 	},
 
-	applyMatrix: function(sX,sY,matrix, width) {
+	applyMatrix: function(sX,sY,matrix, inputWidth, outputWidth) {
 	  // var matrix = matrix || [
 		//   [(.8 * Math.cos(30)),(1.2 * Math.cos(50))],
 		//   [(.8 * Math.sin(30)),(1.2 * Math.sin(50))]
 	  // ];
 	  // console.log('matrix ', matrix)
-	  var math_coord = this.screenToMath(sX,sY, width),
+	  var math_coord = this.screenToMath(sX,sY, inputWidth),
 	      applied_coord = [matrix[0][0] * math_coord[0] + matrix[0][1] * math_coord[1], matrix[1][0] * math_coord[0] + matrix[1][1] * math_coord[1]];
-	  return this.mathToScreen(applied_coord[0],applied_coord[1], width);
+	  return this.mathToScreen(applied_coord[0],applied_coord[1], outputWidth);
 	},
 
 	getRandom: function(min,max) {
