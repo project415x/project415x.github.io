@@ -42,6 +42,7 @@ function Sauron(settings) {
     self.generateNewTargets("", true);
   }
   this.incrementLevel.onclick = function(){
+    var old_lev = level;
     level+= 1;
     self.decrementLevel.style.visibility = "visible";
     if(level <= currhigh){
@@ -51,40 +52,40 @@ function Sauron(settings) {
   }
 
 
-  this.messenger.addEventListener('levelup', function () {
-    if(!self.btnsOn){
-      //console.log("recieved a message!+ "+self.btnsOn);
-      self.btnsOn = 1;
-      setTimeout(function(){
-        self.btnsOn = 0;
-        //console.log("self.btns set!")
-      }, 1000);
-      level_changed = 0;
-      level+= 0.25;
-      self.generateNewTargets("", true);
-    }
-    else{
-      //console.log("failed!");
-    }
-  }, false);
-  this.messenger.addEventListener('leveldown', function () {
-    if(!self.btnsOn){
-      self.btnsOn = 1;
-      setTimeout(function(){
-        self.btnsOn = 0;
-        //console.log("self.btns set!")
-      }, 1000);
-      //console.log("recieved a message!-");
-      level_changed = 0;
-      level-= 0.25;
-      if(level<1)
-        level = 1;
-      self.generateNewTargets("", true);
-    }
-    else{
-     // console.log("failed!");
-    }
-  }, false);
+  // this.messenger.addEventListener('levelup', function () {
+  //   if(!self.btnsOn){
+  //     //console.log("recieved a message!+ "+self.btnsOn);
+  //     self.btnsOn = 1;
+  //     setTimeout(function(){
+  //       self.btnsOn = 0;
+  //       //console.log("self.btns set!")
+  //     }, 1000);
+  //     level_changed = 0;
+  //     level+= 0.25;
+  //     self.generateNewTargets("", true);
+  //   }
+  //   else{
+  //     //console.log("failed!");
+  //   }
+  // }, false);
+  // this.messenger.addEventListener('leveldown', function () {
+  //   if(!self.btnsOn){
+  //     self.btnsOn = 1;
+  //     setTimeout(function(){
+  //       self.btnsOn = 0;
+  //       //console.log("self.btns set!")
+  //     }, 1000);
+  //     //console.log("recieved a message!-");
+  //     level_changed = 0;
+  //     level-= 0.25;
+  //     if(level<1)
+  //       level = 1;
+  //     self.generateNewTargets("", true);
+  //   }
+  //   else{
+  //    // console.log("failed!");
+  //   }
+  // }, false);
   this.chat_form.onsubmit = function(event){
       self.chat.sendmsg(event);
   };
@@ -229,7 +230,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       if(wraith.sprite().style("opacity")>0.9)
         wraith.sprite().jump(10, 250);
       if (type === "collision") {
-
+        console.log(self.matrix);
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
@@ -243,7 +244,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         self.drawBlips(x,y);
 
         if( self.getArmies().size() === 0 ) {
-          self.generateNewTargets(id);
+          self.generateNewTargets(id, false, level);
         }
       }
       //else if (type === "detection") {
@@ -288,33 +289,30 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id, external) {
-  var self = this;
   if(!external){
     if(level != 3){
       level_changed++;
       level_changed %= 3;
       if (!level_changed){
-          self.chat.addText("Congrats! You have completed Level " + level+"!");
+          this.chat.addText("Congrats! You have completed Level " + level+"!");
           level++;
-          self.decrementLevel.style.visibility = "visible";
+          this.decrementLevel.style.visibility = "visible";
           if(level > currhigh){
               currhigh = level;
           }
       }
 
     }
-  }
-  else{
+  }else{
     d3.selectAll(".new").remove();
     level_changed = 0;
-    this.removeBlips(3);
   }
+  this.removeBlips(level);
   console.log("genhere");
   if (level == 3) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
-      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -322,12 +320,12 @@ Sauron.prototype.generateNewTargets = function(id, external) {
   else if (level == 1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips(1);
   }
   else if (level == 2) {
+    console.log(this.matrix);
     this.setMatrix();
+    console.log(this.matrix);
     this.generateRandomCircleofDeath();
-    this.removeBlips(2);
   }
 };
 /*
