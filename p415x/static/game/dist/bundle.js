@@ -264,12 +264,14 @@ Canvas.prototype.appendSvg = function(type) {
                          id: id+"-svg",
                          width: w,
                          height: h
-                       })
-                  canvas.append('rect').attr({
-                          width: w,
-                          height: h,
-                          fill: 'black'
                        });
+    // setting up progress bar based on width
+    document.getElementById("progress-svg").width.baseVal.value = w;
+    d3.select("#progress-rect").attr({
+      width: w,
+      fill: "grey",
+    });
+    d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
 
   } else{
 
