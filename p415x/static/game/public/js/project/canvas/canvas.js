@@ -103,12 +103,35 @@ Canvas.prototype.getTar = function(id) {
 // Appends SVG DOM element to a div.
 Canvas.prototype.appendSvg = function(type) {
   var id = type || this.type;
+  if(id=="input"){
+    var w = this.pixelWidth,
+      h = this.pixelHeight;
+    var r = Math.sqrt(2)*w/2;
+    w = r;
+    h = w;
+    var canvas = this.getCanvas(id).append('svg')
+                  .attr({
+                         id: id+"-svg",
+                         width: w,
+                         height: h
+                       });
+    // setting up progress bar based on width
+    document.getElementById("progress-svg").width.baseVal.value = w;
+    d3.select("#progress-rect").attr({
+      width: w,
+      fill: "grey",
+    });
+    d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
+
+  } else{
+
   var canvas = this.getCanvas(id).append('svg')
                 .attr({
                        id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
+  }
 };
 
 // Adds image on top of Circle (Target).
