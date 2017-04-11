@@ -510,7 +510,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":12,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":11,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -610,7 +610,7 @@ function initTutorial() {
 		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
 		//});
 		// Load starting tutorial
-		
+
 	});
 }
 function initLevel1() {
@@ -648,7 +648,7 @@ startTut = function startTut() {
 		}, 0);
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -753,43 +753,6 @@ module.exports = {
 };
 
 },{}],8:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		Smaug = require('../smaug/smaug.js'),
-		config = require('./config.js'),
-		graphics = new Smaug(),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel2() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-	graphics.drawRobot(2);
-
-	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath(true);
-}
-
-
-// think of this as the main function :)
-startLevel2 = function startLevel2() {
-	initLevel2();
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -844,45 +807,73 @@ module.exports = {
 	}
 };
 
+},{}],9:[function(require,module,exports){
+function Gollum() {
+    state = 0
+}
+
+
+function readTextFile(file) {
+    var converter = new showdown.Converter();
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4) {
+            if (rawFile.status === 200 || rawFile.status == 0) {
+                var allText = rawFile.responseText;
+                $('#chatbar').append("<div class='messages_sent'>" + converter.makeHtml(allText) + "</div>")
+                //alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+
+Gollum.prototype.sendmsg = function(event) {
+    event.preventDefault();
+    showdown.setFlavor('github');
+
+    var chatinput = document.getElementById("btn-input");
+    var data = chatinput.value;
+    chatinput.value = "";
+    if (data === "help") {
+        if (state == 0) {
+            $('#chatbar').append("<div class='messages_sent'><p>Click the radar screen to activate the robot arm!</p></div>")
+            state++;
+        } else if (state == 1) {
+            $('#chatbar').append("<div class='messages_sent'><p>Click and drag the arm in the radar screen to move the robot's arm!</p></div>")
+            state++;
+        } else if (state == 2) {
+            $('#chatbar').append("<div class='messages_sent'><p>Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.</p></div>")
+            state++;
+        } else if (state == 3) {
+            $('#chatbar').append("<div class='messages_sent'><p>Double click the radar screen to collect the part.</p></div>")
+            state++;
+        } else if (state == 4) {
+            console.log("lol");
+            readTextFile("/guide/" + level);
+            state++;
+        }
+        var scroller = document.getElementById("chat-panel");
+        scroller.scrollTop = scroller.scrollHeight;
+    } else if (data === "clear") {
+        document.getElementById('chatbar').innerHTML = "";
+        state = 0;
+    }
+};
+
+Gollum.prototype.addText = function(text){
+    $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
+    state++;
+    var scroller = document.getElementById("chat-panel");
+    scroller.scrollTop = scroller.scrollHeight;
+};
+
+
+module.exports = Gollum;
+
 },{}],10:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		Smaug = require('../smaug/smaug.js'),
-		config = require('./config.js'),
-		graphics = new Smaug(),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel3() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-			//outputTarget = new Target(config.targetSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-	graphics.drawRobot(3);
-
-	// generate target(s)
-	OverWatcher.generateTarget(true);
-}
-
-
-// think of this as the main function :)
-startLevel3 = function startLevel3() {
-	initLevel3();
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":12,"../smaug/smaug.js":13,"./config.js":9}],11:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -931,11 +922,12 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
-    Smaug = require('../smaug/smaug.js');
+    Smaug = require('../smaug/smaug.js'),
+    Gollum = require('../gollum/gollum.js');
 
 // Sauron is alive!
 /*
@@ -943,49 +935,84 @@ var util = require('../utilities/math.js'),
   Sample settings object in game1, game2, game3
 */
 function Sauron(settings) {
+  console.log("Sauron started");
   this.armies = [];
   this.level = settings === {} ? -1 : settings.level;
+  this.currhigh = 1;
   this.matrix = [[1,2],[2,1]];
   this.deathToll = 0;
   this.graphics = new Smaug();
+  this.chat = new Gollum();
+  this.chat_form = document.getElementById("chat_form");
   this.enable = true;
   this.messenger = document.getElementById("mailbox");
   this.btnsOn = 0;
+  this.decrementLevel = document.getElementById("lowerBoundLevel");
+  this.incrementLevel = document.getElementById("upperBoundLevel");
   var self = this;
-  this.messenger.addEventListener('levelup', function () {
-    if(!self.btnsOn){
-      //console.log("recieved a message!+ "+self.btnsOn);
-      self.btnsOn = 1;
-      setTimeout(function(){
-        self.btnsOn = 0;
-        //console.log("self.btns set!")
-      }, 1000);
-      level_changed = 0;
-      level+= 0.25;
-      self.generateNewTargets("", true);
+  this.decrementLevel.style.visibility = "hidden";
+  this.incrementLevel.style.visibility = "hidden";
+
+  setInterval(function(){
+      //console.log("this.btnsOn "+self.btnsOn);
+    }, 2000);
+
+  this.decrementLevel.onclick = function(){
+    level-= 1;
+    if(level == 1){
+        self.decrementLevel.style.visibility = "hidden";
     }
-    else{
-      console.log("failed!");
+    self.incrementLevel.style.visibility = "visible";
+    self.generateNewTargets("", true);
+  }
+  this.incrementLevel.onclick = function(){
+    var old_lev = level;
+    level+= 1;
+    self.decrementLevel.style.visibility = "visible";
+    if(level <= currhigh){
+        self.incrementLevel.style.visibility = "hidden";
     }
-  }, false);
-  this.messenger.addEventListener('leveldown', function () {
-    if(!self.btnsOn){
-      self.btnsOn = 1;
-      setTimeout(function(){
-        self.btnsOn = 0;
-        console.log("self.btns set!")
-      }, 1000);    
-      console.log("recieved a message!-");
-      level_changed = 0;
-      level-= 0.25;
-      if(level<1)
-        level = 1;
-      self.generateNewTargets("", true);
-    }
-    else{
-      console.log("failed!");
-    }
-  }, false);
+    self.generateNewTargets("", true);
+  }
+
+
+  // this.messenger.addEventListener('levelup', function () {
+  //   if(!self.btnsOn){
+  //     //console.log("recieved a message!+ "+self.btnsOn);
+  //     self.btnsOn = 1;
+  //     setTimeout(function(){
+  //       self.btnsOn = 0;
+  //       //console.log("self.btns set!")
+  //     }, 1000);
+  //     level_changed = 0;
+  //     level+= 0.25;
+  //     self.generateNewTargets("", true);
+  //   }
+  //   else{
+  //     //console.log("failed!");
+  //   }
+  // }, false);
+  // this.messenger.addEventListener('leveldown', function () {
+  //   if(!self.btnsOn){
+  //     self.btnsOn = 1;
+  //     setTimeout(function(){
+  //       self.btnsOn = 0;
+  //       //console.log("self.btns set!")
+  //     }, 1000);
+  //     //console.log("recieved a message!-");
+  //     level_changed = 0;
+  //     level-= 0.25;
+  //     if(level<1)
+  //       level = 1;
+  //     self.generateNewTargets("", true);
+  //   }
+  //   else{
+  //    // console.log("failed!");
+  //   }
+  // }, false);
+  this.chat_form.onsubmit = function(event){
+      self.chat.sendmsg(event);
+  };
 }
 
 /*
@@ -1131,7 +1158,7 @@ Sauron.prototype.updateTargets = function(d, type) {
       if(wraith.sprite().style("opacity")>0.9)
         wraith.sprite().jump(10, 250);
       if (type === "collision") {
-
+        console.log(self.matrix);
         wraith.sprite().transition();
 
         d3.select(wraith.node().parentNode).attr("class", "clicked");
@@ -1145,7 +1172,7 @@ Sauron.prototype.updateTargets = function(d, type) {
         self.drawBlips(x,y);
 
         if( self.getArmies().size() === 0 ) {
-          self.generateNewTargets(id);
+          self.generateNewTargets(id, false, level);
         }
       }
       //else if (type === "detection") {
@@ -1194,20 +1221,26 @@ Sauron.prototype.generateNewTargets = function(id, external) {
     if(level != 3){
       level_changed++;
       level_changed %= 3;
-      if (!level_changed)
-        level++;
+      if (!level_changed){
+          this.chat.addText("Congrats! You have completed Level " + level+"!");
+          level++;
+          this.decrementLevel.style.visibility = "visible";
+          if(level > currhigh){
+              currhigh = level;
+          }
+      }
+
     }
-  }
-  else{
+  }else{
     d3.selectAll(".new").remove();
-    this.removeBlips(3);
+    level_changed = 0;
   }
+  this.removeBlips(level);
   console.log("genhere");
   if (level == 3) {
     var flag = false;
     if(this.checkNumberOfBlips() >= 5) {
       this.setMatrix();
-      this.removeBlips(3);
       flag = true;
     }
     this.generateTarget(!flag);
@@ -1215,12 +1248,12 @@ Sauron.prototype.generateNewTargets = function(id, external) {
   else if (level == 1) {
     this.setMatrix();
     this.generateRandomLineofDeath();
-    this.removeBlips(1);
   }
   else if (level == 2) {
+    console.log(this.matrix);
     this.setMatrix();
+    console.log(this.matrix);
     this.generateRandomCircleofDeath();
-    this.removeBlips(2);
   }
 };
 /*
@@ -1357,7 +1390,6 @@ Sauron.prototype.generateRandomCircleofDeath = function(firstRun) {
   var initialOpacity = firstRun ? 1:0;
   var validPoints = util.getValidPreImageOval(this.matrix),
       i = 0;
-
   for( var key in validPoints ) {
     var width = document.getElementById("output-svg").width.baseVal.value;
     var pair = validPoints[key],
@@ -1426,7 +1458,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../smaug/smaug.js":13,"../tutorial/tutorial.js":14,"../utilities/math.js":16}],13:[function(require,module,exports){
+},{"../actors/target.js":1,"../gollum/gollum.js":9,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],12:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
@@ -1546,7 +1578,7 @@ Smaug.prototype.changeBackground = function(mode){
 }
 
 module.exports = Smaug;
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1635,7 +1667,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1860,7 +1892,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":16}],16:[function(require,module,exports){
+},{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
@@ -1989,4 +2021,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);

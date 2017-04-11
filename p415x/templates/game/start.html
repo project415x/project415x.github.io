@@ -57,7 +57,7 @@
           <div class="panel-heading top-bar">
           <h3 class="panel-title">Chat - Clang</h3>
           </div>
-          <div class="panel-body msg_container_base p415x-chat">
+          <div id ="chat-panel" class="panel-body msg_container_base p415x-chat">
             <div class="row msg_container base_sent">
               <div id="chatbar" class="col-md-10 col-xs-10 ">
                 <div class="messages msg_sent">
@@ -71,10 +71,13 @@
           </div>
           <div class="panel-footer">
             <div class="input-group">
-              <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
-              <span class="input-group-btn">
-              <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button>
-              </span>
+                <form id="chat_form">
+                      <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                      <span class="input-group-btn">
+                      <!-- <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button> -->
+                      </span>
+                      <input type="submit" value="Send">
+                </form>
             </div>
           </div>
         </div>
@@ -93,8 +96,8 @@
   <div style="" id="output-canvas"></div>
     <!-- Start Game Nav Buttons -->
     <div class="btn-group p415x-btn-group" id="navigation" role="group" aria-label="Game Navigation">
-      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(-1)"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
-      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default" onclick="levelChanger(1)"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
     </div>
     <!-- End Game Nav Buttons -->
 
@@ -102,40 +105,9 @@
     <button id = "popup_button" style="background-color: black;">View Cutscene</button>
   </div>
   <script type="text/javascript">
-    // found in client script (game1/level1.js)
-    showdown.setFlavor('github');
-    var converter = new showdown.Converter();
-    function readTextFile(file)
-    {
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
-        rawFile.onreadystatechange = function ()
-        {
-            if(rawFile.readyState === 4)
-            {
-                if(rawFile.status === 200 || rawFile.status == 0)
-                {
-                    var allText = rawFile.responseText;
-                    $('#chatbar').append("<div class='messages_sent'>"+converter.makeHtml(allText)+"</div>")
-                    //alert(allText);
-                }
-            }
-        }
-        rawFile.send(null);
-    }
-    function sendmsg(){
-      var chatinput = document.getElementById("btn-input");
-      var data = chatinput.value;
-      chatinput.value = "";
-      if (data==="help"){
-        readTextFile("/guide/"+level);
-      }
-      else if (data==="clear"){
-        document.getElementById('chatbar').innerHTML = "";
-      }
-    }
 
     var level = 1;
+    var currhigh = 1;
     var level_changed = 0;
     function closePopup(){
       //document.getElementById("level").hidden = false;
