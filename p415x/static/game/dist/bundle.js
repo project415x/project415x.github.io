@@ -487,7 +487,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":13,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":11,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -587,7 +587,7 @@ function initTutorial() {
 		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
 		//});
 		// Load starting tutorial
-		
+
 	});
 }
 function initLevel1() {
@@ -625,7 +625,7 @@ startTut = function startTut() {
 		}, 0);
 }
 
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -730,43 +730,6 @@ module.exports = {
 };
 
 },{}],8:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		Smaug = require('../smaug/smaug.js'),
-		config = require('./config.js'),
-		graphics = new Smaug(),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel2() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-	graphics.drawRobot(2);
-
-	// generate target(s)
-	OverWatcher.generateRandomCircleofDeath(true);
-}
-
-
-// think of this as the main function :)
-startLevel2 = function startLevel2() {
-	initLevel2();
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":7}],9:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -821,45 +784,7 @@ module.exports = {
 	}
 };
 
-},{}],10:[function(require,module,exports){
-var Canvas = require('../canvas/canvas.js'),
-		Vector = require('../actors/vector.js'),
-		Target = require('../actors/target.js'),
-		Sauron = require('../sauron/sauron.js'),
-		Smaug = require('../smaug/smaug.js'),
-		config = require('./config.js'),
-		graphics = new Smaug(),
-		OverWatcher = new Sauron(config.sauron);
-
-function initLevel3() {
-	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
-			inputVector = new Vector(config.inputVectorSettings),
-			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
-			//outputTarget = new Target(config.targetSettings);
-
-	// draw grid(s)
-	inputCanvas.drawCanvas();
-	outputCanvas.drawCanvas();
-	outputCanvas.drawProgressBar();
-
-	// draw vector(s)
-	inputVector.init();
-	outputVector.init();
-	graphics.drawRobot(3);
-
-	// generate target(s)
-	OverWatcher.generateTarget(true);
-}
-
-
-// think of this as the main function :)
-startLevel3 = function startLevel3() {
-	initLevel3();
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":13,"../smaug/smaug.js":14,"./config.js":9}],11:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 function Gollum() {
     state = 0
 }
@@ -925,7 +850,7 @@ Gollum.prototype.addText = function(text){
 
 module.exports = Gollum;
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -974,7 +899,7 @@ setTimeout(function() {
   $('.infoLeft').fadeIn();
 }, 5000);
 
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
     Tutorial = require('../tutorial/tutorial.js'),
@@ -1506,7 +1431,7 @@ Sauron.prototype.drawTarget = function(settings) {
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
 
-},{"../actors/target.js":1,"../gollum/gollum.js":11,"../smaug/smaug.js":14,"../tutorial/tutorial.js":15,"../utilities/math.js":17}],14:[function(require,module,exports){
+},{"../actors/target.js":1,"../gollum/gollum.js":9,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],12:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
@@ -1626,7 +1551,7 @@ Smaug.prototype.changeBackground = function(mode){
 }
 
 module.exports = Smaug;
-},{}],15:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*
   Default constuctor
 */
@@ -1715,7 +1640,7 @@ Tutorial.prototype.setTimer = function(time) {
 
 module.exports = new Tutorial();
 
-},{}],16:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1940,7 +1865,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":17}],17:[function(require,module,exports){
+},{"../utilities/math.js":15}],15:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
@@ -2069,4 +1994,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
