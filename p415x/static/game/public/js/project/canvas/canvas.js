@@ -49,6 +49,31 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
 
+  this.decrementLevel = document.getElementById("lowerBoundLevel");
+  this.incrementLevel = document.getElementById("upperBoundLevel");
+
+  this.decrementLevel.style.visibility = "hidden";
+  this.incrementLevel.style.visibility = "hidden";
+
+  var self = this;
+
+  this.decrementLevel.onclick = function(){
+    level-= 1;
+    if(level == 1){
+        self.decrementLevel.style.visibility = "hidden";
+    }
+    self.incrementLevel.style.visibility = "visible";
+    OverWatcher.generateNewTargets("", true);
+  }
+  this.incrementLevel.onclick = function(){
+    level+= 1;
+    self.decrementLevel.style.visibility = "visible";
+    if(level <= currhigh){
+        self.incrementLevel.style.visibility = "hidden";
+    }
+    OverWatcher.generateNewTargets("", true);
+  }
+
 }
 
 // Return modified d3 drag listener
