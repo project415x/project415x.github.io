@@ -8,7 +8,7 @@
   <ul class="nav nav-tabs nav-justified p415x-nav" role="tablist">
     <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
     <li role="presentation"><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
-    <li role="presentation"><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
+    <li role="presentation"><a id="guideLink" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
     <li role="presentation"><a href="https://docs.google.com/forms/d/1OB4mqAjueM9eXgh-DyZ77W7QvgmH74O36NBNx-_dm4w/viewform?usp=send_form" target  "_blank" aria-controls="feedback">Feedback</a></li>
   </ul>
 
@@ -24,7 +24,7 @@
     </p>
   </div>
 </div>
-<div id="mailbox"></div>
+<div id="guide-page" style="background-color: white; display: none"></div>
 <div role="tabpanel" class="tab-pane fade" id="game">
   <div class="container">
     <!-- Congrats Modal -->
@@ -86,9 +86,12 @@
     <!-- /chat box -->
   <!-- TODO: move this to CSS -->
   <div id="input-container">
-    <svg width="100" height="100" id="progress-svg">
-      <rect id="progress-rect" fill="black" width="100" height="100"></rect>
-    </svg>
+    <div id="progress-container">
+      <div id="progress-anim"></div>
+    </div>
+      <svg width="100" height="100" id="progress-svg">
+        <rect id="progress-rect" fill="black" width="100" height="100"></rect>
+      </svg>
     <br><br>
     <div id="input-canvas">
     </div>
@@ -106,9 +109,43 @@
   </div>
   <script type="text/javascript">
 
+    $("#guide-page").dialog({
+      autoOpen : false, modal : true, show : "blind", hide : "blind"
+    });
     var level = 1;
     var currhigh = 1;
     var level_changed = 0;
+    $("#guideLink").click(function(){
+      readTextFile("/guide/"+level);
+      var divText = document.getElementById("guide-page").innerHTML;
+      var guide_window = window.open('','','width=800,height=600');
+      var guide_doc = guide_window.document;
+      guide_doc.open();
+      guide_doc.write(divText);
+      guide_doc.close();
+    });
+
+    showdown.setFlavor('github');
+    var converter = new showdown.Converter();
+    function readTextFile(file)
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, false);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    $('#guide-page').html(converter.makeHtml(allText))
+                    //alert(allText);
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+
     function closePopup(){
       //document.getElementById("level").hidden = false;
       document.getElementById("cutscene").hidden = true;

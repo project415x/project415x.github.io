@@ -122,6 +122,7 @@ Canvas.prototype.appendSvg = function(type) {
       fill: "grey",
     });
     d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
+    $("#progress-container").width(w);
 
   } else{
 
@@ -286,7 +287,7 @@ Canvas.prototype.drawTargetsOnCanvas = function() {
 
 // Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
-  var container = d3.select('#progress-container');
+  /*var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
                   "class": "progress-bar progress-bar-success progress-bar-striped active",
@@ -301,7 +302,7 @@ Canvas.prototype.drawProgressBar = function() {
          .attr({
            "id": "score",
            "class": "sr-only"
-         });
+         });*/
 };
 
 // Also not currently being used. Let's figure out if we need it.

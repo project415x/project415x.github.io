@@ -39,6 +39,7 @@
   <!-- CSS -->
   <link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
   <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'game/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
   <script>
     var eventplus = new Event('levelup');
     var eventminus = new Event('leveldown');
@@ -64,7 +65,7 @@
     font-family: 'Press Start 2P', sans-serif;
   }
 
-	.btn {
+  .btn {
     position: relative;
     display: inline-block;
     margin: 0 10px;
@@ -80,9 +81,9 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     font-weight: bold;
-	}
+  }
   
-	/* removes unneeded CSS in tabs */
+  /* removes unneeded CSS in tabs */
   .nav-tabs.nav-justified>li>a {
     border-bottom: none;
   }
@@ -134,6 +135,24 @@
   .p415x-chat {
     height: 75%;
     overflow:auto;
+  }
+
+  #progress-container {
+    height: 25px;
+    width: 316px;
+    /*position: absolute;
+    top: 94.5%;
+    left: 27.5%;
+    margin: -15px 0 0 -135px;*/
+    /*background-image: url(../public/img/bar.gif);*/
+    background-color: rgba(255,255,255,.5);
+  }
+  #progress-anim {
+    height: 25px;
+    width: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url({% static 'game/public/img/bar.gif' %}) !important;
   }
 </style>
 </head>

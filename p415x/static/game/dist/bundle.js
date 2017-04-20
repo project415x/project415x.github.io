@@ -272,6 +272,7 @@ Canvas.prototype.appendSvg = function(type) {
       fill: "grey",
     });
     d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
+    $("#progress-container").width(w);
 
   } else{
 
@@ -436,7 +437,7 @@ Canvas.prototype.drawTargetsOnCanvas = function() {
 
 // Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
-  var container = d3.select('#progress-container');
+  /*var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
                   "class": "progress-bar progress-bar-success progress-bar-striped active",
@@ -451,7 +452,7 @@ Canvas.prototype.drawProgressBar = function() {
          .attr({
            "id": "score",
            "class": "sr-only"
-         });
+         });*/
 };
 
 // Also not currently being used. Let's figure out if we need it.
@@ -950,6 +951,7 @@ function Sauron(settings) {
   this.decrementLevel = document.getElementById("lowerBoundLevel");
   this.incrementLevel = document.getElementById("upperBoundLevel");
   var self = this;
+
   this.decrementLevel.style.visibility = "hidden";
   this.incrementLevel.style.visibility = "hidden";
 
@@ -1130,6 +1132,14 @@ Sauron.prototype.getArmies = function() {
 };
 
 /*
+  Sauron gets all of the dead targets in the output svg
+  @returns {d3.selection} of targets
+*/
+Sauron.prototype.getFallen = function() {
+  return d3.select("#output-svg").selectAll('.clicked');
+};
+
+/*
   After good news from the Palantir Sauron moves forces!
   @param {obj(int,int)} d
   @param {string} type
@@ -1166,6 +1176,11 @@ Sauron.prototype.updateTargets = function(d, type) {
         wraith.setClicked();
         wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
+        var total = self.getArmies().size() + self.getFallen().size();
+        var prog_increment = $("#progress-container").width()/(total*3);
+        var prog_width = $("#progress-anim").width();
+        $("#progress-anim").width(Number(prog_width)+prog_increment);
+        console.log($("#progress-anim").width());
         self.deathToll++;
 
         //self.updateProgress();
@@ -1228,6 +1243,9 @@ Sauron.prototype.generateNewTargets = function(id, external) {
           if(level > currhigh){
               currhigh = level;
           }
+
+          //reset progress bar
+          $("#progress-anim").width(0);
       }
 
     }
@@ -1338,14 +1356,14 @@ Sauron.prototype.generateTarget = function(firstRun) {
       par = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
       newX, newY;
 
-  while (!isValidCoordinate) {
+  //while (!isValidCoordinate) {
+    var i_width = document.getElementById("input-svg").width.baseVal.value;
+    var o_width = document.getElementById("input-svg").width.baseVal.value;
     var point = {
-      x: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10),
-      y: util.getRandom(10, document.getElementById("input-svg").width.baseVal.value-10)
+      x: util.getRandom(10, o_width-10),
+      y: util.getRandom(10, o_width-10)
     };
-    var width = document.getElementById("output-svg").width.baseVal.value;
-    if ( util.isOnRadar(point.x, point.y, matrix, width)) {
-      isValidCoordinate = true;
+      //point = util.applyInverse(point.x, point.y, matrix, i_width, o_width);
       var targetSettings = {
         x: point.x,
         y: point.y,
@@ -1357,8 +1375,8 @@ Sauron.prototype.generateTarget = function(firstRun) {
         opacity:""+initialOpacity
       };
       this.drawTarget(targetSettings);
-    }
-  }
+    /*sleep(1);*/
+  //}
 };
 /*
   Draws blips that are dropped onto input svg
@@ -2014,9 +2032,9 @@ module.exports = {
 		return validPoints;
 	},
 
-	isOnRadar: function(x, y, matrix, width){
-		var point = this.applyInverse(x, y, matrix, width);
-		return point.x > 0 && point.x < width && point.y > 0 && point.y < width;
+	isOnRadar: function(matrix, point, i_width, o_width){
+		var point = this.applyInverse(point.x, point.y, matrix, i_width, o_width);
+		return point.x > 0 && point.x < o_width && point.y > 0 && point.y < o_width;
 
 	}
 };

@@ -119,9 +119,9 @@ module.exports = {
 		return validPoints;
 	},
 
-	isOnRadar: function(x, y, matrix, width){
-		var point = this.applyInverse(x, y, matrix, width);
-		return point.x > 0 && point.x < width && point.y > 0 && point.y < width;
+	isOnRadar: function(matrix, point, i_width, o_width){
+		var point = this.applyInverse(point.x, point.y, matrix, i_width, o_width);
+		return point.x > 0 && point.x < o_width && point.y > 0 && point.y < o_width;
 
 	}
 };
