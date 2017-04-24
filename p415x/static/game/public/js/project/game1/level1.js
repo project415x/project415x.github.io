@@ -41,10 +41,10 @@ function initTutorial() {
 }
 function initLevel1() {
 	// Create objects needed for game
-	var inputCanvas = new Canvas(config.inputCanvasSettings),
+	var inputCanvas = new Canvas(config.inputCanvasSettings,Level1),
 			inputVector = new Vector(config.inputVectorSettings),
 			outputVector = new Vector(config.outputVectorSettings),
-			outputCanvas = new Canvas(config.outputCanvasSettings);
+			outputCanvas = new Canvas(config.outputCanvasSettings,Level1);
 
 	// draw grid(s)
 	inputCanvas.drawCanvas();
