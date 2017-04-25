@@ -1,7 +1,16 @@
 function Gollum() {
     state = 0
 }
+var counter = 0;
 
+var messages = [
+                "Keep up the good work!",
+                "Those are the parts I'm looking for! Get me some more!",
+                "The robot will be functioning in no time at all!",
+                "A few more tools like this, and robot will be ready to go!",
+                "More progress!!",
+                "That wasn't so bad now, was it? Keep it going!",
+                ];
 
 function readTextFile(file) {
     var converter = new showdown.Converter();
@@ -20,12 +29,17 @@ function readTextFile(file) {
 }
 
 
-Gollum.prototype.sendmsg = function(event) {
-    event.preventDefault();
+Gollum.prototype.sendmsg = function(event, command) {
+    if(event){
+        event.preventDefault();
+    }
     showdown.setFlavor('github');
 
     var chatinput = document.getElementById("btn-input");
     var data = chatinput.value;
+    if(command){
+        data = command;
+    }
     chatinput.value = "";
     if (data === "help") {
         if (state == 0) {
@@ -58,6 +72,11 @@ Gollum.prototype.addText = function(text){
     state++;
     var scroller = document.getElementById("chat-panel");
     scroller.scrollTop = scroller.scrollHeight;
+};
+
+Gollum.prototype.addRandMessage = function(){
+    var ind = Math.floor(Math.random() * messages.length);
+    this.addText(messages[ind]);
 };
 
 
