@@ -21,3 +21,5 @@ _site
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+
+node_modules/**/*
