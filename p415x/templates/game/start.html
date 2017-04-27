@@ -45,7 +45,7 @@
   <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
 
   <div id="cutscene" hidden>
-    <iframe id = "cutscene_frame" style="resize: both;">No cut scene</iframe>
+    <iframe id = "cutscene_frame" src="{% static 'game/public/img/intro/intro.html' %}">No cut scene</iframe>
 </div>
 <div class="game" id="game_container">
   <!-- chat box -->
@@ -91,6 +91,10 @@
   </style>
   <div id="input-container">
     <div id="progress-container">
+    <p id="score_box" class="score_text"></svg>
+    <svg id="additional display">
+      <!-- holds random information like the matrix -->
+    </svg>
     </div>
     <div id="input-canvas">
     </div>
@@ -167,12 +171,12 @@
     function openPopup(){
       document.getElementById("cutscene").hidden = false;
       document.getElementById("game_container").hidden = true;
-      document.getElementById("cutscene").style.zIndex = "9999!important";
-      document.getElementById("cutscene").width = window.innerWidth/2;
-      document.getElementById("cutscene").height = window.innerHeight;
-      document.getElementById("cutscene_frame").src = "{% static 'game/public/img/intro/intro.html' %}";
-      document.getElementById("cutscene_frame").width = window.innerWidth/2;
-      document.getElementById("cutscene_frame").height = window.outerHeight/1.5;
+      //document.getElementById("cutscene").style.zIndex = "9999!important";
+      /*document.getElementById("cutscene").width = window.innerWidth/2;
+      document.getElementById("cutscene").height = window.innerHeight;*/
+      /*document.getElementById("cutscene_frame").src = "{% static 'game/public/img/intro/intro.html' %}";*/
+      /*document.getElementById("cutscene_frame").width = document.getElementById("cutscene").width;
+      document.getElementById("cutscene_frame").height = document.getElementById("cutscene").height/1.5;*/
 
 
       window.parent.document.getElementById("navigation").hidden = true;
