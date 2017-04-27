@@ -1,6 +1,5 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js'),
     Smaug = require('../smaug/smaug.js'),
     Gollum = require('../gollum/gollum.js');
 

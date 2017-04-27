@@ -3,12 +3,12 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Smaug = require('../smaug/smaug.js'),
-		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
 		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
-function initLevel1() {
+// think of this as the main function :)
+startLevel1 = function startLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings,Level1),
 			inputVector = new Vector(config.inputVectorSettings),
@@ -28,10 +28,4 @@ function initLevel1() {
 
 	// generate target(s)
 	Level1.generateRandomLineofDeath(true);
-}
-
-
-// think of this as the main function :)
-startLevel1 = function startLevel1() {
-	initLevel1();
 }
