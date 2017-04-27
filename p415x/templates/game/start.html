@@ -53,6 +53,7 @@
   <div class="row">
     <div class="col-sm-3 col-lg-2">
       <nav class="navbar navbar-default navbar-fixed-side">
+        <div id="dialog" title="Dialog Title" > Some text</div>
         <div class="panel panel-default">
           <div class="panel-heading top-bar">
           <h3 class="panel-title">Chat - Clang</h3>
@@ -116,13 +117,22 @@
     var currhigh = 1;
     var level_changed = 0;
     $("#guideLink").click(function(){
-      readTextFile("/guide/"+level);
-      var divText = document.getElementById("guide-page").innerHTML;
-      var guide_window = window.open('','','width=800,height=600');
-      var guide_doc = guide_window.document;
-      guide_doc.open();
-      guide_doc.write(divText);
-      guide_doc.close();
+    //   readTextFile("/guide/"+level);
+    //   var divText = document.getElementById("guide-page").innerHTML;
+    //   var guide_window = window.open('','','width=800,height=600');
+    //   var guide_doc = guide_window.document;
+    //   guide_doc.open();
+    //   guide_doc.write(divText);
+    //   guide_doc.close();
+        var opt = {
+            autoOpen: false,
+            modal: true,
+            width: 550,
+            height:650,
+            title: 'Details'
+        };
+        var theDialog = $("#dialog").dialog(opt);
+        theDialog.dialog("open");
     });
 
     showdown.setFlavor('github');
