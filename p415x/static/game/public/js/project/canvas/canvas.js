@@ -23,16 +23,17 @@
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
-    OverWatcher = new Sauron({}),
     Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
-function Canvas(settings) {
+var OverWatcher;
+
+function Canvas(settings, sauron) {
   console.log("hello canvas");
   //input error handling
 
   // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
-
+  OverWatcher = sauron;
   var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
