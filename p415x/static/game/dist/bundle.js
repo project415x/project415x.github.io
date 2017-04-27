@@ -1132,8 +1132,10 @@ Sauron.prototype.updateTargets = function(d, type) {
                 wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
                 var total = self.getArmies().size() + self.getFallen().size();
-/*                var prog_increment = $("#progress-container").width() / (total * 3);
-                var prog_width = $("#progress-anim").width();
+
+                //var currScore = Number(document.getElementById("score_box").innerHTML);
+                document.getElementById("score_box").innerHTML = Math.floor(100*self.getFallen().size()/total);
+                /*var prog_width = $("#progress-anim").width();
                 $("#progress-anim").width(Number(prog_width) + prog_increment);
                 console.log($("#progress-anim").width());*/
                 self.deathToll++;
