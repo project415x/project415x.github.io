@@ -106,6 +106,7 @@
   <div class="scene_button" id = "popup" hidden>
     <button id = "popup_button" style="background-color: black;">View Cutscene</button>
   </div>
+  <script src=""></script>
   <script type="text/javascript">
 
     $("#guide-page").dialog({
@@ -127,6 +128,12 @@
 
         document.getElementById("dialog").innerHTML = divText;
         var theDialog = $("#dialog").dialog(opt);
+
+        $(".ui-dialog-titlebar").hide();
+
+        $("#dialog").bind('clickoutside',function(){
+            $("#dialog").dialog('close');
+        });
         theDialog.dialog("open");
     });
 
