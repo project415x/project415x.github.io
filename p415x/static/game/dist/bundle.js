@@ -616,6 +616,7 @@ startLevel1 = function startLevel1() {
 	outputVector.init();
 
 	// generate target(s)
+	Level1.lastClickedTime = Number((new Date()).getTime());
 	Level1.generateRandomLineofDeath(true);
 }
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"./config.js":4}],6:[function(require,module,exports){
@@ -933,6 +934,7 @@ function Sauron(settings) {
         [1, 2],
         [2, 1]
     ];
+    this.lastClickedTime = 0;
     this.deathToll = 0;
     this.graphics = new Smaug();
     this.chat = new Gollum();
@@ -1133,8 +1135,17 @@ Sauron.prototype.updateTargets = function(d, type) {
 
                 var total = self.getArmies().size() + self.getFallen().size();
 
-                //var currScore = Number(document.getElementById("score_box").innerHTML);
-                document.getElementById("score_box").innerHTML = Math.floor(100*self.getFallen().size()/total);
+                var currScore = Number(document.getElementById("score_box").innerHTML),
+                    currTime = (new Date()).getTime(),
+                    incrementScore = 10,
+                    diffTime = (currTime - self.lastClickedTime)/1000; 
+
+                console.log("dtime "+self.lastClickedTime+" "+currTime+" "+diffTime);
+                this.lastClickedTime = currTime;
+                if(diffTime < 3){
+                  incrementScore += 10;
+                }
+                document.getElementById("score_box").innerHTML = currScore + incrementScore;
                 /*var prog_width = $("#progress-anim").width();
                 $("#progress-anim").width(Number(prog_width) + prog_increment);
                 console.log($("#progress-anim").width());*/
@@ -1188,6 +1199,12 @@ Sauron.prototype.removeBlips = function(level) {
   @returns {}
 */
 Sauron.prototype.generateNewTargets = function(id, external) {
+    //setting the last clicked time so that we can time the next click
+    //this holds even for level 3, since a negligible amount of time will
+    //pass between the click and when generateNewTargets is called.
+    console.log("set lastClickedTime");
+    this.lastClickedTime = (new Date()).getTime();
+
     if (!external) {
         if (level != 3) {
             level_changed++;
