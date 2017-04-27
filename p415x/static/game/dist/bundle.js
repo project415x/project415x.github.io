@@ -173,7 +173,6 @@ module.exports = Vector;
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
-    Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
 var OverWatcher;
@@ -235,10 +234,6 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(2,500);
-                // If you want the single click instead of double, replace the
-                //  next four lines until but not including '})' with
-                //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 var newTimer = self.getTimer();
                 if (newTimer - self.timer <= 200) {
                   OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -247,7 +242,6 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(3,500);
               });
 };
 
@@ -531,7 +525,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":11,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":11,"../utilities/math.js":15}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -603,37 +597,6 @@ var Canvas = require('../canvas/canvas.js'),
 		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
-function initTutorial() {
-	// Requires JQuery included on each page
-	$(window).ready(function() {
-		// Initialize Tutorial
-		Tutorial.init()
-		// Dismissable when clicking general window elements
-		/*$('#guide').click(function(event) {
-				var guide = document.getElementById('guide');
-				var img = document.getElementById('tutorial');
-				if(!Tutorial.show) {
-					return;
-				}
-				if((event.target == img || event.target == guide) && Tutorial.reopen) {
-					return;
-				}
-				//Tutorial.clearTimer();
-				$('#tutorial').popover('hide');
-				Tutorial.show = false;
-				Tutorial.reopen = true;
-		});*/
-		// Reopen tutorial
-		//$('#tutorial').click(function(event) {
-		//	if(Tutorial.show || !Tutorial.reopen) {
-		//		return;
-		//	}
-		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
-		//});
-		// Load starting tutorial
-
-	});
-}
 function initLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings,Level1),
@@ -660,13 +623,6 @@ function initLevel1() {
 // think of this as the main function :)
 startLevel1 = function startLevel1() {
 	initLevel1();
-	initTutorial();
-}
-
-startTut = function startTut() {
-	setTimeout(function(){
-			Tutorial.tutorialControl(5000);
-		}, 0);
 }
 
 },{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
@@ -1200,9 +1156,6 @@ Sauron.prototype.updateTargets = function(d, type) {
                     self.generateNewTargets(id, false, level);
                 }
             }
-            //else if (type === "detection") {
-            //  Tutorial.tutorialControl(4,1);
-            //}
         } else {
             wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
         }
@@ -1298,9 +1251,7 @@ Sauron.prototype.tellSauron = function(event, type) {
     if (type === "drag") {
         this.updateInputVector(d);
         this.updateOutputVector(d);
-        if (!Tutorial.show || !Tutorial.reopen) {
-            this.updateTargets(d, "detection");
-        }
+        this.updateTargets(d, "detection");
     } else if (type === "dbclick") {
         this.updateTargets(d, "collision");
     }
