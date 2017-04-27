@@ -141,12 +141,6 @@ Canvas.prototype.appendSvg = function(type) {
                          height: h
                        });
     // setting up progress bar based on width
-    document.getElementById("progress-svg").width.baseVal.value = w;
-    d3.select("#progress-rect").attr({
-      width: w,
-      fill: "grey",
-    });
-    d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
     $("#progress-container").width(w);
 
   } else{
