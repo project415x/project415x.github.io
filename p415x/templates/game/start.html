@@ -110,7 +110,7 @@
   <div class="scene_button" id = "popup" hidden>
     <button id = "popup_button" style="background-color: black;">View Cutscene</button>
   </div>
-  <script src=""></script>
+  <script src=" {% static 'game/bower_components/jquery-outside-events/jquery.ba-outside-events.js' %}"></script>
   <script type="text/javascript">
 
     $("#guide-page").dialog({
@@ -119,6 +119,7 @@
     var level = 1;
     var currhigh = 1;
     var level_changed = 0;
+    var guide_count = 0;
 
     $("#guideLink").click(function(){
         readTextFile("/guide/"+level);
@@ -134,12 +135,16 @@
         var theDialog = $("#dialog").dialog(opt);
 
         $(".ui-dialog-titlebar").hide();
-
         $("#dialog").bind('clickoutside',function(){
-            $("#dialog").dialog('close');
+            guide_count += 1;
+            guide_count %= 2;
+            if(guide_count == 0){
+                $("#dialog").dialog('close');
+            }
         });
         theDialog.dialog("open");
     });
+
 
     showdown.setFlavor('github');
     var converter = new showdown.Converter();
