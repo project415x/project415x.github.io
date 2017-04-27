@@ -53,6 +53,7 @@
   <div class="row">
     <div class="col-sm-3 col-lg-2">
       <nav class="navbar navbar-default navbar-fixed-side">
+        <div id="dialog" style="background: white;" hidden></div>
         <div class="panel panel-default">
           <div class="panel-heading top-bar">
           <h3 class="panel-title">Chat - Clang</h3>
@@ -85,6 +86,9 @@
     </div>
     <!-- /chat box -->
   <!-- TODO: move this to CSS -->
+  <style>
+    .ui-dialog,.ui-dialog, .ui-widget-content, .ui-corner-all, .ui-draggable, .ui-resizable {background:white !important; margin: 20px !important;}
+  </style>
   <div id="input-container">
     <div id="progress-container">
     <p id="score_box" class="score_text"></svg>
@@ -114,14 +118,20 @@
     var level = 1;
     var currhigh = 1;
     var level_changed = 0;
+
     $("#guideLink").click(function(){
-      readTextFile("/guide/"+level);
-      var divText = document.getElementById("guide-page").innerHTML;
-      var guide_window = window.open('','','width=800,height=600');
-      var guide_doc = guide_window.document;
-      guide_doc.open();
-      guide_doc.write(divText);
-      guide_doc.close();
+        readTextFile("/guide/"+level);
+        var divText = document.getElementById("guide-page").innerHTML;
+        var opt = {
+            autoOpen: false,
+            width: 550,
+            height: 650,
+            position:{my:"top",at:"top+100"},
+        };
+
+        document.getElementById("dialog").innerHTML = divText;
+        var theDialog = $("#dialog").dialog(opt);
+        theDialog.dialog("open");
     });
 
     showdown.setFlavor('github');
