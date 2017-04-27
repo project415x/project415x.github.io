@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Learning tools for linear algebra",
   "main": "index.html",
-  "scripts": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/linearlearning/linearlearning.github.io.git"
@@ -15,13 +17,19 @@
   },
   "homepage": "https://github.com/linearlearning/linearlearning.github.io#readme",
   "dependencies": {
+    "browserify": "^13.0.0",
+    "escodegen": "^1.8.0",
+    "glob": "^7.0.0",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "stripify": "^4.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
   },
   "devDependencies": {
-    "webpack": "^2.4.1",
-    "webpack-bundle-tracker": "^0.2.0"
-  },
-	"scripts": {
-		"build": "node node_modules/webpack/bin/webpack.js",
-		"deploy": "node node_modules/webpack/bin/webpack.js --config webpack.config.prod.js"
-	}
+    "gulp-sass": "^3.1.0",
+    "pump": "^1.0.1",
+    "vinyl-buffer": "^1.0.0"
+  }
 }
