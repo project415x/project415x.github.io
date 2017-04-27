@@ -292,12 +292,6 @@ Canvas.prototype.appendSvg = function(type) {
                          height: h
                        });
     // setting up progress bar based on width
-    document.getElementById("progress-svg").width.baseVal.value = w;
-    d3.select("#progress-rect").attr({
-      width: w,
-      fill: "grey",
-    });
-    d3.select("#progress-svg").append("text").attr("fill", "white").attr("y", "10").text("Hello, progress.");
     $("#progress-container").width(w);
 
   } else{
@@ -1190,10 +1184,10 @@ Sauron.prototype.updateTargets = function(d, type) {
                 wraith.sprite().transition().attr("y", wraith.attr("y")).style("opacity", 0.4).duration(250);
 
                 var total = self.getArmies().size() + self.getFallen().size();
-                var prog_increment = $("#progress-container").width() / (total * 3);
+/*                var prog_increment = $("#progress-container").width() / (total * 3);
                 var prog_width = $("#progress-anim").width();
                 $("#progress-anim").width(Number(prog_width) + prog_increment);
-                console.log($("#progress-anim").width());
+                console.log($("#progress-anim").width());*/
                 self.deathToll++;
 
                 //self.updateProgress();
@@ -1260,7 +1254,7 @@ Sauron.prototype.generateNewTargets = function(id, external) {
                 }
 
                 //reset progress bar
-                $("#progress-anim").width(0);
+                /*$("#progress-anim").width(0);*/
             }
 
         }
