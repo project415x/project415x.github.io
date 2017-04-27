@@ -47,7 +47,7 @@
   <div id="cutscene" hidden>
     <iframe id = "cutscene_frame" style="resize: both;">No cut scene</iframe>
 </div>
-<div class="game">
+<div class="game" id="game_container">
   <!-- chat box -->
   <!-- <div style="background-color: red;" class="row">     -->
   <div class="row">
@@ -152,20 +152,19 @@
     }
 
     function closePopup(){
-      //document.getElementById("level").hidden = false;
+      document.getElementById("game_container").hidden = false;
       document.getElementById("cutscene").hidden = true;
       window.parent.document.getElementById("navigation").hidden = false;
-      startTut();
     }
 
     function openPopup(){
       document.getElementById("cutscene").hidden = false;
-      //document.getElementById("level").hidden = true;
+      document.getElementById("game_container").hidden = true;
       document.getElementById("cutscene").style.zIndex = "9999!important";
-      document.getElementById("cutscene").width = window.innerWidth;
+      document.getElementById("cutscene").width = window.innerWidth/2;
       document.getElementById("cutscene").height = window.innerHeight;
       document.getElementById("cutscene_frame").src = "{% static 'game/public/img/intro/intro.html' %}";
-      document.getElementById("cutscene_frame").width = window.innerWidth;
+      document.getElementById("cutscene_frame").width = window.innerWidth/2;
       document.getElementById("cutscene_frame").height = window.outerHeight/1.5;
 
 

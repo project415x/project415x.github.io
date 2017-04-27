@@ -40,17 +40,6 @@
   <link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
   <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'game/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
-  <script>
-    var eventplus = new Event('levelup');
-    var eventminus = new Event('leveldown');
-    function levelChanger(increment){
-      console.log("sending message");
-      if(increment == 1)
-        document.getElementById('mailbox').dispatchEvent(eventplus);
-      else
-        document.getElementById('mailbox').dispatchEvent(eventminus);
-    }
-  </script>
   <!-- todo move to css file -->
 <style type="text/css">
   .body-game-page {

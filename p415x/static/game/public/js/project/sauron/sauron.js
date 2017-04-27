@@ -1,6 +1,5 @@
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js'),
     Smaug = require('../smaug/smaug.js'),
     Gollum = require('../gollum/gollum.js');
 
@@ -235,9 +234,6 @@ Sauron.prototype.updateTargets = function(d, type) {
                     self.generateNewTargets(id, false, level);
                 }
             }
-            //else if (type === "detection") {
-            //  Tutorial.tutorialControl(4,1);
-            //}
         } else {
             wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
         }
@@ -333,9 +329,7 @@ Sauron.prototype.tellSauron = function(event, type) {
     if (type === "drag") {
         this.updateInputVector(d);
         this.updateOutputVector(d);
-        if (!Tutorial.show || !Tutorial.reopen) {
-            this.updateTargets(d, "detection");
-        }
+        this.updateTargets(d, "detection");
     } else if (type === "dbclick") {
         this.updateTargets(d, "collision");
     }

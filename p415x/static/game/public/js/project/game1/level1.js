@@ -3,43 +3,12 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Smaug = require('../smaug/smaug.js'),
-		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
 		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
-function initTutorial() {
-	// Requires JQuery included on each page
-	$(window).ready(function() {
-		// Initialize Tutorial
-		Tutorial.init()
-		// Dismissable when clicking general window elements
-		/*$('#guide').click(function(event) {
-				var guide = document.getElementById('guide');
-				var img = document.getElementById('tutorial');
-				if(!Tutorial.show) {
-					return;
-				}
-				if((event.target == img || event.target == guide) && Tutorial.reopen) {
-					return;
-				}
-				//Tutorial.clearTimer();
-				$('#tutorial').popover('hide');
-				Tutorial.show = false;
-				Tutorial.reopen = true;
-		});*/
-		// Reopen tutorial
-		//$('#tutorial').click(function(event) {
-		//	if(Tutorial.show || !Tutorial.reopen) {
-		//		return;
-		//	}
-		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
-		//});
-		// Load starting tutorial
-
-	});
-}
-function initLevel1() {
+// think of this as the main function :)
+startLevel1 = function startLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings,Level1),
 			inputVector = new Vector(config.inputVectorSettings),
@@ -59,17 +28,4 @@ function initLevel1() {
 
 	// generate target(s)
 	Level1.generateRandomLineofDeath(true);
-}
-
-
-// think of this as the main function :)
-startLevel1 = function startLevel1() {
-	initLevel1();
-	initTutorial();
-}
-
-startTut = function startTut() {
-	setTimeout(function(){
-			Tutorial.tutorialControl(5000);
-		}, 0);
 }

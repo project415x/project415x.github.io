@@ -173,7 +173,6 @@ module.exports = Vector;
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
-    Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
 var OverWatcher;
@@ -235,10 +234,6 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(2,500);
-                // If you want the single click instead of double, replace the
-                //  next four lines until but not including '})' with
-                //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 var newTimer = self.getTimer();
                 if (newTimer - self.timer <= 200) {
                   OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -247,7 +242,6 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(3,500);
               });
 };
 
@@ -531,7 +525,7 @@ Canvas.prototype.getTimer = function() {
 
 module.exports = Canvas;
 
-},{"../sauron/sauron.js":11,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],4:[function(require,module,exports){
+},{"../sauron/sauron.js":11,"../utilities/math.js":14}],4:[function(require,module,exports){
 module.exports = {
 
 	inputCanvasSettings : {
@@ -598,43 +592,12 @@ var Canvas = require('../canvas/canvas.js'),
 		Target = require('../actors/target.js'),
 		Sauron = require('../sauron/sauron.js'),
 		Smaug = require('../smaug/smaug.js'),
-		Tutorial = require('../tutorial/tutorial.js'),
 		config = require('./config.js'),
 		graphics = new Smaug(),
 		Level1 = new Sauron(config.sauron);
 
-function initTutorial() {
-	// Requires JQuery included on each page
-	$(window).ready(function() {
-		// Initialize Tutorial
-		Tutorial.init()
-		// Dismissable when clicking general window elements
-		/*$('#guide').click(function(event) {
-				var guide = document.getElementById('guide');
-				var img = document.getElementById('tutorial');
-				if(!Tutorial.show) {
-					return;
-				}
-				if((event.target == img || event.target == guide) && Tutorial.reopen) {
-					return;
-				}
-				//Tutorial.clearTimer();
-				$('#tutorial').popover('hide');
-				Tutorial.show = false;
-				Tutorial.reopen = true;
-		});*/
-		// Reopen tutorial
-		//$('#tutorial').click(function(event) {
-		//	if(Tutorial.show || !Tutorial.reopen) {
-		//		return;
-		//	}
-		//	Tutorial.tutorialControl(--Tutorial.num,1,true);
-		//});
-		// Load starting tutorial
-
-	});
-}
-function initLevel1() {
+// think of this as the main function :)
+startLevel1 = function startLevel1() {
 	// Create objects needed for game
 	var inputCanvas = new Canvas(config.inputCanvasSettings,Level1),
 			inputVector = new Vector(config.inputVectorSettings),
@@ -655,21 +618,7 @@ function initLevel1() {
 	// generate target(s)
 	Level1.generateRandomLineofDeath(true);
 }
-
-
-// think of this as the main function :)
-startLevel1 = function startLevel1() {
-	initLevel1();
-	initTutorial();
-}
-
-startTut = function startTut() {
-	setTimeout(function(){
-			Tutorial.tutorialControl(5000);
-		}, 0);
-}
-
-},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"./config.js":4}],6:[function(require,module,exports){
+},{"../actors/target.js":1,"../actors/vector.js":2,"../canvas/canvas.js":3,"../sauron/sauron.js":11,"../smaug/smaug.js":12,"./config.js":4}],6:[function(require,module,exports){
 /**
 * Level Tracking
 * @description: Mechanism for tracking levels in gameplay
@@ -965,7 +914,6 @@ setTimeout(function() {
 },{}],11:[function(require,module,exports){
 var util = require('../utilities/math.js'),
     Target = require('../actors/target.js'),
-    Tutorial = require('../tutorial/tutorial.js'),
     Smaug = require('../smaug/smaug.js'),
     Gollum = require('../gollum/gollum.js');
 
@@ -1200,9 +1148,6 @@ Sauron.prototype.updateTargets = function(d, type) {
                     self.generateNewTargets(id, false, level);
                 }
             }
-            //else if (type === "detection") {
-            //  Tutorial.tutorialControl(4,1);
-            //}
         } else {
             wraith.sprite().transition().style("opacity", 1).attr("y", wraith.attr("y"));
         }
@@ -1298,9 +1243,7 @@ Sauron.prototype.tellSauron = function(event, type) {
     if (type === "drag") {
         this.updateInputVector(d);
         this.updateOutputVector(d);
-        if (!Tutorial.show || !Tutorial.reopen) {
-            this.updateTargets(d, "detection");
-        }
+        this.updateTargets(d, "detection");
     } else if (type === "dbclick") {
         this.updateTargets(d, "collision");
     }
@@ -1481,7 +1424,7 @@ Sauron.prototype.drawTarget = function(settings) {
 
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
-},{"../actors/target.js":1,"../gollum/gollum.js":9,"../smaug/smaug.js":12,"../tutorial/tutorial.js":13,"../utilities/math.js":15}],12:[function(require,module,exports){
+},{"../actors/target.js":1,"../gollum/gollum.js":9,"../smaug/smaug.js":12,"../utilities/math.js":14}],12:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
 }
@@ -1602,95 +1545,6 @@ Smaug.prototype.changeBackground = function(mode){
 
 module.exports = Smaug;
 },{}],13:[function(require,module,exports){
-/*
-  Default constuctor
-*/
-function Tutorial(settings) {
-  this.num =  1;
-  this.show = false;
-  this.reopen =  false;
-  this.timer = null;
-}
-
-/**
- * [init using jQuery opens modal]
- * @return {[none]}
- */
-Tutorial.prototype.init = function() {
-  // Initialize Popover
-  $('#tutorial').popover();
-};
-/*
-  Mind that controls tutorials
-  @param {int} num
-  @param {int} time
-  @param {boolean} if it is reopened
-*/
-Tutorial.prototype.tutorialControl = function(time) {
-  var tutor = this;
-  console.log("called tutorialControl "+tutor.num);
-  if (!this.show || !this.reopen) {
-    if (tutor.num === 1) {
-      tutor.num++;
-      d3.select('#tutorial').attr("data-content", "Click the radar screen to activate the robot arm!");
-    } else if (tutor.num === 2) {
-      tutor.num++;
-      d3.select('#tutorial').attr("data-content", "Click and drag the arm in the radar screen to move the robot's arm!");
-    } else if (tutor.num === 3) {
-      tutor.num++;
-      d3.select('#tutorial').attr("data-content", "Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.");
-    } else if (tutor.num === 4) {
-      tutor.num++;
-      d3.select('#tutorial').attr("data-content", "Double click the radar screen to collect the part");
-    } else {
-      tutor.show = false;
-      $('#tutorial').popover('hide');
-      return;
-    }
-
-    //setTimeout(function() {
-    $('#tutorial').popover('show');
-    tutor.show = true;
-    tutor.reopen = false;
-    console.log("asdf");
-
-    //  }, 0);
-    setTimeout(function() {
-
-      console.log("timer done "+tutor.num);
-      tutor.tutorialControl(time, false);
-    }, time);
-
-    //if(!reclick) {
-    //  tutor.setTimer(10000);
-    //  tutor.show = false;
-    //  tutor.reopen = true;
-    //}
-  }
-};
-/*
-  Resets tutorial timer
-  @param {}
-  @return {}
-*/
-Tutorial.prototype.clearTimer = function() {
-  clearTimeout(this.timer);
-};
-/*
-  Set tutorial timer
-  @param {int} time
-  @param {tutorial} tutorial
-  @returns void
-*/
-Tutorial.prototype.setTimer = function(time) {
-  this.timer = setTimeout(function() {
-    $('#tutorial').popover('hide');
-  }, time);
-};
-
-module.exports = new Tutorial();
-
-},{}],14:[function(require,module,exports){
 var util = require("../utilities/math.js");
 
 /*
@@ -1915,7 +1769,7 @@ d3.selection.prototype.animateSprite = function(){
   var wraith = this;
   return wraith.sprite().transition();
 }
-},{"../utilities/math.js":15}],15:[function(require,module,exports){
+},{"../utilities/math.js":14}],14:[function(require,module,exports){
 module.exports = {
 	/**
 	 * [screenToMath takes screen cooridinates (top-left = (0,0)), bottom-right = (width,width)]
@@ -2044,4 +1898,4 @@ module.exports = {
 	}
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
