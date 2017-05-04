@@ -27,5 +27,6 @@ startLevel1 = function startLevel1() {
 	outputVector.init();
 
 	// generate target(s)
+	Level1.lastClickedTime = Number((new Date()).getTime());
 	Level1.generateRandomLineofDeath(true);
 }
