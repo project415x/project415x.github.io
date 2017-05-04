@@ -21,13 +21,20 @@ figure {
   padding: 0;
 }
 
+div.row {
+	margin-left: 5%;
+}
+div.tab-content {
+	margin-left: 5%;
+}
+
 /**
  * Basic styling
  */
 body {
   font-family: $base-font-family;
   font-size: $base-font-size;
-  line-height: $base-line-height;
+  //line-height: $base-line-height;
   font-weight: 300;
   color: $text-color;
   background-color: $background-color;

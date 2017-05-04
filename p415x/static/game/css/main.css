@@ -11,6 +11,7 @@
 @import url(https://fonts.googleapis.com/css?family=Crimson+Text);
 @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
 @import url(https://fonts.googleapis.com/css?family=Inconsolata);
+.messages.msg_sent
 body,
 h1,
 h2,
@@ -33,10 +34,15 @@ figure {
 /**
  * Basic styling
  */
+div.tab-content {
+	padding-left: 9%;
+}
+div.panel-heading.top-bar {
+	padding: 0px 10px;
+}
 body {
   font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 14px;
   font-weight: 300;
   color: #111;
   background-color: #fdfdfd;
@@ -81,10 +87,6 @@ figcaption {
 /**
  * Lists
  */
-ul,
-ol {
-  margin-left: 30px; }
-
 li > ul,
 li > ol {
   margin-bottom: 0; }
@@ -548,9 +550,9 @@ html {
 
 /* Copy & Lists */
 p {
-  line-height: 1.5rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0; }
+	font-family: 'Press Start 2P', sans-serif;
+	font-size: 8px;
+}
 
 ul,
 ol {
@@ -1145,6 +1147,12 @@ code {
       #f404 span a:active {
         opacity: 0.90; }
 
+div.messages.msg_sent div.messages div.messages_sent {
+  line-height: normal;
+  margin-top: initial; 
+
+}
+
 #home {
   height: 100vh;
   background: #cccccc url("../public/img/splash_screen_black.jpg");
@@ -1352,13 +1360,13 @@ body {
   #start h3 {
     font-family: 'Press Start 2P', sans-serif;
     color: #88FD68;
-    font-size: 24px; }
+    font-size: 10px; }
   #start h4 {
     font-size: 24px; }
   @media screen and (max-width: 768px) {
     #start h2 {
       font-size: 28px; } }
-  #start .thumbnail {
+	#start .thumbnail {
     height: 100%;
     width: 100%; }
   #start .people {

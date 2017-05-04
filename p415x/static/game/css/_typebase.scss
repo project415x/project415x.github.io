@@ -24,24 +24,6 @@ html {
   // text-size-adjust: auto
 }
 /* Copy & Lists */
-p {
-  line-height: $leading;
-  margin-top: $leading;
-  margin-bottom: 0;
-}
-ul,
-ol {
-  margin-top: $leading;
-  margin-bottom: $leading;
-  li {
-    line-height: $leading;
-  }
-  ul,
-  ol {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
 blockquote {
   line-height: $leading;
   margin-top: $leading;
@@ -58,7 +40,6 @@ h6 {
   font-family: sans-serif;
   margin-top: $leading;
   margin-bottom: 0;
-  line-height: $leading;
 }
 h1 {
   font-size: 3 * $scale * 1rem;
