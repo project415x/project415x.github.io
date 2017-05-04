@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+		sass = require('gulp-sass'),
 		gutil = require('gulp-util'),
 		uglify = require('gulp-uglify'),
 		source = require('vinyl-source-stream'),
@@ -27,7 +28,18 @@ gulp.task('default', function() {
     .pipe(gulp.dest('./dist/compressed/'));
 });
 
+gulp.task('sass', function() {
+	return gulp.src('./css/**/*.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(gulp.dest('./css'));
+});
+
+gulp.task('sass:watch', function() {
+	gulp.watch('./css/**/*.scss', ['sass']);
+});
+
 gulp.task('watch', function() {
+	gulp.watch('./css/**/*.scss', ['sass']);
 	gulp.watch("./public/js/project/**/*.js", ["compress"],["default"]);
 });
 
