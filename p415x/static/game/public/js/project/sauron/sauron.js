@@ -35,11 +35,11 @@ function Sauron(settings) {
     this.timer = setTimeout(function() {
         var x = 0;
         var messageInt = setInterval(function() {
-            self.chat.sendmsg(null, "help");
+            self.chat.sendmsg(null, "help", true);
             if (++x === 4) {
                 window.clearInterval(messageInt);
             }
-        }, 3000);
+        }, 6000);
 
     }, 10000);
 

@@ -809,7 +809,7 @@ function readTextFile(file) {
 }
 
 
-Gollum.prototype.sendmsg = function(event, command) {
+Gollum.prototype.sendmsg = function(event, command, needsHelp) {
     if(event){
         event.preventDefault();
     }
@@ -820,24 +820,23 @@ Gollum.prototype.sendmsg = function(event, command) {
     if(command){
         data = command;
     }
+    if(!needsHelp){
+        this.addText(data);
+    }
     chatinput.value = "";
     if (data === "help") {
         if (state == 0) {
-            $('#chatbar').append("<div class='messages_sent'><p>Click the radar screen to activate the robot arm!</p></div>")
+            this.addText("Click the radar screen to activate the robot arm!");
             state++;
         } else if (state == 1) {
-            $('#chatbar').append("<div class='messages_sent'><p>Click and drag the arm in the radar screen to move the robot's arm!</p></div>")
+            this.addText("Click and drag the arm in the radar screen to move the robot's arm!")
             state++;
         } else if (state == 2) {
-            $('#chatbar').append("<div class='messages_sent'><p>Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.</p></div>")
+            this.addText("Help the robot reach the parts. Move the arm on the input screen so that his arm can pick up the pieces.")
             state++;
         } else if (state == 3) {
-            $('#chatbar').append("<div class='messages_sent'><p>Double click the radar screen to collect the part.</p></div>")
-            state++;
-        } else if (state == 4) {
-            console.log("lol");
-            readTextFile("/guide/" + level);
-            state++;
+            this.addText("Double click the radar screen to collect the part.")
+            state = 0;
         }
         var scroller = document.getElementById("chat-panel");
         scroller.scrollTop = scroller.scrollHeight;
@@ -849,7 +848,6 @@ Gollum.prototype.sendmsg = function(event, command) {
 
 Gollum.prototype.addText = function(text){
     $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
-    state++;
     var scroller = document.getElementById("chat-panel");
     scroller.scrollTop = scroller.scrollHeight;
 };
@@ -949,11 +947,11 @@ function Sauron(settings) {
     this.timer = setTimeout(function() {
         var x = 0;
         var messageInt = setInterval(function() {
-            self.chat.sendmsg(null, "help");
+            self.chat.sendmsg(null, "help", true);
             if (++x === 4) {
                 window.clearInterval(messageInt);
             }
-        }, 3000);
+        }, 6000);
 
     }, 10000);
 
@@ -1426,6 +1424,7 @@ Sauron.prototype.drawTarget = function(settings) {
 
 // Sauron is mobilized via Smaug!
 module.exports = Sauron;
+
 },{"../actors/target.js":1,"../gollum/gollum.js":9,"../smaug/smaug.js":12,"../utilities/math.js":14}],12:[function(require,module,exports){
 function Smaug(){
 	this.robot = null;
