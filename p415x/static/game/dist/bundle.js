@@ -780,7 +780,11 @@ module.exports = {
 
 },{}],9:[function(require,module,exports){
 function Gollum() {
-    state = 0
+    state = 0,
+    setInterval(function(){
+        $(".chat_msg").removeClass("chat_msg");
+    }, 500);
+
 }
 var counter = 0;
 
@@ -848,7 +852,7 @@ Gollum.prototype.sendmsg = function(event, command, needsHelp) {
 };
 
 Gollum.prototype.addText = function(text){
-    $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
+    $('#chatbar').append("<div class='messages_sent'><p class='chat_msg'>"+text+"</p></div>")
     var scroller = document.getElementById("chat-panel");
     scroller.scrollTop = scroller.scrollHeight;
 };
@@ -1166,6 +1170,12 @@ Sauron.prototype.updateTargets = function(d, type) {
                   incrementScore += 10;
                 }
                 document.getElementById("score_box").innerHTML = currScore + incrementScore;
+                document.getElementById("score_box").style.color = "#00ff00";
+                document.getElementById("score_box").style.fontSize = "200%";
+                setTimeout(function(){
+                  document.getElementById("score_box").style.color = "white";
+                  document.getElementById("score_box").style.fontSize= "150%";
+                }, 500)
                 /*var prog_width = $("#progress-anim").width();
                 $("#progress-anim").width(Number(prog_width) + prog_increment);
                 console.log($("#progress-anim").width());*/

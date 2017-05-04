@@ -253,6 +253,12 @@ Sauron.prototype.updateTargets = function(d, type) {
                   incrementScore += 10;
                 }
                 document.getElementById("score_box").innerHTML = currScore + incrementScore;
+                document.getElementById("score_box").style.color = "#00ff00";
+                document.getElementById("score_box").style.fontSize = "200%";
+                setTimeout(function(){
+                  document.getElementById("score_box").style.color = "white";
+                  document.getElementById("score_box").style.fontSize= "150%";
+                }, 500)
                 /*var prog_width = $("#progress-anim").width();
                 $("#progress-anim").width(Number(prog_width) + prog_increment);
                 console.log($("#progress-anim").width());*/

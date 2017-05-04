@@ -1,5 +1,9 @@
 function Gollum() {
-    state = 0
+    state = 0,
+    setInterval(function(){
+        $(".chat_msg").removeClass("chat_msg");
+    }, 500);
+
 }
 var counter = 0;
 
@@ -67,7 +71,7 @@ Gollum.prototype.sendmsg = function(event, command, needsHelp) {
 };
 
 Gollum.prototype.addText = function(text){
-    $('#chatbar').append("<div class='messages_sent'><p>"+text+"</p></div>")
+    $('#chatbar').append("<div class='messages_sent'><p class='chat_msg'>"+text+"</p></div>")
     var scroller = document.getElementById("chat-panel");
     scroller.scrollTop = scroller.scrollHeight;
 };
