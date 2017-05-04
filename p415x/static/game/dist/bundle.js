@@ -989,6 +989,13 @@ Sauron.prototype.setMatrix = function() {
             (rot[1][0] * m[0][1] + rot[1][1] * m[1][1])
         ]
     ];
+
+    var x1 = (""+this.matrix[0][0]).substring(0, 4),
+        y1 = (""+this.matrix[0][1]).substring(0, 4),
+        x2 = (""+this.matrix[1][0]).substring(0, 4),
+        y2 = (""+this.matrix[1][1]).substring(0, 4);
+
+    document.getElementById("matrix_box").innerHTML = x1+"&nbsp&nbsp"+y1+"&nbsp&nbsp&nbsp00<br>"+x2+"&nbsp&nbsp"+y2+"&nbsp&nbsp&nbsp00";
 };
 
 /*
@@ -1019,6 +1026,22 @@ Sauron.prototype.updateInputVector = function(d) {
             "d": "M " + width_svg / 2 + " " + width_svg / 2 + " L" + d.x + " " + d.y + "z",
             "id": 'input-vector'
         });
+    var padding = function(str, number){
+        if(str.length ==1){
+          str += ".";
+        }
+        while(str.length != number){
+          str += "0";
+        }
+        return str;
+    };
+    var x1 = padding((""+this.matrix[0][0]).substring(0, 4), 4),
+        y1 = padding((""+this.matrix[0][1]).substring(0, 4), 4),
+        x2 = padding((""+this.matrix[1][0]).substring(0, 4), 4),
+        y2 = padding((""+this.matrix[1][1]).substring(0, 4), 4),
+        xp = (""+d.x).substring(0, 2),
+        yp = (""+d.y).substring(0, 2);
+    document.getElementById("matrix_box").innerHTML = x1+"&nbsp&nbsp"+y1+"&nbsp&nbsp&nbsp"+xp+"<br>"+x2+"&nbsp&nbsp"+y2+"&nbsp&nbsp&nbsp"+yp;
 };
 
 /*
