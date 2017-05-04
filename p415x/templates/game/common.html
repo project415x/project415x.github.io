@@ -40,17 +40,7 @@
   <link rel='stylesheet' href="{% static 'game/css/main.css' %}">
 	<link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
   <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
-  <script>
-    var eventplus = new Event('levelup');
-    var eventminus = new Event('leveldown');
-    function levelChanger(increment){
-      console.log("sending message");
-      if(increment == 1)
-        document.getElementById('mailbox').dispatchEvent(eventplus);
-      else
-        document.getElementById('mailbox').dispatchEvent(eventminus);
-    }
-  </script>
+  <script src="{% static 'game/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
   <!-- todo move to css file -->
 <style type="text/css">
   .body-game-page {
@@ -65,7 +55,7 @@
     font-family: 'Press Start 2P', sans-serif;
   }
 
-	.btn {
+  .btn {
     position: relative;
     display: inline-block;
     margin: 0 10px;
@@ -81,9 +71,9 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     font-weight: bold;
-	}
+  }
   
-	/* removes unneeded CSS in tabs */
+  /* removes unneeded CSS in tabs */
   .nav-tabs.nav-justified>li>a {
     border-bottom: none;
   }
@@ -113,9 +103,12 @@
     height: 10%;
   }
 
+  #input-container{
+    display:inline-block;
+  }
+
   #input-canvas {
-    display:inline-block; 
-    background-image: url({% static 'game/public/img/input_background.gif' %}); 
+    background-image: url({% static 'game/public/img/input_background.gif' %});
     background-size:100%;
   }
   
@@ -132,6 +125,35 @@
   .p415x-chat {
     height: 75%;
     overflow:auto;
+  }
+
+  #progress-container {
+    height: 125px;
+    width: 0px;
+    /*position: absolute;
+    top: 94.5%;
+    left: 27.5%;
+    margin: -15px 0 0 -135px;*/
+    background-image: url({% static 'game/public/img/scorebox.gif' %});
+  }
+
+  #cutscene {
+    width: 75%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #cutscene_frame {
+    width: 100%;
+    height: 75%;
+  }
+
+  .score_text {
+    position: relative;
+    top: 10%;
+    left: 18.5%;
+    font-size: 100%;
+    color: white;
   }
 </style>
 </head>

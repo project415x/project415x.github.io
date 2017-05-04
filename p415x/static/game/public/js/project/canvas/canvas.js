@@ -23,16 +23,16 @@
  * Cary
  */
 var Sauron = require('../sauron/sauron.js'),
-    OverWatcher = new Sauron({}),
-    Tutorial = require('../tutorial/tutorial.js'),
     utils = require('../utilities/math.js');
 
-function Canvas(settings) {
+var OverWatcher;
+
+function Canvas(settings, sauron) {
   console.log("hello canvas");
   //input error handling
 
   // console.log(document.body.offsetWidth/2.5 + "   " + document.body.offsetHeight/1.5);
-
+  OverWatcher = sauron;
   var w = Math.min(document.body.offsetWidth/2.50, window.outerHeight/1.8);
   this.minX = settings.minX || -10,
   this.minY = settings.minY || -10,
@@ -49,6 +49,31 @@ function Canvas(settings) {
   this.type = settings.type || "not a valid type",
   this.timer = settings.timer || this.getTimer();
 
+  this.decrementLevel = document.getElementById("lowerBoundLevel");
+  this.incrementLevel = document.getElementById("upperBoundLevel");
+
+  this.decrementLevel.style.visibility = "hidden";
+  this.incrementLevel.style.visibility = "hidden";
+
+  var self = this;
+
+  this.decrementLevel.onclick = function(){
+    level-= 1;
+    if(level == 1){
+        self.decrementLevel.style.visibility = "hidden";
+    }
+    self.incrementLevel.style.visibility = "visible";
+    OverWatcher.generateNewTargets("", true);
+  }
+  this.incrementLevel.onclick = function(){
+    level+= 1;
+    self.decrementLevel.style.visibility = "visible";
+    if(level <= currhigh){
+        self.incrementLevel.style.visibility = "hidden";
+    }
+    OverWatcher.generateNewTargets("", true);
+  }
+
 }
 
 // Return modified d3 drag listener
@@ -59,10 +84,6 @@ Canvas.prototype.vectorDrag = function() {
   return d3.behavior.drag()
               .on("dragstart", function (){
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(2,500);
-                // If you want the single click instead of double, replace the
-                //  next four lines until but not including '})' with
-                //  OverWatcher.tellSauron(d3.mouse(this), "dbclick");
                 var newTimer = self.getTimer();
                 if (newTimer - self.timer <= 200) {
                   OverWatcher.tellSauron(d3.mouse(this), "dbclick");
@@ -71,7 +92,6 @@ Canvas.prototype.vectorDrag = function() {
               })
               .on("drag", function() {
                 OverWatcher.tellSauron(d3.mouse(this), "drag");
-                //Tutorial.tutorialControl(3,500);
               });
 };
 
@@ -103,12 +123,30 @@ Canvas.prototype.getTar = function(id) {
 // Appends SVG DOM element to a div.
 Canvas.prototype.appendSvg = function(type) {
   var id = type || this.type;
+  if(id=="input"){
+    var w = this.pixelWidth,
+      h = this.pixelHeight;
+    var r = Math.sqrt(2)*w/2;
+    w = r;
+    h = w;
+    var canvas = this.getCanvas(id).append('svg')
+                  .attr({
+                         id: id+"-svg",
+                         width: w,
+                         height: h
+                       });
+    // setting up progress bar based on width
+    $("#progress-container").width(w);
+
+  } else{
+
   var canvas = this.getCanvas(id).append('svg')
                 .attr({
                        id: id+"-svg",
                        width: this.pixelWidth,
                        height: this.pixelHeight
                      });
+  }
 };
 
 // Adds image on top of Circle (Target).
@@ -263,7 +301,7 @@ Canvas.prototype.drawTargetsOnCanvas = function() {
 
 // Adds progress bar inbetween two canvases
 Canvas.prototype.drawProgressBar = function() {
-  var container = d3.select('#progress-container');
+  /*var container = d3.select('#progress-container');
       container.append('div')
                 .attr({
                   "class": "progress-bar progress-bar-success progress-bar-striped active",
@@ -278,7 +316,7 @@ Canvas.prototype.drawProgressBar = function() {
          .attr({
            "id": "score",
            "class": "sr-only"
-         });
+         });*/
 };
 
 // Also not currently being used. Let's figure out if we need it.
