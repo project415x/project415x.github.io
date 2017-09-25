@@ -1,11 +1,11 @@
 var gulp = require('gulp'),
-		sass = require('gulp-sass'),
-		gutil = require('gulp-util'),
-		uglify = require('gulp-uglify'),
-		source = require('vinyl-source-stream'),
-		buffer = require('vinyl-buffer'),
-		glob = require('glob'),
-		browserify = require('browserify');
+    sass = require('gulp-sass'),
+    gutil = require('gulp-util'),
+    uglify = require('gulp-uglify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
+    glob = require('glob'),
+    browserify = require('browserify');
 
 gulp.task('default', function() {
 	var files = glob.sync('./public/js/project/**/*.js')
@@ -24,7 +24,7 @@ gulp.task('default', function() {
     })
     .pipe(source('bundle.min.js')) // gives streaming vinyl file object
     .pipe(buffer()) // <----- convert from streaming to buffered vinyl file object
-    .pipe(uglify()) // now gulp-uglify works 
+    .pipe(uglify()) // now gulp-uglify works
     .pipe(gulp.dest('./dist/compressed/'));
 });
 
@@ -52,6 +52,6 @@ gulp.task('compress', function() {
     })
     .pipe(source('bundle.min.js')) // gives streaming vinyl file object
     .pipe(buffer()) // <----- convert from streaming to buffered vinyl file object
-    .pipe(uglify()) // now gulp-uglify works 
+    .pipe(uglify()) // now gulp-uglify works
     .pipe(gulp.dest('./dist/compressed/'));
 });

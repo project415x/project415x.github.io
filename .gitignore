@@ -5,6 +5,7 @@ _site
 *.psd
 *.dat
 *.temp
+<<<<<<< HEAD
 *.pyc
 *~
 *.swp
@@ -21,3 +22,6 @@ _site
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+=======
+npm-debug.log
+>>>>>>> alpha
