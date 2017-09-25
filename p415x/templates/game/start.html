@@ -1,0 +1,219 @@
+{% extends base %}
+{% load static %}
+
+{% block body %}
+<div id="start">
+<div class="container">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs nav-justified p415x-nav" role="tablist">
+    <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+    <li role="presentation"><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+    <li role="presentation"><a id="guideLink" aria-controls="mathguide" role="tab" data-toggle="tab">Guide</a></li>
+    <li role="presentation"><a href="https://docs.google.com/forms/d/1OB4mqAjueM9eXgh-DyZ77W7QvgmH74O36NBNx-_dm4w/viewform?usp=send_form" target  "_blank" aria-controls="feedback">Feedback</a></li>
+  </ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane" id="info">
+  <div class="container">
+    <h3>Project 415x</h3>
+    <p style="color:white;">Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra</p>
+    <h3>About</h3>
+    <p style="color:white;">
+      Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 415x is a MATH 492 Undergraduate Research Project under the supervision of J.L. Doob Research Assistant Professors Cary Malkiewich and Jenya Sapir. The project is aimed at MATH 415 Linear Algebra students to have a direct visual and kinesthetic experience of core concepts in the subject matter. The project includes but not limited to visualization tools and documentation to make the learning experience much more easier for students.
+    </p>
+  </div>
+</div>
+<div id="guide-page" style="background-color: white; display: none"></div>
+<div role="tabpanel" class="tab-pane fade" id="game">
+  <div class="container">
+    <!-- Congrats Modal -->
+    <div id="nextLevel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nextLevelLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="alert alert-success fade in">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <strong>
+              <span class="glyphicon glyphicon-ok"></span>
+              Congratulations!
+            </strong>
+            Proceed to the next level
+        </div>
+      </div>
+    </div>
+    <!-- /Congrats Modal -->
+  </div>
+  <div id="frameLevel" class="frameDiv" frameborder="0" width="100%">
+
+  <div id="cutscene" hidden>
+    <iframe id = "cutscene_frame" src="{% static 'game/public/img/intro/intro.html' %}">No cut scene</iframe>
+</div>
+<div class="game" id="game_container">
+  <!-- chat box -->
+  <!-- <div style="background-color: red;" class="row">     -->
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-fixed-side">
+        <div id="dialog" style="background: white;" hidden></div>
+        <div class="panel panel-default">
+          <div class="panel-heading top-bar">
+          <h3 class="panel-title">Chat - Clang</h3>
+          </div>
+          <div id ="chat-panel" class="panel-body msg_container_base p415x-chat">
+            <div class="row msg_container base_sent">
+              <div id="chatbar" class="col-md-10 col-xs-10 ">
+                <div class="messages msg_sent">
+                  <p>Oh no something funky is happening!</p>
+                </div>
+                <div class="messages msg_sent">
+                  <p>Please help me!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="input-group">
+                <form id="chat_form">
+                      <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                      <span class="input-group-btn">
+                      <!-- <button class="btn btn-primary btn-sm" id="btn-chat" onclick="sendmsg()">Send</button> -->
+                      </span>
+                      <input type="submit" value="Send">
+                </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <!-- /chat box -->
+  <!-- TODO: move this to CSS -->
+  <style>
+    .ui-dialog,.ui-dialog, .ui-widget-content, .ui-corner-all, .ui-draggable, .ui-resizable {background:white !important; margin: 20px !important;}
+  </style>
+  <div id="input-container">
+    <div id="progress-container">
+    <p id="score_box" class="score_text">0</p>
+    <p id="matrix_box" class="matrix_text">Click the radar!</p>
+    <svg id="additional display">
+      <!-- holds random information like the matrix -->
+    </svg>
+    </div>
+    <div id="input-canvas">
+    </div>
+  </div>
+  <div style="" id="output-canvas"></div>
+    <!-- Start Game Nav Buttons -->
+    <div class="btn-group p415x-btn-group" id="navigation" role="group" aria-label="Game Navigation">
+      <button id="lowerBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img width="15" height="15" src="{% static 'game/public/img/left.png' %}"></img></button>
+      <button id="upperBoundLevel" type="button" height="15" width="15" class="btn btn-default"><img height="15" width="15" src="{% static 'game/public/img/right.png' %}"></img></button>
+    </div>
+    <!-- End Game Nav Buttons -->
+
+  <div class="scene_button" id = "popup" hidden>
+    <button id = "popup_button" style="background-color: black;">View Cutscene</button>
+  </div>
+  <script src=" {% static 'game/bower_components/jquery-outside-events/jquery.ba-outside-events.js' %}"></script>
+  <script type="text/javascript">
+
+    $("#guide-page").dialog({
+      autoOpen : false, modal : true, show : "blind", hide : "blind"
+    });
+    var level = 1;
+    var currhigh = 1;
+    var level_changed = 0;
+    var guide_count = 0;
+
+    $("#guideLink").click(function(){
+        readTextFile("/guide/"+level);
+        var divText = document.getElementById("guide-page").innerHTML;
+        var opt = {
+            autoOpen: false,
+            width: 550,
+            height: 650,
+            position:{my:"top",at:"top+100"},
+        };
+
+        document.getElementById("dialog").innerHTML = divText;
+        var theDialog = $("#dialog").dialog(opt);
+
+        $(".ui-dialog-titlebar").hide();
+        $("#dialog").bind('clickoutside',function(){
+            guide_count += 1;
+            guide_count %= 2;
+            if(guide_count == 0){
+                $("#dialog").dialog('close');
+            }
+        });
+        theDialog.dialog("open");
+    });
+
+
+    showdown.setFlavor('github');
+    var converter = new showdown.Converter();
+    function readTextFile(file)
+    {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, false);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    $('#guide-page').html(converter.makeHtml(allText))
+                    //alert(allText);
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+
+    function closePopup(){
+      document.getElementById("game_container").hidden = false;
+      document.getElementById("cutscene").hidden = true;
+      window.parent.document.getElementById("navigation").hidden = false;
+    }
+
+    function openPopup(){
+      document.getElementById("cutscene").hidden = false;
+      document.getElementById("game_container").hidden = true;
+      //document.getElementById("cutscene").style.zIndex = "9999!important";
+      /*document.getElementById("cutscene").width = window.innerWidth/2;
+      document.getElementById("cutscene").height = window.innerHeight;*/
+      /*document.getElementById("cutscene_frame").src = "{% static 'game/public/img/intro/intro.html' %}";*/
+      /*document.getElementById("cutscene_frame").width = document.getElementById("cutscene").width;
+      document.getElementById("cutscene_frame").height = document.getElementById("cutscene").height/1.5;*/
+
+
+      window.parent.document.getElementById("navigation").hidden = true;
+    }
+
+
+    $(window).bind("load", function() {
+      if(!sessionStorage.getItem('first')){
+        openPopup();
+        sessionStorage.first = 'true';
+      }
+      // setInterval(function(){-canvas
+      //  console.log(window.outerHeight);
+      // }, 1000);
+      console.log("starting lvl1");
+      startLevel1();
+
+      // level switcher
+      setTimeout(function() {
+        gameMode = 0;
+      }, 1000);
+
+      var isBroadcasted = 0,
+          levelScore = 0;
+
+      document.getElementById("popup").hidden = false;
+      document.getElementById("popup_button").onclick = function(){ openPopup(); } ;
+      document.getElementById("gameLink").click();
+      openPopup();
+    });
+
+  </script>
+</div>
+{% endblock %}

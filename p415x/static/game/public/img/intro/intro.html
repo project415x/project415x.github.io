@@ -1,0 +1,78 @@
+
+    <style>
+h3 {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 24px;
+}
+
+a {text-decoration: none;
+  color: white;}
+body {
+  background-color: black;
+  background: url(staticbg.gif);
+  color: white;
+  font-family:monospace,monospace;font-size:1.3em;
+  letter-spacing: 1pt;
+}
+
+#slide{
+    height: 490;
+    width: 100%;
+    border: 0px;
+    overflow: hidden;
+}
+
+
+</style>
+
+<script type="text/javascript">
+  var images = ["title/title1.gif", "title/title2.gif", "title/title3.gif", "title/title4.gif"];
+  var text = ["Finally, after all these years of work... my robot is complete!", "...HUH?!", "Something's wrong--my controls aren't working!", "I need your help to fix my robot!!!"];
+  var index = 0;
+  function UpdateCutscene(idx){
+    if(idx==0)
+      index = 0;
+    else
+     index++;
+    if(index>4){
+      return;
+    }
+    if(index == 4){
+      document.getElementById("link").onClick=parent.closePopup;
+      document.getElementById("cutscene_image"+3).onClick = parent.closePopup;
+      index = 1;
+      for(var i = 0; i<4; i++){
+        if(i!=index)
+          document.getElementById("cutscene_image"+i).hidden = true;
+        else
+          document.getElementById("cutscene_image"+i).hidden = false;
+      }
+      parent.closePopup();
+      return;
+    }
+    for(var i = 0; i<4; i++){
+      if(i!=index)
+        document.getElementById("cutscene_image"+i).hidden = true;
+      else
+        document.getElementById("cutscene_image"+i).hidden = false;
+    }
+    document.getElementById("cutscene_text").innerHTML = text[index];
+  }
+</script>
+
+<body>
+<center>
+<a border="0" id="link" onClick = "UpdateCutscene(1)">
+<img width="85%" height = "55%" id="cutscene_image0" src="title/title1.gif"  >
+<img width="85%" height = "55%" id="cutscene_image1" src="title/title2.gif"  hidden>
+<img width="85%" height = "55%" id="cutscene_image2" src="title/title3.gif"  hidden>
+<img width="85%" height = "55%" id="cutscene_image3" src="title/title4.gif"  hidden>
+<br><br><i id="cutscene_text">Finally, after all these years of work... my robot is complete!</i><br>
+<i>(Click here to continue)</i></a>
+<br><br><br>
+</center><p>
+<a border="0" onclick="UpdateCutscene(0)"><img src="title/replay.gif" align="left">
+</a>
+<a onClick="parent.closePopup()" border="0"><img src="title/skip.gif" align="right">
+</a></p>
+</body>
