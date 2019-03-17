@@ -1,0 +1,31 @@
+---
+layout: project
+title: Start
+---
+
+<div id="start">
+  <div class="container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+      <li role="presentation"><a id="infoLink" href="#info" aria-controls="info" role="tab" data-toggle="tab">Info</a></li>
+      <li role="presentation" onclick='loadPage("frameLevel", "0", "0")'><a id="gameLink" href="#game" aria-controls="game" role="tab" data-toggle="tab">Game</a></li>
+      <li role="presentation" onclick='loadPage("frameGuide", "0", "1")'><a id="guideLink" href="#mathguide" aria-controls="mathguide" role="tab" data-toggle="tab">Math</a></li>
+      <li role="presentation"><a href="https://docs.google.com/forms/d/1OB4mqAjueM9eXgh-DyZ77W7QvgmH74O36NBNx-_dm4w/viewform?usp=send_form" target="_blank" aria-controls="feedback">Feedback</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      {% include info.html %}
+      {% include game.html %}
+      {% include guide.html %}
+    </div>
+  </div>
+</div>
+
+<script src="../public/js/project/levelTracking.js"></script>
+<script>
+  // Trigger click on Game tab
+  $(document).ready(function() {
+    $('#gameLink').click();
+  });
+</script>
