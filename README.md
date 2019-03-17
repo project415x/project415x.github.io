@@ -14,57 +14,25 @@ Project 415x is a learning tool for students to have a direct visual and kinesth
 
 ## Setup
 ```bash
+
+$ cd project415x.github.io/p415x/static/game
+
 // Download dependencies
 $ npm install
 $ bower install
 
-// Install Jekyll
-$ gem install jekyll
+$ cd -
 
-// Navigate to project directory
-$ cd project415x.github.io
+// Install django
+$ sudo apt-get install python-pip
+$ pip install django
 
-// Start Jekyll server
-$ jekyll serve
-```
+// setup run script
 
-### What's Included
-```
-project415x.github.io/
-├── _includes/
-│   ├── foot.html
-│   ├── ga.html
-│   ├── head.html
-│   ├── transformation.html
-├── _layouts/
-│   ├── minimum.html
-│   ├── project.html
-├── _sass/
-│   ├── _404.scss
-│   ├── _base.scss
-│   ├── _fonts.scss
-│   ├── _layout.scss
-│   ├── _normalize.scss
-│   ├── _project.scss
-│   ├── _syntax-highlighting.scss
-│   ├── _typebase.scss
-│   ├── _index.scss
-├── bower_components/
-├── _css/
-│   ├── main.scss
-├── _public/
-│   ├── img/
-│   ├── js/
-├── 404.html/
-├── .gitignore/
-├── _config.yml/
-├── bower.json/
-├── CNAME/
-├── feed.xml/
-├── index.html/
-├── LICENSE/
-├── package.json/
-├── README.md/
+$ chmod +x run.sh
+
+// Start build website and django server
+$ ./run.sh
 ```
 
 ## About
@@ -76,8 +44,10 @@ Started in Fall 2015 at the University of Illinois at Urbana-Champaign, Project 
 - [Jenya Sapir](http://www.math.illinois.edu/~jsapir2/)
 
 ### Students
-- [Joseph Milla](https://josephmilla.com/)
 - [Cameron Dart](https://github.com/skamdart)
+- [Aneesh Durg](https://github.com/aneeshdurg)
+- [Rohan Subramaniam](https://github.com/rohansub)
+- [Joseph Milla](https://josephmilla.com/)
 - [Z](https://github.com/zwang180)
 
 ## Issues
@@ -92,8 +62,7 @@ Help in developing and maintaining this project would be much appreciated. Pleas
 For transparency into our release cycle and in striving to maintain backward compatibility, Project415x is maintained under the [Semantic Versioning Guidelines](http://semver.org/). Sometimes we screw up, but we'll adhere to those rules whenever possible.
 
 ## Build
-Jekyll - Static file regeneration is provided
-Gulp - gulpfile found at root. run `gulp watch` to compile changes in js. gulp watches `public/js/project/**/*.js` for changes
+Read through the `run.sh` script for info on how to build and start the server.
 
 ## License
 Code released under the [MIT License](LICENSE).

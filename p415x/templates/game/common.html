@@ -1,0 +1,181 @@
+{% load static %}
+<head>
+  <link href='http://gmpg.org/xfn/11' rel='profile'>
+
+  <link rel='canonical' href='http://p415x.xyz/start/ | replace:"index.html", ""' />
+  <link rel='alternate' type='application/rss+xml' title='Project 415x' href='http://p415x.xyz/feed.xml' />
+
+  <!-- METADATA -->
+  <meta name='description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='keywords' content='Project, 415x, Mathematics, Linear, Algebgra, UIUC, Illinois, Engineering, STEM'>
+
+  <!-- OPEN GRAPH -->
+  <meta property='og:site_name' content='Project 415x' />
+  <meta property='og:title' content='Project 415x' />
+  <meta property='og:description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+  <meta property='og:image' content='http://p415x.xyz/public/img/project415x.png' />
+  <meta property='og:image:width' content='1200'/>
+  <meta property='og:image:height' content='630'/>
+  <meta property='og:url' content='http://p415x.xyz/start/' />
+  <meta property='og:type' content='website' />
+
+  <!-- TWITTER CARD -->
+  <meta name='twitter:title' content='Project 415x' />
+  <meta name='twitter:card' content='summary' />
+  <meta name='twitter:image' content='http://p415x.xyz/public/img/project415x.png' />
+  <meta name='twitter:url' content='http://p415x.xyz/start/' />
+  <meta name='twitter:description' content='Project 415x is a learning tool for students to have a direct visual and kinesthetic experience of core concepts in Linear Algebra' />
+
+  <title>Project 415x</title>
+
+  <!-- ICONS -->
+  <link rel='image_src' href="{% static 'game/public/logo.png' %}"/>
+  <link rel='shortcut icon' href="{% static 'game/public/logo.png' %}"/>
+  <link rel='apple-touch-icon-precomposed' href="{% static 'game/public/logo.png' %}"/>
+
+  <!-- CSS -->
+  <link rel='stylesheet' href="{% static 'game/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+  <link rel='stylesheet' href="{% static 'game/css/main.css' %}">
+  <script src="{% static 'game/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'game/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+  <!-- todo move to css file -->
+<style type="text/css">
+  .body-game-page {
+      moz-background-size: cover; 
+      -o-background-size: cover;
+      background-size: cover;
+      background: url("{% static 'game/public/img/robotbg.gif' %}");
+  }
+
+  a {
+    color: rgb(136, 253, 104);
+    font-family: 'Press Start 2P', sans-serif;
+  }
+
+  .btn {
+    position: relative;
+    display: inline-block;
+    margin: 0 10px;
+    padding: 18px 30px;
+    z-index: 1;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    font-family: 'Press Start 2P', sans-serif;
+    color: #FFFFFF;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  /* removes unneeded CSS in tabs */
+  .nav-tabs.nav-justified>li>a {
+    border-bottom: none;
+  }
+
+  .nav-tabs>li.active>a .nav-tabs.nav-justified>.active>a, .nav-tabs>li>a .nav-tabs.nav-justified>a {
+    color: rgb(136, 253, 104);
+    background-color: transparent;
+    border: none;
+  }
+  .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: rgb(136, 253, 104);
+    background-color: transparent;
+    border: none;
+  }
+
+  .nav>li>a:focus, .nav>li>a:hover {
+    color: rgb(136, 253, 104);
+    background-color: transparent;
+    border: none;
+  }
+
+  .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover {
+    border: none;
+  }
+
+  .p415x-nav::before .p415x-nav::after {
+    height: 10%;
+  }
+
+  #input-container{
+    display:inline-block;
+  }
+
+  #input-canvas {
+    background-image: url({% static 'game/public/img/input_background.gif' %});
+    background-size:100%;
+  }
+  
+  #output-canvas {
+    display:inline-block; 
+    background-image: url({% static 'game/public/img/output_background.gif' %}); 
+    background-size:100%;
+  }
+
+  .p415x-btn-group {
+    display: inherit;
+  }
+
+  .p415x-chat {
+    height: 45%;
+    overflow:auto;
+  }
+
+  #progress-container {
+    height: 125px;
+    width: 0px;
+    /*position: absolute;
+    top: 94.5%;
+    left: 27.5%;
+    margin: -15px 0 0 -135px;*/
+    background-image: url({% static 'game/public/img/scorebox.gif' %});
+  }
+
+  #cutscene {
+    width: 75%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #cutscene_frame {
+    width: 100%;
+    height: 75%;
+  }
+
+  .score_text {
+    position: relative;
+    top: 6%;
+    left: 27.5%;
+    font-size: 150%;
+    color: white;
+    font-family: "'Press Start 2P', sans-serif";
+  }
+  .matrix_text {
+    position: relative;
+    top: 25%;
+    left: 35%;
+    font-size: 100%;
+    color: black;
+    font-family: "'Press Start 2P', sans-serif";
+  }
+  .chat_msg{
+    color: #00ff00;
+  }
+</style>
+</head>
+<script src="{% static 'game/bower_components/d3/d3.min.js' %}"></script>
+<script src="{% static 'game/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'game/bower_components/showdown/dist/showdown.min.js' %}"></script>
+
+<body class="body-game-page">
+  {% block body %}
+  {% endblock %}
+</div>
+
+<script src="{% static 'game/dist/bundle.js' %}"></script>
+</body>
